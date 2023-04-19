@@ -244,7 +244,7 @@ width,name,STT
 " 5,5m",Cao Xuân Dục,243
 " 7,5m",Cầm Bá Thước,244
 " 7,5m",Cẩm Bắc 1,245
-,Cẩm Bắc 10,246
+0,Cẩm Bắc 10,246
 " 5,5m",Cẩm Bắc 11,247
 " 5,5m",Cẩm Bắc 12,248
 " 7,5m",Cẩm Bắc 2,249
@@ -252,10 +252,10 @@ width,name,STT
 " 7,5m",Cẩm Bắc 4,251
 " 7,5m",Cẩm Bắc 5,252
 " 5,5m",Cẩm Bắc 5,253
-,Cẩm Bắc 6,254
-,Cẩm Bắc 7,255
-,Cẩm Bắc 8,256
-,Cẩm Bắc 9,257
+0,Cẩm Bắc 6,254
+0,Cẩm Bắc 7,255
+0,Cẩm Bắc 8,256
+0,Cẩm Bắc 9,257
 " 5,5m",Cẩm Chánh 1,258
 " 5,5m",Cẩm Chánh 2,259
 " 5,5m",Cẩm Chánh 3,260
@@ -545,29 +545,29 @@ width,name,STT
 " 4,5m",Hàm Mặc Tử,543
  8m,Hàm Nghi,544
 " 7,5m",Hàm Tử,545
-,Hàm Trung 1,546
-,Hàm Trung 2,547
+0,Hàm Trung 1,546
+0,Hàm Trung 2,547
 " 5,5m",Hàm Trung 3,548
-,Hàm Trung 4,549
-,Hàm Trung 5,550
-,Hàm Trung 6,551
-,Hàm Trung 7,552
-,Hàm Trung 8,553
+0,Hàm Trung 4,549
+0,Hàm Trung 5,550
+0,Hàm Trung 6,551
+0,Hàm Trung 7,552
+0,Hàm Trung 8,553
 " 7,5m",Hàm Trung 9,554
 " 7,5m",Hàn Thuyên,555
 " 7,5m",Hằng Phương Nữ Sĩ,556
-,Hòa An 1,557
+0,Hòa An 1,557
 " rộng 3,75m",Hòa An 10,558
 " rộng 3,75m",Hòa An 11,559
  ,Hòa An 11,560
-,Hòa An 2,561
-,Hòa An 3,562
-,Hòa An 4,563
-,Hòa An 5,564
-,Hòa An 6,565
-,Hòa An 7,566
-,Hòa An 8,567
-,Hòa An 9,568
+0,Hòa An 2,561
+0,Hòa An 3,562
+0,Hòa An 4,563
+0,Hòa An 5,564
+0,Hòa An 6,565
+0,Hòa An 7,566
+0,Hòa An 8,567
+0,Hòa An 9,568
 " 5,5m",Hòa Bình 1,569
 " 5,5m",Hòa Bình 2,570
 " 5,5m",Hòa Bình 3,571
@@ -576,29 +576,29 @@ width,name,STT
 " 5,5m",Hòa Bình 6,574
 " 5,5m",Hòa Bình 7,575
 "Chiều rộng 5,5m",Hoa Lư,576
-,Hòa Minh 1,577
-,Hòa Minh 10,578
-,Hòa Minh 11,579
-,Hòa Minh 12,580
-,Hòa Minh 13,581
-,Hòa Minh 14,582
-,Hòa Minh 15,583
-,Hòa Minh 16,584
-,Hòa Minh 17,585
-,Hòa Minh 18,586
-,Hòa Minh 19,587
-,Hòa Minh 2,588
-,Hòa Minh 20,589
-,Hòa Minh 21,590
-,Hòa Minh 22,591
+0,Hòa Minh 1,577
+0,Hòa Minh 10,578
+0,Hòa Minh 11,579
+0,Hòa Minh 12,580
+0,Hòa Minh 13,581
+0,Hòa Minh 14,582
+0,Hòa Minh 15,583
+0,Hòa Minh 16,584
+0,Hòa Minh 17,585
+0,Hòa Minh 18,586
+0,Hòa Minh 19,587
+0,Hòa Minh 2,588
+0,Hòa Minh 20,589
+0,Hòa Minh 21,590
+0,Hòa Minh 22,591
 " 5,5m",Hòa Minh 23,592
-,Hòa Minh 3,593
-,Hòa Minh 4,594
-,Hòa Minh 5,595
-,Hòa Minh 6,596
-,Hòa Minh 7,597
-,Hòa Minh 8,598
-,Hòa Minh 9,599
+0,Hòa Minh 3,593
+0,Hòa Minh 4,594
+0,Hòa Minh 5,595
+0,Hòa Minh 6,596
+0,Hòa Minh 7,597
+0,Hòa Minh 8,598
+0,Hòa Minh 9,599
 " 5,5m",Hòa Mỹ 1,600
 " 3,75m",Hòa Mỹ 2,601
 " 3,75m",Hòa Mỹ 3,602
@@ -1415,7 +1415,7 @@ width,name,STT
  4m,Phùng Khắc Khoan,1412
 " Có đoạn 7,5m, có đoạn 5,5m",Phùng Tá Chu,1413
 5.5 m,Phước Hòa,1414
-,Phước Hòa 1,1415
+0,Phước Hòa 1,1415
 5.5 m,Phước Hòa 2,1416
 5.5 m,Phước Hòa 3,1417
  5.5 m,Phước Mỹ,1418
