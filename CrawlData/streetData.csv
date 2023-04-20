@@ -119,7 +119,6 @@ width,name,STT
 " 7,5m",An Thượng 36,118
 " 7,5m",An Thượng 4,119
 " 3,5m",An Thượng 5,120
-" 5,5m",An Thượng 6,121
 " 5,5m",An Thượng 6,122
 " 3,5m",An Thượng 7,123
 " 3,5m",An Thượng 8,124
@@ -250,7 +249,6 @@ width,name,STT
 " 7,5m",Cẩm Bắc 2,249
 " 7,5m",Cẩm Bắc 3,250
 " 7,5m",Cẩm Bắc 4,251
-" 7,5m",Cẩm Bắc 5,252
 " 5,5m",Cẩm Bắc 5,253
 0,Cẩm Bắc 6,254
 0,Cẩm Bắc 7,255
@@ -319,11 +317,9 @@ width,name,STT
 " 5,5m",Chơn Tâm 8,318
 " 7,5m",Chu Cẩm Phong,319
 " rộng một đoạn mỗi bên 7,5m, một đoạn mỗi bên 10,5m và một đoạn rộng 10,5m",Chu Huy Mân,320
-" 5,5m - 7,5m",Chu Lai,321
 " 7,5m",Chu Lai,322
 " 6,8m",Chu Văn An,323
 " 5,5m",Chúc Động,324
- 15m,Chương Dương,325
  ,Chương Dương,326
 " 7,5m",Doãn Kế Thiện,327
 " 7,5m",Doãn Uẩn,328
@@ -334,7 +330,6 @@ width,name,STT
 " 7,5m",Dương Bạch Mai,333
 " 5,5m",Dương Bích Liên,334
 " 7,5m",Dương Cát Lợi,335
-" 5,5m",Dương Đình Nghệ,336
 " 7,5m",Dương Đình Nghệ,337
 " 5,5m",Dương Đức Hiền,338
 " 10,5m",Dương Khuê,339
@@ -383,7 +378,6 @@ width,name,STT
 " 5,5m",Đào Công Chính,382
  ,Đào Công Soạn,383
 " 5,5m ",Đào Doãn Địch,384
- 6m,Đào Duy Anh,385
  6m,Đào Duy Anh,386
 " 5,5m",Đào Duy Kỳ,387
 " 2x10,5m",Đào Duy Tùng,388
@@ -432,9 +426,7 @@ width,name,STT
 " 10,5m",Đinh Thị Vân,431
 " 5,5m",Đò Xu 3,432
 " 7,5m",Đoàn Hữu Trưng,433
-" 11,5m",Đoàn Khuê,434
 " 11,5m",Đoàn Khuê,435
-" một đoạn 5,5m, một đoạn 7,5.",Đoàn Ngọc Nhạc,436
 " 5,5m",Đoàn Ngọc Nhạc,437
 " 5,5m",Đoàn Nguyễn Tuấn,438
 " 5,5m",Đoàn Nguyên Thục,439
@@ -443,23 +435,16 @@ width,name,STT
 " 5,5m",Đoàn Quý Phi,442
 " 4,5m",Đoàn Thị Điểm,443
 " 5,5m",Đoàn Trần Nghiệp,444
-" 11,25m",Đỗ Anh Hàn,445
 " 11,25m",Đỗ Anh Hàn,446
-" 10,5m",Đỗ Bá,447
 " 10,5m",Đỗ Bá,448
 " 5,5m",Đỗ Bí,449
- ,Đỗ Đăng Tuyển,450
  5.5m,Đỗ Đăng Tuyển,451
 " 5,5m",Đô Đốc Bảo,452
-" 10,5m.",Đô Đốc Lân,453
 " 10,5m",Đô Đốc Lân,454
-" 10,5m.",Đô Đốc Lộc,455
 " 5,5m",Đô Đốc Lộc,456
-" 5,5m.",Đô Đốc Tuyết,457
 " 5,5m",Đô Đốc Tuyết,458
 " 10,5m",Đỗ Hành,459
 " 7,5m",Đỗ Huy Uyển,460
-" 5,5m",Đỗ Năng Tế,461
 " 5,5m",Đỗ Năng Tế,462
 " có đoạn 3,5m và có đoạn 5m",Đỗ Ngọc Du,463
 " 5,5m",Đỗ Nhuận,464
@@ -477,10 +462,8 @@ width,name,STT
  3.75m,Đông Du,476
  21m,Đống Đa,477
 " 10,5m",Đông Giang,478
-" 5,5m",Đông Hải 1,479
 " 5,5m",Đông Hải 1,480
 " 5,5m",Đông Hải 10,481
-" 5,5m",Đông Hải 11,482
 " 5,5m",Đông Hải 11,483
 " 5,5m",Đông Hải 12,484
 " 5,5m",Đông Hải 14,485
@@ -558,7 +541,6 @@ width,name,STT
 " 7,5m",Hằng Phương Nữ Sĩ,556
 0,Hòa An 1,557
 " rộng 3,75m",Hòa An 10,558
-" rộng 3,75m",Hòa An 11,559
  ,Hòa An 11,560
 0,Hòa An 2,561
 0,Hòa An 3,562
@@ -602,14 +584,12 @@ width,name,STT
 " 5,5m",Hòa Mỹ 1,600
 " 3,75m",Hòa Mỹ 2,601
 " 3,75m",Hòa Mỹ 3,602
-" 3,75m",Hòa Mỹ 4,603
 " 3,75m",Hòa Mỹ 4,604
 " 5,5m",Hòa Nam 1,605
 " 5,5m",Hòa Nam 2,606
 " 5,5m",Hòa Nam 3,607
 " 5,5m",Hòa Nam 4,608
 " 7,5m",Hòa Nam 5,609
-" 7,5m",Hòa Nam 6,610
 " 7,5m",Hòa Nam 6,611
 " 3,5m",Hóa Sơn 1,612
 " 3,5m",Hóa Sơn 2,613
@@ -627,8 +607,6 @@ width,name,STT
 " 10,5m",Hoàng Diệu,625
 " 7,5m",Hoàng Dư Khương,626
 " 5,5m",Hoàng Đạo Thúy,627
-" 7,5m.",Hoàng Đình Ái,628
- ,Hoàng Đình Ái,629
 " 7,5m",Hoàng Đình Ái,630
  21m,Hoàng Đức Lương,631
 " 8,5m",Hoàng Hoa Thám,632
@@ -666,7 +644,6 @@ width,name,STT
 " 5,5m",Hồ Sĩ Phấn,663
 " 7,5m",Hồ Sĩ Tân,664
 " 7,5m",Hồ Sỹ Dương,665
-" 5,5m",Hồ Sỹ Đống,666
 " 5,5m",Hồ Sỹ Đống,667
 " 5,5m",Hồ Tông Thốc,668
 " 10,5m",Hồ Tùng Mậu,669
@@ -676,30 +653,21 @@ width,name,STT
 " 5,5m",Hồng Thái,673
 " 10,5m",Hùng Vương,674
 " 5,5m",Huy Cận,675
- ,Huyền Trân Công Chúa,676
  8m,Huyền Trân Công Chúa,677
  6m,Huỳnh Bá Chánh,678
-" 3,5m",Huỳnh Lý,679
 " 3,75m",Huỳnh Lý,680
 " 5,5m",Huỳnh Mẫn Đạt,681
 " 7,5m",Huỳnh Ngọc Đủ,682
-" 10,5m",Huỳnh Ngọc Huệ,683
 " 10,5m",Huỳnh Ngọc Huệ,684
-" 10,5m",Huỳnh Tấn Phát ,685
 " 10,5m",Huỳnh Tấn Phát ,686
 " 7,5m",Huỳnh Thị Bảo Hòa,687
 " 5,5m",Huỳnh Thị Một,688
  6m,Huỳnh Thúc Kháng ,689
 " 5,5m",Huỳnh Văn Đảnh,690
-" 7,5m.",Huỳnh Xuân Nhị,691
 " 7,5m",Huỳnh Xuân Nhị,692
- ,Hưng Hóa 1,693
 " 5,5m",Hưng Hóa 1,694
- ,Hưng Hóa 2,695
  ,Hưng Hóa 2,696
- ,Hưng Hóa 3,697
  ,Hưng Hóa 3,698
- ,Hưng Hóa 4,699
  ,Hưng Hóa 4,700
 " 7,5m",Hương Hải Thiền Sư,701
  8m,K20,702
@@ -725,7 +693,6 @@ width,name,STT
  ,Lạc Long Quân,722
 " 7,5m",Lâm Huỳnh,723
 " 5,5m",Lâm Quang Thự,724
- ,Lê Anh Xuân,725
 " 5,5m",Lê Anh Xuân,726
 " 7,5m",Lê Bá Trinh,727
  7m,Lê Bá Trinh(cũ),728
@@ -736,8 +703,6 @@ width,name,STT
 " 7,5m, có đoạn 5,5m ",Lê Công Kiều,733
 " 3,5m",Lê Cơ,734
 " 3,5m",Lê Cơ (nối dài),735
- ,Lê Chân,736
-" 7,5m",Lê Chân,737
 " 7,5m",Lê Chân,738
 " 7,5m",Lê Doãn Nhạ,739
  16m,Lê Duẩn,740
@@ -746,7 +711,6 @@ width,name,STT
  21m,Lê Đại Hành,743
 " 5,5m",Lê Đỉnh,744
 " 7,5m",Lê Đình Chinh,745
-" 5,5m",Lê Đình Diên,746
 " 5,5m",Lê Đình Diên,747
  9m,Lê Đình Dương,748
  8m,Lê Đình Lý,749
@@ -764,10 +728,8 @@ width,name,STT
 " 5,5m",Lê Lâm,761
 " 5,5m",Lê Lộ,762
 "  5,5m",Lê Ninh,763
- ,Lê Phụ Trần,764
 " 5,5m",Lê Phụ Trần,765
 " 5,5m",Lê Phụ Trần 2,766
- ,Lê Phụng Hiểu,767
 " 7,5m",Lê Phụng Hiểu,768
  8m,Lê Qúy Đôn,769
 " một đoạn 10,5m, một đoạn 5,5",Lê Quảng Ba,770
@@ -777,12 +739,9 @@ width,name,STT
 " 7,5m",Lê Quát,774
 " 7,5m",Lê Sát,775
 " 7,5m",Lê Tấn Toán,776
- ,Lê Tấn Trung,777
 " 10,5m",Lê Tấn Trung,778
 " 7,5m",Lê Tự Thống Nhất,779
-" 7,5m – 10,5m",Lê Thạch,780
 " 10,5m-7,5m",Lê Thạch,781
- ,Lê Thanh Nghị,782
  ,Lê Thanh Nghị,783
 " 7,5m",Lê Thành Phương,784
  7m,Lê Thánh Tông,785
@@ -791,12 +750,10 @@ width,name,STT
 " 5,5m",Lê Thị Tính,788
 " 4,5m",Lê Thị Xuyến,789
 " 5,5m",Lê Thiện Trị,790
-" 5,5m",Lê Thiệt,791
 " 5,5m",Lê Thiệt,792
 " 7,5m",Lê Thuyết Hùng,793
 " 5,5m",Lê Thước,794
  7m,Lê Trọng Tấn,795
-" 5,5m",Lê Trung Đình,796
 " 5,5m",Lê Trung Đình,797
  ,Lê Văn An,798
  6m,Lê Văn Duyệt,799
@@ -811,7 +768,6 @@ width,name,STT
 " 5,5m",Lê Văn Miến,808
 " một đoạn 7,5m, một đoạn 2x7,5m",Lê Văn Quý,809
 " 5,5m",Lê Văn Sỹ,810
-" 7,5m",Lê Văn Tâm,811
 " 7,5m",Lê Văn Tâm,812
  5.5m,Lê Văn Thiêm,813
 " 5,5m",Lê Văn Thịnh,814
@@ -832,7 +788,6 @@ width,name,STT
 " 5,5m",Liêm Lạc 9,829
 " 5,5m",Lỗ Giáng 1,830
 " rộng 5,5m",Lỗ Giáng 10,831
-" 5,5m",Lỗ Giáng 11,832
 " 5,5m",Lỗ Giáng 11,833
 " 5,5m",Lỗ Giáng 15,834
 " rộng 5,5m",Lỗ Giáng 16,835
@@ -884,7 +839,6 @@ width,name,STT
  10.5m,Lý Thường Kiệt,881
  8m,Lý Triện,882
 " 5,5m",Lý Văn Phức,883
- ,Lý Văn Tố,884
 " 7,5m",Lý Văn Tố,885
 " 7,5m",Mạc Cửu,886
  5m,Mạc Đĩnh Chi,887
@@ -900,16 +854,13 @@ width,name,STT
 " 7,5m",Mai Văn Ngọc,897
  6m,Mai Xuân Thưởng,898
 " 7,5m",Man Thiện,899
-" 5,5m",Mân Quang 1,900
 " 5,5m",Mân Quang 1,901
  ,Mân Quang 10,902
 " 5,5m",Mân Quang 2,903
 " 5,5m",Mân Quang 2 ,904
 " 5,5m",Mân Quang 3,905
 " 5,5m",Mân Quang 3 ,906
-" 5,5m",Mân Quang 4,907
 " 5,5m",Mân Quang 4,908
-" 7,5m",Mân Quang 5,909
 " 7,5m",Mân Quang 5,910
 " 3,75m",Mân Quang 6,911
 " 3,75m",Mân Quang 7,912
@@ -918,13 +869,9 @@ width,name,STT
 " 5,5m",Mẹ Hiền,915
  6m,Mẹ Nhu,916
 " đoạn 2x15m và có đoạn 2x7,5m",Minh Mạng,917
-" 5,5m",Mộc Bài 1,918
 " 5,5m",Mộc Bài 1,919
-" 5,5m",Mộc Bài 2,920
 " 5,5m",Mộc Bài 2,921
-" 5,5m",Mộc Bài 3,922
 " 5,5m",Mộc Bài 3,923
-" 5,5m",Mộc Bài 4,924
 " 5,5m",Mộc Bài 4,925
 " 7,5m",Mộc Bài 5,926
 " 5,5m",Mộc Bài 6,927
@@ -932,53 +879,30 @@ width,name,STT
 " 5,5m",Mộc Sơn 2,929
 " 7,5m",Mộc Sơn 3,930
 " 7,5m",Mộc Sơn 4,931
-" 5,5m",Mỹ An 1,932
 " 5,5m",Mỹ An 1,933
 " 5,5m",Mỹ An 10,934
 " 5,5m",Mỹ An 10 ,935
-" 5,5m",Mỹ An 11,936
 " 5,5m",Mỹ An 11,937
-" 5,5m",Mỹ An 12,938
 " 5,5m",Mỹ An 12,939
-" 5,5m",Mỹ An 14,940
 " 5,5m",Mỹ An 14,941
-" 5,5m",Mỹ An 15,942
 " 5,5m",Mỹ An 15,943
-" 5,5m",Mỹ An 16,944
 " 5,5m",Mỹ An 16,945
-" 7,5m",Mỹ An 17,946
 " 7,5m",Mỹ An 17,947
-" 5,5m",Mỹ An 18,948
 " 5,5m",Mỹ An 18,949
-" 3,5m",Mỹ An 19,950
 " 3,5m",Mỹ An 19,951
-" 5,5m",Mỹ An 2,952
 " 5,5m",Mỹ An 2,953
-" 5,5m",Mỹ An 20,954
 " 5,5m",Mỹ An 20,955
-" 5,5m",Mỹ An 21,956
 " 5,5m",Mỹ An 21,957
-" 5,5m",Mỹ An 22,958
 " 5,5m",Mỹ An 22,959
-" 5,5m",Mỹ An 23,960
 " 5,5m",Mỹ An 23,961
-" 5,5m",Mỹ An 24,962
 " 5,5m",Mỹ An 24,963
-" 7,5m",Mỹ An 25,964
 " 7,5m",Mỹ An 25,965
-" 5,5m",Mỹ An 3,966
 " 5,5m",Mỹ An 3,967
-" 5,5m",Mỹ An 4,968
 " 5,5m",Mỹ An 4,969
-" 5,5m",Mỹ An 5,970
 " 5,5m",Mỹ An 5,971
-" 5,5m",Mỹ An 6,972
 " 5,5m",Mỹ An 6,973
-" 5,5m",Mỹ An 7,974
 " 5,5m",Mỹ An 7,975
-" 5,5m",Mỹ An 8,976
 " 5,5m",Mỹ An 8,977
-" 5,5m",Mỹ An 9,978
 " 5,5m",Mỹ An 9,979
  ,Mỹ Đa Đông 1,980
  ,Mỹ Đa Đông 2,981
@@ -1039,7 +963,6 @@ width,name,STT
  ,Norman Morrison (Morrison),1036
 " 5,5m",Nơ Trang Lơng,1037
  7m,Núi Thành,1038
-" 10,5m",Nghiêm Xuân Yêm,1039
 " 10,5m",Nghiêm Xuân Yêm,1040
 " 5,5m",Ngọc Hân,1041
  5.5m,Ngọc Hồi,1042
@@ -1050,7 +973,6 @@ width,name,STT
 " 5,5m",Ngô Gia Khảm,1047
  8m,Ngô Gia Tự,1048
 " 5,5m",Ngô Mây,1049
-" 7,5m",Ngô Quang Huy,1050
 " 7,5m",Ngô Quang Huy,1051
  48m,Ngô Quyền,1052
  5m,Ngô Sỹ Liên,1053
@@ -1059,7 +981,6 @@ width,name,STT
 " 10,5m",Ngô Thì Hiệu,1056
 " 7,5m",Ngô Thì Hương,1057
 " 5,5m",Ngô Thị Liễu,1058
- ,Ngô Thì Nhậm,1059
  10m,Ngô Thì Nhậm,1060
 " 7,5m",Ngô Thị Sỹ,1061
 " 5,5m",Ngô Thì Trí,1062
@@ -1084,7 +1005,6 @@ width,name,STT
  5m,Nguyễn Công Hoan,1081
 " 5,5m",Nguyễn Công Sáu,1082
  9m,Nguyễn Công Trứ,1083
-" 7,5m",Nguyễn Cơ Thạch,1084
 " 7,5m",Nguyễn Cơ Thạch,1085
  6m,Nguyễn Chánh,1086
 " 5,5m",Nguyễn Chế Nghĩa,1087
@@ -1092,30 +1012,24 @@ width,name,STT
  14m,Nguyễn Chí Thanh,1089
 " 5,5m",Nguyễn Chích,1090
 " 5,5m",Nguyễn Chu Sĩ,1091
- 10m,Nguyễn Chu Sỹ,1092
  10m,Nguyễn Chu Sỹ,1093
 " 10,5m",Nguyễn Du,1094
 " 7,5m",Nguyễn Dục,1095
- ,Nguyễn Duy,1096
  ,Nguyễn Duy,1097
 " 5,5m",Nguyễn Duy Cung,1098
  6m,Nguyễn Duy Hiệu,1099
  7m,Nguyễn Duy Trinh,1100
-" 5,5m",Nguyễn Dữ,1101
  5.5 m,Nguyễn Dữ,1102
-" 5,5m",Nguyễn Đăng,1103
  ,Nguyễn Đăng,1104
 " 5,5m – 7,5m",Nguyễn Đăng Đạo,1105
  ,Nguyễn Đăng Giai,1106
 " 5,5m",Nguyễn Đình Chiểu,1107
 " 7,5m",Nguyễn Đình Hiến,1108
-" 7,5m – 10,5m",Nguyễn Đình Tứ,1109
 " 7,5 - 10,5m",Nguyễn Đình Tứ,1110
 " 10,5m",Nguyễn Đình Tựu,1111
 " 7,5m",Nguyễn Đình Trân,1112
 " 10,5m",Nguyễn Đình Trọng ,1113
 " 10,5m",Nguyễn Đình Trọng (nối dài),1114
-" 7,5m",Nguyễn Đóa,1115
 " 7,5m",Nguyễn Đóa,1116
  7.5m,Nguyễn Đỗ Cung,1117
  ,Nguyễn Đỗ Mục,1118
@@ -1124,14 +1038,12 @@ width,name,STT
 " 5,5m",Nguyễn Đức Cảnh,1121
 " rộng 5,5m;",Nguyễn Đức Thiệu,1122
  15 m,Nguyễn Đức Thuận,1123
-" 10,5m",Nguyễn Đức Trung,1124
 " 10,5m",Nguyễn Đức Trung,1125
  4m,Nguyễn Gia Thiều,1126
  6m,Nguyễn Gia Trí,1127
  ,Nguyễn Giản Thanh,1128
 " 5,5 m",Nguyễn Giản Thanh 2,1129
 " 5,5m",Nguyễn Hàng,1130
-" 10,5m",Nguyễn Hàng Chi,1131
 " 5,5m",Nguyễn Hàng Chi,1132
 " 9,5m",Nguyễn Hanh,1133
 " 5,5m",Nguyễn Hành,1134
@@ -1154,8 +1066,6 @@ width,name,STT
  ,Nguyễn Khang,1151
 " 7,5m",Nguyễn Khắc Cần,1152
 "  5,5m",Nguyễn Khắc Nhu,1153
- 15m,Nguyễn Khắc Viện,1154
- 15m,Nguyễn Khắc Viện,1155
  15m,Nguyễn Khắc Viện,1156
  ,Nguyễn Khoa Chiêm,1157
 " 7,5m",Nguyễn Khoái,1158
@@ -1181,7 +1091,6 @@ width,name,STT
 " 5,5m",Nguyễn Phẩm,1178
  10.5m,Nguyễn Phi Khanh,1179
  10.5m,Nguyễn Phong Sắc,1180
-" một đoạn 7,5m, một đoạn 10m",Nguyễn Phú Hường,1181
 " 7,5m",Nguyễn Phú Hường,1182
 " 10,5m",Nguyễn Phục,1183
 " một đoạn 7,5m.",Nguyễn Phước Chu,1184
@@ -1189,9 +1098,7 @@ width,name,STT
  15m.,Nguyễn Phước Tần,1186
 " 7,5m",Nguyễn Phước Thái,1187
  5.5m.,Nguyễn Quang Bích,1188
-" 5,5m",Nguyễn Quang Lâm,1189
 " 7,5m",Nguyễn Quang Lâm,1190
-" 7,5m",Nguyễn Quốc Trị,1191
 " 7,5m",Nguyễn Quốc Trị,1192
  5.5m.,Nguyễn Quyền,1193
  10.5m.,Nguyễn Sáng,1194
@@ -1238,7 +1145,6 @@ width,name,STT
 " 5,5m",Nguyễn Văn Giáp,1235
  5.5m,Nguyễn Văn Huề,1236
  ,Nguyễn Văn Huyên,1237
-" 10,5m",Nguyễn Văn Hưởng,1238
  7.5m,Nguyễn Văn Hưởng,1239
  16m ,Nguyễn Văn Linh,1240
 " 2x10,5m",Nguyễn Văn Nguyễn,1241
@@ -1263,7 +1169,6 @@ width,name,STT
 " 5,5m",Nhân Hoà 5,1260
 " 5,5m",Nhân Hoà 6,1261
 " 5,5m",Nhân Hoà 7,1262
-" 5,5 m",Nhất Chi Mai,1263
 " 7,5m",Nhất Chi Mai,1264
 " 5,5m",Nhơn Hòa 1,1265
 " 5,5m",Nhơn Hòa 2,1266
@@ -1277,7 +1182,6 @@ width,name,STT
 " rộng 3,75m",Nhơn Hòa Phước 2,1274
 " rộng 3,75m",Nhơn Hòa Phước 3,1275
  15m,Như Nguyệt,1276
- 15 m,Ông Ích Đường,1277
  15m,Ông Ích Đường,1278
  9 m,Ông Ích Khiêm,1279
  6.5 m,Pasteur,1280
@@ -1311,28 +1215,22 @@ width,name,STT
  7.5 m,Pham Vấn,1308
 " 5,5m",Phạm Vinh,1309
  6 m,Phan Bá Phiến,1310
- 5.5 m,Phan Bôi,1311
 " 5,5m",Phan Bôi,1312
  8.5 m,Phan Châu Trinh,1313
- 14m,Phan Đăng Lưu,1314
  15m,Phan Đăng Lưu,1315
  7 m,Phan Đình Phùng,1316
-" 5,5m",Phan Đình Thông,1317
  5.5 m,Phan Đình Thông,1318
  15m,Phan Hành Sơn,1319
  6 m,Phan Huy Chú,1320
  6 m,Phan Huy Ích,1321
 " 7,5m",Phan Huy Thực,1322
  5.5 m,Phan Kế Bính,1323
-" 7,5m",Phan Khôi,1324
 " 7,5m",Phan Khôi,1325
 " 7,5m",Phan Liêm,1326
 " 7,5m.",Phan Ngọc Nhân,1327
  7.5 m,Phan Nhu,1328
- 5.5 m,Phan Phu Tiên,1329
 " 5,5m",Phan Phu Tiên,1330
  7.5 m,Phan Tòng ,1331
-" 7,5m",Phan Tôn,1332
 " 7,5m",Phan Tôn,1333
 " 7,5m",Phan Tốn,1334
  7 m,Phan Tứ,1335
@@ -1365,7 +1263,6 @@ width,name,STT
 " 5,5m",Phần Lăng 7,1362
 " 5,5m",Phần Lăng 8,1363
  6 m,Phó Đức Chính,1364
-5.5 m,Phong Bắc,1365
 5.5 m,Phong Bắc,1366
 5.5 m,Phong Bắc 16,1367
 5.5 m,Phong Bắc 1,1368
@@ -1373,19 +1270,15 @@ width,name,STT
 5.5 m,Phong Bắc 11,1370
 " rộng 5,5m;",Phong Bắc 18,1371
 " 5,5m",Phong Bắc 19,1372
-5.5 m,Phong Bắc 2,1373
 5.5 m,Phong Bắc 2,1374
 " 5,5m, có đoạn 3m",Phong Bắc 20,1375
-5.5 m,Phong Bắc 3,1376
 5.5 m,Phong Bắc 3,1377
-5.5 m,Phong Bắc 4,1378
 5.5 m,Phong Bắc 4,1379
 5.5 m,Phong Bắc 5,1380
 5.5 m,Phong Bắc 6,1381
 5.5 m,Phong Bắc 7,1382
 " rộng 5,5m;",Phong Bắc 8,1383
 5.5 m,Phong Bắc 9,1384
-" 5,5m.",Phù Đổng,1385
 7.5 m,Phù Đổng,1386
 " 5,5m",Phú Lộc 1,1387
 " 5,5m ",Phú Lộc 10,1388
@@ -1450,27 +1343,16 @@ width,name,STT
  ,Quốc lộ 1A,1447
  7m,Quy Mỹ,1448
  15m,Song Hào,1449
- 7.5 m,Sơn Thủy 1,1450
 "7,5m",Sơn Thủy 1,1451
- ,Sơn Thủy 10,1452
  ,Sơn Thủy 10,1453
- ,Sơn Thủy 11,1454
  ,Sơn Thủy 11,1455
- ,Sơn Thủy 2,1456
 " 5,5m",Sơn Thủy 2,1457
- ,Sơn Thủy 3,1458
 " 5,5m",Sơn Thủy 3,1459
- ,Sơn Thủy 4,1460
 " 3,5m",Sơn Thủy 4,1461
- ,Sơn Thủy 5,1462
 " 3,5m",Sơn Thủy 5,1463
- ,Sơn Thủy 6,1464
 " 3,5m",Sơn Thủy 6,1465
- ,Sơn Thủy 7,1466
 " 3,5m",Sơn Thủy 7,1467
- ,Sơn Thủy 8,1468
 " 3,5m",Sơn Thủy 8,1469
- ,Sơn Thủy 9,1470
 " 3,5m",Sơn Thủy 9,1471
 " 5,5m ",Sơn Thủy Đông 1,1472
 " 7,5m ",Sơn Thủy Đông 2,1473
@@ -1596,7 +1478,6 @@ width,name,STT
 " 3,5m",Thanh Vinh 8,1593
 " 3,5m",Thanh Vinh 9,1594
 " 10,5m & 5,5m",Thăng Long,1595
- 7.5 m,Thân Cảnh Phúc,1596
 " 7,5m",Thân Cảnh Phúc,1597
 " 5,5m",Thân Nhân Trung,1598
 " có đoạn 5,5m và có đoạn rộng 7,5m",Thép Mới,1599
@@ -1608,19 +1489,12 @@ width,name,STT
  m,Thôi Hữu,1605
 " 5,5m",Thu Bồn,1606
 " 5,5m",Thủ Khoa Huân,1607
- m,Thuận An 1,1608
 ,Thuận An 1,1609
- m,Thuận An 2,1610
 ,Thuận An 2,1611
- m,Thuận An 3,1612
 ,Thuận An 3,1613
- m,Thuận An 4,1614
 ,Thuận An 4,1615
- 4m,Thuận An 5,1616
 ,Thuận An 5,1617
-"  7,5m",Thuận An 6,1618
 ,Thuận An 6,1619
- m,Thúc Tề,1620
 ,Thúc Tề,1621
 " 7,5m",Thuỷ Sơn 1,1622
 " 7,5m",Thuỷ Sơn 2,1623
@@ -1664,13 +1538,11 @@ width,name,STT
 " 7,5m",Trần Ngọc Sương,1661
 " 10,5 m",Trần Nguyên Đán,1662
 " 10,5 m",Trần Nguyên Hãn,1663
-" 10,5 m",Trần Nhân Tông,1664
 " 15m – 10,5m",Trần Nhân Tông,1665
  6 m,Trần Nhật Duật,1666
  10.5 m,Trần Phú,1667
  10.5 m,Trần Phước Thành,1668
  10.5 m,Trần Phước Thành (nối dài),1669
- m,Trần Quang Diệu,1670
  10.5 m,Trần Quang Diệu,1671
  6m,Trần Quang Khải,1672
  ,Trần Quang Khải (nối dài),1673
@@ -1681,8 +1553,6 @@ width,name,STT
 " 5,5m",Trần Quý Hai,1678
 " 7,5m",Trần Sâm,1679
 " 7,5m",Trần Tấn,1680
- m,Trần Tấn Mới,1681
- 7.5m,Trần Tấn Mới,1682
 " 5,5m",Trần Tấn Mới,1683
  6 m,Trần Tống,1684
  11 m,Trần Thái Tông,1685
@@ -1695,16 +1565,12 @@ width,name,STT
  9m,Trần Văn Dư ,1692
  ,Trần Văn Dư (nối dài),1693
 " 7,5m",Trần Văn Đán,1694
- 5.5m,Trần Văn Đang,1695
 " 5,5m",Trần Văn Đang,1696
 " 7,5m",Trần Văn Hai,1697
- 10.5m,Trần Văn Kỳ,1698
  10.5m,Trần Văn Kỳ,1699
-" 5,5m",Trần Văn Lan,1700
  ,Trần Văn Lan,1701
  m,Trần Văn Thành,1702
  21m,Trần Văn Trà,1703
-" 7,5m",Trần Xuân Lê,1704
  5.5 m,Trần Xuân Lê,1705
  5.5 m,Trần Xuân Soạn,1706
  m,Triệu Việt Vương,1707
@@ -1712,7 +1578,6 @@ width,name,STT
  15 m,Trịnh Đình Thảo,1709
 " 4,5 m",Trịnh Hoài Đức,1710
 "  5,5 m",Trịnh Khả,1711
-   m,Trịnh Khắc Lập,1712
 " 4,5 m",Trịnh Khắc Lập,1713
 " 7,5m",Trịnh Lỗi,1714
 " 5,5m",Trung Hòa 1,1715
@@ -1728,37 +1593,27 @@ width,name,STT
 " 7,5m.",Trung Lương 6,1725
 " 7,5m.",Trung Lương 7,1726
 " 5,5 m",Trung Nghĩa 1,1727
-  5.5 m,Trung Nghĩa 2,1728
 " 5,5 m",Trung Nghĩa 2,1729
-  5.5 m,Trung Nghĩa 3,1730
 " 5,5 m",Trung Nghĩa 3,1731
-  5.5 m,Trung Nghĩa 4,1732
 " 5,5 m",Trung Nghĩa 4,1733
-  5.5 m,Trung Nghĩa 5,1734
 " 5,5 m",Trung Nghĩa 5,1735
-  5.5m,Trung Nghĩa 6,1736
 " 5,5 m",Trung Nghĩa 6,1737
-  5.5m,Trung Nghĩa 7,1738
 " 5,5 m",Trung Nghĩa 7,1739
 " 5,5 m",Trừ Văn Thố,1740
  9 m,Trưng Nữ Vương,1741
-  5.5m,Trưng Nhị,1742
 " 5,5 m",Trưng Nhị,1743
 " 7,5m",Trương Công Hy,1744
  8 m,Trương Chí Cương,1745
-   m,Trường Chinh,1746
  24 m,Trường Chinh,1747
 " 5,5m",Trương Đăng Quế,1748
  8 m,Trương Định,1749
 " 10,5m",Trương Gia Mô,1750
-"   3,75m ",Trương Hán Siêu,1751
 " 3,74 m",Trương Hán Siêu,1752
 " 7,5m",Trương Minh Giảng,1753
 " 5,5 m",Trương Quang Giao ,1754
 " 7,5m",Trương Quyền,1755
  15 m,Trường Sa,1756
  21m,Trường Sơn,1757
-" 7,5 m",Trương Văn Đa,1758
 " 7,5m",Trương Văn Đa,1759
 " 7,5 m",Trương Văn Hiến,1760
 " 5,5m",Trương Vân Lĩnh,1761
@@ -1766,7 +1621,6 @@ width,name,STT
 " 5,5 m",Vạn Tường,1763
  6 m,Văn Cao,1764
 " 7,5m",Văn Tân,1765
-" 10,5m.",Văn Tiến Dũng,1766
 " 10,5m",Văn Tiến Dũng,1767
 " 5,5m",Văn Thánh 1,1768
 " 5,5m",Văn Thánh 2,1769
@@ -1774,7 +1628,6 @@ width,name,STT
 " 5,5m",Văn Thánh 4,1771
  15 m,Vân Đồn,1772
 " 7,5m",Việt Bắc,1773
-" 5,5m",Võ Duy Dương,1774
 " 7,5m",Võ Duy Dương,1775
 " 7,5 m",Võ Duy Đoán,1776
 " 7,5m",Võ Duy Ninh,1777
@@ -1799,7 +1652,6 @@ width,name,STT
 " 5,5m",Vũ Thạnh,1796
  m ,Vũ Trọng Phụng,1797
 " 10,5m",Vũ Văn Cẩn,1798
- m ,Vũ Văn Dũng,1799
 " 5,5 m",Vũ Văn Dũng,1800
 " 7,5m ",Vũng Thùng 1,1801
 " 5,5m ",Vũng Thùng 2,1802
