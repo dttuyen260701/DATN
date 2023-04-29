@@ -50,9 +50,10 @@ def getPrice(request):
             data = pd.DataFrame.from_dict([data])
             data = scaleMinMax(data)
             data['Clusters'] = -1
-            data.iloc[0]['Clusters'] = getCluster(data.iloc[0])
+            clusters = getCluster(data.iloc[0])
+            data.iloc[0]['Clusters'] = clusters[0]
             data = decodeClusters(data)
-            return JsonResponse({"Result": getPriceTraining(data)})
+            return JsonResponse({"Result": getPriceTraining(data), "Cluster": str(clusters[0])})
         except Exception as e:
             return JsonResponse({"Error": e})
     else:
