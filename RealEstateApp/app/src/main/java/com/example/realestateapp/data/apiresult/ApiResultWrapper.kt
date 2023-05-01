@@ -1,6 +1,7 @@
 package com.example.realestateapp.data.apiresult
 
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 sealed class ApiResultWrapper<out T> {
     data class Success<out T>(val value: ResponseAPI<out T>) : ApiResultWrapper<T>()
@@ -9,7 +10,9 @@ sealed class ApiResultWrapper<out T> {
 
     data class NetworkError(val io: IOException) : ApiResultWrapper<Nothing>()
 
-    object TimeOutError : ApiResultWrapper<Nothing>()
+    data class TimeOutError(val error: SocketTimeoutException) : ApiResultWrapper<Nothing>()
+
+    object NullResponseError : ApiResultWrapper<Nothing>()
 
     object ExceptionError : ApiResultWrapper<Nothing>()
 

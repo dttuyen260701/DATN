@@ -1,7 +1,5 @@
 package com.example.realestateapp.util
 
-import com.example.realestateapp.data.apiresult.ResponseAPI
-
 /**
  * Created by tuyen.dang on 4/30/2023.
  */
@@ -19,11 +17,7 @@ class Constants {
     }
 
     object DefaultValue {
-        val DEFAULT_RESULT_API = ResponseAPI(
-            false,
-            "Lỗi khi thực hiện thao tác !!!",
-            null
-        )
+
     }
 
     object MessageErrorAPI {

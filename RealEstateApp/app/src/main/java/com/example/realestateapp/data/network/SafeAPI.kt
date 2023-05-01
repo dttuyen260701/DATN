@@ -2,7 +2,6 @@ package com.example.realestateapp.data.network
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.apiresult.ResponseAPI
-import com.example.realestateapp.util.Constants.DefaultValue
 import com.example.realestateapp.util.Constants.MessageErrorAPI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,14 +15,17 @@ import java.net.SocketTimeoutException
 
 open class SafeAPI {
     suspend fun <T> callApi(
-        apiFunction: suspend () -> Response<ResponseAPI<T?>>
+        apiFunction: suspend () -> Response<ResponseAPI<out T>>
     ): ApiResultWrapper<T> {
         return withContext(Dispatchers.IO) {
             try {
                 val res = apiFunction()
                 when (res.code()) {
                     200 -> {
-                        ApiResultWrapper.Success(res.body() ?: DefaultValue.DEFAULT_RESULT_API)
+                        res.body()?.let {
+                            ApiResultWrapper.Success(it)
+                        }
+                        ApiResultWrapper.NullResponseError
                     }
                     400 -> {
                         ApiResultWrapper.ResponseCodeError(MessageErrorAPI.INVALID_INPUT_ERROR)
@@ -35,9 +37,8 @@ open class SafeAPI {
                         ApiResultWrapper.ResponseCodeError(MessageErrorAPI.INTERNAL_SERVER_ERROR)
                     }
                 }
-                ApiResultWrapper.TimeOutError
             } catch (e: SocketTimeoutException) {
-                ApiResultWrapper.TimeOutError
+                ApiResultWrapper.TimeOutError(e)
             } catch (e: IOException) {
                 ApiResultWrapper.NetworkError(e)
             } catch (e: Exception) {
