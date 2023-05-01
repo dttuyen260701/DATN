@@ -15,10 +15,10 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ApiSourceModule {
+interface ApiSourceModule {
     @Binds
-    abstract fun bindRetrofitDataSource(impl: RetrofitDataSourceImpl): RetrofitDataSource
+    fun bindRetrofitDataSource(impl: RetrofitDataSourceImpl): RetrofitDataSource
 
     @Binds
-    abstract fun bindAppRepository(impl: AppRepositoryImpl): AppRepository
+    fun bindAppRepository(impl: AppRepositoryImpl): AppRepository
 }
