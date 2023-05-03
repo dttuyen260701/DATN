@@ -1,4 +1,4 @@
-package com.example.realestateapp.data.navigation
+package com.example.realestateapp.navigation
 
 import android.graphics.drawable.Icon
 

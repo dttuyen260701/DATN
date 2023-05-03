@@ -5,7 +5,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.realestateapp.data.navigation.TopLevelDestination
+import com.example.realestateapp.navigation.TopLevelDestination
 
 /**
  * Created by tuyen.dang on 5/1/2023.
@@ -35,18 +35,11 @@ class RealEstateAppState(
     var isLoading by mutableStateOf(false)
         private set
 
-    var isOnline by mutableStateOf(false)
-        private set
-
     var shouldErrorDialog by mutableStateOf(false)
         private set
 
     fun setIsLoading(loading: Boolean) {
         isLoading = loading
-    }
-
-    fun setIsOnline(online: Boolean) {
-        isOnline = online
     }
 
     fun setShowErrorDialog(shouldShow: Boolean) {

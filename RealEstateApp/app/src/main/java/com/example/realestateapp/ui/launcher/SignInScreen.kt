@@ -1,4 +1,4 @@
-package com.example.realestateapp.ui.launcher.login
+package com.example.realestateapp.ui.launcher
 
 /**
  * Created by tuyen.dang on 5/1/2023.
