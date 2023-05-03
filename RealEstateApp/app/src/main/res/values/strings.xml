@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RealEstateApp</string>
+    <string name="homeTitle">Home</string>
+    <string name="postTitle">Post</string>
+    <string name="notificationTitle">Notification</string>
+    <string name="settingTitle">Setting</string>
 </resources>
