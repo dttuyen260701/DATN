@@ -2,8 +2,14 @@ package com.example.realestateapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.example.realestateapp.ui.home.navigation.homeScreen
+import com.example.realestateapp.ui.launcher.navigation.launcherGraph
+import com.example.realestateapp.ui.notification.navigation.notificationScreen
+import com.example.realestateapp.ui.post.navigation.postScreen
+import com.example.realestateapp.ui.setting.navigation.settingScreen
 
 /**
  * Created by tuyen.dang on 5/1/2023.
@@ -20,6 +26,30 @@ fun RealEstateNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-
+        launcherGraph()
+        homeScreen()
+        postScreen()
+        notificationScreen()
+        settingScreen()
     }
+}
+
+fun NavHostController.navigateSingleTopTo(
+    route: String,
+    beforeNavigated: () -> Unit = {}
+) = this.navigate(route) {
+    // Pop up to the start destination of the graph to
+    // avoid building up a large stack of destinations
+    // on the back stack as users select items
+    popUpTo(
+        this@navigateSingleTopTo.graph.findStartDestination().id
+    ) {
+        saveState = true
+    }
+    // Avoid multiple copies of the same destination when
+    // reselecting the same item
+    launchSingleTop = true
+    // Restore state when reselecting a previously selected item
+    restoreState = true
+    beforeNavigated.invoke()
 }
