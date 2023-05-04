@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.post
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,5 +19,5 @@ internal fun PostRoute(
 
 @Composable
 internal fun PostScreen() {
-
+    Text(text = "Post")
 }

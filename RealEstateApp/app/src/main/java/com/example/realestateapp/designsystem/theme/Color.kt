@@ -1,4 +1,4 @@
-package com.example.realestateapp.ui.theme
+package com.example.realestateapp.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

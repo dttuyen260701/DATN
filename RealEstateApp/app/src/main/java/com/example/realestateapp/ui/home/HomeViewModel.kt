@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val appRepository: AppRepository
+    appRepository: AppRepository
 ) : BaseViewModel() {
 
 }

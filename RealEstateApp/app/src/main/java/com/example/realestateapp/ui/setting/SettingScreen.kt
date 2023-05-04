@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.setting
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,5 +19,5 @@ internal fun SettingRoute(
  
 @Composable
 internal fun SettingScreen() {
-
+    Text(text = "Setting")
 }

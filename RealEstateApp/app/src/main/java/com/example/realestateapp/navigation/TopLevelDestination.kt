@@ -1,8 +1,9 @@
 package com.example.realestateapp.navigation
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.realestateapp.R
+import com.example.realestateapp.designsystem.icon.Icon
+import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.ui.home.navigation.homeNavigationRoute
 import com.example.realestateapp.ui.notification.navigation.notificationNavigationRoute
 import com.example.realestateapp.ui.post.navigation.postNavigationRoute
@@ -14,27 +15,27 @@ import com.example.realestateapp.ui.setting.navigation.settingNavigationRoute
 
 enum class TopLevelDestination(
     @StringRes val title: Int,
-    @DrawableRes val icon: Int,
+    val icon: Icon,
     val route: String
 ) {
     HOME(
         title = R.string.homeTitle,
-        icon = R.drawable.ic_home,
+        icon = Icon.DrawableResourceIcon(RealStateIcon.TabHome),
         route = homeNavigationRoute
     ),
     POST(
         title = R.string.postTitle,
-        icon = R.drawable.ic_post,
+        icon = Icon.DrawableResourceIcon(RealStateIcon.TabPost),
         route = postNavigationRoute
     ),
     NOTIFICATION(
         title = R.string.notificationTitle,
-        icon = R.drawable.ic_notification,
+        icon = Icon.DrawableResourceIcon(RealStateIcon.TabNotification),
         route = notificationNavigationRoute
     ),
     SETTING(
         title = R.string.settingTitle,
-        icon = R.drawable.ic_setting,
+        icon = Icon.DrawableResourceIcon(RealStateIcon.TabSetting),
         route = settingNavigationRoute
     ),
 }

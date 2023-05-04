@@ -24,7 +24,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface ApiModule {
+object ApiModule {
 
     @Provides
     @Singleton
