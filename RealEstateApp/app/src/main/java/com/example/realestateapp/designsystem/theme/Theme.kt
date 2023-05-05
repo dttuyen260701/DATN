@@ -1,30 +1,25 @@
 package com.example.realestateapp.designsystem.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
+import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import javax.inject.Singleton
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val DarkColorRealState = RealStateColors(
+    primary = MidnightGreen,
+    primaryVariant = AntiFlashWhite,
+    secondary = GhostWhite,
+    selectedBottomNavigate = Malachite
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val LightColorRealState = RealStateColors(
+    primary = MidnightGreen,
+    primaryVariant = AntiFlashWhite,
+    secondary = GhostWhite,
+    selectedBottomNavigate = Malachite
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -37,32 +32,105 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+@Singleton
+object RealStateAppTheme {
+    val colors: RealStateColors
+        @Composable
+        get() = LocalRealStateColors.current
+}
+
 @Composable
 fun RealEstateAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colors = if (darkTheme) {
+        DarkColorRealState
+    } else {
+        LightColorRealState
     }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
-        }
+    val systemUiController = rememberSystemUiController()
+    if (darkTheme) {
+        systemUiController.setSystemBarsColor(
+            color = colors.primary
+        )
+    } else {
+        systemUiController.setSystemBarsColor(
+            color = colors.primary
+        )
+    }
+    ProvideRealStateColors(colors = colors) {
+        MaterialTheme(
+            colors = debugColors(darkTheme),
+            typography = Typography,
+            content = content
+        )
+    }
+}
+
+
+@Stable
+class RealStateColors(
+    primary: Color,
+    primaryVariant: Color,
+    secondary: Color,
+    selectedBottomNavigate: Color
+) {
+    var primary by mutableStateOf(primary)
+        private set
+    var primaryVariant by mutableStateOf(primaryVariant)
+        private set
+    var secondary by mutableStateOf(secondary)
+        private set
+    var selectedBottomNavigate by mutableStateOf(selectedBottomNavigate)
+        private set
+
+    fun update(other: RealStateColors) {
+        primary = other.primary
+        primaryVariant = other.primaryVariant
+        secondary = other.secondary
+        selectedBottomNavigate = other.selectedBottomNavigate
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+    fun copy(): RealStateColors = RealStateColors(
+        primary = primary,
+        primaryVariant = primaryVariant,
+        secondary = secondary,
+        selectedBottomNavigate = selectedBottomNavigate
     )
 }
+
+@Composable
+fun ProvideRealStateColors(
+    colors: RealStateColors,
+    content: @Composable () -> Unit
+) {
+    val colorPalette = remember {
+        colors.copy()
+    }
+    colorPalette.update(colors)
+    CompositionLocalProvider(LocalRealStateColors provides colorPalette, content = content)
+}
+
+private val LocalRealStateColors = staticCompositionLocalOf<RealStateColors> {
+    error("No LocalPostColors provided")
+}
+
+fun debugColors(
+    darkTheme: Boolean,
+    debugColor: Color = Color.Magenta
+) = Colors(
+    primary = debugColor,
+    primaryVariant = debugColor,
+    secondary = debugColor,
+    secondaryVariant = debugColor,
+    background = debugColor,
+    surface = debugColor,
+    error = debugColor,
+    onPrimary = debugColor,
+    onSecondary = debugColor,
+    onBackground = debugColor,
+    onSurface = debugColor,
+    onError = debugColor,
+    isLight = !darkTheme
+)

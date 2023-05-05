@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import com.example.realestateapp.designsystem.icon.Icon
+import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.navigation.RealEstateNavHost
 import com.example.realestateapp.navigation.TopLevelDestination
 
@@ -75,8 +76,8 @@ fun RealEstateBottomBar(
                             onNavigateToDestination(tab)
                     },
                     alwaysShowLabel = false,
-                    selectedContentColor = Color.Green,
-                    unselectedContentColor = Color.Gray,
+                    selectedContentColor = RealStateAppTheme.colors.selectedBottomNavigate,
+                    unselectedContentColor = RealStateAppTheme.colors.primary,
                     modifier = Modifier
                         .navigationBarsPadding()
                         .background(Color.White)
