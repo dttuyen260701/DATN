@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">RealEstateApp</string>
-    <string name="homeTitle">Home</string>
-    <string name="postTitle">Post</string>
-    <string name="notificationTitle">Notification</string>
-    <string name="settingTitle">Setting</string>
+    <string name="homeTitle">Trang chủ</string>
+    <string name="postTitle">Bài đăng</string>
+    <string name="notificationTitle">Thông báo</string>
+    <string name="settingTitle">Cài đặt</string>
+
+<!--    Setting Screen-->
+    <string name="settingUserTitle">Thông tin tài khoản</string>
+    <string name="settingChangePassTitle">Đổi mật khẩu</string>
+    <string name="settingPostSavedTitle">Tin đã lưu</string>
 </resources>

@@ -2,7 +2,7 @@ package com.example.realestateapp.navigation
 
 import androidx.annotation.StringRes
 import com.example.realestateapp.R
-import com.example.realestateapp.designsystem.icon.Icon
+import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.ui.home.navigation.homeNavigationRoute
 import com.example.realestateapp.ui.notification.navigation.notificationNavigationRoute
@@ -15,27 +15,27 @@ import com.example.realestateapp.ui.setting.navigation.settingNavigationRoute
 
 enum class TopLevelDestination(
     @StringRes val title: Int,
-    val icon: Icon,
+    val icon: AppIcon,
     val route: String
 ) {
     HOME(
         title = R.string.homeTitle,
-        icon = Icon.DrawableResourceIcon(RealStateIcon.TabHome),
+        icon = AppIcon.DrawableResourceIcon(RealStateIcon.TabHome),
         route = homeNavigationRoute
     ),
     POST(
         title = R.string.postTitle,
-        icon = Icon.DrawableResourceIcon(RealStateIcon.TabPost),
+        icon = AppIcon.DrawableResourceIcon(RealStateIcon.TabPost),
         route = postNavigationRoute
     ),
     NOTIFICATION(
         title = R.string.notificationTitle,
-        icon = Icon.DrawableResourceIcon(RealStateIcon.TabNotification),
+        icon = AppIcon.DrawableResourceIcon(RealStateIcon.TabNotification),
         route = notificationNavigationRoute
     ),
     SETTING(
         title = R.string.settingTitle,
-        icon = Icon.DrawableResourceIcon(RealStateIcon.TabSetting),
+        icon = AppIcon.DrawableResourceIcon(RealStateIcon.TabSetting),
         route = settingNavigationRoute
     ),
 }

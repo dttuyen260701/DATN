@@ -1,0 +1,108 @@
+package com.example.realestateapp.designsystem.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.realestateapp.designsystem.icon.AppIcon
+import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.theme.RealStateAppTheme
+import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_TEXT
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_CIRCLE
+
+/**
+ * Created by tuyen.dang on 5/6/2023.
+ */
+
+@Composable
+fun SettingButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    title: String,
+    leadingIcon: AppIcon,
+    trailingIcon: AppIcon? =  AppIcon.DrawableResourceIcon(RealStateIcon.NextArrow),
+    backgroundIcon: Color
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .then(modifier),
+        enabled = enabled,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = RealStateAppTheme.colors.bgSettingButton
+        ),
+        shape = RoundedCornerShape(ROUND_CIRCLE.dp),
+        contentPadding = PaddingValues(PADDING_VIEW.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = RealStateAppTheme.colors.bgSettingButton),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconRealStateApp(
+                icon = leadingIcon,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1f)
+                    .background(color = backgroundIcon, shape = CircleShape)
+                    .padding(PADDING_TEXT.dp),
+                tint = Color.White
+            )
+            Text(
+                text = title,
+                style = RealStateTypography.button.copy(
+                    fontSize = 16.sp,
+                    color = RealStateAppTheme.colors.textSettingButton,
+                    textAlign = TextAlign.Start
+                ),
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .weight(1f)
+                    .padding(horizontal = PADDING_TEXT.dp)
+            )
+            trailingIcon?.run {
+                IconRealStateApp(
+                    icon = this,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .aspectRatio(1f)
+                        .padding(PADDING_ICON.dp),
+                    tint = RealStateAppTheme.colors.textSettingButton
+                )
+            }
+        }
+    }
+}
+
+@Preview("default", "rectangle")
+@Composable
+private fun SettingButtonPreview() {
+    SettingButton(
+        onClick = {},
+        modifier = Modifier
+            .height(56.dp)
+            .fillMaxWidth(),
+        title = "User",
+        leadingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Lock),
+        backgroundIcon = RealStateAppTheme.colors.primary
+    )
+}

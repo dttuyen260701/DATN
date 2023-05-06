@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
-import com.example.realestateapp.designsystem.icon.Icon
+import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.navigation.RealEstateNavHost
 import com.example.realestateapp.navigation.TopLevelDestination
@@ -59,11 +59,11 @@ fun RealEstateBottomBar(
                 BottomNavigationItem(
                     icon = {
                         when (tab.icon) {
-                            is Icon.ImageVectorIcon -> Icon(
+                            is AppIcon.ImageVectorIcon -> Icon(
                                 imageVector = tab.icon.imageVector,
                                 contentDescription = null
                             )
-                            is Icon.DrawableResourceIcon -> Icon(
+                            is AppIcon.DrawableResourceIcon -> Icon(
                                 painter = painterResource(id = tab.icon.id),
                                 contentDescription = null
                             )

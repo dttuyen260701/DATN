@@ -12,14 +12,20 @@ private val DarkColorRealState = RealStateColors(
     primary = MidnightGreen,
     primaryVariant = AntiFlashWhite,
     secondary = GhostWhite,
-    selectedBottomNavigate = Malachite
+    selectedBottomNavigate = Malachite,
+    textSettingButton = SonicSilver,
+    bgSettingButton = Color.White,
+    bgScreen = AthensGrayApprox
 )
 
 private val LightColorRealState = RealStateColors(
     primary = MidnightGreen,
     primaryVariant = AntiFlashWhite,
     secondary = GhostWhite,
-    selectedBottomNavigate = Malachite
+    selectedBottomNavigate = Malachite,
+    textSettingButton = SonicSilver,
+    bgSettingButton = Color.White,
+    bgScreen = AthensGrayApprox
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -62,7 +68,7 @@ fun RealEstateAppTheme(
     ProvideRealStateColors(colors = colors) {
         MaterialTheme(
             colors = debugColors(darkTheme),
-            typography = Typography,
+            typography = RealStateTypography,
             content = content
         )
     }
@@ -74,7 +80,10 @@ class RealStateColors(
     primary: Color,
     primaryVariant: Color,
     secondary: Color,
-    selectedBottomNavigate: Color
+    selectedBottomNavigate: Color,
+    textSettingButton: Color,
+    bgSettingButton: Color,
+    bgScreen: Color,
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -84,19 +93,31 @@ class RealStateColors(
         private set
     var selectedBottomNavigate by mutableStateOf(selectedBottomNavigate)
         private set
+    var textSettingButton by mutableStateOf(textSettingButton)
+        private set
+    var bgSettingButton by mutableStateOf(bgSettingButton)
+        private set
+    var bgScreen by mutableStateOf(bgScreen)
+        private set
 
     fun update(other: RealStateColors) {
         primary = other.primary
         primaryVariant = other.primaryVariant
         secondary = other.secondary
         selectedBottomNavigate = other.selectedBottomNavigate
+        textSettingButton = other.textSettingButton
+        bgSettingButton = other.bgSettingButton
+        bgScreen = other.bgScreen
     }
 
     fun copy(): RealStateColors = RealStateColors(
         primary = primary,
         primaryVariant = primaryVariant,
         secondary = secondary,
-        selectedBottomNavigate = selectedBottomNavigate
+        selectedBottomNavigate = selectedBottomNavigate,
+        textSettingButton = textSettingButton,
+        bgSettingButton = bgSettingButton,
+        bgScreen = bgScreen
     )
 }
 
