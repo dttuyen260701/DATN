@@ -5,8 +5,13 @@
     <string name="notificationTitle">Thông báo</string>
     <string name="settingTitle">Cài đặt</string>
 
-<!--    Setting Screen-->
+    <!--Setting Screen-->
     <string name="settingUserTitle">Thông tin tài khoản</string>
     <string name="settingChangePassTitle">Đổi mật khẩu</string>
     <string name="settingPostSavedTitle">Tin đã lưu</string>
+    <string name="settingSignInTitle">Đăng nhập</string>
+    <string name="settingSignUpTitle">Đăng ký</string>
+    <string name="settingPolicyTitle">Điều khoản dịch vụ</string>
+    <string name="settingAboutUsTitle">Về chúng tôi</string>
+    <string name="settingSignOutTitle">Đăng Xuất</string>
 </resources>

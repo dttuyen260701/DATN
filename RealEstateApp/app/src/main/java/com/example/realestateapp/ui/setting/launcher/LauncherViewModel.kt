@@ -1,4 +1,4 @@
-package com.example.realestateapp.ui.launcher
+package com.example.realestateapp.ui.setting.launcher
 
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel

@@ -15,7 +15,8 @@ private val DarkColorRealState = RealStateColors(
     selectedBottomNavigate = Malachite,
     textSettingButton = SonicSilver,
     bgSettingButton = Color.White,
-    bgScreen = AthensGrayApprox
+    bgScreen = AthensGrayApprox,
+    progressBar = KellyGreen
 )
 
 private val LightColorRealState = RealStateColors(
@@ -25,7 +26,8 @@ private val LightColorRealState = RealStateColors(
     selectedBottomNavigate = Malachite,
     textSettingButton = SonicSilver,
     bgSettingButton = Color.White,
-    bgScreen = AthensGrayApprox
+    bgScreen = AthensGrayApprox,
+    progressBar = KellyGreen
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -84,6 +86,7 @@ class RealStateColors(
     textSettingButton: Color,
     bgSettingButton: Color,
     bgScreen: Color,
+    progressBar: Color
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -99,6 +102,8 @@ class RealStateColors(
         private set
     var bgScreen by mutableStateOf(bgScreen)
         private set
+    var progressBar by mutableStateOf(progressBar)
+        private set
 
     fun update(other: RealStateColors) {
         primary = other.primary
@@ -108,6 +113,7 @@ class RealStateColors(
         textSettingButton = other.textSettingButton
         bgSettingButton = other.bgSettingButton
         bgScreen = other.bgScreen
+        progressBar = other.progressBar
     }
 
     fun copy(): RealStateColors = RealStateColors(
@@ -117,7 +123,8 @@ class RealStateColors(
         selectedBottomNavigate = selectedBottomNavigate,
         textSettingButton = textSettingButton,
         bgSettingButton = bgSettingButton,
-        bgScreen = bgScreen
+        bgScreen = bgScreen,
+        progressBar = progressBar
     )
 }
 

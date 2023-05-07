@@ -9,14 +9,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.realestateapp.navigation.TopLevelDestination
 import com.example.realestateapp.navigation.TopLevelDestination.*
-import com.example.realestateapp.ui.home.navigation.homeNavigationRoute
 import com.example.realestateapp.ui.home.navigation.navigateToHome
 import com.example.realestateapp.ui.notification.navigation.navigateToNotification
-import com.example.realestateapp.ui.notification.navigation.notificationNavigationRoute
 import com.example.realestateapp.ui.post.navigation.navigateToPost
-import com.example.realestateapp.ui.post.navigation.postNavigationRoute
-import com.example.realestateapp.ui.setting.navigation.navigateToSetting
-import com.example.realestateapp.ui.setting.navigation.settingNavigationRoute
+import com.example.realestateapp.ui.setting.navigation.navigateToSettingGraph
 
 /**
  * Created by tuyen.dang on 5/1/2023.
@@ -36,15 +32,6 @@ class RealEstateAppState(
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
-
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            homeNavigationRoute -> HOME
-            postNavigationRoute -> POST
-            notificationNavigationRoute -> NOTIFICATION
-            settingNavigationRoute -> SETTING
-            else -> null
-        }
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
 
@@ -78,7 +65,7 @@ class RealEstateAppState(
             HOME -> navController.navigateToHome(topLevelNavOptions)
             POST -> navController.navigateToPost(topLevelNavOptions)
             NOTIFICATION -> navController.navigateToNotification(topLevelNavOptions)
-            SETTING -> navController.navigateToSetting(topLevelNavOptions)
+            SETTING -> navController.navigateToSettingGraph(topLevelNavOptions)
         }
     }
 

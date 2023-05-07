@@ -10,6 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
+import com.example.realestateapp.designsystem.components.LoadingScreen
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.navigation.RealEstateNavHost
@@ -23,20 +24,28 @@ import com.example.realestateapp.navigation.TopLevelDestination
 fun RealEstateApp(
     appState: RealEstateAppState = rememberRealEstateAppState()
 ) {
-    Scaffold(
-        backgroundColor = Color.Transparent,
-        bottomBar = {
-            if (appState.shouldShowBottomBar) RealEstateBottomBar(
-                currentDestination = appState.currentDestination,
-                onNavigateToDestination = appState::navigateToTopLevelDestination,
-                tabs = appState.topLevelDestinations
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Scaffold(
+            backgroundColor = Color.Transparent,
+            bottomBar = {
+                if (appState.shouldShowBottomBar) RealEstateBottomBar(
+                    currentDestination = appState.currentDestination,
+                    onNavigateToDestination = appState::navigateToTopLevelDestination,
+                    tabs = appState.topLevelDestinations
+                )
+            }
+        ) { innerPaddingModifier ->
+            RealEstateNavHost(
+                navController = appState.navController,
+                modifier = Modifier.padding(innerPaddingModifier)
             )
         }
-    ) { innerPaddingModifier ->
-        RealEstateNavHost(
-            navController = appState.navController,
-            modifier = Modifier.padding(innerPaddingModifier)
-        )
+        if(appState.isLoading) {
+            LoadingScreen(modifier = Modifier.fillMaxSize())
+        }
     }
 }
 

@@ -21,6 +21,11 @@ object RealStateIcon {
     const val BackArrow = R.drawable.ic_arrow_left
     val Edit = Icons.Rounded.Edit
     const val PostSaved = R.drawable.ic_post_saved
+    const val Policy = R.drawable.ic_policy
+    const val AboutUs = R.drawable.ic_contact_us
+    const val SignOut = R.drawable.ic_signout
+    const val SignIn = R.drawable.ic_signin
+    const val SignUp = R.drawable.ic_signup
 }
 
 /**

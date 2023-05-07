@@ -1,22 +1,22 @@
-package com.example.realestateapp.ui.launcher
+package com.example.realestateapp.ui.setting.launcher
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 
 /**
- * Created by tuyen.dang on 5/3/2023.
+ * Created by tuyen.dang on 5/1/2023.
  */
 
 @Composable
-internal fun SignUpRoute(
+internal fun SignInRoute(
     modifier: Modifier = Modifier,
     viewModel: LauncherViewModel = hiltViewModel()
 ) {
-    SignUpScreen()
+    SignInScreen()
 }
- 
+
 @Composable
-internal fun SignUpScreen() {
+internal fun SignInScreen() {
 
 }
