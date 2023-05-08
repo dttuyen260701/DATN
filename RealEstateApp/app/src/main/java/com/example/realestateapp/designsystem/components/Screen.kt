@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.util.Constants
@@ -20,12 +21,13 @@ import com.example.realestateapp.util.Constants
 @Composable
 internal fun BaseScreen(
     modifier: Modifier = Modifier,
+    bgColor: Color = RealStateAppTheme.colors.bgScreen,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
         modifier = Modifier
-            .background(RealStateAppTheme.colors.bgScreen)
-            .padding(horizontal = Constants.DefaultValue.PADDING_SCREEN.dp)
+            .background(bgColor)
+            .padding(horizontal = Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN.dp)
             .then(modifier)
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
     ) {

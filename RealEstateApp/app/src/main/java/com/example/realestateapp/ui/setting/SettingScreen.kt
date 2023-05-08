@@ -156,8 +156,8 @@ internal fun SettingScreen(
                     tint = RealStateAppTheme.colors.primary
                 )
             }
+            Spacing(MARGIN_VIEW)
         }
-        if (user != null) Spacing(MARGIN_VIEW)
         listSettingButton.forEach { button ->
             Spacing(MARGIN_VIEW)
             SettingButton(

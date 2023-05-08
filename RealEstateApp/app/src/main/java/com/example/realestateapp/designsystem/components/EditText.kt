@@ -9,7 +9,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -31,7 +31,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_PADDI
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun EditTextBorder(
+fun EditTextRadius(
     modifier: Modifier = Modifier,
     label: String? = null,
     text: String = "",
@@ -41,11 +41,13 @@ fun EditTextBorder(
     errorText: String = "",
     textColor: Color = Color.Black,
     backgroundColor: Color = Color.White,
-    trailingIcon: AppIcon? = null,
-    trailingIconListener: () -> Unit = {},
     isLastEditText: Boolean = false
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var isShowPassword by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = modifier.background(Color.Transparent),
@@ -68,13 +70,15 @@ fun EditTextBorder(
                     color = textColor.copy(alpha = 0.7f)
                 )
             },
-            trailingIcon = if (trailingIcon != null) {
+            trailingIcon = if (typeInput == KeyboardType.Password) {
                 {
                     IconButton(
-                        onClick = trailingIconListener,
+                        onClick = {
+                            isShowPassword = !isShowPassword
+                        },
                     ) {
                         IconRealStateApp(
-                            icon = trailingIcon,
+                            icon = AppIcon.DrawableResourceIcon(if (isShowPassword) RealStateIcon.VisibilityOff else RealStateIcon.Visibility),
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(TRAILING_ICON_PADDING.dp)
@@ -106,7 +110,7 @@ fun EditTextBorder(
             ),
             shape = RoundedCornerShape(ROUND_RECTANGLE.dp),
             visualTransformation =
-            if (typeInput != KeyboardType.Password) VisualTransformation.None
+            if (typeInput != KeyboardType.Password || isShowPassword) VisualTransformation.None
             else PasswordVisualTransformation()
         )
         Spacing(5)
@@ -126,13 +130,12 @@ fun EditTextBorder(
 @Composable
 @Preview("default")
 private fun PreviewEditText() {
-    EditTextBorder(
+    EditTextRadius(
         onTextChange = {},
         text = "TAs",
         errorText = "error1231231231231232313123123123123123123123123123213123",
         textColor = Color(5, 84, 89),
         backgroundColor = Color(240, 247, 218),
-        trailingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Edit),
         modifier = Modifier.height(56.dp)
     )
 }

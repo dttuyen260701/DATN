@@ -14,6 +14,12 @@
     <string name="settingPolicyTitle">Điều khoản dịch vụ</string>
     <string name="settingAboutUsTitle">Về chúng tôi</string>
     <string name="settingSignOutTitle">Đăng Xuất</string>
+
+    <!--SignIn SignUp Screen-->
+    <string name="emailTitle">Email</string>
+    <string name="emailError">Sai định dạng email</string>
+    <string name="passwordTitle">Mật khẩu</string>
+    <string name="passwordError">Sai định dạng mật khẩu</string>
     
     <!--Error Dialog-->
     <string name="errorDialogTitle">Lỗi</string>

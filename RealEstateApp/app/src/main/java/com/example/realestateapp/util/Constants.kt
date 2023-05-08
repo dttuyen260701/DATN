@@ -18,11 +18,12 @@ class Constants {
 
     object DefaultValue {
         const val MARGIN_VIEW = 10
+        const val MARGIN_TEXT_FIELD = 15
         const val MARGIN_DIFFERENT_VIEW = 24
         const val TOOLBAR_HEIGHT = 56
         const val PADDING_VIEW = 5
         const val PADDING_ICON = 7
-        const val PADDING_SCREEN = 10
+        const val PADDING_HORIZONTAL_SCREEN = 20
         const val PADDING_TEXT = 10
         const val ROUND_CIRCLE = 50
         const val ROUND_RECTANGLE = 20
