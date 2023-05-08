@@ -12,9 +12,7 @@ val RealStateTypography = Typography(
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        fontSize = 14.sp,
     ),
     h1 = TextStyle(
         fontFamily = FontFamily.Default,

@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Transparent
                 ) {
-                    RealEstateApp()
+                    RealEstateApp(viewModel = viewModel)
                 }
             }
         }

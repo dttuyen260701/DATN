@@ -1,8 +1,10 @@
 package com.example.realestateapp.ui.base
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
+import com.example.realestateapp.data.models.User
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -14,6 +16,27 @@ import kotlinx.coroutines.launch
  */
 
 abstract class BaseViewModel : ViewModel() {
+    companion object {
+        private val user = mutableStateOf<User?>(null)
+
+        private val isLoading = mutableStateOf(false)
+
+        private val isShowDialogError = mutableStateOf(false)
+
+        private var messageError = ""
+    }
+
+    internal fun getUser() = user
+
+    internal fun getIsLoading() = isLoading
+
+    internal fun getIsShowDialogError() = isShowDialogError
+
+    internal fun getMessageError() = messageError
+
+    internal fun setMessageError(mess: String) {
+        messageError = mess
+    }
 
     internal var showApiPopupError: (errorMessage: String) -> Unit = { _ -> }
 

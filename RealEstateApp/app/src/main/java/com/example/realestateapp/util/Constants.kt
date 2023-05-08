@@ -25,6 +25,8 @@ class Constants {
         const val PADDING_SCREEN = 10
         const val PADDING_TEXT = 10
         const val ROUND_CIRCLE = 50
+        const val ROUND_RECTANGLE = 20
+        const val TRAILING_ICON_PADDING = 17
         const val BORDER_WIDTH = 4
     }
 

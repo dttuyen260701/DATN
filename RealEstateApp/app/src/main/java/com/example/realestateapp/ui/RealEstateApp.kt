@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -15,6 +16,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.navigation.RealEstateNavHost
 import com.example.realestateapp.navigation.TopLevelDestination
+import com.example.realestateapp.ui.dialog.ErrorDialog
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -22,8 +24,15 @@ import com.example.realestateapp.navigation.TopLevelDestination
 
 @Composable
 fun RealEstateApp(
-    appState: RealEstateAppState = rememberRealEstateAppState()
+    appState: RealEstateAppState = rememberRealEstateAppState(),
+    viewModel: MainActivityViewModel
 ) {
+    val isLoading = remember {
+        viewModel.getIsLoading()
+    }
+    val isShowDialogError = remember {
+        viewModel.getIsShowDialogError()
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,8 +52,16 @@ fun RealEstateApp(
                 modifier = Modifier.padding(innerPaddingModifier)
             )
         }
-        if(appState.isLoading) {
+        if(isLoading.value) {
             LoadingScreen(modifier = Modifier.fillMaxSize())
+        }
+        if(isShowDialogError.value) {
+            ErrorDialog(
+                messageError = viewModel.getMessageError(),
+                onDismissListener = {
+                    isShowDialogError.value = false
+                }
+            )
         }
     }
 }

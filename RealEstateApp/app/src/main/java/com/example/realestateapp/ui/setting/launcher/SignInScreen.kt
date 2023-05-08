@@ -3,9 +3,10 @@ package com.example.realestateapp.ui.setting.launcher
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.realestateapp.designsystem.components.BaseScreen
 
 /**
- * Created by tuyen.dang on 5/1/2023.
+ * Created by tuyen.dang on 5/8/2023.
  */
 
 @Composable
@@ -13,10 +14,16 @@ internal fun SignInRoute(
     modifier: Modifier = Modifier,
     viewModel: LauncherViewModel = hiltViewModel()
 ) {
-    SignInScreen()
+    SignInScreen(
+        modifier = modifier
+    )
 }
 
 @Composable
-internal fun SignInScreen() {
-
+internal fun SignInScreen(
+    modifier: Modifier = Modifier
+) {
+    BaseScreen(modifier = modifier) {
+        
+    }
 }

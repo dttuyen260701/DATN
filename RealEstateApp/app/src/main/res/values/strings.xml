@@ -14,4 +14,8 @@
     <string name="settingPolicyTitle">Điều khoản dịch vụ</string>
     <string name="settingAboutUsTitle">Về chúng tôi</string>
     <string name="settingSignOutTitle">Đăng Xuất</string>
+    
+    <!--Error Dialog-->
+    <string name="errorDialogTitle">Lỗi</string>
+    <string name="errorDialogBtn">Trờ về</string>
 </resources>

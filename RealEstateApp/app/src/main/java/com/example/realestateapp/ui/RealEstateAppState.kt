@@ -35,12 +35,6 @@ class RealEstateAppState(
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
 
-    var isLoading by mutableStateOf(false)
-        private set
-
-    var shouldErrorDialog by mutableStateOf(false)
-        private set
-
     val shouldShowBottomBar: Boolean
         @Composable get() = (currentDestination?.route in topLevelDestinations.map { it.route })
 
@@ -67,13 +61,5 @@ class RealEstateAppState(
             NOTIFICATION -> navController.navigateToNotification(topLevelNavOptions)
             SETTING -> navController.navigateToSettingGraph(topLevelNavOptions)
         }
-    }
-
-    fun setIsLoading(loading: Boolean) {
-        isLoading = loading
-    }
-
-    fun setShowErrorDialog(shouldShow: Boolean) {
-        shouldErrorDialog = shouldShow
     }
 }

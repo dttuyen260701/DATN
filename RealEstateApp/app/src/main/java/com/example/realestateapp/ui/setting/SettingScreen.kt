@@ -21,11 +21,8 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
-import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
-import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
-import com.example.realestateapp.util.Constants.DefaultValue.PADDING_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 
 /**
@@ -46,7 +43,7 @@ internal fun SettingRoute(
     onLogoutSuccessListener: () -> Unit
 ) {
     val user = remember {
-        MainActivityViewModel.getUser()
+        viewModel.getUser()
     }
     SettingScreen(
         modifier = modifier,
@@ -80,12 +77,7 @@ internal fun SettingScreen(
     onPostSavedClick: () -> Unit,
     onLogoutListener: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .background(RealStateAppTheme.colors.bgScreen)
-            .padding(horizontal = PADDING_SCREEN.dp)
-            .then(modifier)
-    ) {
+    BaseScreen(modifier = modifier) {
         Spacing(TOOLBAR_HEIGHT)
         user?.run {
             Spacing(MARGIN_VIEW)
@@ -104,14 +96,14 @@ internal fun SettingScreen(
                 val verticalGuideLine = createGuidelineFromTop(0.5f)
                 ImageProfile(
                     size = 100,
-                    model = "https://media.tinthethao.com.vn/files/bongda/2019/03/20/sinh-than-torres-va-10-bi-mat-khong-phai-ai-cung-biet-170116jpg.jpg",
+                    model = imgUrl,
                     modifier = Modifier
                         .constrainAs(imgUser) {
                             start.linkTo(parent.start)
                         }
                 )
                 Text(
-                    text = "Name",
+                    text = name,
                     style = RealStateTypography.h1,
                     modifier = Modifier
                         .constrainAs(tvName) {
@@ -128,7 +120,7 @@ internal fun SettingScreen(
                         }
                 )
                 Text(
-                    text = "Mail",
+                    text = email,
                     style = RealStateTypography.button.copy(
                         color = RealStateAppTheme.colors.textSettingButton,
                     ),
@@ -165,7 +157,7 @@ internal fun SettingScreen(
                 )
             }
         }
-
+        if (user != null) Spacing(MARGIN_VIEW)
         listSettingButton.forEach { button ->
             Spacing(MARGIN_VIEW)
             SettingButton(
