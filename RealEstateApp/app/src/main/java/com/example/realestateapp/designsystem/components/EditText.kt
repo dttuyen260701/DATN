@@ -102,12 +102,13 @@ internal fun EditTextRadius(
                 focusedIndicatorColor = Color.Transparent,
                 focusedLabelColor = textColor,
                 unfocusedLabelColor = Color.Gray,
-                errorCursorColor = Color.Red
+                errorCursorColor = Color.Red,
+                placeholderColor = textColor
             ),
             keyboardOptions = KeyboardOptions(
                 imeAction = if (isLastEditText) ImeAction.Done else ImeAction.Next,
                 keyboardType = typeInput,
-                capitalization = KeyboardCapitalization.Words
+                capitalization = KeyboardCapitalization.None
             ),
             keyboardActions = KeyboardActions(
                 onDone = {

@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.realestateapp.ui.home.navigation.homeNavigationRoute
 import com.example.realestateapp.ui.home.navigation.homeScreen
+import com.example.realestateapp.ui.home.navigation.navigateToHome
 import com.example.realestateapp.ui.notification.navigation.notificationScreen
 import com.example.realestateapp.ui.post.navigation.postScreen
 import com.example.realestateapp.ui.setting.navigation.navigateToSignIn
@@ -53,10 +54,20 @@ fun RealEstateNavHost(
             onPostSavedClick = {
 
             },
-            onLogoutSuccessListener = {
+            onSignInSuccess = {
+                navController.clearBackStack()
+                navController.navigateToHome()
+            },
+            onLogoutSuccess = {
 
             }
         )
+    }
+}
+
+fun NavHostController.clearBackStack() {
+    for (i  in 1..this.backQueue.size){
+        this.popBackStack()
     }
 }
 

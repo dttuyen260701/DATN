@@ -35,6 +35,11 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
 
     internal fun getMessageError() = messageError
 
+    internal fun showMessageDialog(message: String) {
+        messageError = message
+        isShowDialogError.value = true
+    }
+
     open fun <T> callAPIOnThread(
         funCallApis: MutableList<suspend () -> Flow<ApiResultWrapper<T>>>,
         apiSuccess: (ResponseAPI<out T>) -> Unit,
@@ -54,24 +59,23 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
                         }
                         is ApiResultWrapper.Success -> {
                             isLoading.value = false
-                            apiSuccess(result.value)
+                            withContext(Dispatchers.Main) {
+                                apiSuccess(result.value)
+                            }
                         }
                         is ApiResultWrapper.ResponseCodeError -> {
                             isLoading.value = false
                             apiError()
-                            messageError = result.error
-                            isShowDialogError.value = true
+                            showMessageDialog(result.error)
                         }
                         is ApiResultWrapper.NetworkError -> {
                             isLoading.value = false
                             apiError()
-                            messageError = result.io.message ?: ""
-                            isShowDialogError.value = true
+                            showMessageDialog(result.io.message ?: "")
                         }
                         else -> {
                             isLoading.value = false
-                            messageError = Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR
-                            isShowDialogError.value = true
+                            showMessageDialog(Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR)
                         }
                     }
                 }

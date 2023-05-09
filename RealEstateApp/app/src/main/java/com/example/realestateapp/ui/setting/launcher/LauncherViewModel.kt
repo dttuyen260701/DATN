@@ -1,7 +1,6 @@
 package com.example.realestateapp.ui.setting.launcher
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.R
 import com.example.realestateapp.data.repository.AppRepository
@@ -31,7 +30,9 @@ class LauncherViewModel @Inject constructor(
     internal val password = mutableStateOf("")
     internal var firstClickButton = mutableStateOf(true)
 
-    internal fun loginUser() {
+    internal fun loginUser(
+        onSignInSuccess: () -> Unit
+    ) {
         callAPIOnThread(
             funCallApis = mutableListOf({
                 appRepository.login(
@@ -40,10 +41,13 @@ class LauncherViewModel @Inject constructor(
                 )
             }),
             apiSuccess = {
-                getUser().value = it.body
-            },
-            apiError = {
-                Log.e("TTT", "loginUser: ", )
+                if(it.isSuccess) {
+                    getUser().value = it.body
+                    onSignInSuccess()
+                } else {
+                    showMessageDialog(it.errorMessage ?: "")
+                    getIsShowDialogError().value = true
+                }
             }
         )
     }

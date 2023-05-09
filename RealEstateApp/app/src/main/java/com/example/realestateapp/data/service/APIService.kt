@@ -12,5 +12,6 @@ import retrofit2.http.POST
 
 interface APIService {
     @POST("/api/Accounts/login")
-    suspend fun login(@Body options: Map<String, String>, @Body isAdmin: Boolean = false): Response<ResponseAPI<User>>
+    @JvmSuppressWildcards
+    suspend fun login(@Body options: Map<String, Any>): Response<ResponseAPI<User?>>
 }

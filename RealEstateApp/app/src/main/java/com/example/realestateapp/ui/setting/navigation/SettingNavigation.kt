@@ -36,7 +36,8 @@ internal fun NavGraphBuilder.settingGraph(
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
-    onLogoutSuccessListener: () -> Unit,
+    onSignInSuccess:() -> Unit,
+    onLogoutSuccess: () -> Unit,
 ) {
     navigation(
         route = settingNavigationRouteGraph,
@@ -50,10 +51,11 @@ internal fun NavGraphBuilder.settingGraph(
             onAboutUsClick = onAboutUsClick,
             onChangePassClick = onChangePassClick,
             onPostSavedClick = onPostSavedClick,
-            onLogoutSuccessListener = onLogoutSuccessListener
+            onLogoutSuccess = onLogoutSuccess
         )
         singInScreen(
-            onSignUpClick = onSignUpClick
+            onSignUpClick = onSignUpClick,
+            onSignInSuccess = onSignInSuccess
         )
         singUpScreen()
     }
@@ -67,7 +69,7 @@ internal fun NavGraphBuilder.settingScreen(
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
-    onLogoutSuccessListener: () -> Unit
+    onLogoutSuccess: () -> Unit
 ) {
     composable(settingNavigationRoute) {
         SettingRoute(
@@ -78,17 +80,19 @@ internal fun NavGraphBuilder.settingScreen(
             onAboutUsClick = onAboutUsClick,
             onChangePassClick = onChangePassClick,
             onPostSavedClick = onPostSavedClick,
-            onLogoutSuccessListener = onLogoutSuccessListener
+            onLogoutSuccess = onLogoutSuccess
         )
     }
 }
 
 internal fun NavGraphBuilder.singInScreen(
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    onSignInSuccess: () -> Unit
 ) {
     composable(signInNavigationRoute) {
         SignInRoute(
-            onSignUpClick = onSignUpClick
+            onSignUpClick = onSignUpClick,
+            onSignInSuccess = onSignInSuccess
         )
     }
 }
@@ -98,4 +102,3 @@ internal fun NavGraphBuilder.singUpScreen() {
         SignUpRoute()
     }
 }
-

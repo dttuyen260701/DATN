@@ -24,8 +24,7 @@ open class SafeAPI {
                     200 -> {
                         res.body()?.let {
                             ApiResultWrapper.Success(it)
-                        }
-                        ApiResultWrapper.NullResponseError
+                        } ?: ApiResultWrapper.NullResponseError
                     }
                     400 -> {
                         ApiResultWrapper.ResponseCodeError(MessageErrorAPI.INVALID_INPUT_ERROR)

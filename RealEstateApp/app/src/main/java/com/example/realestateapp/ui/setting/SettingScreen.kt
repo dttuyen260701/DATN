@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,7 +41,7 @@ internal fun SettingRoute(
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
-    onLogoutSuccessListener: () -> Unit
+    onLogoutSuccess: () -> Unit
 ) {
     val user = remember {
         viewModel.getUser()
@@ -58,7 +59,7 @@ internal fun SettingRoute(
         onChangePassClick = onChangePassClick,
         onPostSavedClick = onPostSavedClick,
         onLogoutListener = {
-            onLogoutSuccessListener()
+            onLogoutSuccess()
         }
     )
 }
@@ -104,7 +105,10 @@ internal fun SettingScreen(
                 )
                 Text(
                     text = fullName,
-                    style = RealStateTypography.h1,
+                    style = RealStateTypography.h2.copy(
+                        color = RealStateAppTheme.colors.primary,
+                        fontWeight = FontWeight.Bold
+                    ),
                     modifier = Modifier
                         .constrainAs(tvName) {
                             start.linkTo(imgUser.end, margin = MARGIN_VIEW.dp)

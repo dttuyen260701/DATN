@@ -37,7 +37,8 @@ import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 internal fun SignInRoute(
     modifier: Modifier = Modifier,
     viewModel: LauncherViewModel = hiltViewModel(),
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    onSignInSuccess: () -> Unit
 ) {
     val email = remember {
         viewModel.email
@@ -79,7 +80,9 @@ internal fun SignInRoute(
         onSignUpClick = onSignUpClick,
         onSignInClick = {
             firstClick.value = false
-            if (enableBtnSignIn.value) viewModel.loginUser()
+            if (enableBtnSignIn.value) viewModel.loginUser(
+                onSignInSuccess = onSignInSuccess
+            )
         }
     )
 }
@@ -102,7 +105,7 @@ internal fun SignInScreen(
             painter = painterResource(id = R.drawable.storyset_login),
             contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(0.8f)
                 .aspectRatio(1f)
         )
         Text(
