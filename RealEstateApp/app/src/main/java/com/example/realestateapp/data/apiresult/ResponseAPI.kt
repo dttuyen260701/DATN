@@ -3,7 +3,8 @@ package com.example.realestateapp.data.apiresult
 import com.google.gson.annotations.SerializedName
 
 data class ResponseAPI<T>(
-    @SerializedName("isSuccesses") var isSuccesses: Boolean,
-    @SerializedName("message") var message: String?,
-    @SerializedName("resultObj") var resultObj: T
+    @SerializedName("isSuccess") var isSuccess: Boolean,
+    @SerializedName("errorMessage") var errorMessage: String?,
+    @SerializedName("errorMessageDetail") var errorMessageDetail: String?,
+    @SerializedName("body") var body: T
 )

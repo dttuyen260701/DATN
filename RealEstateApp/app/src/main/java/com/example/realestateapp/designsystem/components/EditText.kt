@@ -18,12 +18,16 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_PADDING
+import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
+import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
 
 /**
  * Created by tuyen.dang on 5/8/2023.
@@ -31,7 +35,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_PADDI
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun EditTextRadius(
+internal fun EditTextRadius(
     modifier: Modifier = Modifier,
     label: String? = null,
     text: String = "",
@@ -50,7 +54,8 @@ fun EditTextRadius(
     }
 
     Column(
-        modifier = modifier.background(Color.Transparent),
+        modifier = modifier.background(Color.Transparent)
+            .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
@@ -67,7 +72,7 @@ fun EditTextRadius(
             placeholder = {
                 Text(
                     text = hint,
-                    color = textColor.copy(alpha = 0.7f)
+                    color = textColor.copy(alpha = ALPHA_HINT_COLOR)
                 )
             },
             trailingIcon = if (typeInput == KeyboardType.Password) {
@@ -82,6 +87,7 @@ fun EditTextRadius(
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(TRAILING_ICON_PADDING.dp)
+                                .size(TRAILING_ICON_SIZE.dp)
                         )
                     }
                 }
@@ -113,11 +119,11 @@ fun EditTextRadius(
             if (typeInput != KeyboardType.Password || isShowPassword) VisualTransformation.None
             else PasswordVisualTransformation()
         )
-        Spacing(5)
         Text(
             text = errorText,
             style = RealStateTypography.caption.copy(
-                color = Color.Red
+                color = Color.Red,
+                fontSize = WARNING_TEXT_SIZE.sp
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -136,6 +142,5 @@ private fun PreviewEditText() {
         errorText = "error1231231231231232313123123123123123123123123123213123",
         textColor = Color(5, 84, 89),
         backgroundColor = Color(240, 247, 218),
-        modifier = Modifier.height(56.dp)
     )
 }

@@ -17,7 +17,8 @@ private val DarkColorRealState = RealStateColors(
     bgSettingButton = Color.White,
     bgScreen = AthensGrayApprox,
     progressBar = KellyGreen,
-    bgTextField = Beige
+    bgTextField = Beige,
+    bgBtnDisable = SonicSilver
 )
 
 private val LightColorRealState = RealStateColors(
@@ -29,7 +30,8 @@ private val LightColorRealState = RealStateColors(
     bgSettingButton = Color.White,
     bgScreen = AthensGrayApprox,
     progressBar = KellyGreen,
-    bgTextField = Beige
+    bgTextField = Beige,
+    bgBtnDisable = SonicSilver
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -89,7 +91,8 @@ class RealStateColors(
     bgSettingButton: Color,
     bgScreen: Color,
     progressBar: Color,
-    bgTextField: Color
+    bgTextField: Color,
+    bgBtnDisable: Color
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -109,6 +112,8 @@ class RealStateColors(
         private set
     var bgTextField by mutableStateOf(bgTextField)
         private set
+    var bgBtnDisable by mutableStateOf(bgBtnDisable)
+        private set
 
     fun update(other: RealStateColors) {
         primary = other.primary
@@ -120,6 +125,7 @@ class RealStateColors(
         bgScreen = other.bgScreen
         progressBar = other.progressBar
         bgTextField = other.bgTextField
+        bgBtnDisable = other.bgBtnDisable
     }
 
     fun copy(): RealStateColors = RealStateColors(
@@ -131,7 +137,8 @@ class RealStateColors(
         bgSettingButton = bgSettingButton,
         bgScreen = bgScreen,
         progressBar = progressBar,
-        bgTextField = bgTextField
+        bgTextField = bgTextField,
+        bgBtnDisable = bgBtnDisable
     )
 }
 

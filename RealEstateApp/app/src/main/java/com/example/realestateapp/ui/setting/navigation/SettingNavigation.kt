@@ -36,7 +36,7 @@ internal fun NavGraphBuilder.settingGraph(
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
-    onLogoutSuccessListener: () -> Unit
+    onLogoutSuccessListener: () -> Unit,
 ) {
     navigation(
         route = settingNavigationRouteGraph,
@@ -52,7 +52,9 @@ internal fun NavGraphBuilder.settingGraph(
             onPostSavedClick = onPostSavedClick,
             onLogoutSuccessListener = onLogoutSuccessListener
         )
-        singInScreen()
+        singInScreen(
+            onSignUpClick = onSignUpClick
+        )
         singUpScreen()
     }
 }
@@ -81,9 +83,13 @@ internal fun NavGraphBuilder.settingScreen(
     }
 }
 
-internal fun NavGraphBuilder.singInScreen() {
+internal fun NavGraphBuilder.singInScreen(
+    onSignUpClick: () -> Unit
+) {
     composable(signInNavigationRoute) {
-        SignInRoute()
+        SignInRoute(
+            onSignUpClick = onSignUpClick
+        )
     }
 }
 

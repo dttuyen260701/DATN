@@ -96,14 +96,14 @@ internal fun SettingScreen(
                 val verticalGuideLine = createGuidelineFromTop(0.5f)
                 ImageProfile(
                     size = 100,
-                    model = imgUrl,
+                    model = imgUrl ?: "",
                     modifier = Modifier
                         .constrainAs(imgUser) {
                             start.linkTo(parent.start)
                         }
                 )
                 Text(
-                    text = name,
+                    text = fullName,
                     style = RealStateTypography.h1,
                     modifier = Modifier
                         .constrainAs(tvName) {

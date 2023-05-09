@@ -2,6 +2,7 @@ package com.example.realestateapp.ui.post
 
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
+import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -9,9 +10,14 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/4/2023.
  */
 
+sealed class PostUiState : UiState() {
+    object InitView : PostUiState()
+}
+
 @HiltViewModel
 class PostViewModel @Inject constructor(
     appRepository: AppRepository
-) : BaseViewModel() {
+) : BaseViewModel<PostUiState>() {
+    override var uiState: UiState = PostUiState.InitView
 
 }

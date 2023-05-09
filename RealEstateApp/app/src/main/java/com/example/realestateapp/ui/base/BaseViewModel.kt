@@ -4,18 +4,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
+import com.example.realestateapp.data.apiresult.ResponseAPI
 import com.example.realestateapp.data.models.User
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import com.example.realestateapp.util.Constants
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 /**
  * Created by tuyen.dang on 4/30/2023.
  */
 
-abstract class BaseViewModel : ViewModel() {
+abstract class BaseViewModel<US : UiState> : ViewModel() {
     companion object {
         private val user = mutableStateOf<User?>(null)
 
@@ -26,6 +25,8 @@ abstract class BaseViewModel : ViewModel() {
         private var messageError = ""
     }
 
+    abstract var uiState: UiState
+
     internal fun getUser() = user
 
     internal fun getIsLoading() = isLoading
@@ -34,18 +35,12 @@ abstract class BaseViewModel : ViewModel() {
 
     internal fun getMessageError() = messageError
 
-    internal fun setMessageError(mess: String) {
-        messageError = mess
-    }
-
-    internal var showApiPopupError: (errorMessage: String) -> Unit = { _ -> }
-
     open fun <T> callAPIOnThread(
         funCallApis: MutableList<suspend () -> Flow<ApiResultWrapper<T>>>,
-        apiSuccess: (ApiResultWrapper<T>) -> Unit,
+        apiSuccess: (ResponseAPI<out T>) -> Unit,
         apiError: () -> Unit = {}
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val listAsync = mutableListOf<Deferred<Flow<ApiResultWrapper<T>>>>()
             funCallApis.forEach { funCallApi ->
                 listAsync.add(async { funCallApi() })
@@ -54,21 +49,30 @@ abstract class BaseViewModel : ViewModel() {
             response.forEach {
                 it.collect { result ->
                     when (result) {
-                        is ApiResultWrapper.Success -> {
-                            apiSuccess(result)
+                        is ApiResultWrapper.Loading -> {
+                            isLoading.value = true
                         }
-                        is ApiResultWrapper.NullResponseError -> {
-                            apiSuccess(result)
+                        is ApiResultWrapper.Success -> {
+                            isLoading.value = false
+                            apiSuccess(result.value)
                         }
                         is ApiResultWrapper.ResponseCodeError -> {
+                            isLoading.value = false
                             apiError()
-                            showApiPopupError(result.error)
+                            messageError = result.error
+                            isShowDialogError.value = true
                         }
                         is ApiResultWrapper.NetworkError -> {
+                            isLoading.value = false
                             apiError()
-                            showApiPopupError(result.io.message ?: "")
+                            messageError = result.io.message ?: ""
+                            isShowDialogError.value = true
                         }
-                        else -> {}
+                        else -> {
+                            isLoading.value = false
+                            messageError = Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR
+                            isShowDialogError.value = true
+                        }
                     }
                 }
             }

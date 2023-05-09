@@ -29,7 +29,7 @@ internal fun BaseScreen(
             .background(bgColor)
             .padding(horizontal = Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN.dp)
             .then(modifier)
-            .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
+            .scrollable(rememberScrollState(), orientation = Orientation.Vertical),
     ) {
         content()
     }

@@ -12,13 +12,8 @@ class Constants {
         const val AUTHORIZATION = "Authorization"
     }
 
-    object MethodRequest {
-
-    }
-
     object DefaultValue {
         const val MARGIN_VIEW = 10
-        const val MARGIN_TEXT_FIELD = 15
         const val MARGIN_DIFFERENT_VIEW = 24
         const val TOOLBAR_HEIGHT = 56
         const val PADDING_VIEW = 5
@@ -27,8 +22,11 @@ class Constants {
         const val PADDING_TEXT = 10
         const val ROUND_CIRCLE = 50
         const val ROUND_RECTANGLE = 20
+        const val TRAILING_ICON_SIZE = 20
         const val TRAILING_ICON_PADDING = 17
         const val BORDER_WIDTH = 4
+        const val WARNING_TEXT_SIZE = 10
+        const val ALPHA_HINT_COLOR = 0.7f
     }
 
     object MessageErrorAPI {

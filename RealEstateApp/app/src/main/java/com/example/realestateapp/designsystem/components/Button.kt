@@ -29,13 +29,13 @@ import com.example.realestateapp.util.Constants.DefaultValue.ROUND_CIRCLE
  */
 
 @Composable
-fun SettingButton(
+internal fun SettingButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     title: String,
     leadingIcon: AppIcon,
-    trailingIcon: AppIcon? =  AppIcon.DrawableResourceIcon(RealStateIcon.NextArrow),
+    trailingIcon: AppIcon? = AppIcon.DrawableResourceIcon(RealStateIcon.NextArrow),
     backgroundIcon: Color
 ) {
     Button(
@@ -90,6 +90,36 @@ fun SettingButton(
                 )
             }
         }
+    }
+}
+
+@Composable
+internal fun ButtonRadius(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    title: String,
+    bgColor: Color,
+    textColor: Color = Color.White
+) {
+    Button(
+        enabled = enabled,
+        onClick = onClick,
+        modifier = Modifier
+            .then(modifier),
+        shape = RoundedCornerShape(ROUND_CIRCLE.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = bgColor,
+            disabledBackgroundColor = RealStateAppTheme.colors.bgBtnDisable
+        ),
+        elevation = null
+    ) {
+        Text(
+            text = title,
+            style = RealStateTypography.button.copy(
+                color = textColor
+            )
+        )
     }
 }
 

@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException
 
 open class SafeAPI {
     suspend fun <T> callApi(
-        apiFunction: suspend () -> Response<ResponseAPI<out T>>
+        apiFunction: suspend () -> Response<ResponseAPI<T>>
     ): ApiResultWrapper<T> {
         return withContext(Dispatchers.IO) {
             try {
