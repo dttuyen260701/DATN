@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.*
-import com.example.realestateapp.designsystem.components.BaseScreen
+import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.designsystem.components.ButtonRadius
 import com.example.realestateapp.designsystem.components.EditTextRadius
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme

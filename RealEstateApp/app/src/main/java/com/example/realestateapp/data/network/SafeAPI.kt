@@ -32,6 +32,9 @@ open class SafeAPI {
                     401 -> {
                         ApiResultWrapper.ResponseCodeError(MessageErrorAPI.AUTHENTICATION_ERROR)
                     }
+                    404 -> {
+                        ApiResultWrapper.ResponseCodeError(MessageErrorAPI.NOT_FOUND_ERROR)
+                    }
                     else -> {
                         ApiResultWrapper.ResponseCodeError(MessageErrorAPI.INTERNAL_SERVER_ERROR)
                     }

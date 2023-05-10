@@ -19,10 +19,12 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_TEXT
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_CIRCLE
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 
 /**
  * Created by tuyen.dang on 5/6/2023.
@@ -56,7 +58,7 @@ internal fun SettingButton(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconRealStateApp(
+            BaseIcon(
                 icon = leadingIcon,
                 contentDescription = null,
                 modifier = Modifier
@@ -79,7 +81,7 @@ internal fun SettingButton(
                     .padding(horizontal = PADDING_TEXT.dp)
             )
             trailingIcon?.run {
-                IconRealStateApp(
+                BaseIcon(
                     icon = this,
                     contentDescription = null,
                     modifier = Modifier
@@ -98,26 +100,30 @@ internal fun ButtonRadius(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    radius: Int = ROUND_CIRCLE,
     title: String,
+    textSize: Int = 14,
     bgColor: Color,
-    textColor: Color = Color.White
+    textColor: Color = Color.White,
+    bgDisableColor: Color = RealStateAppTheme.colors.bgBtnDisable
 ) {
     Button(
         enabled = enabled,
         onClick = onClick,
         modifier = Modifier
             .then(modifier),
-        shape = RoundedCornerShape(ROUND_CIRCLE.dp),
+        shape = RoundedCornerShape(radius.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = bgColor,
-            disabledBackgroundColor = RealStateAppTheme.colors.bgBtnDisable
+            disabledBackgroundColor = bgDisableColor
         ),
         elevation = null
     ) {
         Text(
             text = title,
             style = RealStateTypography.button.copy(
-                color = textColor
+                color = textColor,
+                fontSize = textSize.sp
             )
         )
     }
@@ -134,5 +140,18 @@ private fun SettingButtonPreview() {
         title = "User",
         leadingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Lock),
         backgroundIcon = RealStateAppTheme.colors.primary
+    )
+}
+
+@Preview("buttonRadius", "rectangle")
+@Composable
+private fun PreviewButtonRadius() {
+    ButtonRadius(
+        onClick = {},
+        modifier = Modifier.height(56.dp).width(30.dp),
+        radius = ROUND_RECTANGLE,
+        title = "Cafi ddajwt",
+        bgColor = RealStateAppTheme.colors.primary,
+        textColor = RealStateAppTheme.colors.textSettingButton
     )
 }

@@ -1,0 +1,201 @@
+package com.example.realestateapp.designsystem.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
+import com.example.realestateapp.R
+import com.example.realestateapp.designsystem.theme.RealStateAppTheme
+import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
+
+/**
+ * Created by tuyen.dang on 5/3/2023.
+ */
+
+@Composable
+internal fun DialogMessage(
+    modifier: Modifier = Modifier,
+    title: String = stringResource(id = R.string.errorDialogTitle),
+    message: String,
+    btnText: String = stringResource(id = R.string.dialogBackBtn),
+    onDismissDialog: () -> Unit = {}
+) {
+    AlertDialog(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(ROUND_DIALOG.dp))
+            .background(Color.White),
+        onDismissRequest = onDismissDialog,
+        title = {
+            Text(
+                text = title,
+                style = RealStateTypography.button.copy(
+                    fontSize = 16.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        },
+        text = {
+            Text(
+                text = message,
+                style = RealStateTypography.button.copy(
+                    color = Color.Black,
+                    textAlign = TextAlign.Start,
+                    fontWeight = FontWeight.Light
+                )
+            )
+        },
+        buttons = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = MARGIN_VIEW.dp, end = MARGIN_DIFFERENT_VIEW.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    text = btnText,
+                    style = RealStateTypography.button.copy(
+                        color = Color.Black
+                    ),
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(MARGIN_VIEW.dp)
+                        .clickable {
+                            onDismissDialog()
+                        },
+                    textAlign = TextAlign.Center
+                )
+            }
+        },
+        properties = DialogProperties(),
+        backgroundColor = Color.White
+    )
+}
+
+@Composable
+internal fun DialogConfirm(
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    message: String,
+    negativeBtnText: String,
+    onBtnNegativeClick: () -> Unit,
+    positiveBtnText: String,
+    onBtnPositiveClick: () -> Unit,
+    onDismissDialog: () -> Unit
+) {
+    AlertDialog(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(ROUND_RECTANGLE.dp))
+            .background(Color.White),
+        onDismissRequest = onDismissDialog,
+        title = if (title != null) {
+            {
+                Text(
+                    text = title,
+                    style = RealStateTypography.button.copy(
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
+        } else null,
+        text = {
+            Text(
+                text = message,
+                style = RealStateTypography.button.copy(
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Light
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        },
+        buttons = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp)
+                    .padding(bottom = PADDING_HORIZONTAL_SCREEN.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                ButtonRadius(
+                    onClick = {
+                        onBtnNegativeClick()
+                        onDismissDialog()
+                    },
+                    modifier = Modifier
+                        .height(42.dp)
+                        .weight(0.45f),
+                    radius = ROUND_DIALOG,
+                    title = negativeBtnText,
+                    bgColor = RealStateAppTheme.colors.primaryVariant,
+                    textSize = 12,
+                    textColor = RealStateAppTheme.colors.primary
+                )
+                Spacer(modifier = Modifier.weight(0.1f))
+                ButtonRadius(
+                    onClick = {
+                        onBtnPositiveClick()
+                        onDismissDialog()
+                    },
+                    modifier = Modifier
+                        .height(42.dp)
+                        .weight(0.45f),
+                    radius = ROUND_DIALOG,
+                    title = positiveBtnText,
+                    bgColor = RealStateAppTheme.colors.primary,
+                    textSize = 12,
+                    textColor = RealStateAppTheme.colors.primaryVariant
+                )
+            }
+        },
+        properties = DialogProperties(),
+        backgroundColor = Color.White
+    )
+}
+
+@Preview(name = "MessageDialog")
+@Composable
+private fun PreviewMessageDialog() {
+    DialogMessage(message = "Lỗi cuộc đời")
+}
+
+@Preview(name = "ConfirmDialog")
+@Composable
+private fun PreviewDialogConfirm() {
+    DialogConfirm(
+        title = "Tesst",
+        message = "a123",
+        negativeBtnText = "Khoong",
+        onBtnNegativeClick = {},
+        positiveBtnText = "Co",
+        onBtnPositiveClick = {},
+        onDismissDialog = {}
+    )
+}

@@ -1,4 +1,4 @@
-package com.example.realestateapp.designsystem.components
+package com.example.realestateapp.ui.base
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation

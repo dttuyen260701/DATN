@@ -22,8 +22,11 @@
     <string name="passwordError">Sai định dạng mật khẩu</string>
     <string name="passwordForget">Quên mật khẩu?</string>
     <string name="doNotHaveAccount">Bạn chưa có tài khoản?</string>
+
+    <!--SignOut-->
+    <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
     
-    <!--Error Dialog-->
+    <!--Dialog-->
     <string name="errorDialogTitle">Lỗi</string>
-    <string name="errorDialogBtn">Trờ về</string>
+    <string name="dialogBackBtn">Trở về</string>
 </resources>

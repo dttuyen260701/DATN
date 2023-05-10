@@ -1,6 +1,5 @@
 package com.example.realestateapp.ui
 
-import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +15,6 @@ sealed class MainUiState : UiState() {
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    appRepository: AppRepository
 ) : BaseViewModel<MainUiState>() {
     override var uiState: UiState = MainUiState.InitView
 }

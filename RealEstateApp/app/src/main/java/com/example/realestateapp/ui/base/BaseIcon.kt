@@ -1,4 +1,4 @@
-package com.example.realestateapp.designsystem.components
+package com.example.realestateapp.ui.base
 
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
@@ -14,7 +14,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
  */
  
 @Composable
-fun IconRealStateApp(
+fun BaseIcon(
     icon: AppIcon,
     contentDescription: String?,
     modifier: Modifier = Modifier,

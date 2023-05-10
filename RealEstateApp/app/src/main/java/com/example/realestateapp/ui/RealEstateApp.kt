@@ -16,7 +16,8 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.navigation.RealEstateNavHost
 import com.example.realestateapp.navigation.TopLevelDestination
-import com.example.realestateapp.ui.dialog.ErrorDialog
+import com.example.realestateapp.ui.base.BaseDialog
+import com.example.realestateapp.ui.base.TypeDialog
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -30,8 +31,8 @@ fun RealEstateApp(
     val isLoading = remember {
         viewModel.getIsLoading()
     }
-    val isShowDialogError = remember {
-        viewModel.getIsShowDialogError()
+    val dialogType = remember {
+        viewModel.getDialogType()
     }
     Box(
         modifier = Modifier
@@ -55,14 +56,14 @@ fun RealEstateApp(
         if(isLoading.value) {
             LoadingScreen(modifier = Modifier.fillMaxSize())
         }
-        if(isShowDialogError.value) {
-            ErrorDialog(
-                messageError = viewModel.getMessageError(),
-                onDismissListener = {
-                    isShowDialogError.value = false
-                }
-            )
-        }
+        BaseDialog(
+            dialog = dialogType.value,
+            onDismissDialog = {
+                viewModel.showDialog(
+                    dialog = TypeDialog.Hide
+                )
+            }
+        )
     }
 }
 

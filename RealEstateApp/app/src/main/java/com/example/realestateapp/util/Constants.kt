@@ -22,6 +22,7 @@ class Constants {
         const val PADDING_TEXT = 10
         const val ROUND_CIRCLE = 50
         const val ROUND_RECTANGLE = 20
+        const val ROUND_DIALOG = 10
         const val TRAILING_ICON_SIZE = 20
         const val TRAILING_ICON_PADDING = 17
         const val BORDER_WIDTH = 4
@@ -33,6 +34,7 @@ class Constants {
         const val INVALID_INPUT_ERROR = "Vui lòng kiểm tra lại các trường đã nhập !"
         const val AUTHENTICATION_ERROR = "Vui lòng đăng nhập để thực hiện chức năng này !"
         const val INTERNAL_SERVER_ERROR = "Server đang bận, vui lòng thử lại sau !"
+        const val NOT_FOUND_ERROR = "Không tìm thấy đường dẫn !"
     }
 
     object DefaultConfig {

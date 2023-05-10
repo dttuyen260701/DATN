@@ -14,6 +14,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
@@ -47,7 +48,7 @@ fun ToolbarView(
             enabled = (leftIcon != null)
         ) {
             leftIcon?.run {
-                IconRealStateApp(
+                BaseIcon(
                     icon = this,
                     modifier = Modifier
                         .fillMaxSize()
@@ -73,7 +74,7 @@ fun ToolbarView(
             enabled = (rightIcon != null)
         ) {
             rightIcon?.run {
-                IconRealStateApp(
+                BaseIcon(
                     icon = this,
                     modifier = Modifier
                         .fillMaxSize()

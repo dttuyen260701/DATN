@@ -7,6 +7,7 @@ import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.EMAIL_ADDRESS
 import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.ui.base.BaseViewModel
+import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,8 +48,9 @@ class LauncherViewModel @Inject constructor(
                     AuthenticationObject.token = it.body?.token ?: ""
                     onSignInSuccess()
                 } else {
-                    showMessageDialog(it.errorMessage ?: "")
-                    getIsShowDialogError().value = true
+                    showDialog(
+                        dialog = TypeDialog.ErrorDialog(it.errorMessage ?: "")
+                    )
                 }
             }
         )

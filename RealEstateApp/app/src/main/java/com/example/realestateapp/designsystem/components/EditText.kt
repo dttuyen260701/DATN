@@ -23,6 +23,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
@@ -84,7 +85,7 @@ internal fun EditTextRadius(
                             isShowPassword = !isShowPassword
                         },
                     ) {
-                        IconRealStateApp(
+                        BaseIcon(
                             icon = AppIcon.DrawableResourceIcon(if (isShowPassword) RealStateIcon.VisibilityOff else RealStateIcon.Visibility),
                             contentDescription = null,
                             modifier = Modifier
@@ -159,6 +160,7 @@ internal fun EditTextTrailingIconCustom(
             edt,
             tvError
         ) = createRefs()
+
     }
 }
 

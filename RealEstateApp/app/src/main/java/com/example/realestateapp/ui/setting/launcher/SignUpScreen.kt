@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
-import com.example.realestateapp.designsystem.components.BaseScreen
+import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.TextTitle
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW

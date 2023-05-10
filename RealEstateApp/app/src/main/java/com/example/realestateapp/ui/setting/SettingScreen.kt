@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,9 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.ui.base.BaseIcon
+import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
@@ -46,6 +50,7 @@ internal fun SettingRoute(
     val user = remember {
         viewModel.getUser()
     }
+    val context = LocalContext.current
     SettingScreen(
         modifier = modifier,
         listSettingButton = if (user.value == null) ViewDataRepository.getListSettingSignOut()
@@ -58,9 +63,21 @@ internal fun SettingRoute(
         onAboutUsClick = onAboutUsClick,
         onChangePassClick = onChangePassClick,
         onPostSavedClick = onPostSavedClick,
-        onLogoutListener = {
-            viewModel.signOut()
-            onSignOutSuccess()
+        onSignOutListener = {
+            viewModel.run {
+                showDialog(
+                    dialog = TypeDialog.ConfirmDialog(
+                        message = context.getString(R.string.confirmSignOut),
+                        negativeBtnText = context.getString(R.string.dialogBackBtn),
+                        onBtnNegativeClick = {},
+                        positiveBtnText = context.getString(R.string.settingSignOutTitle),
+                        onBtnPositiveClick = {
+                            signOut()
+                            onSignOutSuccess()
+                        }
+                    )
+                )
+            }
         }
     )
 }
@@ -77,7 +94,7 @@ internal fun SettingScreen(
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
-    onLogoutListener: () -> Unit
+    onSignOutListener: () -> Unit
 ) {
     BaseScreen(modifier = modifier) {
         Spacing(TOOLBAR_HEIGHT)
@@ -143,7 +160,7 @@ internal fun SettingScreen(
                             onEditClick()
                         }
                 )
-                IconRealStateApp(
+                BaseIcon(
                     icon = AppIcon.ImageVectorIcon(RealStateIcon.Edit),
                     contentDescription = null,
                     modifier = Modifier
@@ -186,7 +203,7 @@ internal fun SettingScreen(
                         onPostSavedClick
                     }
                     else -> {
-                        onLogoutListener
+                        onSignOutListener
                     }
                 },
                 modifier = Modifier
