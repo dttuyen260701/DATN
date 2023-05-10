@@ -14,12 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateTypography
@@ -137,6 +139,7 @@ internal fun EditTextRadius(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun EditTextTrailingIconCustom(
     modifier: Modifier = Modifier,
@@ -146,21 +149,124 @@ internal fun EditTextTrailingIconCustom(
     typeInput: KeyboardType = KeyboardType.Text,
     hint: String = "",
     errorText: String = "",
+    trailingIcon: AppIcon,
     textColor: Color = Color.Black,
     backgroundColor: Color = Color.White,
     isLastEditText: Boolean = false
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    var isShowPassword by remember {
+        mutableStateOf(false)
+    }
+
     ConstraintLayout(
         modifier = modifier
             .background(Color.Transparent)
-            .wrapContentHeight(),
+            .wrapContentHeight()
+            .fillMaxWidth(),
     ) {
         val (
-            trailingIcon,
+            icTrailing,
             edt,
             tvError
         ) = createRefs()
 
+        TextField(
+            modifier = Modifier
+                .wrapContentHeight()
+                .background(Color.Transparent)
+                .constrainAs(edt) {
+                    top.linkTo(parent.top)
+                    start.linkTo(icTrailing.end, MARGIN_VIEW.dp)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                },
+            textStyle = RealStateTypography.body1,
+            label = if (label != null) {
+                { Text(text = label) }
+            } else null,
+            onValueChange = { onTextChange(it) },
+            value = text,
+            placeholder = {
+                Text(
+                    text = hint,
+                    color = textColor.copy(alpha = ALPHA_HINT_COLOR)
+                )
+            },
+            trailingIcon = if (typeInput == KeyboardType.Password) {
+                {
+                    IconButton(
+                        onClick = {
+                            isShowPassword = !isShowPassword
+                        },
+                    ) {
+                        BaseIcon(
+                            icon = AppIcon.DrawableResourceIcon(if (isShowPassword) RealStateIcon.VisibilityOff else RealStateIcon.Visibility),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(TRAILING_ICON_PADDING.dp)
+                                .size(TRAILING_ICON_SIZE.dp)
+                        )
+                    }
+                }
+            } else null,
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = textColor,
+                backgroundColor = backgroundColor,
+                cursorColor = textColor,
+                trailingIconColor = textColor,
+                unfocusedIndicatorColor = Color.Gray,
+                focusedIndicatorColor = textColor,
+                focusedLabelColor = textColor,
+                unfocusedLabelColor = Color.Gray,
+                errorCursorColor = Color.Red,
+                placeholderColor = textColor
+            ),
+            keyboardOptions = KeyboardOptions(
+                imeAction = if (isLastEditText) ImeAction.Done else ImeAction.Next,
+                keyboardType = typeInput,
+                capitalization = KeyboardCapitalization.None
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                },
+            ),
+            shape = RectangleShape,
+            visualTransformation =
+            if (typeInput != KeyboardType.Password || isShowPassword) VisualTransformation.None
+            else PasswordVisualTransformation()
+        )
+        BaseIcon(
+            icon = trailingIcon,
+            contentDescription = null,
+            modifier = Modifier
+                .size(35.dp)
+                .background(Color.Transparent)
+                .constrainAs(icTrailing) {
+                    start.linkTo(parent.start)
+                    top.linkTo(edt.top)
+                    bottom.linkTo(edt.bottom)
+                },
+            tint = textColor
+        )
+        Text(
+            text = errorText,
+            style = RealStateTypography.caption.copy(
+                color = Color.Red,
+                fontSize = WARNING_TEXT_SIZE.sp
+            ),
+            modifier = Modifier
+                .wrapContentHeight()
+                .constrainAs(tvError) {
+                    start.linkTo(edt.start)
+                    end.linkTo(edt.end)
+                    top.linkTo(edt.bottom)
+                    width = Dimension.fillToConstraints
+                }
+        )
     }
 }
 
@@ -178,14 +284,15 @@ private fun PreviewEditText() {
 }
 
 @Composable
-@Preview("EditTextTrailingIconCustom")
+@Preview("EditTextTrailingIconCustom", showSystemUi = false)
 private fun PreviewEditTextWithTrailingIcon() {
-    EditTextTrailingIconCustom (
+    EditTextTrailingIconCustom(
         onTextChange = {},
         text = "TAs",
         errorText = "error1231231231231232313123123123123123123123123123213123",
         textColor = Color(5, 84, 89),
         backgroundColor = Color(240, 247, 218),
-        typeInput = KeyboardType.Password
+        typeInput = KeyboardType.Password,
+        trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Visibility)
     )
 }
