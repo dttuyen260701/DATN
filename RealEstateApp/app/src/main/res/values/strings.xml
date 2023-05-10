@@ -19,9 +19,17 @@
     <string name="emailTitle">Email</string>
     <string name="emailError">Sai định dạng email</string>
     <string name="passwordTitle">Mật khẩu</string>
+    <string name="reTypePasswordTitle">Xác nhận mật khẩu</string>
     <string name="passwordError">Sai định dạng mật khẩu</string>
+    <string name="nameError">Tên không được để trống</string>
+    <string name="phoneError">Số điện thoại phải đủ 10 số</string>
+    <string name="rePasswordError">Mật khẩu không trùng khớp</string>
     <string name="passwordForget">Quên mật khẩu?</string>
     <string name="doNotHaveAccount">Bạn chưa có tài khoản?</string>
+    <string name="haveAccount">Bạn đã có tài khoản?</string>
+    <string name="nameTitle">Họ và tên</string>
+    <string name="phoneTitle">Số điện thoại</string>
+    <string name="signUpSuccess">Đăng kí thành công, bạn có muốn chuyển đến trang đăng nhập</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
@@ -29,4 +37,5 @@
     <!--Dialog-->
     <string name="errorDialogTitle">Lỗi</string>
     <string name="dialogBackBtn">Trở về</string>
+    <string name="dialogYesBtn">Có</string>
 </resources>

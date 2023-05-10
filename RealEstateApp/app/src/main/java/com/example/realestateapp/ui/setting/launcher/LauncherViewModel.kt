@@ -32,12 +32,12 @@ class LauncherViewModel @Inject constructor(
     internal val password = mutableStateOf("")
     internal var firstClickButton = mutableStateOf(true)
 
-    internal fun loginUser(
+    internal fun signInUser(
         onSignInSuccess: () -> Unit
     ) {
         callAPIOnThread(
             funCallApis = mutableListOf({
-                appRepository.login(
+                appRepository.signIn(
                     email = email.value,
                     password = password.value
                 )
@@ -56,9 +56,35 @@ class LauncherViewModel @Inject constructor(
         )
     }
 
-    fun validEmail(mail: String): String =
+    internal fun signUpUser(
+        name: String,
+        phone: String,
+        onSignUpSuccess: () -> Unit
+    ) {
+        callAPIOnThread(
+            funCallApis = mutableListOf({
+                appRepository.signUp(
+                    name = name,
+                    phone = phone,
+                    email = email.value,
+                    password = password.value
+                )
+            }),
+            apiSuccess = {
+                if(it.isSuccess) {
+                    onSignUpSuccess()
+                } else {
+                    showDialog(
+                        dialog = TypeDialog.ErrorDialog(it.errorMessage ?: "")
+                    )
+                }
+            }
+        )
+    }
+
+    internal fun validEmail(mail: String): String =
         if (EMAIL_ADDRESS.matches(mail) || firstClickButton.value) "" else application.getString(R.string.emailError)
 
-    fun validPassWord(pass: String): String =
+    internal fun validPassWord(pass: String): String =
         if (PASSWORD.matches(pass) || firstClickButton.value) "" else application.getString(R.string.passwordError)
 }

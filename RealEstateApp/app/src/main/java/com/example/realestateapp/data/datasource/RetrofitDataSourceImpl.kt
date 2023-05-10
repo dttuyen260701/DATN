@@ -14,15 +14,30 @@ class RetrofitDataSourceImpl @Inject constructor(
     private val apiService: APIService
 ) : RetrofitDataSource, SafeAPI() {
 
-    override suspend fun login(email: String, password: String): ApiResultWrapper<User?> {
+    override suspend fun signIn(email: String, password: String): ApiResultWrapper<User?> {
         val options: MutableMap<String, Any> = HashMap()
         options["userName"] = email
         options["password"] = password
         options["isAdmin"] = false
         return callApi {
-            apiService.login(options)
+            apiService.signIn(options)
         }
     }
 
-
+    override suspend fun signUp(
+        name: String,
+        phone: String,
+        email: String,
+        password: String
+    ): ApiResultWrapper<Boolean> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["name"] = name
+        options["email"] = email
+        options["phone"] = phone
+        options["password"] = password
+        options["dateOfBirth"] = "01/01/2023"
+        return callApi {
+            apiService.signUp(options)
+        }
+    }
 }

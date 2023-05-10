@@ -243,7 +243,7 @@ internal fun EditTextTrailingIconCustom(
             icon = trailingIcon,
             contentDescription = null,
             modifier = Modifier
-                .size(35.dp)
+                .size(30.dp)
                 .background(Color.Transparent)
                 .constrainAs(icTrailing) {
                     start.linkTo(parent.start)

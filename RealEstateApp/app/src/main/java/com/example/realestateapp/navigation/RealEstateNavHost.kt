@@ -54,6 +54,11 @@ fun RealEstateNavHost(
             onPostSavedClick = {
 
             },
+            onSignUpSuccess = {
+                navController.navigateToSignIn {
+                    navController.popBackStack()
+                }
+            },
             onSignInSuccess = {
                 navController.clearBackStack()
                 navController.navigateToHome()
@@ -67,7 +72,7 @@ fun RealEstateNavHost(
 }
 
 fun NavHostController.clearBackStack() {
-    for (i  in 1..this.backQueue.size){
+    for (i in 1..this.backQueue.size) {
         this.popBackStack()
     }
 }

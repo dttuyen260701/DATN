@@ -28,7 +28,9 @@ object RealStateIcon {
     const val SignUp = R.drawable.ic_signup
     const val Visibility = R.drawable.ic_visibility
     const val VisibilityOff = R.drawable.ic_visibility_off
-    const val User = R.drawable.ic_user_box
+    const val User = R.drawable.ic_user_outline
+    const val Email = R.drawable.ic_mail
+    const val Password = R.drawable.ic_pass
 }
 
 /**

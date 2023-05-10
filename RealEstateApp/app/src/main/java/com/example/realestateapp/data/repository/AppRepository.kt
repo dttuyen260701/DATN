@@ -9,5 +9,12 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface AppRepository {
-    suspend fun login(email: String, password: String): Flow<ApiResultWrapper<User?>>
+    suspend fun signIn(email: String, password: String): Flow<ApiResultWrapper<User?>>
+
+    suspend fun signUp(
+        name: String,
+        phone: String,
+        email: String,
+        password: String
+    ): Flow<ApiResultWrapper<Boolean>>
 }

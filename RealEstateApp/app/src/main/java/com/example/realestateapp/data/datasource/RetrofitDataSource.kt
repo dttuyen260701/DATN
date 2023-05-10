@@ -8,5 +8,12 @@ import com.example.realestateapp.data.models.User
  */
 
 interface RetrofitDataSource {
-    suspend fun login(email: String, password: String): ApiResultWrapper<User?>
+    suspend fun signIn(email: String, password: String): ApiResultWrapper<User?>
+
+    suspend fun signUp(
+        name: String,
+        phone: String,
+        email: String,
+        password: String
+    ): ApiResultWrapper<Boolean>
 }

@@ -78,9 +78,9 @@ internal fun SignInRoute(
         passwordError = passwordError.value,
         enableBtnSignIn = enableBtnSignIn.value,
         onSignUpClick = onSignUpClick,
-        onSignInClick = {
+        onBtnSignInClick = {
             firstClick.value = false
-            if (enableBtnSignIn.value) viewModel.loginUser(
+            if (enableBtnSignIn.value) viewModel.signInUser(
                 onSignInSuccess = onSignInSuccess
             )
         }
@@ -98,7 +98,7 @@ internal fun SignInScreen(
     passwordError: String,
     enableBtnSignIn: Boolean,
     onSignUpClick: () -> Unit,
-    onSignInClick: () -> Unit
+    onBtnSignInClick: () -> Unit
 ) {
     BaseScreen(modifier = modifier) {
         Image(
@@ -140,7 +140,7 @@ internal fun SignInScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
         ButtonRadius(
-            onClick = onSignInClick,
+            onClick = onBtnSignInClick,
             title = stringResource(id = R.string.settingSignInTitle),
             enabled = enableBtnSignIn,
             bgColor = RealStateAppTheme.colors.primary,
