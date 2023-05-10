@@ -8,6 +8,7 @@ import com.example.realestateapp.extension.EMAIL_ADDRESS
 import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -43,6 +44,7 @@ class LauncherViewModel @Inject constructor(
             apiSuccess = {
                 if(it.isSuccess) {
                     getUser().value = it.body
+                    AuthenticationObject.token = it.body?.token ?: ""
                     onSignInSuccess()
                 } else {
                     showMessageDialog(it.errorMessage ?: "")

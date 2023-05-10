@@ -1,8 +1,8 @@
 package com.example.realestateapp.ui.setting
 
-import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,7 +16,12 @@ sealed class SettingUiState : UiState() {
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    appRepository: AppRepository
+
 ) : BaseViewModel<SettingUiState>() {
     override var uiState: UiState = SettingUiState.InitView
+
+    internal fun signOut() {
+        getUser().value = null
+        AuthenticationObject.token = ""
+    }
 }

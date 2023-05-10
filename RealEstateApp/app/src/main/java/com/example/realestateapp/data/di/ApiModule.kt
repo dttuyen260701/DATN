@@ -2,6 +2,7 @@ package com.example.realestateapp.data.di
 
 import com.example.realestateapp.BuildConfig
 import com.example.realestateapp.data.service.APIService
+import com.example.realestateapp.util.AuthenticationObject
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.HeaderRequest
 import com.google.gson.Gson
@@ -32,7 +33,7 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideGson() = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
+    fun provideGson(): Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
 
     @Provides
     @Singleton
@@ -47,7 +48,7 @@ object ApiModule {
                 .newBuilder()
                 .url(url)
                 .addHeader(HeaderRequest.CONTENT_TYPE, HeaderRequest.CONTENT_TYPE_VALUE)
-                .addHeader(HeaderRequest.AUTHORIZATION, "Bearer ${""}")
+                .addHeader(HeaderRequest.AUTHORIZATION, "Bearer ${AuthenticationObject.token}")
                 .build()
 
             return@Interceptor chain.proceed(request)

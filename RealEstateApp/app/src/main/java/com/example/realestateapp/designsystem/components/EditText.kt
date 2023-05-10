@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateTypography
@@ -54,7 +55,8 @@ internal fun EditTextRadius(
     }
 
     Column(
-        modifier = modifier.background(Color.Transparent)
+        modifier = modifier
+            .background(Color.Transparent)
             .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -135,6 +137,32 @@ internal fun EditTextRadius(
 }
 
 @Composable
+internal fun EditTextTrailingIconCustom(
+    modifier: Modifier = Modifier,
+    label: String? = null,
+    text: String = "",
+    onTextChange: (String) -> Unit,
+    typeInput: KeyboardType = KeyboardType.Text,
+    hint: String = "",
+    errorText: String = "",
+    textColor: Color = Color.Black,
+    backgroundColor: Color = Color.White,
+    isLastEditText: Boolean = false
+) {
+    ConstraintLayout(
+        modifier = modifier
+            .background(Color.Transparent)
+            .wrapContentHeight(),
+    ) {
+        val (
+            trailingIcon,
+            edt,
+            tvError
+        ) = createRefs()
+    }
+}
+
+@Composable
 @Preview("default")
 private fun PreviewEditText() {
     EditTextRadius(
@@ -143,5 +171,19 @@ private fun PreviewEditText() {
         errorText = "error1231231231231232313123123123123123123123123123213123",
         textColor = Color(5, 84, 89),
         backgroundColor = Color(240, 247, 218),
+        typeInput = KeyboardType.Password
+    )
+}
+
+@Composable
+@Preview("EditTextTrailingIconCustom")
+private fun PreviewEditTextWithTrailingIcon() {
+    EditTextTrailingIconCustom (
+        onTextChange = {},
+        text = "TAs",
+        errorText = "error1231231231231232313123123123123123123123123123213123",
+        textColor = Color(5, 84, 89),
+        backgroundColor = Color(240, 247, 218),
+        typeInput = KeyboardType.Password
     )
 }

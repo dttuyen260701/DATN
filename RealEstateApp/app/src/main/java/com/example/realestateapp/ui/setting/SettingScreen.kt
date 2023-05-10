@@ -41,7 +41,7 @@ internal fun SettingRoute(
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
-    onLogoutSuccess: () -> Unit
+    onSignOutSuccess: () -> Unit
 ) {
     val user = remember {
         viewModel.getUser()
@@ -59,7 +59,8 @@ internal fun SettingRoute(
         onChangePassClick = onChangePassClick,
         onPostSavedClick = onPostSavedClick,
         onLogoutListener = {
-            onLogoutSuccess()
+            viewModel.signOut()
+            onSignOutSuccess()
         }
     )
 }

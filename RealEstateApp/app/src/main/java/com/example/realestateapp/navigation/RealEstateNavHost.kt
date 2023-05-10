@@ -58,8 +58,9 @@ fun RealEstateNavHost(
                 navController.clearBackStack()
                 navController.navigateToHome()
             },
-            onLogoutSuccess = {
-
+            onSignOutSuccess = {
+                navController.clearBackStack()
+                navController.navigateToHome()
             }
         )
     }

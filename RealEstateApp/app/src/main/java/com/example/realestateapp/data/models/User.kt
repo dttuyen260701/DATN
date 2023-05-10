@@ -29,5 +29,5 @@ data class User(
     @SerializedName("levelRank") val levelRank: Int,
     @SerializedName("accountBalance") val accountBalance: Int,
     @SerializedName("isIdentified") val isIdentified: Boolean,
-    @SerializedName("token") val token: Boolean
+    @SerializedName("token") val token: String
 )

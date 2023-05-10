@@ -20,12 +20,18 @@ internal fun NavController.navigateToSettingGraph(navOptions: NavOptions? = null
     this.navigate(settingNavigationRouteGraph, navOptions)
 }
 
-internal fun NavHostController.navigateToSignIn() {
-    this.navigateSingleTopTo(signInNavigationRoute)
+internal fun NavHostController.navigateToSignIn(beforeNavigated: () -> Unit = {}) {
+    this.navigateSingleTopTo(
+        route = signInNavigationRoute,
+        beforeNavigated = beforeNavigated
+    )
 }
 
-internal fun NavHostController.navigateToSignUp() {
-    this.navigateSingleTopTo(signUpNavigationRoute)
+internal fun NavHostController.navigateToSignUp(beforeNavigated: () -> Unit = {}) {
+    this.navigateSingleTopTo(
+        route = signUpNavigationRoute,
+        beforeNavigated = beforeNavigated
+    )
 }
 
 internal fun NavGraphBuilder.settingGraph(
@@ -37,7 +43,7 @@ internal fun NavGraphBuilder.settingGraph(
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
     onSignInSuccess:() -> Unit,
-    onLogoutSuccess: () -> Unit,
+    onSignOutSuccess: () -> Unit,
 ) {
     navigation(
         route = settingNavigationRouteGraph,
@@ -51,7 +57,7 @@ internal fun NavGraphBuilder.settingGraph(
             onAboutUsClick = onAboutUsClick,
             onChangePassClick = onChangePassClick,
             onPostSavedClick = onPostSavedClick,
-            onLogoutSuccess = onLogoutSuccess
+            onSignOutSuccess = onSignOutSuccess
         )
         singInScreen(
             onSignUpClick = onSignUpClick,
@@ -69,7 +75,7 @@ internal fun NavGraphBuilder.settingScreen(
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
     onPostSavedClick: () -> Unit,
-    onLogoutSuccess: () -> Unit
+    onSignOutSuccess: () -> Unit
 ) {
     composable(settingNavigationRoute) {
         SettingRoute(
@@ -80,7 +86,7 @@ internal fun NavGraphBuilder.settingScreen(
             onAboutUsClick = onAboutUsClick,
             onChangePassClick = onChangePassClick,
             onPostSavedClick = onPostSavedClick,
-            onLogoutSuccess = onLogoutSuccess
+            onSignOutSuccess = onSignOutSuccess
         )
     }
 }

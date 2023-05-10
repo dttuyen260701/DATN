@@ -18,10 +18,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
+import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.components.BaseScreen
 import com.example.realestateapp.designsystem.components.ButtonRadius
 import com.example.realestateapp.designsystem.components.EditTextRadius
-import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
@@ -108,12 +108,7 @@ internal fun SignInScreen(
                 .fillMaxWidth(0.8f)
                 .aspectRatio(1f)
         )
-        Text(
-            text = stringResource(id = R.string.settingSignInTitle),
-            style = RealStateTypography.h1.copy(
-                color = RealStateAppTheme.colors.primary
-            )
-        )
+        TextTitle(stringResource(id = R.string.settingSignInTitle))
         Spacing(MARGIN_DIFFERENT_VIEW)
         EditTextRadius(
             onTextChange = onEmailChange,
