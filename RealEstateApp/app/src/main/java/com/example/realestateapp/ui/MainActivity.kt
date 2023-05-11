@@ -5,10 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.Surface
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,10 +26,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             RealEstateAppTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.Transparent
+                    modifier = Modifier.fillMaxSize(), color = Color.Transparent
                 ) {
-                    RealEstateApp(viewModel = viewModel)
+
+                    val customTextSelectionColors = TextSelectionColors(
+                        handleColor = RealStateAppTheme.colors.primary,
+                        backgroundColor = RealStateAppTheme.colors.primary.copy(alpha = 0.4f)
+                    )
+
+                    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+                        RealEstateApp(viewModel = viewModel)
+                    }
                 }
             }
         }

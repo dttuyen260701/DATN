@@ -36,7 +36,8 @@ class MainActivityViewModel @Inject constructor(
                     funCallApis = mutableListOf({
                         appRepository.signIn(
                             email = email,
-                            password = pass
+                            password = pass,
+                            showLoading = false
                         )
                     }),
                     apiSuccess = {

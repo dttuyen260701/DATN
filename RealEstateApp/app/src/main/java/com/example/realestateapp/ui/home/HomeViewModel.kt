@@ -22,4 +22,6 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(HomeUiState.InitView)
 
+    internal val filter = mutableStateOf("")
+
 }

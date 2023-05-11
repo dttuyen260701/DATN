@@ -90,7 +90,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
                             isLoading.value = false
                             apiError()
                             showDialog(
-                                dialog = TypeDialog.ErrorDialog(result.io.message ?: "")
+                                dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.NOT_FOUND_INTERNET)
                             )
                         }
                         else -> {

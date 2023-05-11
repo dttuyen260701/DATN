@@ -41,6 +41,7 @@ class Constants {
         const val AUTHENTICATION_ERROR = "Vui lòng đăng nhập để thực hiện chức năng này !"
         const val INTERNAL_SERVER_ERROR = "Server đang bận, vui lòng thử lại sau !"
         const val NOT_FOUND_ERROR = "Không tìm thấy đường dẫn !"
+        const val NOT_FOUND_INTERNET = "Vui lòng kiểm tra lại mạng !"
     }
 
     object DefaultConfig {

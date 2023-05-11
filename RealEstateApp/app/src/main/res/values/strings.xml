@@ -33,6 +33,7 @@
 
     <!--Home Screen-->
     <string name="welcomeTitle">Xin chào</string>
+    <string name="searchHint">Bạn muốn tìm điều gì?</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>

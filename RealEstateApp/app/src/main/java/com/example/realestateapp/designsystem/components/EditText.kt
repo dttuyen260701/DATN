@@ -1,6 +1,8 @@
 package com.example.realestateapp.designsystem.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,10 +26,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_PADDING
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
@@ -268,6 +272,97 @@ internal fun EditTextTrailingIconCustom(
                 }
         )
     }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal fun EditTextFullIconBorderRadius(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    textColor: Color = RealStateAppTheme.colors.primary,
+    onTextChange: (String) -> Unit,
+    typeInput: KeyboardType = KeyboardType.Text,
+    hint: String = "",
+    borderColor: Color = RealStateAppTheme.colors.bgBtnDisable,
+    leadingIcon: AppIcon? = null,
+    leadingIconColor: Color,
+    onLeadingIconClick: () -> Unit,
+    trailingIcon: AppIcon? = null,
+    trailingIconColor: Color,
+    onTrailingIconClick: () -> Unit,
+    onDoneAction: () -> Unit = {},
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .border(
+                BorderStroke(width = 1.dp, color = borderColor),
+                shape = RoundedCornerShape(ROUND_DIALOG.dp)
+            )
+            .background(Color.Transparent)
+            .then(modifier),
+        textStyle = RealStateTypography.body1,
+        onValueChange = { onTextChange(it) },
+        value = text,
+        placeholder = {
+            Text(
+                text = hint,
+                color = textColor.copy(alpha = ALPHA_HINT_COLOR)
+            )
+        },
+        leadingIcon = if (leadingIcon != null) {
+            {
+                IconButton(
+                    onClick = onLeadingIconClick,
+                ) {
+                    BaseIcon(
+                        icon = leadingIcon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(25.dp)
+                    )
+                }
+            }
+        } else null,
+        trailingIcon = if (trailingIcon != null) {
+            {
+                IconButton(
+                    onClick = onTrailingIconClick,
+                ) {
+                    BaseIcon(
+                        icon = trailingIcon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(25.dp)
+                    )
+                }
+            }
+        } else null,
+        singleLine = true,
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = textColor,
+            backgroundColor = Color.Transparent,
+            cursorColor = textColor,
+            leadingIconColor = leadingIconColor,
+            trailingIconColor = trailingIconColor,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            errorCursorColor = Color.Red
+        ),
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
+            keyboardType = typeInput,
+            capitalization = KeyboardCapitalization.Words
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onDoneAction()
+                keyboardController?.hide()
+            },
+        )
+    )
 }
 
 @Composable

@@ -14,8 +14,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.User
+import com.example.realestateapp.designsystem.components.EditTextFullIconBorderRadius
 import com.example.realestateapp.designsystem.components.ImageProfile
 import com.example.realestateapp.designsystem.components.Spacing
+import com.example.realestateapp.designsystem.icon.AppIcon
+import com.example.realestateapp.designsystem.icon.RealStateIcon
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
 import com.example.realestateapp.ui.base.BaseScreen
@@ -33,20 +36,29 @@ internal fun HomeRoute(
     val user = remember {
         viewModel.getUser()
     }
+    val filter = remember {
+        viewModel.filter
+    }
     HomeScreen(
         modifier = modifier,
-        user = user.value
+        user = user.value,
+        filter = filter.value,
+        onFilterChange = {
+            filter.value = it
+        }
     )
 }
 
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
-    user: User?
+    user: User?,
+    filter: String,
+    onFilterChange: (String) -> Unit
 ) {
     BaseScreen(modifier = modifier) {
-        Spacing(MARGIN_DIFFERENT_VIEW)
         user?.run {
+            Spacing(MARGIN_DIFFERENT_VIEW)
             ConstraintLayout(
                 modifier = Modifier
                     .background(Color.Transparent)
@@ -99,5 +111,22 @@ internal fun HomeScreen(
             }
         }
         Spacing(MARGIN_DIFFERENT_VIEW)
+        EditTextFullIconBorderRadius(
+            text = filter,
+            onTextChange = onFilterChange,
+            hint = stringResource(id = R.string.searchHint),
+            leadingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Search),
+            borderColor = Color.Gray.copy(0.3f),
+            leadingIconColor = RealStateAppTheme.colors.primary,
+            onLeadingIconClick = {},
+            trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Config),
+            trailingIconColor = RealStateAppTheme.colors.primary,
+            onTrailingIconClick = {
+
+            },
+            onDoneAction = {
+
+            }
+        )
     }
 }

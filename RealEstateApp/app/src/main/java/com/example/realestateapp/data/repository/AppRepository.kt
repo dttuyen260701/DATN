@@ -12,7 +12,7 @@ interface AppRepository {
     suspend fun signIn(
         email: String,
         password: String,
-        showLoading: Boolean = false
+        showLoading: Boolean = true
     ): Flow<ApiResultWrapper<User?>>
 
     suspend fun signUp(

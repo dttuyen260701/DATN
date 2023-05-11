@@ -2,6 +2,7 @@ package com.example.realestateapp.designsystem.icon
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,6 +32,8 @@ object RealStateIcon {
     const val User = R.drawable.ic_user_outline
     const val Email = R.drawable.ic_mail
     const val Password = R.drawable.ic_pass
+    val Search = Icons.Outlined.Search
+    const val Config = R.drawable.ic_config
 }
 
 /**
