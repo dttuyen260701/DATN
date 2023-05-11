@@ -23,7 +23,8 @@ open class SafeAPI {
                 when (res.code()) {
                     200 -> {
                         res.body()?.let {
-                            ApiResultWrapper.Success(it)
+                            if (it.isSuccess) ApiResultWrapper.Success(it)
+                            else ApiResultWrapper.ResponseCodeError(it.errorMessage ?: "")
                         } ?: ApiResultWrapper.NullResponseError
                     }
                     400 -> {

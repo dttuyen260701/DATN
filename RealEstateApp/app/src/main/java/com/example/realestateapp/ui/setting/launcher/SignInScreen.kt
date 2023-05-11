@@ -18,12 +18,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
-import com.example.realestateapp.designsystem.components.*
-import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.designsystem.components.ButtonRadius
 import com.example.realestateapp.designsystem.components.EditTextRadius
+import com.example.realestateapp.designsystem.components.Spacing
+import com.example.realestateapp.designsystem.components.TextTitle
 import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
@@ -47,7 +48,7 @@ internal fun SignInRoute(
         viewModel.password
     }
     val firstClick = remember {
-        viewModel.firstClickButton
+        viewModel.firstClick
     }
     val emailError = remember {
         derivedStateOf {
@@ -64,6 +65,15 @@ internal fun SignInRoute(
             emailError.value.isEmpty() && passwordError.value.isEmpty()
         }
     }
+    val onBtnSignUpClick = remember {
+        {
+            firstClick.value = false
+            if (enableBtnSignIn.value) viewModel.signInUser(
+                onSignInSuccess = onSignInSuccess
+            )
+        }
+    }
+
     SignInScreen(
         modifier = modifier,
         email = email.value,
@@ -78,12 +88,7 @@ internal fun SignInRoute(
         passwordError = passwordError.value,
         enableBtnSignIn = enableBtnSignIn.value,
         onSignUpClick = onSignUpClick,
-        onBtnSignInClick = {
-            firstClick.value = false
-            if (enableBtnSignIn.value) viewModel.signInUser(
-                onSignInSuccess = onSignInSuccess
-            )
-        }
+        onBtnSignInClick = onBtnSignUpClick
     )
 }
 

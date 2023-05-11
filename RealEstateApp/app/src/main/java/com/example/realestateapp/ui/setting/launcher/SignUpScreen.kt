@@ -48,7 +48,7 @@ internal fun SignUpRoute(
 ) {
     val context = LocalContext.current
     val firstClick = remember {
-        viewModel.firstClickButton
+        viewModel.firstClick
     }
     val name = remember { mutableStateOf("") }
     val nameError = remember {
@@ -98,7 +98,32 @@ internal fun SignUpRoute(
                     && rePasswordError.value.isEmpty()
         }
     }
-    SignUpScreen(modifier = modifier,
+    val onBtnSignUpClick = remember {
+        {
+            firstClick.value = false
+            viewModel.run {
+                if (enableBtnSignUp.value) signUpUser(
+                    name = name.value,
+                    phone = phone.value
+                ) {
+                    showDialog(
+                        dialog = TypeDialog.ConfirmDialog(
+                            message = context.getString(R.string.signUpSuccess),
+                            negativeBtnText = context.getString(R.string.dialogBackBtn),
+                            onBtnNegativeClick = {},
+                            positiveBtnText = context.getString(R.string.dialogYesBtn),
+                            onBtnPositiveClick = {
+                                onSignUpSuccess()
+                            }
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    SignUpScreen(
+        modifier = modifier,
         name = name.value,
         nameError = nameError.value,
         onNameChange = {
@@ -126,27 +151,9 @@ internal fun SignUpRoute(
         rePasswordError = rePasswordError.value,
         enableBtnSignUp = enableBtnSignUp.value,
         onSignInClick = onSignInClick,
-        onBtnSignUpClick = {
-            firstClick.value = false
-            viewModel.run {
-                if (enableBtnSignUp.value) signUpUser(
-                    name = name.value,
-                    phone = phone.value
-                ) {
-                    showDialog(
-                        dialog = TypeDialog.ConfirmDialog(
-                            message = context.getString(R.string.signUpSuccess),
-                            negativeBtnText = context.getString(R.string.dialogBackBtn),
-                            onBtnNegativeClick = {},
-                            positiveBtnText = context.getString(R.string.dialogYesBtn),
-                            onBtnPositiveClick = {
-                                onSignUpSuccess()
-                            }
-                        )
-                    )
-                }
-            }
-        })
+        onBtnSignUpClick = onBtnSignUpClick
+
+    )
 }
 
 @Composable
@@ -205,8 +212,7 @@ internal fun SignUpScreen(
             errorText = emailError,
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Email),
             textColor = RealStateAppTheme.colors.primary,
-            backgroundColor = Color.White,
-            isLastEditText = true
+            backgroundColor = Color.White
         )
         EditTextTrailingIconCustom(
             onTextChange = onPassChange,
@@ -216,8 +222,7 @@ internal fun SignUpScreen(
             errorText = passwordError,
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Password),
             textColor = RealStateAppTheme.colors.primary,
-            backgroundColor = Color.White,
-            isLastEditText = true
+            backgroundColor = Color.White
         )
         EditTextTrailingIconCustom(
             onTextChange = onRePassChange,

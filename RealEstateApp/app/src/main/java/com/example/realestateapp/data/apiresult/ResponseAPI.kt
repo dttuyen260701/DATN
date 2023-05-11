@@ -5,6 +5,5 @@ import com.google.gson.annotations.SerializedName
 data class ResponseAPI<T>(
     @SerializedName("isSuccess") var isSuccess: Boolean,
     @SerializedName("errorMessage") var errorMessage: String?,
-    @SerializedName("errorMessageDetail") var errorMessageDetail: String?,
     @SerializedName("body") var body: T
 )

@@ -1,16 +1,20 @@
 package com.example.realestateapp.ui.setting.launcher
 
 import android.app.Application
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.EMAIL_ADDRESS
 import com.example.realestateapp.extension.PASSWORD
+import com.example.realestateapp.extension.writeStoreLauncher
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -26,11 +30,11 @@ class LauncherViewModel @Inject constructor(
     private val appRepository: AppRepository,
     private val application: Application
 ) : BaseViewModel<LauncherUiState>() {
-    override var uiState: UiState = LauncherUiState.InitView
+    override var uiState: MutableState<UiState> = mutableStateOf(LauncherUiState.InitView)
 
     internal val email = mutableStateOf("")
     internal val password = mutableStateOf("")
-    internal var firstClickButton = mutableStateOf(true)
+    internal var firstClick = mutableStateOf(true)
 
     internal fun signInUser(
         onSignInSuccess: () -> Unit
@@ -43,13 +47,13 @@ class LauncherViewModel @Inject constructor(
                 )
             }),
             apiSuccess = {
-                if(it.isSuccess) {
-                    getUser().value = it.body
-                    AuthenticationObject.token = it.body?.token ?: ""
-                    onSignInSuccess()
-                } else {
-                    showDialog(
-                        dialog = TypeDialog.ErrorDialog(it.errorMessage ?: "")
+                getUser().value = it.body
+                AuthenticationObject.token = it.body?.token ?: ""
+                onSignInSuccess()
+                viewModelScope.launch(Dispatchers.IO) {
+                    application.baseContext.writeStoreLauncher(
+                        email = email.value,
+                        password = password.value
                     )
                 }
             }
@@ -71,20 +75,14 @@ class LauncherViewModel @Inject constructor(
                 )
             }),
             apiSuccess = {
-                if(it.isSuccess) {
-                    onSignUpSuccess()
-                } else {
-                    showDialog(
-                        dialog = TypeDialog.ErrorDialog(it.errorMessage ?: "")
-                    )
-                }
+                onSignUpSuccess()
             }
         )
     }
 
     internal fun validEmail(mail: String): String =
-        if (EMAIL_ADDRESS.matches(mail) || firstClickButton.value) "" else application.getString(R.string.emailError)
+        if (EMAIL_ADDRESS.matches(mail) || firstClick.value) "" else application.getString(R.string.emailError)
 
     internal fun validPassWord(pass: String): String =
-        if (PASSWORD.matches(pass) || firstClickButton.value) "" else application.getString(R.string.passwordError)
+        if (PASSWORD.matches(pass) || firstClick.value) "" else application.getString(R.string.passwordError)
 }

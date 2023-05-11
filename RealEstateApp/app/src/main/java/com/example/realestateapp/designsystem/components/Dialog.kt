@@ -155,7 +155,7 @@ internal fun DialogConfirm(
                     radius = ROUND_DIALOG,
                     title = negativeBtnText,
                     bgColor = RealStateAppTheme.colors.primaryVariant,
-                    textSize = 12,
+                    textSize = 13,
                     textColor = RealStateAppTheme.colors.primary
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
@@ -170,7 +170,7 @@ internal fun DialogConfirm(
                     radius = ROUND_DIALOG,
                     title = positiveBtnText,
                     bgColor = RealStateAppTheme.colors.primary,
-                    textSize = 12,
+                    textSize = 13,
                     textColor = RealStateAppTheme.colors.primaryVariant
                 )
             }

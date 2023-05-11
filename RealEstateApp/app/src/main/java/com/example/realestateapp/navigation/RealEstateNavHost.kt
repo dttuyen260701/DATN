@@ -10,9 +10,7 @@ import com.example.realestateapp.ui.home.navigation.homeScreen
 import com.example.realestateapp.ui.home.navigation.navigateToHome
 import com.example.realestateapp.ui.notification.navigation.notificationScreen
 import com.example.realestateapp.ui.post.navigation.postScreen
-import com.example.realestateapp.ui.setting.navigation.navigateToSignIn
-import com.example.realestateapp.ui.setting.navigation.navigateToSignUp
-import com.example.realestateapp.ui.setting.navigation.settingGraph
+import com.example.realestateapp.ui.setting.navigation.*
 
 /**
  * Created by tuyen.dang on 5/1/2023.
@@ -34,7 +32,7 @@ fun RealEstateNavHost(
         notificationScreen()
         settingGraph(
             onEditClick = {
-
+                navController.navigateToProfile()
             },
             onSignInClick = {
                 navController.navigateToSignIn()
@@ -49,7 +47,7 @@ fun RealEstateNavHost(
 
             },
             onChangePassClick = {
-
+                navController.navigateToChangePass()
             },
             onPostSavedClick = {
 

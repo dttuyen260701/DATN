@@ -12,6 +12,12 @@ class Constants {
         const val AUTHORIZATION = "Authorization"
     }
 
+    object DataStore {
+        const val NAME = "real_estate"
+        const val KEY_EMAIL = "email"
+        const val KEY_PASSWORD = "password"
+    }
+
     object DefaultValue {
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24

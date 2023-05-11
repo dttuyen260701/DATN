@@ -44,7 +44,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         private var dialogType: MutableState<TypeDialog> = mutableStateOf(TypeDialog.Hide)
     }
 
-    abstract var uiState: UiState
+    abstract var uiState: MutableState<UiState>
 
     internal fun getUser() = user
 

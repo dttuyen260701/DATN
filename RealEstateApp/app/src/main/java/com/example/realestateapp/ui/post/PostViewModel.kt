@@ -1,5 +1,7 @@
 package com.example.realestateapp.ui.post
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
@@ -18,6 +20,6 @@ sealed class PostUiState : UiState() {
 class PostViewModel @Inject constructor(
     appRepository: AppRepository
 ) : BaseViewModel<PostUiState>() {
-    override var uiState: UiState = PostUiState.InitView
+    override var uiState: MutableState<UiState> = mutableStateOf(PostUiState.InitView)
 
 }

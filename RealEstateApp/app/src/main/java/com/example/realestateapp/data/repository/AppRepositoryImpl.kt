@@ -15,10 +15,14 @@ import javax.inject.Inject
 class AppRepositoryImpl @Inject constructor(
     private val dataSource: RetrofitDataSource
 ) : AppRepository {
-    override suspend fun signIn(email: String, password: String): Flow<ApiResultWrapper<User?>> {
+    override suspend fun signIn(
+        email: String,
+        password: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<User?>> {
         return flow {
             emit(dataSource.signIn(email, password))
-        }.onStart { emit(ApiResultWrapper.Loading) }
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
 
     override suspend fun signUp(

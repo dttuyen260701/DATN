@@ -1,5 +1,7 @@
 package com.example.realestateapp.ui.notification
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
@@ -19,5 +21,5 @@ class NotificationViewModel @Inject constructor(
     appRepository: AppRepository
 ) : BaseViewModel<NotificationUiState>() {
 
-    override var uiState: UiState = NotificationUiState.InitView
+    override var uiState: MutableState<UiState> = mutableStateOf(NotificationUiState.InitView)
 }
