@@ -31,9 +31,12 @@
     <string name="phoneTitle">Số điện thoại</string>
     <string name="signUpSuccess">Đăng kí thành công, bạn có muốn chuyển đến trang đăng nhập</string>
 
+    <!--Home Screen-->
+    <string name="welcomeTitle">Xin chào</string>
+
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
-    
+
     <!--Dialog-->
     <string name="errorDialogTitle">Lỗi</string>
     <string name="dialogBackBtn">Trở về</string>
