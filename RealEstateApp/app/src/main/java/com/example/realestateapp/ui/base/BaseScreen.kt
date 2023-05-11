@@ -24,7 +24,7 @@ import com.example.realestateapp.util.Constants
 internal fun BaseScreen(
     modifier: Modifier = Modifier,
     bgColor: Color = RealStateAppTheme.colors.bgScreen,
-    verticalArrangement : Arrangement.HorizontalOrVertical = Arrangement.Center,
+    verticalArrangement: Arrangement.HorizontalOrVertical = Arrangement.Center,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable ColumnScope.() -> Unit
 ) {
