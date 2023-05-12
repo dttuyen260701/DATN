@@ -28,8 +28,8 @@ import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.TextTitle
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.util.Constants
@@ -98,29 +98,6 @@ internal fun SignUpRoute(
                     && rePasswordError.value.isEmpty()
         }
     }
-    val onBtnSignUpClick = remember {
-        {
-            firstClick.value = false
-            viewModel.run {
-                if (enableBtnSignUp.value) signUpUser(
-                    name = name.value,
-                    phone = phone.value
-                ) {
-                    showDialog(
-                        dialog = TypeDialog.ConfirmDialog(
-                            message = context.getString(R.string.signUpSuccess),
-                            negativeBtnText = context.getString(R.string.dialogBackBtn),
-                            onBtnNegativeClick = {},
-                            positiveBtnText = context.getString(R.string.dialogYesBtn),
-                            onBtnPositiveClick = {
-                                onSignUpSuccess()
-                            }
-                        )
-                    )
-                }
-            }
-        }
-    }
 
     SignUpScreen(
         modifier = modifier,
@@ -151,8 +128,29 @@ internal fun SignUpRoute(
         rePasswordError = rePasswordError.value,
         enableBtnSignUp = enableBtnSignUp.value,
         onSignInClick = onSignInClick,
-        onBtnSignUpClick = onBtnSignUpClick
-
+        onBtnSignUpClick = remember {
+            {
+                firstClick.value = false
+                viewModel.run {
+                    if (enableBtnSignUp.value) signUpUser(
+                        name = name.value,
+                        phone = phone.value
+                    ) {
+                        showDialog(
+                            dialog = TypeDialog.ConfirmDialog(
+                                message = context.getString(R.string.signUpSuccess),
+                                negativeBtnText = context.getString(R.string.dialogBackBtn),
+                                onBtnNegativeClick = {},
+                                positiveBtnText = context.getString(R.string.dialogYesBtn),
+                                onBtnPositiveClick = {
+                                    onSignUpSuccess()
+                                }
+                            )
+                        )
+                    }
+                }
+            }
+        }
     )
 }
 
@@ -179,7 +177,7 @@ internal fun SignUpScreen(
     onBtnSignUpClick: () -> Unit
 ) {
     BaseScreen(
-        modifier = modifier, bgColor = RealStateAppTheme.colors.bgScrPrimaryLight
+        modifier = modifier, bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight
     ) {
         Spacing(MARGIN_DIFFERENT_VIEW)
         TextTitle(stringResource(id = R.string.settingSignUpTitle))
@@ -191,7 +189,7 @@ internal fun SignUpScreen(
             typeInput = KeyboardType.Text,
             errorText = nameError,
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.User),
-            textColor = RealStateAppTheme.colors.primary,
+            textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )
         EditTextTrailingIconCustom(
@@ -201,7 +199,7 @@ internal fun SignUpScreen(
             typeInput = KeyboardType.Number,
             errorText = phoneError,
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.User),
-            textColor = RealStateAppTheme.colors.primary,
+            textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )
         EditTextTrailingIconCustom(
@@ -211,7 +209,7 @@ internal fun SignUpScreen(
             typeInput = KeyboardType.Email,
             errorText = emailError,
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Email),
-            textColor = RealStateAppTheme.colors.primary,
+            textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White
         )
         EditTextTrailingIconCustom(
@@ -221,7 +219,7 @@ internal fun SignUpScreen(
             typeInput = KeyboardType.Password,
             errorText = passwordError,
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Password),
-            textColor = RealStateAppTheme.colors.primary,
+            textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White
         )
         EditTextTrailingIconCustom(
@@ -231,7 +229,7 @@ internal fun SignUpScreen(
             typeInput = KeyboardType.Password,
             errorText = rePasswordError,
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Password),
-            textColor = RealStateAppTheme.colors.primary,
+            textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isLastEditText = true
         )
@@ -240,7 +238,7 @@ internal fun SignUpScreen(
             onClick = onBtnSignUpClick,
             title = stringResource(id = R.string.settingSignUpTitle),
             enabled = enableBtnSignUp,
-            bgColor = RealStateAppTheme.colors.primary,
+            bgColor = RealEstateAppTheme.colors.primary,
             modifier = Modifier
                 .height(Constants.DefaultValue.TOOLBAR_HEIGHT.dp)
                 .fillMaxWidth()
@@ -249,19 +247,19 @@ internal fun SignUpScreen(
         Text(text = buildAnnotatedString {
             withStyle(
                 style = SpanStyle(
-                    color = RealStateAppTheme.colors.textSettingButton
+                    color = RealEstateAppTheme.colors.textSettingButton
                 )
             ) {
                 append(stringResource(id = R.string.haveAccount))
             }
             withStyle(
                 style = SpanStyle(
-                    color = RealStateAppTheme.colors.primary
+                    color = RealEstateAppTheme.colors.primary
                 )
             ) {
                 append(" ${stringResource(id = R.string.settingSignInTitle)}")
             }
-        }, style = RealStateTypography.body1.copy(
+        }, style = RealEstateTypography.body1.copy(
             textAlign = TextAlign.Center
         ), modifier = Modifier
             .fillMaxWidth()

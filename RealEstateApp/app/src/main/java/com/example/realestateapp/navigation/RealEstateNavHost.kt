@@ -49,9 +49,6 @@ fun RealEstateNavHost(
             onChangePassClick = {
                 navController.navigateToChangePass()
             },
-            onPostSavedClick = {
-
-            },
             onSignUpSuccess = {
                 navController.navigateToSignIn {
                     navController.popBackStack()

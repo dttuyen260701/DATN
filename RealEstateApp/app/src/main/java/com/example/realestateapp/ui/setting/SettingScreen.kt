@@ -18,13 +18,16 @@ import com.example.realestateapp.R
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.models.view.SettingButton
 import com.example.realestateapp.data.repository.ViewDataRepository
-import com.example.realestateapp.designsystem.components.*
+import com.example.realestateapp.designsystem.components.ImageProfile
+import com.example.realestateapp.designsystem.components.SettingButton
+import com.example.realestateapp.designsystem.components.Spacing
+import com.example.realestateapp.designsystem.components.ToolbarView
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
-import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
+import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -44,7 +47,6 @@ internal fun SettingRoute(
     onPolicyClick: () -> Unit,
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
-    onPostSavedClick: () -> Unit,
     onSignOutSuccess: () -> Unit
 ) {
     val user = remember {
@@ -62,7 +64,6 @@ internal fun SettingRoute(
         onPolicyClick = onPolicyClick,
         onAboutUsClick = onAboutUsClick,
         onChangePassClick = onChangePassClick,
-        onPostSavedClick = onPostSavedClick,
         onSignOutListener = {
             viewModel.run {
                 showDialog(
@@ -93,7 +94,6 @@ internal fun SettingScreen(
     onPolicyClick: () -> Unit,
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
-    onPostSavedClick: () -> Unit,
     onSignOutListener: () -> Unit
 ) {
     BaseScreen(modifier = modifier) {
@@ -123,8 +123,8 @@ internal fun SettingScreen(
                 )
                 Text(
                     text = fullName,
-                    style = RealStateTypography.h2.copy(
-                        color = RealStateAppTheme.colors.primary,
+                    style = RealEstateTypography.h2.copy(
+                        color = RealEstateAppTheme.colors.primary,
                         fontWeight = FontWeight.Bold
                     ),
                     modifier = Modifier
@@ -143,8 +143,8 @@ internal fun SettingScreen(
                 )
                 Text(
                     text = email,
-                    style = RealStateTypography.button.copy(
-                        color = RealStateAppTheme.colors.textSettingButton,
+                    style = RealEstateTypography.button.copy(
+                        color = RealEstateAppTheme.colors.textSettingButton,
                     ),
                     modifier = Modifier
                         .constrainAs(tvMail) {
@@ -175,7 +175,7 @@ internal fun SettingScreen(
                         .clickable {
                             onEditClick()
                         },
-                    tint = RealStateAppTheme.colors.primary
+                    tint = RealEstateAppTheme.colors.primary
                 )
             }
             Spacing(MARGIN_VIEW)
@@ -199,9 +199,6 @@ internal fun SettingScreen(
                     R.string.settingChangePassTitle -> {
                         onChangePassClick
                     }
-                    R.string.settingPostSavedTitle -> {
-                        onPostSavedClick
-                    }
                     else -> {
                         onSignOutListener
                     }
@@ -211,7 +208,7 @@ internal fun SettingScreen(
                     .fillMaxWidth(),
                 title = stringResource(id = button.title),
                 leadingIcon = button.leadingIcon,
-                backgroundIcon = RealStateAppTheme.colors.primary
+                backgroundIcon = RealEstateAppTheme.colors.primary
             )
         }
     }

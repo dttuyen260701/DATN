@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import javax.inject.Singleton
 
-private val DarkColorRealState = RealStateColors(
+private val DarkColorRealState = RealEstateColors(
     primary = MidnightGreen,
     primaryVariant = AntiFlashWhite,
     secondary = GhostWhite,
@@ -22,7 +22,7 @@ private val DarkColorRealState = RealStateColors(
     bgScrPrimaryLight = Snow
 )
 
-private val LightColorRealState = RealStateColors(
+private val LightColorRealState = RealEstateColors(
     primary = MidnightGreen,
     primaryVariant = AntiFlashWhite,
     secondary = GhostWhite,
@@ -47,10 +47,10 @@ private val LightColorRealState = RealStateColors(
 )
 
 @Singleton
-object RealStateAppTheme {
-    val colors: RealStateColors
+object RealEstateAppTheme {
+    val colors: RealEstateColors
         @Composable
-        get() = LocalRealStateColors.current
+        get() = LocalRealEstateColors.current
 }
 
 @Composable
@@ -73,10 +73,10 @@ fun RealEstateAppTheme(
             color = colors.primary
         )
     }
-    ProvideRealStateColors(colors = colors) {
+    ProvideRealEstateColors(colors = colors) {
         MaterialTheme(
             colors = debugColors(darkTheme),
-            typography = RealStateTypography,
+            typography = RealEstateTypography,
             content = content
         )
     }
@@ -84,7 +84,7 @@ fun RealEstateAppTheme(
 
 
 @Stable
-class RealStateColors(
+class RealEstateColors(
     primary: Color,
     primaryVariant: Color,
     secondary: Color,
@@ -120,7 +120,7 @@ class RealStateColors(
     var bgScrPrimaryLight by mutableStateOf(bgScrPrimaryLight)
         private set
 
-    fun update(other: RealStateColors) {
+    fun update(other: RealEstateColors) {
         primary = other.primary
         primaryVariant = other.primaryVariant
         secondary = other.secondary
@@ -134,7 +134,7 @@ class RealStateColors(
         bgScrPrimaryLight = other.bgScrPrimaryLight
     }
 
-    fun copy(): RealStateColors = RealStateColors(
+    fun copy(): RealEstateColors = RealEstateColors(
         primary = primary,
         primaryVariant = primaryVariant,
         secondary = secondary,
@@ -150,18 +150,18 @@ class RealStateColors(
 }
 
 @Composable
-fun ProvideRealStateColors(
-    colors: RealStateColors,
+fun ProvideRealEstateColors(
+    colors: RealEstateColors,
     content: @Composable () -> Unit
 ) {
     val colorPalette = remember {
         colors.copy()
     }
     colorPalette.update(colors)
-    CompositionLocalProvider(LocalRealStateColors provides colorPalette, content = content)
+    CompositionLocalProvider(LocalRealEstateColors provides colorPalette, content = content)
 }
 
-private val LocalRealStateColors = staticCompositionLocalOf<RealStateColors> {
+private val LocalRealEstateColors = staticCompositionLocalOf<RealEstateColors> {
     error("No LocalPostColors provided")
 }
 

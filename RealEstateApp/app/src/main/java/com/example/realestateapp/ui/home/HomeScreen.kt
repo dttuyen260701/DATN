@@ -1,28 +1,42 @@
 package com.example.realestateapp.ui.home
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.designsystem.components.EditTextFullIconBorderRadius
 import com.example.realestateapp.designsystem.components.ImageProfile
+import com.example.realestateapp.designsystem.components.ItemType
 import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -39,22 +53,52 @@ internal fun HomeRoute(
     val filter = remember {
         viewModel.filter
     }
+    val listTypeState = rememberLazyListState()
+    val listType = remember {
+        viewModel.listData.toMutableStateList()
+    }
+    val coroutineScope = rememberCoroutineScope()
+
     HomeScreen(
         modifier = modifier,
         user = user.value,
         filter = filter.value,
         onFilterChange = {
             filter.value = it
+        },
+        listTypeState = listTypeState,
+        listType = listType,
+        onItemTypeClick = remember {
+            {
+                val newValue = it.copy(isSelected = !it.isSelected)
+                listType[listType.indexOf(it)] = newValue
+                listType.run {
+                    sortBy { item ->
+                        item.name
+                    }
+                    sortByDescending { item ->
+                        item.isSelected
+                    }
+                    coroutineScope.launch {
+                        delay(TWEEN_ANIMATION_TIME.toLong())
+                        listTypeState.animateScrollToItem(0)
+                    }
+                }
+            }
         }
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
     user: User?,
     filter: String,
-    onFilterChange: (String) -> Unit
+    onFilterChange: (String) -> Unit,
+    listTypeState: LazyListState,
+    listType: MutableList<ItemChoose>,
+    onItemTypeClick: (ItemChoose) -> Unit,
 ) {
     BaseScreen(modifier = modifier) {
         user?.run {
@@ -69,7 +113,7 @@ internal fun HomeScreen(
                 val verticalGuideLine = createGuidelineFromTop(0.5f)
                 Text(
                     text = stringResource(id = R.string.welcomeTitle),
-                    style = RealStateTypography.h1.copy(
+                    style = RealEstateTypography.h1.copy(
                         fontSize = 23.sp,
                         color = Color.Black
                     ),
@@ -83,9 +127,9 @@ internal fun HomeScreen(
                 )
                 Text(
                     text = fullName,
-                    style = RealStateTypography.h1.copy(
+                    style = RealEstateTypography.h1.copy(
                         fontSize = 25.sp,
-                        color = RealStateAppTheme.colors.primary,
+                        color = RealEstateAppTheme.colors.primary,
                         fontStyle = FontStyle.Italic
                     ),
                     modifier = Modifier
@@ -117,10 +161,10 @@ internal fun HomeScreen(
             hint = stringResource(id = R.string.searchHint),
             leadingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Search),
             borderColor = Color.Gray.copy(0.3f),
-            leadingIconColor = RealStateAppTheme.colors.primary,
+            leadingIconColor = RealEstateAppTheme.colors.primary,
             onLeadingIconClick = {},
             trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Config),
-            trailingIconColor = RealStateAppTheme.colors.primary,
+            trailingIconColor = RealEstateAppTheme.colors.primary,
             onTrailingIconClick = {
 
             },
@@ -128,5 +172,27 @@ internal fun HomeScreen(
 
             }
         )
+        Spacing(MARGIN_DIFFERENT_VIEW)
+        LazyRow(
+            modifier = Modifier
+                .fillMaxSize(),
+            state = listTypeState,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+        ) {
+            items(
+                items = listType,
+                key = { typeKey ->
+                    typeKey.toString()
+                },
+            ) { type ->
+                ItemType(
+                    item = type,
+                    onItemClick = onItemTypeClick,
+                    modifier = Modifier.animateItemPlacement(
+                        tween(durationMillis = TWEEN_ANIMATION_TIME)
+                    )
+                )
+            }
+        }
     }
 }

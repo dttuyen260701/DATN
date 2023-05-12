@@ -34,6 +34,7 @@ class Constants {
         const val BORDER_WIDTH = 4
         const val WARNING_TEXT_SIZE = 10
         const val ALPHA_HINT_COLOR = 0.7f
+        const val TWEEN_ANIMATION_TIME = 300
     }
 
     object MessageErrorAPI {

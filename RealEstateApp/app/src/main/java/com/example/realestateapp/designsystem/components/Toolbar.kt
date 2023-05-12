@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
@@ -33,7 +33,7 @@ fun ToolbarView(
             .height(TOOLBAR_HEIGHT.dp)
             .fillMaxWidth()
             .background(
-                color = RealStateAppTheme.colors.primary
+                color = RealEstateAppTheme.colors.primary
             )
             .then(modifier),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -61,7 +61,7 @@ fun ToolbarView(
 
         Text(
             text = title,
-            style = RealStateTypography.h2,
+            style = RealEstateTypography.h2,
             color = Color.White
         )
 

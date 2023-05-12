@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_TEXT
@@ -46,7 +46,7 @@ internal fun SettingButton(
             .then(modifier),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = RealStateAppTheme.colors.bgSettingButton
+            backgroundColor = RealEstateAppTheme.colors.bgSettingButton
         ),
         shape = RoundedCornerShape(ROUND_CIRCLE.dp),
         contentPadding = PaddingValues(PADDING_VIEW.dp)
@@ -54,7 +54,7 @@ internal fun SettingButton(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = RealStateAppTheme.colors.bgSettingButton),
+                .background(color = RealEstateAppTheme.colors.bgSettingButton),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -70,9 +70,9 @@ internal fun SettingButton(
             )
             Text(
                 text = title,
-                style = RealStateTypography.button.copy(
+                style = RealEstateTypography.button.copy(
                     fontSize = 16.sp,
-                    color = RealStateAppTheme.colors.textSettingButton,
+                    color = RealEstateAppTheme.colors.textSettingButton,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
@@ -88,7 +88,7 @@ internal fun SettingButton(
                         .fillMaxHeight()
                         .aspectRatio(1f)
                         .padding(PADDING_ICON.dp),
-                    tint = RealStateAppTheme.colors.textSettingButton
+                    tint = RealEstateAppTheme.colors.textSettingButton
                 )
             }
         }
@@ -105,7 +105,7 @@ internal fun ButtonRadius(
     textSize: Int = 14,
     bgColor: Color,
     textColor: Color = Color.White,
-    bgDisableColor: Color = RealStateAppTheme.colors.bgBtnDisable
+    bgDisableColor: Color = RealEstateAppTheme.colors.bgBtnDisable
 ) {
     Button(
         enabled = enabled,
@@ -121,7 +121,7 @@ internal fun ButtonRadius(
     ) {
         Text(
             text = title,
-            style = RealStateTypography.button.copy(
+            style = RealEstateTypography.button.copy(
                 color = textColor,
                 fontSize = textSize.sp
             )
@@ -139,7 +139,7 @@ private fun SettingButtonPreview() {
             .fillMaxWidth(),
         title = "User",
         leadingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Lock),
-        backgroundIcon = RealStateAppTheme.colors.primary
+        backgroundIcon = RealEstateAppTheme.colors.primary
     )
 }
 
@@ -148,10 +148,12 @@ private fun SettingButtonPreview() {
 private fun PreviewButtonRadius() {
     ButtonRadius(
         onClick = {},
-        modifier = Modifier.height(56.dp).width(30.dp),
+        modifier = Modifier
+            .height(56.dp)
+            .width(30.dp),
         radius = ROUND_RECTANGLE,
         title = "Cafi ddajwt",
-        bgColor = RealStateAppTheme.colors.primary,
-        textColor = RealStateAppTheme.colors.textSettingButton
+        bgColor = RealEstateAppTheme.colors.primary,
+        textColor = RealEstateAppTheme.colors.textSettingButton
     )
 }

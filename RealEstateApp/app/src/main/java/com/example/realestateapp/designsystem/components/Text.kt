@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 
 /**
  * Created by tuyen.dang on 5/10/2023.
@@ -16,11 +16,11 @@ import com.example.realestateapp.designsystem.theme.RealStateTypography
 @Composable
 internal fun TextTitle(
     title: String,
-    textColor: Color = RealStateAppTheme.colors.primary
+    textColor: Color = RealEstateAppTheme.colors.primary
 ){
     Text(
         text = title,
-        style = RealStateTypography.h1.copy(
+        style = RealEstateTypography.h1.copy(
             color = textColor,
             textAlign = TextAlign.Start
         ),

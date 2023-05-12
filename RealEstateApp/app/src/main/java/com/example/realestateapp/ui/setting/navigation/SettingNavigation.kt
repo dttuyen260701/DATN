@@ -57,7 +57,6 @@ internal fun NavGraphBuilder.settingGraph(
     onPolicyClick: () -> Unit,
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
-    onPostSavedClick: () -> Unit,
     onSignUpSuccess: () -> Unit,
     onSignInSuccess: () -> Unit,
     onSignOutSuccess: () -> Unit,
@@ -73,7 +72,6 @@ internal fun NavGraphBuilder.settingGraph(
             onPolicyClick = onPolicyClick,
             onAboutUsClick = onAboutUsClick,
             onChangePassClick = onChangePassClick,
-            onPostSavedClick = onPostSavedClick,
             onSignOutSuccess = onSignOutSuccess
         )
         singInScreen(
@@ -96,7 +94,6 @@ internal fun NavGraphBuilder.settingScreen(
     onPolicyClick: () -> Unit,
     onAboutUsClick: () -> Unit,
     onChangePassClick: () -> Unit,
-    onPostSavedClick: () -> Unit,
     onSignOutSuccess: () -> Unit
 ) {
     composable(settingNavigationRoute) {
@@ -107,7 +104,6 @@ internal fun NavGraphBuilder.settingScreen(
             onPolicyClick = onPolicyClick,
             onAboutUsClick = onAboutUsClick,
             onChangePassClick = onChangePassClick,
-            onPostSavedClick = onPostSavedClick,
             onSignOutSuccess = onSignOutSuccess
         )
     }

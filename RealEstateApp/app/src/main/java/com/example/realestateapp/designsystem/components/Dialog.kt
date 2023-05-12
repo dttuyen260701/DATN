@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.example.realestateapp.R
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
@@ -48,7 +48,7 @@ internal fun DialogMessage(
         title = {
             Text(
                 text = title,
-                style = RealStateTypography.button.copy(
+                style = RealEstateTypography.button.copy(
                     fontSize = 16.sp,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold
@@ -58,7 +58,7 @@ internal fun DialogMessage(
         text = {
             Text(
                 text = message,
-                style = RealStateTypography.button.copy(
+                style = RealEstateTypography.button.copy(
                     color = Color.Black,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Light
@@ -74,7 +74,7 @@ internal fun DialogMessage(
             ) {
                 Text(
                     text = btnText,
-                    style = RealStateTypography.button.copy(
+                    style = RealEstateTypography.button.copy(
                         color = Color.Black
                     ),
                     modifier = Modifier
@@ -113,7 +113,7 @@ internal fun DialogConfirm(
             {
                 Text(
                     text = title,
-                    style = RealStateTypography.button.copy(
+                    style = RealEstateTypography.button.copy(
                         fontSize = 16.sp,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
@@ -127,7 +127,7 @@ internal fun DialogConfirm(
         text = {
             Text(
                 text = message,
-                style = RealStateTypography.button.copy(
+                style = RealEstateTypography.button.copy(
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Light
@@ -154,9 +154,9 @@ internal fun DialogConfirm(
                         .weight(0.45f),
                     radius = ROUND_DIALOG,
                     title = negativeBtnText,
-                    bgColor = RealStateAppTheme.colors.primaryVariant,
+                    bgColor = RealEstateAppTheme.colors.primaryVariant,
                     textSize = 13,
-                    textColor = RealStateAppTheme.colors.primary
+                    textColor = RealEstateAppTheme.colors.primary
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
                 ButtonRadius(
@@ -169,9 +169,9 @@ internal fun DialogConfirm(
                         .weight(0.45f),
                     radius = ROUND_DIALOG,
                     title = positiveBtnText,
-                    bgColor = RealStateAppTheme.colors.primary,
+                    bgColor = RealEstateAppTheme.colors.primary,
                     textSize = 13,
-                    textColor = RealStateAppTheme.colors.primaryVariant
+                    textColor = RealEstateAppTheme.colors.primaryVariant
                 )
             }
         },

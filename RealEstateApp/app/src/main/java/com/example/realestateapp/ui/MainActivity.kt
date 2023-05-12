@@ -12,7 +12,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,8 +29,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val customTextSelectionColors = TextSelectionColors(
-                        handleColor = RealStateAppTheme.colors.primary,
-                        backgroundColor = RealStateAppTheme.colors.primary.copy(alpha = 0.4f)
+                        handleColor = RealEstateAppTheme.colors.primary,
+                        backgroundColor = RealEstateAppTheme.colors.primary.copy(alpha = 0.4f)
                     )
 
                     CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {

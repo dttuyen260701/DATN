@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.util.Constants
 
 /**
@@ -23,7 +23,7 @@ import com.example.realestateapp.util.Constants
 @Composable
 internal fun BaseScreen(
     modifier: Modifier = Modifier,
-    bgColor: Color = RealStateAppTheme.colors.bgScreen,
+    bgColor: Color = RealEstateAppTheme.colors.bgScreen,
     verticalArrangement: Arrangement.HorizontalOrVertical = Arrangement.Center,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable ColumnScope.() -> Unit

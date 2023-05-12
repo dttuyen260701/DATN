@@ -23,12 +23,6 @@ object ViewDataRepository {
             )
             add(
                 SettingButton(
-                    title = R.string.settingPostSavedTitle,
-                    leadingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.PostSaved)
-                )
-            )
-            add(
-                SettingButton(
                     title = R.string.settingPolicyTitle,
                     leadingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Policy)
                 )

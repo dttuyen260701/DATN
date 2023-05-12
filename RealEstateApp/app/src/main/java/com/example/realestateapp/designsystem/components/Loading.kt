@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 
 /**
  * Created by tuyen.dang on 5/7/2023.
@@ -29,7 +29,7 @@ fun LoadingScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator(
-            color = RealStateAppTheme.colors.progressBar
+            color = RealEstateAppTheme.colors.progressBar
         )
     }
 }

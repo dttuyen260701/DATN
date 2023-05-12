@@ -32,7 +32,7 @@
     <string name="signUpSuccess">Đăng kí thành công, bạn có muốn chuyển đến trang đăng nhập</string>
 
     <!--Home Screen-->
-    <string name="welcomeTitle">Xin chào</string>
+    <string name="welcomeTitle">Xin chào 👋</string>
     <string name="searchHint">Bạn muốn tìm điều gì?</string>
 
     <!--SignOut-->

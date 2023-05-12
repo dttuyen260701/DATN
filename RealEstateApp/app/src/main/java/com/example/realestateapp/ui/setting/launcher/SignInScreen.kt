@@ -22,8 +22,8 @@ import com.example.realestateapp.designsystem.components.ButtonRadius
 import com.example.realestateapp.designsystem.components.EditTextRadius
 import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.TextTitle
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -65,14 +65,6 @@ internal fun SignInRoute(
             emailError.value.isEmpty() && passwordError.value.isEmpty()
         }
     }
-    val onBtnSignUpClick = remember {
-        {
-            firstClick.value = false
-            if (enableBtnSignIn.value) viewModel.signInUser(
-                onSignInSuccess = onSignInSuccess
-            )
-        }
-    }
 
     SignInScreen(
         modifier = modifier,
@@ -88,7 +80,14 @@ internal fun SignInRoute(
         passwordError = passwordError.value,
         enableBtnSignIn = enableBtnSignIn.value,
         onSignUpClick = onSignUpClick,
-        onBtnSignInClick = onBtnSignUpClick
+        onBtnSignInClick = remember {
+            {
+                firstClick.value = false
+                if (enableBtnSignIn.value) viewModel.signInUser(
+                    onSignInSuccess = onSignInSuccess
+                )
+            }
+        }
     )
 }
 
@@ -120,8 +119,8 @@ internal fun SignInScreen(
             text = email,
             label = stringResource(id = R.string.emailTitle),
             errorText = emailError,
-            textColor = RealStateAppTheme.colors.primary,
-            backgroundColor = RealStateAppTheme.colors.bgTextField
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = RealEstateAppTheme.colors.bgTextField
         )
         Spacing(PADDING_VIEW)
         EditTextRadius(
@@ -130,14 +129,14 @@ internal fun SignInScreen(
             label = stringResource(id = R.string.passwordTitle),
             typeInput = KeyboardType.Password,
             errorText = passwordError,
-            textColor = RealStateAppTheme.colors.primary,
-            backgroundColor = RealStateAppTheme.colors.bgTextField,
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = RealEstateAppTheme.colors.bgTextField,
             isLastEditText = true
         )
         Text(
             text = stringResource(id = R.string.passwordForget),
-            style = RealStateTypography.body1.copy(
-                color = RealStateAppTheme.colors.primary,
+            style = RealEstateTypography.body1.copy(
+                color = RealEstateAppTheme.colors.primary,
                 textAlign = TextAlign.End
             ),
             modifier = Modifier
@@ -148,7 +147,7 @@ internal fun SignInScreen(
             onClick = onBtnSignInClick,
             title = stringResource(id = R.string.settingSignInTitle),
             enabled = enableBtnSignIn,
-            bgColor = RealStateAppTheme.colors.primary,
+            bgColor = RealEstateAppTheme.colors.primary,
             modifier = Modifier
                 .height(TOOLBAR_HEIGHT.dp)
                 .fillMaxWidth()
@@ -158,20 +157,20 @@ internal fun SignInScreen(
             text = buildAnnotatedString {
                 withStyle(
                     style = SpanStyle(
-                        color = RealStateAppTheme.colors.textSettingButton
+                        color = RealEstateAppTheme.colors.textSettingButton
                     )
                 ) {
                     append(stringResource(id = R.string.doNotHaveAccount))
                 }
                 withStyle(
                     style = SpanStyle(
-                        color = RealStateAppTheme.colors.primary
+                        color = RealEstateAppTheme.colors.primary
                     )
                 ) {
                     append(" ${stringResource(id = R.string.settingSignUpTitle)}")
                 }
             },
-            style = RealStateTypography.body1.copy(
+            style = RealEstateTypography.body1.copy(
                 textAlign = TextAlign.Center
             ),
             modifier = Modifier

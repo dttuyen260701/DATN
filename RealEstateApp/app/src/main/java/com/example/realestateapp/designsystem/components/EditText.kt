@@ -26,8 +26,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealStateIcon
-import com.example.realestateapp.designsystem.theme.RealStateAppTheme
-import com.example.realestateapp.designsystem.theme.RealStateTypography
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -72,7 +72,7 @@ internal fun EditTextRadius(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .background(Color.Transparent),
-            textStyle = RealStateTypography.body1,
+            textStyle = RealEstateTypography.body1,
             label = if (label != null) {
                 { Text(text = label) }
             } else null,
@@ -131,7 +131,7 @@ internal fun EditTextRadius(
         )
         Text(
             text = errorText,
-            style = RealStateTypography.caption.copy(
+            style = RealEstateTypography.caption.copy(
                 color = Color.Red,
                 fontSize = WARNING_TEXT_SIZE.sp
             ),
@@ -186,7 +186,7 @@ internal fun EditTextTrailingIconCustom(
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 },
-            textStyle = RealStateTypography.body1,
+            textStyle = RealEstateTypography.body1,
             label = if (label != null) {
                 { Text(text = label) }
             } else null,
@@ -258,7 +258,7 @@ internal fun EditTextTrailingIconCustom(
         )
         Text(
             text = errorText,
-            style = RealStateTypography.caption.copy(
+            style = RealEstateTypography.caption.copy(
                 color = Color.Red,
                 fontSize = WARNING_TEXT_SIZE.sp
             ),
@@ -279,11 +279,11 @@ internal fun EditTextTrailingIconCustom(
 internal fun EditTextFullIconBorderRadius(
     modifier: Modifier = Modifier,
     text: String = "",
-    textColor: Color = RealStateAppTheme.colors.primary,
+    textColor: Color = RealEstateAppTheme.colors.primary,
     onTextChange: (String) -> Unit,
     typeInput: KeyboardType = KeyboardType.Text,
     hint: String = "",
-    borderColor: Color = RealStateAppTheme.colors.bgBtnDisable,
+    borderColor: Color = RealEstateAppTheme.colors.bgBtnDisable,
     leadingIcon: AppIcon? = null,
     leadingIconColor: Color,
     onLeadingIconClick: () -> Unit,
@@ -303,7 +303,7 @@ internal fun EditTextFullIconBorderRadius(
             )
             .background(Color.Transparent)
             .then(modifier),
-        textStyle = RealStateTypography.body1,
+        textStyle = RealEstateTypography.body1,
         onValueChange = { onTextChange(it) },
         value = text,
         placeholder = {
