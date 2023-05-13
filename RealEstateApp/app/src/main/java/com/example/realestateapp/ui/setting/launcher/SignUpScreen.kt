@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -47,94 +44,88 @@ internal fun SignUpRoute(
     onSignUpSuccess: () -> Unit
 ) {
     val context = LocalContext.current
-    val firstClick = remember {
-        viewModel.firstClick
-    }
-    val name = remember { mutableStateOf("") }
-    val nameError = remember {
+    var firstClick by remember { viewModel.firstClick }
+    var name by remember { mutableStateOf("") }
+    val nameError by remember {
         derivedStateOf {
-            if (name.value.isEmpty() && !firstClick.value) context.getString(R.string.nameError)
+            if (name.isEmpty() && !firstClick) context.getString(R.string.nameError)
             else ""
         }
     }
-    val phone = remember { mutableStateOf("") }
-    val phoneError = remember {
+    var phone by remember { mutableStateOf("") }
+    val phoneError by remember {
         derivedStateOf {
-            if (phone.value.length != 10 && !firstClick.value) context.getString(R.string.phoneError)
+            if (phone.length != 10 && !firstClick) context.getString(R.string.phoneError)
             else ""
         }
     }
-    val email = remember {
-        viewModel.email
-    }
-    val emailError = remember {
+    var email by remember { viewModel.email }
+    val emailError by remember {
         derivedStateOf {
-            viewModel.validEmail(email.value)
+            viewModel.validEmail(email)
         }
     }
-    val password = remember {
-        viewModel.password
-    }
-    val passwordError = remember {
+    var password by remember { viewModel.password }
+    val passwordError by remember {
         derivedStateOf {
-            viewModel.validPassWord(password.value)
+            viewModel.validPassWord(password)
         }
     }
-    val rePassword = remember { mutableStateOf("") }
-    val rePasswordError = remember {
+    var rePassword by remember { mutableStateOf("") }
+    val rePasswordError by remember {
         derivedStateOf {
-            if (password.value != rePassword.value && !firstClick.value && rePassword.value.isNotEmpty()) context.getString(
+            if (password != rePassword && !firstClick && rePassword.isNotEmpty()) context.getString(
                 R.string.rePasswordError
             )
             else ""
         }
     }
-    val enableBtnSignUp = remember {
+    val enableBtnSignUp by remember {
         derivedStateOf {
-            emailError.value.isEmpty()
-                    && nameError.value.isEmpty()
-                    && phoneError.value.isEmpty()
-                    && passwordError.value.isEmpty()
-                    && rePasswordError.value.isEmpty()
+            emailError.isEmpty()
+                    && nameError.isEmpty()
+                    && phoneError.isEmpty()
+                    && passwordError.isEmpty()
+                    && rePasswordError.isEmpty()
         }
     }
 
     SignUpScreen(
         modifier = modifier,
-        name = name.value,
-        nameError = nameError.value,
+        name = name,
+        nameError = nameError,
         onNameChange = {
-            name.value = it
+            name = it
         },
-        phone = phone.value,
-        phoneError = phoneError.value,
+        phone = phone,
+        phoneError = phoneError,
         onPhoneChange = {
-            phone.value = it
+            phone = it
         },
-        email = email.value,
+        email = email,
         onEmailChange = {
-            email.value = it
+            email = it
         },
-        emailError = emailError.value,
-        password = password.value,
+        emailError = emailError,
+        password = password,
         onPassChange = {
-            password.value = it
+            password = it
         },
-        passwordError = passwordError.value,
-        rePassword = rePassword.value,
+        passwordError = passwordError,
+        rePassword = rePassword,
         onRePassChange = {
-            rePassword.value = it
+            rePassword = it
         },
-        rePasswordError = rePasswordError.value,
-        enableBtnSignUp = enableBtnSignUp.value,
+        rePasswordError = rePasswordError,
+        enableBtnSignUp = enableBtnSignUp,
         onSignInClick = onSignInClick,
         onBtnSignUpClick = remember {
             {
-                firstClick.value = false
+                firstClick = false
                 viewModel.run {
-                    if (enableBtnSignUp.value) signUpUser(
-                        name = name.value,
-                        phone = phone.value
+                    if (enableBtnSignUp) signUpUser(
+                        name = name,
+                        phone = phone
                     ) {
                         showDialog(
                             dialog = TypeDialog.ConfirmDialog(
@@ -198,7 +189,7 @@ internal fun SignUpScreen(
             label = stringResource(id = R.string.phoneTitle),
             typeInput = KeyboardType.Number,
             errorText = phoneError,
-            trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.User),
+            trailingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Phone),
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )

@@ -32,8 +32,8 @@ class LauncherViewModel @Inject constructor(
 ) : BaseViewModel<LauncherUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(LauncherUiState.InitView)
 
-    internal val email = mutableStateOf("")
-    internal val password = mutableStateOf("")
+    internal var email = mutableStateOf("")
+    internal var password = mutableStateOf("")
     internal var firstClick = mutableStateOf(true)
 
     internal fun signInUser(

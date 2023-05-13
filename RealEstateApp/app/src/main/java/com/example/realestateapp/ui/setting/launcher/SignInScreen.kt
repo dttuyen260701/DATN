@@ -4,9 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,48 +39,42 @@ internal fun SignInRoute(
     onSignUpClick: () -> Unit,
     onSignInSuccess: () -> Unit
 ) {
-    val email = remember {
-        viewModel.email
-    }
-    val password = remember {
-        viewModel.password
-    }
-    val firstClick = remember {
-        viewModel.firstClick
-    }
-    val emailError = remember {
+    var email by remember { viewModel.email }
+    var password by remember { viewModel.password }
+    var firstClick by remember { viewModel.firstClick }
+    val emailError by remember {
         derivedStateOf {
-            viewModel.validEmail(email.value)
+            viewModel.validEmail(email)
         }
     }
-    val passwordError = remember {
+    val passwordError by remember {
         derivedStateOf {
-            viewModel.validPassWord(password.value)
+            viewModel.validPassWord(password)
         }
     }
     val enableBtnSignIn = remember {
         derivedStateOf {
-            emailError.value.isEmpty() && passwordError.value.isEmpty()
+            emailError.isEmpty() && passwordError.isEmpty()
         }
     }
 
     SignInScreen(
         modifier = modifier,
-        email = email.value,
+        email = email,
         onEmailChange = {
-            email.value = it
+            email = it
         },
-        emailError = emailError.value,
-        password = password.value,
+        emailError = emailError,
+        password = password,
         onPassChange = {
-            password.value = it
+            password = it
         },
-        passwordError = passwordError.value,
+        passwordError = passwordError,
         enableBtnSignIn = enableBtnSignIn.value,
         onSignUpClick = onSignUpClick,
         onBtnSignInClick = remember {
             {
-                firstClick.value = false
+                firstClick = false
                 if (enableBtnSignIn.value) viewModel.signInUser(
                     onSignInSuccess = onSignInSuccess
                 )
