@@ -294,15 +294,14 @@ internal fun EditTextFullIconBorderRadius(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     TextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .border(
                 BorderStroke(width = 1.dp, color = borderColor),
                 shape = RoundedCornerShape(ROUND_DIALOG.dp)
             )
-            .background(Color.Transparent)
-            .then(modifier),
+            .background(Color.Transparent),
         textStyle = RealEstateTypography.body1,
         onValueChange = { onTextChange(it) },
         value = text,

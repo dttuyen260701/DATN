@@ -43,86 +43,86 @@ internal fun SignUpRoute(
     onSignInClick: () -> Unit,
     onSignUpSuccess: () -> Unit
 ) {
-    val context = LocalContext.current
-    var firstClick by remember { viewModel.firstClick }
-    var name by remember { mutableStateOf("") }
-    val nameError by remember {
-        derivedStateOf {
-            if (name.isEmpty() && !firstClick) context.getString(R.string.nameError)
-            else ""
+    viewModel.run {
+        val context = LocalContext.current
+        var firstClick by remember { firstClick }
+        var name by remember { mutableStateOf("") }
+        val nameError by remember {
+            derivedStateOf {
+                if (name.isEmpty() && !firstClick) context.getString(R.string.nameError)
+                else ""
+            }
         }
-    }
-    var phone by remember { mutableStateOf("") }
-    val phoneError by remember {
-        derivedStateOf {
-            if (phone.length != 10 && !firstClick) context.getString(R.string.phoneError)
-            else ""
+        var phone by remember { mutableStateOf("") }
+        val phoneError by remember {
+            derivedStateOf {
+                if (phone.length != 10 && !firstClick) context.getString(R.string.phoneError)
+                else ""
+            }
         }
-    }
-    var email by remember { viewModel.email }
-    val emailError by remember {
-        derivedStateOf {
-            viewModel.validEmail(email)
+        var email by remember { email }
+        val emailError by remember {
+            derivedStateOf {
+                validEmail(email)
+            }
         }
-    }
-    var password by remember { viewModel.password }
-    val passwordError by remember {
-        derivedStateOf {
-            viewModel.validPassWord(password)
+        var password by remember { password }
+        val passwordError by remember {
+            derivedStateOf {
+                validPassWord(password)
+            }
         }
-    }
-    var rePassword by remember { mutableStateOf("") }
-    val rePasswordError by remember {
-        derivedStateOf {
-            if (password != rePassword && !firstClick && rePassword.isNotEmpty()) context.getString(
-                R.string.rePasswordError
-            )
-            else ""
+        var rePassword by remember { mutableStateOf("") }
+        val rePasswordError by remember {
+            derivedStateOf {
+                if (password != rePassword && !firstClick && rePassword.isNotEmpty()) context.getString(
+                    R.string.rePasswordError
+                )
+                else ""
+            }
         }
-    }
-    val enableBtnSignUp by remember {
-        derivedStateOf {
-            emailError.isEmpty()
-                    && nameError.isEmpty()
-                    && phoneError.isEmpty()
-                    && passwordError.isEmpty()
-                    && rePasswordError.isEmpty()
+        val enableBtnSignUp by remember {
+            derivedStateOf {
+                emailError.isEmpty()
+                        && nameError.isEmpty()
+                        && phoneError.isEmpty()
+                        && passwordError.isEmpty()
+                        && rePasswordError.isEmpty()
+            }
         }
-    }
 
-    SignUpScreen(
-        modifier = modifier,
-        name = name,
-        nameError = nameError,
-        onNameChange = {
-            name = it
-        },
-        phone = phone,
-        phoneError = phoneError,
-        onPhoneChange = {
-            phone = it
-        },
-        email = email,
-        onEmailChange = {
-            email = it
-        },
-        emailError = emailError,
-        password = password,
-        onPassChange = {
-            password = it
-        },
-        passwordError = passwordError,
-        rePassword = rePassword,
-        onRePassChange = {
-            rePassword = it
-        },
-        rePasswordError = rePasswordError,
-        enableBtnSignUp = enableBtnSignUp,
-        onSignInClick = onSignInClick,
-        onBtnSignUpClick = remember {
-            {
-                firstClick = false
-                viewModel.run {
+        SignUpScreen(
+            modifier = modifier,
+            name = name,
+            nameError = nameError,
+            onNameChange = {
+                name = it
+            },
+            phone = phone,
+            phoneError = phoneError,
+            onPhoneChange = {
+                phone = it
+            },
+            email = email,
+            onEmailChange = {
+                email = it
+            },
+            emailError = emailError,
+            password = password,
+            onPassChange = {
+                password = it
+            },
+            passwordError = passwordError,
+            rePassword = rePassword,
+            onRePassChange = {
+                rePassword = it
+            },
+            rePasswordError = rePasswordError,
+            enableBtnSignUp = enableBtnSignUp,
+            onSignInClick = onSignInClick,
+            onBtnSignUpClick = remember {
+                {
+                    firstClick = false
                     if (enableBtnSignUp) signUpUser(
                         name = name,
                         phone = phone
@@ -141,8 +141,8 @@ internal fun SignUpRoute(
                     }
                 }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable

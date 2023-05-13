@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
-import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -24,6 +24,7 @@ import com.example.realestateapp.util.Constants
 internal fun BaseScreen(
     modifier: Modifier = Modifier,
     bgColor: Color = RealEstateAppTheme.colors.bgScreen,
+    paddingHorizontal: Int = PADDING_HORIZONTAL_SCREEN,
     verticalArrangement: Arrangement.HorizontalOrVertical = Arrangement.Center,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable ColumnScope.() -> Unit
@@ -31,7 +32,7 @@ internal fun BaseScreen(
     Column(
         modifier = Modifier
             .background(bgColor)
-            .padding(horizontal = Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN.dp)
+            .padding(horizontal = paddingHorizontal.dp)
             .then(modifier)
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical),
         verticalArrangement = verticalArrangement,

@@ -39,48 +39,50 @@ internal fun SignInRoute(
     onSignUpClick: () -> Unit,
     onSignInSuccess: () -> Unit
 ) {
-    var email by remember { viewModel.email }
-    var password by remember { viewModel.password }
-    var firstClick by remember { viewModel.firstClick }
-    val emailError by remember {
-        derivedStateOf {
-            viewModel.validEmail(email)
-        }
-    }
-    val passwordError by remember {
-        derivedStateOf {
-            viewModel.validPassWord(password)
-        }
-    }
-    val enableBtnSignIn = remember {
-        derivedStateOf {
-            emailError.isEmpty() && passwordError.isEmpty()
-        }
-    }
-
-    SignInScreen(
-        modifier = modifier,
-        email = email,
-        onEmailChange = {
-            email = it
-        },
-        emailError = emailError,
-        password = password,
-        onPassChange = {
-            password = it
-        },
-        passwordError = passwordError,
-        enableBtnSignIn = enableBtnSignIn.value,
-        onSignUpClick = onSignUpClick,
-        onBtnSignInClick = remember {
-            {
-                firstClick = false
-                if (enableBtnSignIn.value) viewModel.signInUser(
-                    onSignInSuccess = onSignInSuccess
-                )
+    viewModel.run {
+        var email by remember { email }
+        var password by remember { password }
+        var firstClick by remember { firstClick }
+        val emailError by remember {
+            derivedStateOf {
+                validEmail(email)
             }
         }
-    )
+        val passwordError by remember {
+            derivedStateOf {
+                validPassWord(password)
+            }
+        }
+        val enableBtnSignIn = remember {
+            derivedStateOf {
+                emailError.isEmpty() && passwordError.isEmpty()
+            }
+        }
+
+        SignInScreen(
+            modifier = modifier,
+            email = email,
+            onEmailChange = {
+                email = it
+            },
+            emailError = emailError,
+            password = password,
+            onPassChange = {
+                password = it
+            },
+            passwordError = passwordError,
+            enableBtnSignIn = enableBtnSignIn.value,
+            onSignUpClick = onSignUpClick,
+            onBtnSignInClick = remember {
+                {
+                    firstClick = false
+                    if (enableBtnSignIn.value) signInUser(
+                        onSignInSuccess = onSignInSuccess
+                    )
+                }
+            }
+        )
+    }
 }
 
 @Composable

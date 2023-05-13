@@ -43,7 +43,8 @@ class MainActivityViewModel @Inject constructor(
                     apiSuccess = {
                         getUser().value = it.body
                         AuthenticationObject.token = it.body?.token ?: ""
-                    }
+                    },
+                    showDialog = false
                 )
             }
         }

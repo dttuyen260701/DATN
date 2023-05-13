@@ -35,6 +35,9 @@
     <string name="welcomeTitle">Xin chào 👋</string>
     <string name="searchHint">Bạn muốn tìm điều gì?</string>
 
+    <!--RealEstate Item-->
+    <string name="squareUnit">%s m²</string>
+
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
 

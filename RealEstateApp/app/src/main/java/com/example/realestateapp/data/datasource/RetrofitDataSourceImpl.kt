@@ -1,6 +1,7 @@
 package com.example.realestateapp.data.datasource
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.network.SafeAPI
 import com.example.realestateapp.data.service.APIService
@@ -38,6 +39,12 @@ class RetrofitDataSourceImpl @Inject constructor(
         options["dateOfBirth"] = "01/01/2023"
         return callApi {
             apiService.signUp(options)
+        }
+    }
+
+    override suspend fun getTypes(): ApiResultWrapper<MutableList<ItemChoose>> {
+        return callApi {
+            apiService.getTypes()
         }
     }
 }

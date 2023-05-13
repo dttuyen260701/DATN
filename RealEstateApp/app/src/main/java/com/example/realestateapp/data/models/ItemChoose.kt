@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class ItemChoose(
-    @SerializedName("id") val id: String,
+    @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     var isSelected: Boolean = false
 )

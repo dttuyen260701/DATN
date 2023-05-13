@@ -30,6 +30,7 @@ class Constants {
         const val ROUND_RECTANGLE = 20
         const val ROUND_DIALOG = 10
         const val TRAILING_ICON_SIZE = 20
+        const val ICON_ITEM_SIZE = 40
         const val TRAILING_ICON_PADDING = 17
         const val BORDER_WIDTH = 4
         const val WARNING_TEXT_SIZE = 10

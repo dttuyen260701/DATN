@@ -53,8 +53,6 @@ class RealEstateAppState(
             restoreState = true
         }
 
-        navController.popBackStack()
-
         when (topLevelDestination) {
             HOME -> navController.navigateToHome(topLevelNavOptions)
             POST -> navController.navigateToPost(topLevelNavOptions)

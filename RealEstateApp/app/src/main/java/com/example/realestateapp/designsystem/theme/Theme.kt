@@ -19,7 +19,8 @@ private val DarkColorRealState = RealEstateColors(
     progressBar = KellyGreen,
     bgTextField = Beige,
     bgBtnDisable = SonicSilver,
-    bgScrPrimaryLight = Snow
+    bgScrPrimaryLight = Snow,
+    bgIconsBlack30 = Black30
 )
 
 private val LightColorRealState = RealEstateColors(
@@ -33,7 +34,8 @@ private val LightColorRealState = RealEstateColors(
     progressBar = KellyGreen,
     bgTextField = Beige,
     bgBtnDisable = SonicSilver,
-    bgScrPrimaryLight = Snow
+    bgScrPrimaryLight = Snow,
+    bgIconsBlack30 = Black30
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -95,7 +97,8 @@ class RealEstateColors(
     progressBar: Color,
     bgTextField: Color,
     bgBtnDisable: Color,
-    bgScrPrimaryLight: Color
+    bgScrPrimaryLight: Color,
+    bgIconsBlack30: Color,
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -119,6 +122,8 @@ class RealEstateColors(
         private set
     var bgScrPrimaryLight by mutableStateOf(bgScrPrimaryLight)
         private set
+    var bgIconsWhite50 by mutableStateOf(bgIconsBlack30)
+        private set
 
     fun update(other: RealEstateColors) {
         primary = other.primary
@@ -132,6 +137,7 @@ class RealEstateColors(
         bgTextField = other.bgTextField
         bgBtnDisable = other.bgBtnDisable
         bgScrPrimaryLight = other.bgScrPrimaryLight
+        bgIconsWhite50 = other.bgIconsWhite50
     }
 
     fun copy(): RealEstateColors = RealEstateColors(
@@ -145,7 +151,8 @@ class RealEstateColors(
         progressBar = progressBar,
         bgTextField = bgTextField,
         bgBtnDisable = bgBtnDisable,
-        bgScrPrimaryLight = bgScrPrimaryLight
+        bgScrPrimaryLight = bgScrPrimaryLight,
+        bgIconsBlack30 = bgIconsWhite50
     )
 }
 

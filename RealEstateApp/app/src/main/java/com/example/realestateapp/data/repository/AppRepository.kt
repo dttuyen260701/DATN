@@ -1,6 +1,7 @@
 package com.example.realestateapp.data.repository
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
 import kotlinx.coroutines.flow.Flow
 
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface AppRepository {
+    //launcher follow
     suspend fun signIn(
         email: String,
         password: String,
@@ -21,4 +23,7 @@ interface AppRepository {
         email: String,
         password: String
     ): Flow<ApiResultWrapper<Boolean>>
+
+    //home follow
+    suspend fun getTypes(showLoading: Boolean = true): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
 }

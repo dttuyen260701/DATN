@@ -1,6 +1,7 @@
 package com.example.realestateapp.data.datasource
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
 
 /**
@@ -8,6 +9,7 @@ import com.example.realestateapp.data.models.User
  */
 
 interface RetrofitDataSource {
+    //launcher follow
     suspend fun signIn(email: String, password: String): ApiResultWrapper<User?>
 
     suspend fun signUp(
@@ -16,4 +18,7 @@ interface RetrofitDataSource {
         email: String,
         password: String
     ): ApiResultWrapper<Boolean>
+
+    //home follow
+    suspend fun getTypes() : ApiResultWrapper<MutableList<ItemChoose>>
 }

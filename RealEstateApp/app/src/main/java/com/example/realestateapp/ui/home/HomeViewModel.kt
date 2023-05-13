@@ -15,27 +15,29 @@ import javax.inject.Inject
 
 sealed class HomeUiState : UiState() {
     object InitView : HomeUiState()
+
+    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : HomeUiState()
 }
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    appRepository: AppRepository
+    private val appRepository: AppRepository
 ) : BaseViewModel<HomeUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(HomeUiState.InitView)
 
-    internal val filter = mutableStateOf("")
+    internal var filter = mutableStateOf("")
 
-    internal var listData = mutableListOf(
-        ItemChoose("1", "Tên 1"),
-        ItemChoose("2", "Tên 2"),
-        ItemChoose("3", "Tên 3"),
-        ItemChoose("4", "Tên 4"),
-        ItemChoose("5", "Tên 5"),
-        ItemChoose("6", "Tên 6"),
-        ItemChoose("7", "Tên 7"),
-        ItemChoose("8", "Tên 8"),
-        ItemChoose("9", "Tên 9"),
-        ItemChoose("10", "Tên 10"),
-        ItemChoose("11", "Tên 11")
-    )
+    internal var listData = mutableListOf<ItemChoose>()
+
+    internal fun getTypes() {
+        callAPIOnThread(
+            funCallApis = mutableListOf({
+                appRepository.getTypes(showLoading = false)
+            }),
+            apiSuccess = {
+                uiState.value = HomeUiState.GetTypesSuccess(it.body)
+            },
+            showDialog = false
+        )
+    }
 }

@@ -2,6 +2,7 @@ package com.example.realestateapp.data.repository
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.datasource.RetrofitDataSource
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -34,5 +35,12 @@ class AppRepositoryImpl @Inject constructor(
         return flow {
             emit(dataSource.signUp(name, phone, email, password))
         }.onStart { emit(ApiResultWrapper.Loading) }
+    }
+
+    //home follow
+    override suspend fun getTypes(showLoading: Boolean): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
+        return flow {
+            emit(dataSource.getTypes())
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
 }
