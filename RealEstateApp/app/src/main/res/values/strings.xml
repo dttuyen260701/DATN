@@ -34,9 +34,15 @@
     <!--Home Screen-->
     <string name="welcomeTitle">Xin chào 👋</string>
     <string name="searchHint">Bạn muốn tìm điều gì?</string>
+    <string name="latestTitle">Mới cập nhật</string>
+    <string name="mostViewTitle">Lượt xem nhiều nhất</string>
+    <string name="lowestPriceTitle">Giá thấp nhất</string>
+    <string name="highestPriceTitle">Giá cao nhất</string>
+    <string name="btnSeeAll">Xem thêm</string>
 
     <!--RealEstate Item-->
     <string name="squareUnit">%s m²</string>
+    <string name="titleDefault">Nhà bán</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>

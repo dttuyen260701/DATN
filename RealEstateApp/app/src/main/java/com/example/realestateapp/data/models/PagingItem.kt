@@ -5,7 +5,7 @@ package com.example.realestateapp.data.models
  */
  
 data class PagingItem<T>(
-    val items: MutableList<T>,
+    val items: MutableList<T>?,
     val pageIndex: Int,
     val pageSize: Int,
     val totalRecords: Int,

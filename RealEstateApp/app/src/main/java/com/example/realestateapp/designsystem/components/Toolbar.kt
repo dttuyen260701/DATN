@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
@@ -93,6 +93,6 @@ fun PreviewLoginScreen() {
     ToolbarView(
         modifier = Modifier.height(56.dp),
         title = "Test",
-        leftIcon = AppIcon.DrawableResourceIcon(RealStateIcon.BackArrow)
+        leftIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.BackArrow)
     )
 }

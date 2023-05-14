@@ -39,7 +39,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        viewModel.backgroundSignIn()
     }
 }

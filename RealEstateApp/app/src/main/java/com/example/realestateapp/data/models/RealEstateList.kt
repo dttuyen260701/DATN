@@ -7,9 +7,10 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class RealEstateList(
-    @SerializedName("id") val id: String,
-    @SerializedName("image") val image: String?,
-    @SerializedName("title") val title: String,
+    @SerializedName("id") val id: Int,
+    @SerializedName("imageUrl") val imageUrl: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("createdDate") val createdDate: String,
     @SerializedName("square") val square: Float,
     @SerializedName("price") val price: Float,
     @SerializedName("bedRooms") val bedRooms: Int?,

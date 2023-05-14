@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
@@ -37,7 +37,7 @@ internal fun SettingButton(
     enabled: Boolean = true,
     title: String,
     leadingIcon: AppIcon,
-    trailingIcon: AppIcon? = AppIcon.DrawableResourceIcon(RealStateIcon.NextArrow),
+    trailingIcon: AppIcon? = AppIcon.DrawableResourceIcon(RealEstateIcon.NextArrow),
     backgroundIcon: Color
 ) {
     Button(
@@ -138,7 +138,7 @@ private fun SettingButtonPreview() {
             .height(56.dp)
             .fillMaxWidth(),
         title = "User",
-        leadingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Lock),
+        leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Lock),
         backgroundIcon = RealEstateAppTheme.colors.primary
     )
 }

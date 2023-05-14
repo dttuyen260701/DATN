@@ -57,17 +57,21 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     }
 
     open fun <T> callAPIOnThread(
-        funCallApis: MutableList<suspend () -> Flow<ApiResultWrapper<T>>>,
+        funCallApis: MutableList<Flow<ApiResultWrapper<T>>>,
         apiSuccess: (ResponseAPI<out T>) -> Unit,
         apiError: () -> Unit = {},
+        onDoneCallApi: () -> Unit = {},
         showDialog: Boolean = true
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val listAsync = mutableListOf<Deferred<Flow<ApiResultWrapper<T>>>>()
+
             funCallApis.forEach { funCallApi ->
-                listAsync.add(async { funCallApi() })
+                listAsync.add(async { funCallApi })
             }
+
             val response = awaitAll(*listAsync.toTypedArray())
+
             response.forEach {
                 it.collect { result ->
                     when (result) {
@@ -83,26 +87,28 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
                         is ApiResultWrapper.ResponseCodeError -> {
                             isLoading.value = false
                             apiError()
-                            if(showDialog) showDialog(
+                            if (showDialog) showDialog(
                                 dialog = TypeDialog.ErrorDialog(result.error)
                             )
                         }
                         is ApiResultWrapper.NetworkError -> {
                             isLoading.value = false
                             apiError()
-                            if(showDialog) showDialog(
+                            if (showDialog) showDialog(
                                 dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.NOT_FOUND_INTERNET)
                             )
                         }
                         else -> {
                             isLoading.value = false
-                            if(showDialog) showDialog(
+                            if (showDialog) showDialog(
                                 dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR)
                             )
                         }
                     }
                 }
             }
+
+            onDoneCallApi()
         }
     }
 }

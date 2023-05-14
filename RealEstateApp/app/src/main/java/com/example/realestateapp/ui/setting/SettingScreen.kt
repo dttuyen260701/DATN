@@ -23,7 +23,7 @@ import com.example.realestateapp.designsystem.components.SettingButton
 import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.ToolbarView
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
@@ -161,7 +161,7 @@ internal fun SettingScreen(
                         }
                 )
                 BaseIcon(
-                    icon = AppIcon.ImageVectorIcon(RealStateIcon.Edit),
+                    icon = AppIcon.ImageVectorIcon(RealEstateIcon.Edit),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxHeight(0.5f)

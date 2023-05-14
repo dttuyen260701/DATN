@@ -39,25 +39,27 @@ class LauncherViewModel @Inject constructor(
     internal fun signInUser(
         onSignInSuccess: () -> Unit
     ) {
-        callAPIOnThread(
-            funCallApis = mutableListOf({
-                appRepository.signIn(
-                    email = email.value,
-                    password = password.value
-                )
-            }),
-            apiSuccess = {
-                getUser().value = it.body
-                AuthenticationObject.token = it.body?.token ?: ""
-                onSignInSuccess()
-                viewModelScope.launch(Dispatchers.IO) {
-                    application.baseContext.writeStoreLauncher(
+        viewModelScope.launch {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.signIn(
                         email = email.value,
                         password = password.value
                     )
+                ),
+                apiSuccess = {
+                    getUser().value = it.body
+                    AuthenticationObject.token = it.body?.token ?: ""
+                    onSignInSuccess()
+                    viewModelScope.launch(Dispatchers.IO) {
+                        application.baseContext.writeStoreLauncher(
+                            email = email.value,
+                            password = password.value
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     internal fun signUpUser(
@@ -65,19 +67,21 @@ class LauncherViewModel @Inject constructor(
         phone: String,
         onSignUpSuccess: () -> Unit
     ) {
-        callAPIOnThread(
-            funCallApis = mutableListOf({
-                appRepository.signUp(
-                    name = name,
-                    phone = phone,
-                    email = email.value,
-                    password = password.value
-                )
-            }),
-            apiSuccess = {
-                onSignUpSuccess()
-            }
-        )
+        viewModelScope.launch {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.signUp(
+                        name = name,
+                        phone = phone,
+                        email = email.value,
+                        password = password.value
+                    )
+                ),
+                apiSuccess = {
+                    onSignUpSuccess()
+                }
+            )
+        }
     }
 
     internal fun validEmail(mail: String): String =

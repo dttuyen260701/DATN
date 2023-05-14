@@ -25,13 +25,15 @@ import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,21 +51,49 @@ internal fun HomeRoute(
         val user by remember { getUser() }
         var filter by remember { filter }
         val listTypeState = rememberLazyListState()
-        val listType = remember {
-            listData.toMutableStateList()
-        }
+        val listType = remember { listTypeData.toMutableStateList() }
+        val listRealEstateLatest = remember { listRealEstateLatest.toMutableStateList() }
+        val listRealEstateMostView = remember { listRealEstateMostView.toMutableStateList() }
+        val listRealEstateHighestPrice =
+            remember { listRealEstateHighestPrice.toMutableStateList() }
+        val listRealEstateLowestPrice = remember { listRealEstateLowestPrice.toMutableStateList() }
         val uiState by remember { uiState }
 //        var refreshing by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
+
         when (uiState) {
+            is HomeUiState.DoneSignInBackground -> {
+                getTypes()
+            }
             is HomeUiState.GetTypesSuccess -> {
                 listType.clear()
                 listType.addAll((uiState as HomeUiState.GetTypesSuccess).data)
+                getPostsWOptions(isLatest = true)
+            }
+            is HomeUiState.GetLatestSuccess -> {
+                listRealEstateLatest.clear()
+                listRealEstateLatest.addAll((uiState as HomeUiState.GetLatestSuccess).data)
+                getPostsWOptions(isMostView = true)
+            }
+            is HomeUiState.GetMostViewSuccess -> {
+                listRealEstateMostView.clear()
+                listRealEstateMostView.addAll((uiState as HomeUiState.GetMostViewSuccess).data)
+                getPostsWOptions(isHighestPrice = true)
+            }
+            is HomeUiState.GetHighestPriceSuccess -> {
+                listRealEstateHighestPrice.clear()
+                listRealEstateHighestPrice.addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
+                getPostsWOptions(isLowestPrice = true)
+            }
+            is HomeUiState.GetLowestPriceSuccess -> {
+                listRealEstateLowestPrice.clear()
+                listRealEstateLowestPrice.addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
             }
             else -> {}
         }
+
         LaunchedEffect(key1 = true) {
-            getTypes()
+            backgroundSignIn()
         }
 
         HomeScreen(
@@ -95,6 +125,13 @@ internal fun HomeRoute(
                         }
                     }
                 }
+            },
+            listLRealEstateLatest = listRealEstateLatest,
+            listRealEstateMostView = listRealEstateMostView,
+            listRealEstateHighestPrice = listRealEstateHighestPrice,
+            listRealEstateLowestPrice = listRealEstateLowestPrice,
+            onItemRealEstateClick = remember {
+                {}
             }
         )
     }
@@ -111,126 +148,181 @@ internal fun HomeScreen(
     listTypeState: LazyListState,
     listType: MutableList<ItemChoose>,
     onItemTypeClick: (ItemChoose) -> Unit,
+    listLRealEstateLatest: MutableList<RealEstateList>,
+    listRealEstateMostView: MutableList<RealEstateList>,
+    listRealEstateHighestPrice: MutableList<RealEstateList>,
+    listRealEstateLowestPrice: MutableList<RealEstateList>,
+    onItemRealEstateClick: (RealEstateList) -> Unit
 ) {
     BaseScreen(
         modifier = modifier,
-        paddingHorizontal = 0
-    ) {
-        user?.run {
-            Spacing(MARGIN_DIFFERENT_VIEW)
-            ConstraintLayout(
-                modifier = Modifier
-                    .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
-                    .background(Color.Transparent)
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-            ) {
-                val (imgUser, tvWelcome, tvName) = createRefs()
-                val verticalGuideLine = createGuidelineFromTop(0.5f)
-                Text(
-                    text = stringResource(id = R.string.welcomeTitle),
-                    style = RealEstateTypography.h1.copy(
-                        fontSize = 23.sp,
-                        color = Color.Black
-                    ),
+        paddingHorizontal = 0,
+        toolbar = {
+            user?.run {
+                Spacing(MARGIN_DIFFERENT_VIEW)
+                ConstraintLayout(
                     modifier = Modifier
+                        .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                        .background(Color.Transparent)
                         .wrapContentHeight()
-                        .wrapContentWidth()
-                        .constrainAs(tvWelcome) {
-                            start.linkTo(parent.start)
-                            linkTo(parent.top, verticalGuideLine)
-                        }
-                )
-                Text(
-                    text = fullName,
-                    style = RealEstateTypography.h1.copy(
-                        fontSize = 25.sp,
-                        color = RealEstateAppTheme.colors.primary,
-                        fontStyle = FontStyle.Italic
-                    ),
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .constrainAs(tvName) {
-                            start.linkTo(parent.start)
-                            linkTo(verticalGuideLine, parent.bottom)
-                        }
-                )
-                ImageProfile(
-                    size = 50,
-                    model = user.imgUrl ?: "",
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(1f, true)
-                        .constrainAs(imgUser) {
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                )
-            }
-        }
-        Spacing(MARGIN_DIFFERENT_VIEW)
-        EditTextFullIconBorderRadius(
-            modifier = Modifier
-                .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
-            text = filter,
-            onTextChange = onFilterChange,
-            hint = stringResource(id = R.string.searchHint),
-            leadingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Search),
-            borderColor = Color.Gray.copy(0.3f),
-            leadingIconColor = RealEstateAppTheme.colors.primary,
-            onLeadingIconClick = {},
-            trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Config),
-            trailingIconColor = RealEstateAppTheme.colors.primary,
-            onTrailingIconClick = {
-
-            },
-            onDoneAction = {
-
-            }
-        )
-        Spacing(MARGIN_DIFFERENT_VIEW)
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            state = listTypeState,
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            contentPadding = PaddingValues(horizontal = 20.dp)
-        ) {
-            items(
-                items = listType,
-                key = { typeKey ->
-                    typeKey.toString()
-                },
-            ) { type ->
-                ItemType(
-                    item = type,
-                    onItemClick = onItemTypeClick,
-                    modifier = Modifier.animateItemPlacement(
-                        tween(durationMillis = TWEEN_ANIMATION_TIME)
+                        .fillMaxWidth()
+                ) {
+                    val (imgUser, tvWelcome, tvName) = createRefs()
+                    val verticalGuideLine = createGuidelineFromTop(0.5f)
+                    Text(
+                        text = stringResource(id = R.string.welcomeTitle),
+                        style = RealEstateTypography.h1.copy(
+                            fontSize = 23.sp,
+                            color = Color.Black
+                        ),
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .wrapContentWidth()
+                            .constrainAs(tvWelcome) {
+                                start.linkTo(parent.start)
+                                linkTo(parent.top, verticalGuideLine)
+                            }
                     )
+                    Text(
+                        text = fullName,
+                        style = RealEstateTypography.h1.copy(
+                            fontSize = 25.sp,
+                            color = RealEstateAppTheme.colors.primary,
+                            fontStyle = FontStyle.Italic
+                        ),
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .constrainAs(tvName) {
+                                start.linkTo(parent.start)
+                                linkTo(verticalGuideLine, parent.bottom)
+                            }
+                    )
+                    ImageProfile(
+                        size = 50,
+                        model = user.imgUrl ?: "",
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(1f, true)
+                            .constrainAs(imgUser) {
+                                end.linkTo(parent.end)
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                            }
+                    )
+                }
+            }
+            Spacing(MARGIN_DIFFERENT_VIEW)
+            EditTextFullIconBorderRadius(
+                modifier = Modifier
+                    .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
+                text = filter,
+                onTextChange = onFilterChange,
+                hint = stringResource(id = R.string.searchHint),
+                leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Search),
+                borderColor = Color.Gray.copy(0.3f),
+                leadingIconColor = RealEstateAppTheme.colors.primary,
+                onLeadingIconClick = {},
+                trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
+                trailingIconColor = RealEstateAppTheme.colors.primary,
+                onTrailingIconClick = {
+
+                },
+                onDoneAction = {
+
+                }
+            )
+            listType.let {
+                if (it.size > 0) {
+                    Spacing(MARGIN_DIFFERENT_VIEW)
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        state = listTypeState,
+                        horizontalArrangement = Arrangement.spacedBy(PADDING_VIEW.dp),
+                        contentPadding = PaddingValues(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                    ) {
+                        items(
+                            items = it,
+                            key = { typeKey ->
+                                typeKey.toString()
+                            },
+                        ) { type ->
+                            ItemType(
+                                item = type,
+                                onItemClick = onItemTypeClick,
+                                modifier = Modifier.animateItemPlacement(
+                                    tween(durationMillis = TWEEN_ANIMATION_TIME)
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            Spacing(MARGIN_VIEW)
+        }
+    ) {
+        listLRealEstateLatest.let {
+            if (it.size > 0) {
+                Spacing(MARGIN_VIEW)
+                ListItemHome(
+                    title = stringResource(id = R.string.latestTitle),
+                    btnTitle = stringResource(id = R.string.btnSeeAll),
+                    btnClick = {
+
+                    },
+                    listRealEstate = it,
+                    onItemClick = onItemRealEstateClick
+                )
+            }
+        }
+        listRealEstateMostView.let {
+            if (it.size > 0) {
+                Spacing(MARGIN_DIFFERENT_VIEW)
+                ListItemHome(
+                    title = stringResource(id = R.string.mostViewTitle),
+                    btnTitle = stringResource(id = R.string.btnSeeAll),
+                    btnClick = {
+
+                    },
+                    listRealEstate = it,
+                    onItemClick = onItemRealEstateClick
+                )
+            }
+        }
+        listRealEstateHighestPrice.let {
+            if (it.size > 0) {
+                Spacing(MARGIN_DIFFERENT_VIEW)
+                ListItemHome(
+                    title = stringResource(id = R.string.highestPriceTitle),
+                    btnTitle = stringResource(id = R.string.btnSeeAll),
+                    btnClick = {
+
+                    },
+                    listRealEstate = it,
+                    onItemClick = onItemRealEstateClick
+                )
+            }
+        }
+        listRealEstateLowestPrice.let {
+            if (it.size > 0) {
+                Spacing(MARGIN_DIFFERENT_VIEW)
+                ListItemHome(
+                    title = stringResource(id = R.string.lowestPriceTitle),
+                    btnTitle = stringResource(id = R.string.btnSeeAll),
+                    btnClick = {
+
+                    },
+                    listRealEstate = it,
+                    onItemClick = onItemRealEstateClick
                 )
             }
         }
         Spacing(MARGIN_DIFFERENT_VIEW)
-        ItemRealEstate(
-            item = RealEstateList(
-                id = "123",
-                image = "https://cdnimg.vietnamplus.vn/uploaded/zatmzy/2020_03_30/aaa.jpg",
-                title = "Nhà 2 tầng đường 7.5m kiệt lớn",
-                square = 100.0f,
-                price = 3_000f,
-                bedRooms = 3,
-                floors = 3,
-                address = "Hòa Xuân, Cẩm Lệ.",
-                views = 1234,
-                isSaved = false
-            )
-        )
-        if (uiState is HomeUiState.InitView)
+        if (uiState is HomeUiState.InitView) {
             CircularProgressIndicator(
                 color = RealEstateAppTheme.colors.progressBar
             )
+        }
     }
 }

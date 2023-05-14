@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +29,7 @@ import com.example.realestateapp.R
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
@@ -82,14 +84,16 @@ internal fun ItemType(
 @Composable
 internal fun ItemRealEstate(
     modifier: Modifier = Modifier,
-    item: RealEstateList
+    item: RealEstateList,
+    onItemClick: (RealEstateList) -> Unit
 ) {
     val roundedCornerShape = RoundedCornerShape(ROUND_RECTANGLE.dp)
+    val configuration = LocalConfiguration.current
     item.run {
         ConstraintLayout(
             modifier = modifier
                 .wrapContentHeight()
-                .fillMaxWidth(0.85f)
+                .width((configuration.screenWidthDp * 0.85).dp)
                 .clip(roundedCornerShape)
                 .background(
                     color = Color.White,
@@ -102,12 +106,15 @@ internal fun ItemRealEstate(
                     ),
                     shape = roundedCornerShape
                 )
+                .clickable {
+                    onItemClick(item)
+                }
         ) {
-            val (img, btnSave, tvViews, tvName, tvAddress,
+            val (img, btnSave, tvViews, tvName, tvCreatedDate, tvAddress,
                 tvSquare, tvFloors, tvBedrooms, tvPrice) = createRefs()
 
             AsyncImage(
-                model = image ?: "",
+                model = imageUrl ?: "",
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -130,8 +137,8 @@ internal fun ItemRealEstate(
             }) {
                 BaseIcon(
                     icon = AppIcon.DrawableResourceIcon(
-                        if (isSaved) RealStateIcon.PostSaved
-                        else RealStateIcon.PostSavedOutline
+                        if (isSaved) RealEstateIcon.PostSaved
+                        else RealEstateIcon.PostSavedOutline
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(TRAILING_ICON_SIZE.dp),
@@ -140,7 +147,7 @@ internal fun ItemRealEstate(
             }
             TextIcon(
                 text = views.toString(),
-                icon = AppIcon.DrawableResourceIcon(RealStateIcon.Visibility),
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Visibility),
                 isIconFirst = false,
                 size = 14,
                 modifier = Modifier
@@ -150,7 +157,7 @@ internal fun ItemRealEstate(
                     }
             )
             Text(
-                text = title,
+                text = title ?: stringResource(id = R.string.titleDefault),
                 style = RealEstateTypography.body1.copy(
                     fontSize = 14.sp,
                     color = Color.Black,
@@ -167,18 +174,41 @@ internal fun ItemRealEstate(
                             bias = 0f
                         )
                         width = Dimension.fillToConstraints
-                    }
+                    },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = address,
+                style = RealEstateTypography.body1.copy(
+                    fontSize = 12.sp,
+                    color = Color.Black.copy(0.8f),
+                    textAlign = TextAlign.Start
+                ),
+                modifier = Modifier
+                    .wrapContentSize()
+                    .constrainAs(tvAddress) {
+                        top.linkTo(tvName.bottom)
+                        linkTo(
+                            start = tvName.start,
+                            end = tvViews.start,
+                            endMargin = MARGIN_VIEW.dp,
+                            bias = 0f
+                        )
+                    },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = createdDate,
                 style = RealEstateTypography.body1.copy(
                     fontSize = 12.sp,
                     color = Color.Gray,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
-                    .constrainAs(tvAddress) {
-                        top.linkTo(tvName.bottom, MARGIN_VIEW.dp)
+                    .constrainAs(tvCreatedDate) {
+                        top.linkTo(tvAddress.bottom)
                         linkTo(
                             start = parent.start,
                             startMargin = MARGIN_VIEW.dp,
@@ -187,16 +217,18 @@ internal fun ItemRealEstate(
                             bias = 0f
                         )
                         width = Dimension.fillToConstraints
-                    }
+                    },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             TextIcon(
                 text = stringResource(R.string.squareUnit, square.toString()),
-                icon = AppIcon.DrawableResourceIcon(RealStateIcon.Square),
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Square),
                 size = 12,
                 modifier = Modifier
                     .constrainAs(tvSquare) {
                         linkTo(
-                            top = tvAddress.bottom,
+                            top = tvCreatedDate.bottom,
                             topMargin = PADDING_VIEW.dp,
                             bottom = parent.bottom,
                             bottomMargin = MARGIN_DIFFERENT_VIEW.dp,
@@ -207,7 +239,7 @@ internal fun ItemRealEstate(
             floors?.let {
                 TextIcon(
                     text = it.toString(),
-                    icon = AppIcon.DrawableResourceIcon(RealStateIcon.Floors),
+                    icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Floors),
                     size = 12,
                     modifier = Modifier
                         .constrainAs(tvFloors) {
@@ -219,7 +251,7 @@ internal fun ItemRealEstate(
             bedRooms?.let {
                 TextIcon(
                     text = it.toString(),
-                    icon = AppIcon.DrawableResourceIcon(RealStateIcon.Bed),
+                    icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Bed),
                     size = 12,
                     modifier = Modifier
                         .constrainAs(tvBedrooms) {
@@ -233,11 +265,11 @@ internal fun ItemRealEstate(
             }
             TextIcon(
                 text = price.toString(),
-                icon = AppIcon.DrawableResourceIcon(RealStateIcon.Dollar),
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Dollar),
                 size = 23,
                 modifier = Modifier
                     .constrainAs(tvPrice) {
-                        linkTo(top = tvAddress.top, bottom = tvSquare.bottom, bias = 1f)
+                        linkTo(top = tvCreatedDate.top, bottom = tvSquare.bottom, bias = 1f)
                         linkTo(
                             start = (if (bedRooms != null) tvBedrooms
                             else if (floors != null) tvFloors
@@ -258,8 +290,8 @@ internal fun ItemRealEstate(
 private fun PreviewItemRealEstate() {
     ItemRealEstate(
         item = RealEstateList(
-            id = "123",
-            image = "https://cdn.dribbble.com/userupload/4259155/file/original-9c5357566528015850f4375ca16fee72.jpg?compress=1&resize=1024x768",
+            id = 132,
+            imageUrl = "https://cdn.dribbble.com/userupload/4259155/file/original-9c5357566528015850f4375ca16fee72.jpg?compress=1&resize=1024x768",
             title = "Nhà 3 ",
             square = 100.0f,
             price = 3_000_000f,
@@ -267,8 +299,10 @@ private fun PreviewItemRealEstate() {
             floors = 3,
             address = "15 Lỗ giáng 19",
             views = 1234,
-            isSaved = true
-        )
+            isSaved = true,
+            createdDate = ""
+        ),
+        onItemClick = {}
     )
 }
 

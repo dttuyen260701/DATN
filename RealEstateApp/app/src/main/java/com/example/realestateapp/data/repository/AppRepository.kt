@@ -2,6 +2,8 @@ package com.example.realestateapp.data.repository
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.PagingItem
+import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
 import kotlinx.coroutines.flow.Flow
 
@@ -26,4 +28,16 @@ interface AppRepository {
 
     //home follow
     suspend fun getTypes(showLoading: Boolean = true): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
+
+    suspend fun getPostsWOptions(
+        pageIndex: Int,
+        pageSize: Int,
+        isMostView: Boolean,
+        typePropertyIds: MutableList<Int>,
+        isLatest: Boolean,
+        isHighestPrice: Boolean,
+        isLowestPrice: Boolean,
+        userId: Int = 0,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 }

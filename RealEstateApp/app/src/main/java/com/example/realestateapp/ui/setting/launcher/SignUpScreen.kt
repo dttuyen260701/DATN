@@ -24,7 +24,7 @@ import com.example.realestateapp.designsystem.components.EditTextTrailingIconCus
 import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.TextTitle
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
@@ -179,7 +179,7 @@ internal fun SignUpScreen(
             label = stringResource(id = R.string.nameTitle),
             typeInput = KeyboardType.Text,
             errorText = nameError,
-            trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.User),
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.User),
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )
@@ -189,7 +189,7 @@ internal fun SignUpScreen(
             label = stringResource(id = R.string.phoneTitle),
             typeInput = KeyboardType.Number,
             errorText = phoneError,
-            trailingIcon = AppIcon.ImageVectorIcon(RealStateIcon.Phone),
+            trailingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Phone),
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )
@@ -199,7 +199,7 @@ internal fun SignUpScreen(
             label = stringResource(id = R.string.emailTitle),
             typeInput = KeyboardType.Email,
             errorText = emailError,
-            trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Email),
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Email),
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White
         )
@@ -209,7 +209,7 @@ internal fun SignUpScreen(
             label = stringResource(id = R.string.passwordTitle),
             typeInput = KeyboardType.Password,
             errorText = passwordError,
-            trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Password),
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Password),
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White
         )
@@ -219,7 +219,7 @@ internal fun SignUpScreen(
             label = stringResource(id = R.string.reTypePasswordTitle),
             typeInput = KeyboardType.Password,
             errorText = rePasswordError,
-            trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Password),
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Password),
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isLastEditText = true

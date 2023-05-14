@@ -1,5 +1,6 @@
 package com.example.realestateapp.data.network
 
+import android.util.Log
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.apiresult.ResponseAPI
 import com.example.realestateapp.util.Constants.MessageErrorAPI
@@ -45,6 +46,7 @@ open class SafeAPI {
             } catch (e: IOException) {
                 ApiResultWrapper.NetworkError(e)
             } catch (e: Exception) {
+                Log.e("TTT", "callApi: ", e)
                 ApiResultWrapper.ExceptionError
             }
         }

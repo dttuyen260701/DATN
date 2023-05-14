@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
@@ -88,6 +88,6 @@ fun PreviewTextIcon() {
     TextIcon(
         text = "Text",
         size = 14,
-        icon = AppIcon.DrawableResourceIcon(RealStateIcon.PostSaved),
+        icon = AppIcon.DrawableResourceIcon(RealEstateIcon.PostSaved),
     )
 }

@@ -2,6 +2,8 @@ package com.example.realestateapp.data.datasource
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.PagingItem
+import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.network.SafeAPI
 import com.example.realestateapp.data.service.APIService
@@ -45,6 +47,30 @@ class RetrofitDataSourceImpl @Inject constructor(
     override suspend fun getTypes(): ApiResultWrapper<MutableList<ItemChoose>> {
         return callApi {
             apiService.getTypes()
+        }
+    }
+
+    override suspend fun getPostsWOptions(
+        pageIndex: Int,
+        pageSize: Int,
+        isMostView: Boolean,
+        typePropertyIds: MutableList<Int>,
+        isLatest: Boolean,
+        isHighestPrice: Boolean,
+        isLowestPrice: Boolean,
+        userId: Int
+    ): ApiResultWrapper<PagingItem<RealEstateList>> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["pageIndex"] = pageIndex
+        options["pageSize"] = pageSize
+        options["isMostView"] = isMostView
+        options["typePropertyIds"] = typePropertyIds
+        options["isLatest"] = isLatest
+        options["isHighestPrice"] = isHighestPrice
+        options["isLowestPrice"] = isLowestPrice
+        options["userId"] = userId
+        return callApi {
+            apiService.getPostsWOptions(options)
         }
     }
 }

@@ -13,7 +13,7 @@ import com.example.realestateapp.R
  * Created by tuyen.dang on 5/4/2023.
  */
 
-object RealStateIcon {
+object RealEstateIcon {
     const val TabHome = R.drawable.ic_home
     const val TabPost = R.drawable.ic_post
     const val TabNotification = R.drawable.ic_notification

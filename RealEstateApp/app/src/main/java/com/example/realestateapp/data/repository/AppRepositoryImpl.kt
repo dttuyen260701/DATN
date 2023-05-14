@@ -3,6 +3,8 @@ package com.example.realestateapp.data.repository
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.datasource.RetrofitDataSource
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.PagingItem
+import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -22,7 +24,12 @@ class AppRepositoryImpl @Inject constructor(
         showLoading: Boolean
     ): Flow<ApiResultWrapper<User?>> {
         return flow {
-            emit(dataSource.signIn(email, password))
+            emit(
+                dataSource.signIn(
+                    email = email,
+                    password = password
+                )
+            )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
 
@@ -33,7 +40,14 @@ class AppRepositoryImpl @Inject constructor(
         password: String
     ): Flow<ApiResultWrapper<Boolean>> {
         return flow {
-            emit(dataSource.signUp(name, phone, email, password))
+            emit(
+                dataSource.signUp(
+                    name = name,
+                    phone = phone,
+                    email = email,
+                    password = password
+                )
+            )
         }.onStart { emit(ApiResultWrapper.Loading) }
     }
 
@@ -41,6 +55,33 @@ class AppRepositoryImpl @Inject constructor(
     override suspend fun getTypes(showLoading: Boolean): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         return flow {
             emit(dataSource.getTypes())
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun getPostsWOptions(
+        pageIndex: Int,
+        pageSize: Int,
+        isMostView: Boolean,
+        typePropertyIds: MutableList<Int>,
+        isLatest: Boolean,
+        isHighestPrice: Boolean,
+        isLowestPrice: Boolean,
+        userId: Int,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
+        return flow {
+            emit(
+                dataSource.getPostsWOptions(
+                    pageIndex = pageIndex,
+                    pageSize = pageSize,
+                    isMostView = isMostView,
+                    typePropertyIds = typePropertyIds,
+                    isLatest = isLatest,
+                    isHighestPrice = isHighestPrice,
+                    isLowestPrice = isLowestPrice,
+                    userId = userId
+                )
+            )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
 }

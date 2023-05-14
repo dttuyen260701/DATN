@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealStateIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
@@ -92,7 +92,7 @@ internal fun EditTextRadius(
                         },
                     ) {
                         BaseIcon(
-                            icon = AppIcon.DrawableResourceIcon(if (isShowPassword) RealStateIcon.VisibilityOff else RealStateIcon.Visibility),
+                            icon = AppIcon.DrawableResourceIcon(if (isShowPassword) RealEstateIcon.VisibilityOff else RealEstateIcon.Visibility),
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(TRAILING_ICON_PADDING.dp)
@@ -206,7 +206,7 @@ internal fun EditTextTrailingIconCustom(
                         },
                     ) {
                         BaseIcon(
-                            icon = AppIcon.DrawableResourceIcon(if (isShowPassword) RealStateIcon.VisibilityOff else RealStateIcon.Visibility),
+                            icon = AppIcon.DrawableResourceIcon(if (isShowPassword) RealEstateIcon.VisibilityOff else RealEstateIcon.Visibility),
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(TRAILING_ICON_PADDING.dp)
@@ -387,6 +387,6 @@ private fun PreviewEditTextWithTrailingIcon() {
         textColor = Color(5, 84, 89),
         backgroundColor = Color(240, 247, 218),
         typeInput = KeyboardType.Password,
-        trailingIcon = AppIcon.DrawableResourceIcon(RealStateIcon.Visibility)
+        trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Visibility)
     )
 }

@@ -30,5 +30,6 @@ interface APIService {
     suspend fun getTypes(): Response<ResponseAPI<MutableList<ItemChoose>>>
 
     @POST("/api/Posts/options")
+    @JvmSuppressWildcards
     suspend fun getPostsWOptions(@Body options: Map<String, Any>): Response<ResponseAPI<PagingItem<RealEstateList>>>
 }
