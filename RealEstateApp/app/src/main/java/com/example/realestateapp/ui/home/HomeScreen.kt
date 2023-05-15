@@ -51,17 +51,19 @@ internal fun HomeRoute(
         val user by remember { getUser() }
         var filter by remember { filter }
         val listTypeState = rememberLazyListState()
-        val listType = remember { listTypeData.toMutableStateList() }
-        val listRealEstateLatest = remember { listRealEstateLatest.toMutableStateList() }
-        val listRealEstateMostView = remember { listRealEstateMostView.toMutableStateList() }
+        val listType = remember { listTypeData }
+        val listRealEstateLatest = remember { listRealEstateLatest }
+        val listRealEstateMostView = remember { listRealEstateMostView }
         val listRealEstateHighestPrice =
-            remember { listRealEstateHighestPrice.toMutableStateList() }
-        val listRealEstateLowestPrice = remember { listRealEstateLowestPrice.toMutableStateList() }
-        val uiState by remember { uiState }
-//        var refreshing by remember { mutableStateOf(false) }
+            remember { listRealEstateHighestPrice }
+        val listRealEstateLowestPrice = remember { listRealEstateLowestPrice }
+        var uiState by remember { uiState }
         val coroutineScope = rememberCoroutineScope()
 
         when (uiState) {
+            is HomeUiState.InitView -> {
+                backgroundSignIn()
+            }
             is HomeUiState.DoneSignInBackground -> {
                 getTypes()
             }
@@ -88,12 +90,9 @@ internal fun HomeRoute(
             is HomeUiState.GetLowestPriceSuccess -> {
                 listRealEstateLowestPrice.clear()
                 listRealEstateLowestPrice.addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
+                uiState = HomeUiState.Success
             }
             else -> {}
-        }
-
-        LaunchedEffect(key1 = true) {
-            backgroundSignIn()
         }
 
         HomeScreen(
@@ -319,7 +318,7 @@ internal fun HomeScreen(
             }
         }
         Spacing(MARGIN_DIFFERENT_VIEW)
-        if (uiState is HomeUiState.InitView) {
+        if (uiState is HomeUiState.Loading) {
             CircularProgressIndicator(
                 color = RealEstateAppTheme.colors.progressBar
             )

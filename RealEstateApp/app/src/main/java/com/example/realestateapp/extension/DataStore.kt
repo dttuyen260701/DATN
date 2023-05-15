@@ -14,7 +14,10 @@ import com.example.realestateapp.util.Constants
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constants.DataStore.NAME)
 
-internal suspend fun Context.readStoreLauncher(onReadSuccess: (String, String) -> Unit) {
+internal suspend fun Context.readStoreLauncher(
+    onReadSuccess: (String, String) -> Unit,
+    onErrorAction: () -> Unit
+) {
     val keyEmail = stringPreferencesKey(Constants.DataStore.KEY_EMAIL)
     val keyPassword = stringPreferencesKey(Constants.DataStore.KEY_PASSWORD)
     this.dataStore.data.collect {
@@ -22,6 +25,8 @@ internal suspend fun Context.readStoreLauncher(onReadSuccess: (String, String) -
         val pass = it[keyPassword] ?: ""
         if (email.isNotEmpty() && pass.isNotEmpty()) {
             onReadSuccess(email, pass)
+        } else {
+            onErrorAction()
         }
     }
 }

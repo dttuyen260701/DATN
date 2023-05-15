@@ -2,6 +2,7 @@ package com.example.realestateapp.ui.home
 
 import android.app.Application
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.models.ItemChoose
@@ -22,6 +23,10 @@ import javax.inject.Inject
 
 sealed class HomeUiState : UiState() {
     object InitView : HomeUiState()
+
+    object Loading : HomeUiState()
+
+    object Success : HomeUiState()
 
     object Error : HomeUiState()
 
@@ -45,41 +50,48 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(HomeUiState.InitView)
     internal var filter = mutableStateOf("")
-    internal var listTypeData = mutableListOf<ItemChoose>()
-    internal var listRealEstateLatest = mutableListOf<RealEstateList>()
-    internal var listRealEstateMostView = mutableListOf<RealEstateList>()
-    internal var listRealEstateHighestPrice = mutableListOf<RealEstateList>()
-    internal var listRealEstateLowestPrice = mutableListOf<RealEstateList>()
+    internal var listTypeData = mutableStateListOf<ItemChoose>()
+    internal var listRealEstateLatest = mutableStateListOf<RealEstateList>()
+    internal var listRealEstateMostView = mutableStateListOf<RealEstateList>()
+    internal var listRealEstateHighestPrice = mutableStateListOf<RealEstateList>()
+    internal var listRealEstateLowestPrice = mutableStateListOf<RealEstateList>()
 
     internal fun backgroundSignIn() {
+        uiState.value = HomeUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            application.baseContext.readStoreLauncher { email, pass ->
-
-                viewModelScope.launch {
-                    callAPIOnThread(
-                        funCallApis = mutableListOf(
-                            appRepository.signIn(
-                                email = email,
-                                password = pass,
-                                showLoading = false
-                            )
-                        ),
-                        apiSuccess = {
-                            getUser().value = it.body
-                            AuthenticationObject.token = it.body?.token ?: ""
-                        },
-                        onDoneCallApi = {
-                            uiState.value = HomeUiState.DoneSignInBackground
-                        },
-                        showDialog = false
-                    )
+            application.baseContext.readStoreLauncher(
+                onReadSuccess = { email, pass ->
+                    viewModelScope.launch {
+                        callAPIOnThread(
+                            funCallApis = mutableListOf(
+                                appRepository.signIn(
+                                    email = email,
+                                    password = pass,
+                                    showLoading = false
+                                )
+                            ),
+                            apiSuccess = {
+                                getUser().value = it.body
+                                AuthenticationObject.token = it.body?.token ?: ""
+                            },
+                            onDoneCallApi = {
+                                uiState.value = HomeUiState.DoneSignInBackground
+                            },
+                            showDialog = false
+                        )
+                    }
+                },
+                onErrorAction = {
+                    viewModelScope.launch {
+                        uiState.value = HomeUiState.DoneSignInBackground
+                    }
                 }
-            }
+            )
         }
     }
 
     internal fun getTypes() {
-        uiState.value = HomeUiState.InitView
+        uiState.value = HomeUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 funCallApis = mutableListOf(
@@ -103,7 +115,7 @@ class HomeViewModel @Inject constructor(
         isHighestPrice: Boolean = false,
         isLowestPrice: Boolean = false,
     ) {
-        uiState.value = HomeUiState.InitView
+        uiState.value = HomeUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 funCallApis = mutableListOf(
