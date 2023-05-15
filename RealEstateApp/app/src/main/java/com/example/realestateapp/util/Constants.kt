@@ -38,6 +38,11 @@ class Constants {
         const val TWEEN_ANIMATION_TIME = 300
     }
 
+    object PriceUnit {
+        const val BILLION = "Tỷ"
+        const val MILLION = "Triệu"
+    }
+
     object MessageErrorAPI {
         const val INVALID_INPUT_ERROR = "Vui lòng kiểm tra lại các trường đã nhập !"
         const val AUTHENTICATION_ERROR = "Vui lòng đăng nhập để thực hiện chức năng này !"

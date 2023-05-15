@@ -49,7 +49,6 @@ internal fun HomeRoute(
 ) {
     viewModel.run {
         val user by remember { getUser() }
-        var filter by remember { filter }
         val listTypeState = rememberLazyListState()
         val listType = remember { listTypeData }
         val listRealEstateLatest = remember { listRealEstateLatest }
@@ -99,10 +98,6 @@ internal fun HomeRoute(
             modifier = modifier,
             uiState = uiState,
             user = user,
-            filter = filter,
-            onFilterChange = {
-                filter = it
-            },
             listTypeState = listTypeState,
             listType = listType,
             onItemTypeClick = remember {
@@ -112,7 +107,7 @@ internal fun HomeRoute(
                         listType[listType.indexOf(it)] = newValue
                         listType.run {
                             sortBy { item ->
-                                item.name
+                                item.id
                             }
                             sortByDescending { item ->
                                 item.isSelected
@@ -120,6 +115,7 @@ internal fun HomeRoute(
                             coroutineScope.launch {
                                 delay(TWEEN_ANIMATION_TIME.toLong())
                                 listTypeState.animateScrollToItem(0)
+                                getPostsWOptions(isLatest = true)
                             }
                         }
                     }
@@ -131,6 +127,11 @@ internal fun HomeRoute(
             listRealEstateLowestPrice = listRealEstateLowestPrice,
             onItemRealEstateClick = remember {
                 {}
+            },
+            onSearchClick = remember {
+                {
+
+                }
             }
         )
     }
@@ -142,8 +143,6 @@ internal fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: UiState,
     user: User?,
-    filter: String,
-    onFilterChange: (String) -> Unit,
     listTypeState: LazyListState,
     listType: MutableList<ItemChoose>,
     onItemTypeClick: (ItemChoose) -> Unit,
@@ -151,7 +150,8 @@ internal fun HomeScreen(
     listRealEstateMostView: MutableList<RealEstateList>,
     listRealEstateHighestPrice: MutableList<RealEstateList>,
     listRealEstateLowestPrice: MutableList<RealEstateList>,
-    onItemRealEstateClick: (RealEstateList) -> Unit
+    onItemRealEstateClick: (RealEstateList) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     BaseScreen(
         modifier = modifier,
@@ -214,21 +214,16 @@ internal fun HomeScreen(
             EditTextFullIconBorderRadius(
                 modifier = Modifier
                     .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
-                text = filter,
-                onTextChange = onFilterChange,
+                onTextChange = {},
                 hint = stringResource(id = R.string.searchHint),
                 leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Search),
-                borderColor = Color.Gray.copy(0.3f),
+                borderColor = RealEstateAppTheme.colors.primary,
+                readOnly = true,
                 leadingIconColor = RealEstateAppTheme.colors.primary,
                 onLeadingIconClick = {},
                 trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
                 trailingIconColor = RealEstateAppTheme.colors.primary,
-                onTrailingIconClick = {
-
-                },
-                onDoneAction = {
-
-                }
+                onItemClick = onSearchClick
             )
             listType.let {
                 if (it.size > 0) {

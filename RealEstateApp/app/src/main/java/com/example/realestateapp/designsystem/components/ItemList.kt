@@ -32,6 +32,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.extension.formatToMoney
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
@@ -264,7 +265,7 @@ internal fun ItemRealEstate(
                 )
             }
             TextIcon(
-                text = price.toString(),
+                text = price.formatToMoney(),
                 icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Dollar),
                 size = 23,
                 modifier = Modifier

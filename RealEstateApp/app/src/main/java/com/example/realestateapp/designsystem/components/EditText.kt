@@ -3,6 +3,7 @@ package com.example.realestateapp.designsystem.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -283,14 +284,16 @@ internal fun EditTextFullIconBorderRadius(
     onTextChange: (String) -> Unit,
     typeInput: KeyboardType = KeyboardType.Text,
     hint: String = "",
-    borderColor: Color = RealEstateAppTheme.colors.bgBtnDisable,
+    borderColor: Color = RealEstateAppTheme.colors.primary,
+    readOnly: Boolean = true,
     leadingIcon: AppIcon? = null,
     leadingIconColor: Color,
     onLeadingIconClick: () -> Unit,
     trailingIcon: AppIcon? = null,
     trailingIconColor: Color,
-    onTrailingIconClick: () -> Unit,
+    onTrailingIconClick: () -> Unit = {},
     onDoneAction: () -> Unit = {},
+    onItemClick: () -> Unit = {}
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     TextField(
@@ -301,8 +304,13 @@ internal fun EditTextFullIconBorderRadius(
                 BorderStroke(width = 1.dp, color = borderColor),
                 shape = RoundedCornerShape(ROUND_DIALOG.dp)
             )
-            .background(Color.Transparent),
+            .background(Color.Transparent)
+            .clickable {
+                onItemClick()
+            },
         textStyle = RealEstateTypography.body1,
+        enabled = !readOnly,
+        readOnly = readOnly,
         onValueChange = { onTextChange(it) },
         value = text,
         placeholder = {
@@ -342,13 +350,16 @@ internal fun EditTextFullIconBorderRadius(
         singleLine = true,
         colors = TextFieldDefaults.textFieldColors(
             textColor = textColor,
+            disabledTextColor = textColor.copy(alpha = ALPHA_HINT_COLOR),
             backgroundColor = Color.Transparent,
             cursorColor = textColor,
             leadingIconColor = leadingIconColor,
+            disabledLeadingIconColor = leadingIconColor,
             trailingIconColor = trailingIconColor,
+            disabledTrailingIconColor = trailingIconColor,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
-            errorCursorColor = Color.Red
+            disabledIndicatorColor = Color.Transparent
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
