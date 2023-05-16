@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.realestateapp.ui.home.navigation.homeNavigationRoute
-import com.example.realestateapp.ui.home.navigation.homeScreen
+import com.example.realestateapp.ui.home.navigation.homeGraph
+import com.example.realestateapp.ui.home.navigation.homeNavigationGraphRoute
 import com.example.realestateapp.ui.home.navigation.navigateToHome
+import com.example.realestateapp.ui.home.navigation.navigateToRealEstateDetail
 import com.example.realestateapp.ui.notification.navigation.notificationScreen
 import com.example.realestateapp.ui.post.navigation.postScreen
 import com.example.realestateapp.ui.setting.navigation.*
@@ -19,14 +20,23 @@ import com.example.realestateapp.ui.setting.navigation.*
 fun RealEstateNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    startDestination: String = homeNavigationRoute
+    startDestination: String = homeNavigationGraphRoute
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        homeScreen()
+        homeGraph(
+            onSearchClick = {
+
+            },
+            onRealEstateItemClick = {
+                navController.navigateToRealEstateDetail(
+                    realEstateId = it
+                )
+            }
+        )
         postScreen()
         notificationScreen()
         settingGraph(

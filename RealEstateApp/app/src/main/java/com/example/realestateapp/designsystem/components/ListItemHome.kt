@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -68,7 +69,10 @@ internal fun ListItemHome(
                 .constrainAs(btnSeeAll) {
                     linkTo(top = tvTitle.top, bottom = tvTitle.bottom)
                     end.linkTo(parent.end, PADDING_HORIZONTAL_SCREEN.dp)
-                }
+                },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent
+            )
         ) {
             Text(
                 text = btnTitle,

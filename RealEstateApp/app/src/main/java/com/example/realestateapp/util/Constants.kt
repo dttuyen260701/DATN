@@ -41,6 +41,9 @@ class Constants {
     object PriceUnit {
         const val BILLION = "Tỷ"
         const val MILLION = "Triệu"
+        const val THOUSAND_CHAR = "k"
+        const val MILLION_CHAR = "m"
+        const val BILLION_CHAR = "b"
     }
 
     object MessageErrorAPI {

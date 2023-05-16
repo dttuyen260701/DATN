@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.base
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_
 @Composable
 internal fun BaseScreen(
     modifier: Modifier = Modifier,
+    scrollState: ScrollState = rememberScrollState(),
     bgColor: Color = RealEstateAppTheme.colors.bgScreen,
     bgToolbarColor: Color = RealEstateAppTheme.colors.bgScrPrimaryLight,
     paddingHorizontal: Int = PADDING_HORIZONTAL_SCREEN,
@@ -40,7 +42,7 @@ internal fun BaseScreen(
                 .background(bgColor)
                 .padding(horizontal = paddingHorizontal.dp)
                 .then(modifier)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(scrollState),
             verticalArrangement = verticalArrangement,
             horizontalAlignment = horizontalAlignment
         ) {
