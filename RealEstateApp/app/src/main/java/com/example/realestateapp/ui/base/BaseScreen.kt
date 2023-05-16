@@ -27,7 +27,7 @@ internal fun BaseScreen(
     bgColor: Color = RealEstateAppTheme.colors.bgScreen,
     bgToolbarColor: Color = RealEstateAppTheme.colors.bgScrPrimaryLight,
     paddingHorizontal: Int = PADDING_HORIZONTAL_SCREEN,
-    verticalArrangement: Arrangement.HorizontalOrVertical = Arrangement.Center,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Center,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     toolbar: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit

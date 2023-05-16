@@ -96,8 +96,14 @@ internal fun SettingScreen(
     onChangePassClick: () -> Unit,
     onSignOutListener: () -> Unit
 ) {
-    BaseScreen(modifier = modifier) {
-        Spacing(TOOLBAR_HEIGHT)
+    BaseScreen(
+        modifier = modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        toolbar = {
+            ToolbarView(title = stringResource(id = R.string.settingTitle))
+        }
+    ) {
         user?.run {
             Spacing(MARGIN_VIEW)
             ConstraintLayout(
@@ -212,5 +218,4 @@ internal fun SettingScreen(
             )
         }
     }
-    ToolbarView(title = stringResource(id = R.string.settingTitle))
 }

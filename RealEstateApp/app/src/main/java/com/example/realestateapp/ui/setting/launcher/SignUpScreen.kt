@@ -1,10 +1,7 @@
 package com.example.realestateapp.ui.setting.launcher
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -31,6 +28,7 @@ import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -168,7 +166,9 @@ internal fun SignUpScreen(
     onBtnSignUpClick: () -> Unit
 ) {
     BaseScreen(
-        modifier = modifier, bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight
+        modifier = modifier
+            .fillMaxSize(),
+        bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight
     ) {
         Spacing(MARGIN_DIFFERENT_VIEW)
         TextTitle(stringResource(id = R.string.settingSignUpTitle))
@@ -183,6 +183,7 @@ internal fun SignUpScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )
+        Spacing(PADDING_VIEW)
         EditTextTrailingIconCustom(
             onTextChange = onPhoneChange,
             text = phone,
@@ -193,6 +194,7 @@ internal fun SignUpScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )
+        Spacing(PADDING_VIEW)
         EditTextTrailingIconCustom(
             onTextChange = onEmailChange,
             text = email,
@@ -203,6 +205,7 @@ internal fun SignUpScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White
         )
+        Spacing(PADDING_VIEW)
         EditTextTrailingIconCustom(
             onTextChange = onPassChange,
             text = password,
@@ -213,6 +216,7 @@ internal fun SignUpScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White
         )
+        Spacing(PADDING_VIEW)
         EditTextTrailingIconCustom(
             onTextChange = onRePassChange,
             text = rePassword,

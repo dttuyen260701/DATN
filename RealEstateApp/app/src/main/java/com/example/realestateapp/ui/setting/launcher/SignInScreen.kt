@@ -98,7 +98,10 @@ internal fun SignInScreen(
     onSignUpClick: () -> Unit,
     onBtnSignInClick: () -> Unit
 ) {
-    BaseScreen(modifier = modifier) {
+    BaseScreen(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
         Image(
             painter = painterResource(id = R.drawable.storyset_login),
             contentDescription = null,
