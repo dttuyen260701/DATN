@@ -41,6 +41,7 @@ object RealEstateIcon {
     const val Floors = R.drawable.ic_floors
     const val Bed = R.drawable.ic_bed
     const val Dollar = R.drawable.ic_dollar
+    const val LeftArrow = R.drawable.ic_left_arrow
 }
 
 /**

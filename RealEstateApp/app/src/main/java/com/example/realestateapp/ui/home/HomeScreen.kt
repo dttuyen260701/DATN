@@ -126,7 +126,10 @@ internal fun HomeRoute(
             listRealEstateHighestPrice = listRealEstateHighestPrice,
             listRealEstateLowestPrice = listRealEstateLowestPrice,
             onItemRealEstateClick = remember { onRealEstateItemClick },
-            onSearchClick = remember { onSearchClick })
+            onSearchClick = remember { {
+                onRealEstateItemClick(2)
+            } }
+        )
     }
 }
 

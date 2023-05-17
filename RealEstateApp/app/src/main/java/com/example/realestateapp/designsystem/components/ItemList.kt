@@ -129,7 +129,7 @@ internal fun ItemRealEstate(
             )
             IconButton(modifier = Modifier
                 .clip(RoundedCornerShape(ROUND_DIALOG.dp))
-                .background(RealEstateAppTheme.colors.bgIconsWhite50)
+                .background(RealEstateAppTheme.colors.bgIconsBlack50)
                 .constrainAs(btnSave) {
                     top.linkTo(parent.top, MARGIN_VIEW.dp)
                     end.linkTo(parent.end, MARGIN_VIEW.dp)
