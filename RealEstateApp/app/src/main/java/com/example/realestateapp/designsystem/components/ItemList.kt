@@ -193,7 +193,7 @@ internal fun ItemRealEstate(
                         top.linkTo(tvName.bottom)
                         linkTo(
                             start = tvName.start,
-                            end = tvViews.start,
+                            end = tvPrice.start,
                             endMargin = MARGIN_VIEW.dp,
                             bias = 0f
                         )

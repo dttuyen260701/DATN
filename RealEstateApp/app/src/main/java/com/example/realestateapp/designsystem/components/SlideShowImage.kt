@@ -95,13 +95,14 @@ internal fun DotsIndicator(
                 },
                 label = ""
             ) {
-                if (it) RealEstateAppTheme.colors.primary else RealEstateAppTheme.colors.primaryVariant
+                if (it) RealEstateAppTheme.colors.primary
+                else RealEstateAppTheme.colors.primaryVariant
             }
             val indicatorWidth by transition.animateInt(
                 transitionSpec = {
                     spring(
-                        stiffness = 1000f,
-                        dampingRatio = 0.7f
+                        stiffness = 100f,
+                        dampingRatio = 1f
                     )
                 },
                 label = ""

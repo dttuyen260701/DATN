@@ -40,9 +40,10 @@
     <string name="highestPriceTitle">Giá cao nhất</string>
     <string name="btnSeeAll">Xem thêm</string>
 
-    <!--RealEstate Item-->
+    <!--RealEstate Item, Detail-->
     <string name="squareUnit">%s m²</string>
     <string name="titleDefault">Nhà bán</string>
+    <string name="idPostTitle">Mã tin: %s</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>

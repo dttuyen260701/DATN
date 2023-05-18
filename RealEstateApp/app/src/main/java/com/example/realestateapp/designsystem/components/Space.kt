@@ -20,10 +20,13 @@ fun Spacing(height: Int = 0) {
 }
 
 @Composable
-fun BorderLine(modifier: Modifier = Modifier) {
+fun BorderLine(
+    modifier: Modifier = Modifier,
+    height: Float = 0f
+) {
     Spacer(
         modifier = Modifier
-            .height(1.dp)
+            .height(height.dp)
             .then(modifier)
             .fillMaxWidth()
             .background(Color.Gray)

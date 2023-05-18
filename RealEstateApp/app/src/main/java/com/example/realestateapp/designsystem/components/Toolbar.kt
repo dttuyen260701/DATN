@@ -102,10 +102,10 @@ internal fun ToolbarWAnimation(
     title: String = "",
     textAlign: TextAlign = TextAlign.Start,
     titleColor: Color = Color.White,
-    rightIcon: AppIcon? = null,
-    onRightIconClick: () -> Unit = {},
-    leftIcon: AppIcon? = null,
-    onLeftIconClick: () -> Unit = {},
+    leadingIcon: AppIcon? = null,
+    onLeadingIconClick: () -> Unit = {},
+    trainingIcon: AppIcon? = null,
+    onTrainingIconClick: () -> Unit = {},
     bgIcon: Color = Color.Transparent
 ) {
     Row(
@@ -120,16 +120,16 @@ internal fun ToolbarWAnimation(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = onLeftIconClick,
+            onClick = onLeadingIconClick,
             modifier = Modifier
                 .size(ICON_ITEM_SIZE.dp)
                 .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                 .background(
                     color = bgIcon
                 ),
-            enabled = (leftIcon != null)
+            enabled = (leadingIcon != null)
         ) {
-            leftIcon?.run {
+            leadingIcon?.run {
                 BaseIcon(
                     icon = this,
                     modifier = Modifier
@@ -154,16 +154,16 @@ internal fun ToolbarWAnimation(
         )
 
         IconButton(
-            onClick = onRightIconClick,
+            onClick = onTrainingIconClick,
             modifier = Modifier
                 .size(ICON_ITEM_SIZE.dp)
                 .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                 .background(
                     color = bgIcon
                 ),
-            enabled = (rightIcon != null)
+            enabled = (trainingIcon != null)
         ) {
-            rightIcon?.run {
+            trainingIcon?.run {
                 BaseIcon(
                     icon = this,
                     modifier = Modifier
