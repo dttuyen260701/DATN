@@ -19,9 +19,10 @@ import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
+import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
-import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 
 /**
  * Created by tuyen.dang on 5/10/2023.
@@ -92,27 +93,25 @@ internal fun TextIconVertical(
     modifier: Modifier = Modifier,
     text: String,
     textColor: Color = Color.Black,
-    size: Int = 12,
+    size: Int = 14,
     icon: AppIcon,
-    iconTint: Color = Color.Black,
+    iconTint: Color = Color.White,
     bgIconTint: Color = Color.Black.copy(0.5f)
 ) {
     Column(
         modifier = Modifier
-            .width((size + TRAILING_ICON_SIZE).dp)
-            .wrapContentHeight()
             .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BaseIcon(
             icon = icon,
             modifier = Modifier
-                .size((size + TRAILING_ICON_SIZE).dp)
+                .size((size + ICON_ITEM_SIZE).dp)
                 .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                 .background(
                     color = bgIconTint
                 )
-                .padding(PADDING_VIEW.dp),
+                .padding(MARGIN_VIEW.dp),
             contentDescription = null,
             tint = iconTint
         )
@@ -124,8 +123,9 @@ internal fun TextIconVertical(
                 fontSize = size.sp,
                 textAlign = TextAlign.Center
             ),
+            maxLines = 1,
             modifier = Modifier
-                .fillMaxWidth()
+                .wrapContentSize()
                 .padding()
         )
     }
@@ -145,7 +145,7 @@ fun PreviewTextIcon() {
 @Composable
 fun PreviewTextIconVertical() {
     TextIconVertical(
-        text = "3 TEst ext",
+        text = "212334",
         size = 14,
         icon = AppIcon.DrawableResourceIcon(RealEstateIcon.PostSavedOutline),
         iconTint = Color.Green,

@@ -44,6 +44,7 @@
     <string name="squareUnit">%s m²</string>
     <string name="titleDefault">Nhà bán</string>
     <string name="idPostTitle">Mã tin: %s</string>
+    <string name="descriptionTitle">Mô tả chi tiết</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
