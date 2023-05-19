@@ -20,7 +20,7 @@ const val searchNavigationRoute = "search"
 const val searchOptionKey = "option"
 
 internal fun NavController.navigateToHome(navOptions: NavOptions? = null) {
-    this.navigate(homeNavigationRoute, navOptions)
+    this.navigate(homeNavigationGraphRoute, navOptions)
 }
 
 internal fun NavHostController.navigateToRealEstateDetail(
@@ -58,7 +58,9 @@ internal fun NavGraphBuilder.homeGraph(
             onRealEstateItemClick = onRealEstateItemClick,
             onBackClick = onBackClick
         )
-        searchScreen()
+        searchScreen(
+            onBackClick = onBackClick
+        )
     }
 }
 
@@ -91,14 +93,15 @@ internal fun NavGraphBuilder.realEstateDetailScreen(
 }
 
 internal fun NavGraphBuilder.searchScreen(
-
+    onBackClick: () -> Unit
 ) {
     composable(
         route = "$searchNavigationRoute/{$searchOptionKey}",
         arguments = listOf(navArgument(searchOptionKey) { type = NavType.IntType })
     ) { backStackEntry ->
         SearchRoute(
-            searchOption = backStackEntry.arguments?.getInt(searchOptionKey) ?: 0
+            searchOption = backStackEntry.arguments?.getInt(searchOptionKey) ?: 0,
+            onBackClick = onBackClick
         )
     }
 }

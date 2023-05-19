@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +20,7 @@ import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
+import com.example.realestateapp.util.Constants.DefaultValue.CLICK_BUTTON_TIME
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_TEXT
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
@@ -126,6 +127,24 @@ internal fun ButtonRadius(
                 fontSize = textSize.sp
             )
         )
+    }
+}
+
+@Composable
+internal fun ButtonUnRepeating(
+    onClick: () -> Unit,
+    timeBlock: Long = CLICK_BUTTON_TIME,
+    content: @Composable (() -> Unit) -> Unit
+) {
+    var latest by remember {
+        mutableStateOf(0L)
+    }
+    val now = System.currentTimeMillis()
+    content {
+        if (now - latest >= timeBlock) {
+            latest = now
+            onClick()
+        }
     }
 }
 

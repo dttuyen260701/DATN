@@ -126,6 +126,7 @@ internal fun RealEstateDetailRoute(
             realEstatesSamePrice = realEstatesSamePrice,
             realEstatesCluster = realEstatesCluster,
             onRealEstateItemClick = remember { onRealEstateItemClick },
+            onItemSaveClick = remember { {} },
             onBackClick = remember { onBackClick },
             onDirectClick = remember { {} },
             onCallClick = remember { {} },
@@ -142,6 +143,7 @@ internal fun RealEstateDetailScreen(
     realEstatesSamePrice: MutableList<RealEstateList>,
     realEstatesCluster: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
+    onItemSaveClick: (Int) -> Unit,
     onBackClick: () -> Unit,
     onDirectClick: () -> Unit,
     onCallClick: () -> Unit,
@@ -413,8 +415,9 @@ internal fun RealEstateDetailScreen(
             )
             TextIcon(
                 text = "23,3 tỷ",
-                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Dollar),
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.VND),
                 size = 23,
+                isIconFirst = false,
                 textColor = RealEstateAppTheme.colors.primary,
                 iconTint = RealEstateAppTheme.colors.primary,
                 modifier = Modifier
@@ -588,7 +591,8 @@ internal fun RealEstateDetailScreen(
                     ListItemHome(
                         title = stringResource(id = R.string.samePriceTitle),
                         listRealEstate = it,
-                        onItemClick = { item -> onRealEstateItemClick(item.id) },
+                        onItemClick = { id -> onRealEstateItemClick(id) },
+                        onItemSaveClick = { id -> onItemSaveClick(id) },
                         modifier = Modifier
                             .constrainAs(samePriceList) {
                                 top.linkTo(
@@ -603,7 +607,8 @@ internal fun RealEstateDetailScreen(
                     ListItemHome(
                         title = stringResource(id = R.string.suggestTitle),
                         listRealEstate = it,
-                        onItemClick = { item -> onRealEstateItemClick(item.id) },
+                        onItemClick = { id -> onRealEstateItemClick(id) },
+                        onItemSaveClick = { id -> onItemSaveClick(id) },
                         modifier = Modifier
                             .constrainAs(clusterList) {
                                 top.linkTo(

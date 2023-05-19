@@ -119,24 +119,26 @@ internal fun ToolbarWAnimation(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = onLeadingIconClick,
-            modifier = Modifier
-                .size(ICON_ITEM_SIZE.dp)
-                .clip(RoundedCornerShape(ROUND_DIALOG.dp))
-                .background(
-                    color = bgIcon
-                ),
-            enabled = (leadingIcon != null)
-        ) {
-            leadingIcon?.run {
-                BaseIcon(
-                    icon = this,
-                    modifier = Modifier
-                        .size(TRAILING_ICON_SIZE.dp),
-                    contentDescription = null,
-                    tint = Color.White
-                )
+        ButtonUnRepeating(onLeadingIconClick) {
+            IconButton(
+                onClick = it,
+                modifier = Modifier
+                    .size(ICON_ITEM_SIZE.dp)
+                    .clip(RoundedCornerShape(ROUND_DIALOG.dp))
+                    .background(
+                        color = bgIcon
+                    ),
+                enabled = (leadingIcon != null)
+            ) {
+                leadingIcon?.run {
+                    BaseIcon(
+                        icon = this,
+                        modifier = Modifier
+                            .size(TRAILING_ICON_SIZE.dp),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
             }
         }
 
@@ -153,31 +155,33 @@ internal fun ToolbarWAnimation(
             overflow = TextOverflow.Ellipsis
         )
 
-        IconButton(
-            onClick = onTrainingIconClick,
-            modifier = Modifier
-                .size(ICON_ITEM_SIZE.dp)
-                .clip(RoundedCornerShape(ROUND_DIALOG.dp))
-                .background(
-                    color = bgIcon
-                ),
-            enabled = (trainingIcon != null)
-        ) {
-            trainingIcon?.run {
-                BaseIcon(
-                    icon = this,
-                    modifier = Modifier
-                        .size(TRAILING_ICON_SIZE.dp),
-                    contentDescription = null,
-                    tint = Color.White
-                )
+        ButtonUnRepeating(onTrainingIconClick) {
+            IconButton(
+                onClick = it,
+                modifier = Modifier
+                    .size(ICON_ITEM_SIZE.dp)
+                    .clip(RoundedCornerShape(ROUND_DIALOG.dp))
+                    .background(
+                        color = bgIcon
+                    ),
+                enabled = (trainingIcon != null)
+            ) {
+                trainingIcon?.run {
+                    BaseIcon(
+                        icon = this,
+                        modifier = Modifier
+                            .size(TRAILING_ICON_SIZE.dp),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-@Preview()
+@Preview
 fun PreviewLoginScreen() {
     ToolbarView(
         modifier = Modifier.height(56.dp),

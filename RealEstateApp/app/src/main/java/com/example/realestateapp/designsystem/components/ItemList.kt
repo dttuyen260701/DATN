@@ -87,7 +87,8 @@ internal fun ItemType(
 internal fun ItemRealEstate(
     modifier: Modifier = Modifier,
     item: RealEstateList,
-    onItemClick: (RealEstateList) -> Unit
+    onItemClick: (Int) -> Unit,
+    onSaveClick: (Int) -> Unit
 ) {
     val roundedCornerShape = RoundedCornerShape(ROUND_RECTANGLE.dp)
     val configuration = LocalConfiguration.current
@@ -109,7 +110,7 @@ internal fun ItemRealEstate(
                     shape = roundedCornerShape
                 )
                 .clickable {
-                    onItemClick(item)
+                    onItemClick(item.id)
                 }
         ) {
             val (img, btnSave, tvViews, tvName, tvCreatedDate, tvAddress,
@@ -127,25 +128,27 @@ internal fun ItemRealEstate(
                     },
                 placeholder = painterResource(id = R.drawable.sale_real_estate)
             )
-            IconButton(modifier = Modifier
-                .clip(RoundedCornerShape(ROUND_DIALOG.dp))
-                .background(RealEstateAppTheme.colors.bgIconsBlack50)
-                .constrainAs(btnSave) {
-                    top.linkTo(parent.top, MARGIN_VIEW.dp)
-                    end.linkTo(parent.end, MARGIN_VIEW.dp)
+            ButtonUnRepeating({ onSaveClick(item.id) }) {
+                IconButton(modifier = Modifier
+                    .clip(RoundedCornerShape(ROUND_DIALOG.dp))
+                    .background(RealEstateAppTheme.colors.bgIconsBlack50)
+                    .constrainAs(btnSave) {
+                        top.linkTo(parent.top, MARGIN_VIEW.dp)
+                        end.linkTo(parent.end, MARGIN_VIEW.dp)
+                    }
+                    .size(ICON_ITEM_SIZE.dp),
+                    onClick = it
+                ) {
+                    BaseIcon(
+                        icon = AppIcon.DrawableResourceIcon(
+                            if (isSaved) RealEstateIcon.PostSaved
+                            else RealEstateIcon.PostSavedOutline
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier.size(TRAILING_ICON_SIZE.dp),
+                        tint = Color.White
+                    )
                 }
-                .size(ICON_ITEM_SIZE.dp), onClick = {
-
-            }) {
-                BaseIcon(
-                    icon = AppIcon.DrawableResourceIcon(
-                        if (isSaved) RealEstateIcon.PostSaved
-                        else RealEstateIcon.PostSavedOutline
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(TRAILING_ICON_SIZE.dp),
-                    tint = Color.White
-                )
             }
             TextIcon(
                 text = views.formatToUnit(),
@@ -267,8 +270,9 @@ internal fun ItemRealEstate(
             }
             TextIcon(
                 text = price.formatToMoney(),
-                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Dollar),
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.VND),
                 size = 23,
+                isIconFirst = false,
                 modifier = Modifier
                     .constrainAs(tvPrice) {
                         linkTo(top = tvCreatedDate.top, bottom = tvSquare.bottom, bias = 1f)
@@ -304,6 +308,7 @@ private fun PreviewItemRealEstate() {
             isSaved = true,
             createdDate = ""
         ),
+        onSaveClick = {},
         onItemClick = {}
     )
 }

@@ -33,7 +33,8 @@ internal fun ListItemHome(
     btnClick: () -> Unit = {},
     btnColor: Color = RealEstateAppTheme.colors.primary,
     listRealEstate: MutableList<RealEstateList>,
-    onItemClick: (RealEstateList) -> Unit,
+    onItemClick: (Int) -> Unit,
+    onItemSaveClick: (Int) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -102,7 +103,8 @@ internal fun ListItemHome(
             ) { realEstate ->
                 ItemRealEstate(
                     item = realEstate,
-                    onItemClick = onItemClick
+                    onItemClick = onItemClick,
+                    onSaveClick = onItemSaveClick
                 )
             }
         }

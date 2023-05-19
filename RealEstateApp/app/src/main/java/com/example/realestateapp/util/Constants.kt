@@ -43,6 +43,7 @@ class Constants {
         const val WARNING_TEXT_SIZE = 10
         const val ALPHA_HINT_COLOR = 0.7f
         const val TWEEN_ANIMATION_TIME = 300
+        const val CLICK_BUTTON_TIME = 500L
     }
 
     object PriceUnit {

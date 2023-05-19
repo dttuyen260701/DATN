@@ -127,6 +127,7 @@ internal fun HomeRoute(
             realEstatesHighestPrice = realEstatesHighestPrice,
             realEstatesLowestPrice = realEstatesLowestPrice,
             onItemRealEstateClick = remember { onRealEstateItemClick },
+            onItemSaveClick = remember { {} },
             navigateToSearch = remember { navigateToSearch }
         )
     }
@@ -146,6 +147,7 @@ internal fun HomeScreen(
     realEstatesHighestPrice: MutableList<RealEstateList>,
     realEstatesLowestPrice: MutableList<RealEstateList>,
     onItemRealEstateClick: (Int) -> Unit,
+    onItemSaveClick: (Int) -> Unit,
     navigateToSearch: (SearchOption) -> Unit
 ) {
     BaseScreen(modifier = modifier, paddingHorizontal = 0, toolbar = {
@@ -243,6 +245,10 @@ internal fun HomeScreen(
             }
         }
         Spacing(MARGIN_VIEW)
+        BorderLine(
+            height = 0.2f,
+            bgColor = RealEstateAppTheme.colors.primary
+        )
     }) {
         realEstatesLatest.let {
             if (it.size > 0) {
@@ -254,20 +260,24 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.LATEST)
                     },
                     listRealEstate = it,
-                    onItemClick = { item -> onItemRealEstateClick(item.id) }
+                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemSaveClick = { id -> onItemSaveClick(id) }
                 )
             }
         }
         realEstatesMostView.let {
             if (it.size > 0) {
                 Spacing(MARGIN_DIFFERENT_VIEW)
-                ListItemHome(title = stringResource(id = R.string.mostViewTitle),
+                ListItemHome(
+                    title = stringResource(id = R.string.mostViewTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
                         navigateToSearch(SearchOption.MOST_VIEW)
                     },
                     listRealEstate = it,
-                    onItemClick = { item -> onItemRealEstateClick(item.id) })
+                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemSaveClick = { id -> onItemSaveClick(id) }
+                )
             }
         }
         realEstatesHighestPrice.let {
@@ -280,7 +290,8 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.HIGHEST_PRICE)
                     },
                     listRealEstate = it,
-                    onItemClick = { item -> onItemRealEstateClick(item.id) }
+                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemSaveClick = { id -> onItemSaveClick(id) }
                 )
             }
         }
@@ -294,7 +305,8 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.LOWEST_PRICE)
                     },
                     listRealEstate = it,
-                    onItemClick = { item -> onItemRealEstateClick(item.id) }
+                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemSaveClick = { id -> onItemSaveClick(id) }
                 )
             }
         }

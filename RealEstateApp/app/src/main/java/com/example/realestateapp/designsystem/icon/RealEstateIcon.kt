@@ -40,7 +40,7 @@ object RealEstateIcon {
     const val Square = R.drawable.ic_square
     const val Floors = R.drawable.ic_floors
     const val Bed = R.drawable.ic_bed
-    const val Dollar = R.drawable.ic_dollar
+    const val VND = R.drawable.ic_vnd
     const val LeftArrow = R.drawable.ic_left_arrow
     const val Warning = R.drawable.ic_warning
     const val Phone = R.drawable.ic_phone

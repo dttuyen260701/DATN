@@ -1,6 +1,7 @@
 package com.example.realestateapp.ui.home.search
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
@@ -21,5 +22,6 @@ class SearchViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : BaseViewModel<SearchUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(SearchUiState.InitView)
+    internal var filter = mutableStateListOf("")
 
 }
