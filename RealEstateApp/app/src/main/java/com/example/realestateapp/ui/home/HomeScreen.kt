@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
+import com.example.realestateapp.data.enums.SearchOption
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
@@ -46,7 +47,7 @@ import kotlinx.coroutines.launch
 internal fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    onSearchClick: () -> Unit,
+    navigateToSearch: (SearchOption) -> Unit,
     onRealEstateItemClick: (Int) -> Unit
 ) {
     viewModel.run {
@@ -126,11 +127,7 @@ internal fun HomeRoute(
             realEstatesHighestPrice = realEstatesHighestPrice,
             realEstatesLowestPrice = realEstatesLowestPrice,
             onItemRealEstateClick = remember { onRealEstateItemClick },
-            onSearchClick = remember {
-                {
-                    onRealEstateItemClick(2)
-                }
-            }
+            navigateToSearch = remember { navigateToSearch }
         )
     }
 }
@@ -149,7 +146,7 @@ internal fun HomeScreen(
     realEstatesHighestPrice: MutableList<RealEstateList>,
     realEstatesLowestPrice: MutableList<RealEstateList>,
     onItemRealEstateClick: (Int) -> Unit,
-    onSearchClick: () -> Unit
+    navigateToSearch: (SearchOption) -> Unit
 ) {
     BaseScreen(modifier = modifier, paddingHorizontal = 0, toolbar = {
         user?.run {
@@ -205,10 +202,17 @@ internal fun HomeScreen(
             borderColor = RealEstateAppTheme.colors.primary,
             readOnly = true,
             leadingIconColor = RealEstateAppTheme.colors.primary,
-            onLeadingIconClick = {},
+            onLeadingIconClick = {
+                navigateToSearch(SearchOption.NONE)
+            },
             trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
             trailingIconColor = RealEstateAppTheme.colors.primary,
-            onItemClick = onSearchClick
+            onTrailingIconClick = {
+                navigateToSearch(SearchOption.NONE)
+            },
+            onItemClick = {
+                navigateToSearch(SearchOption.NONE)
+            }
         )
         listType.let {
             if (it.size > 0) {
@@ -247,7 +251,7 @@ internal fun HomeScreen(
                     title = stringResource(id = R.string.latestTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
-
+                        navigateToSearch(SearchOption.LATEST)
                     },
                     listRealEstate = it,
                     onItemClick = { item -> onItemRealEstateClick(item.id) }
@@ -260,7 +264,7 @@ internal fun HomeScreen(
                 ListItemHome(title = stringResource(id = R.string.mostViewTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
-
+                        navigateToSearch(SearchOption.MOST_VIEW)
                     },
                     listRealEstate = it,
                     onItemClick = { item -> onItemRealEstateClick(item.id) })
@@ -273,7 +277,7 @@ internal fun HomeScreen(
                     title = stringResource(id = R.string.highestPriceTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
-
+                        navigateToSearch(SearchOption.HIGHEST_PRICE)
                     },
                     listRealEstate = it,
                     onItemClick = { item -> onItemRealEstateClick(item.id) }
@@ -287,7 +291,7 @@ internal fun HomeScreen(
                     title = stringResource(id = R.string.lowestPriceTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
-
+                        navigateToSearch(SearchOption.LOWEST_PRICE)
                     },
                     listRealEstate = it,
                     onItemClick = { item -> onItemRealEstateClick(item.id) }
