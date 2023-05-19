@@ -35,6 +35,9 @@ fun RealEstateNavHost(
                 navController.navigateToRealEstateDetail(
                     realEstateId = it
                 )
+            },
+            onBackClick = {
+                navController.popBackStack()
             }
         )
         postScreen()

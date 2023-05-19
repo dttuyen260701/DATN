@@ -1,7 +1,10 @@
 package com.example.realestateapp.ui.setting.launcher
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -166,8 +169,7 @@ internal fun SignUpScreen(
     onBtnSignUpClick: () -> Unit
 ) {
     BaseScreen(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight
     ) {
         Spacing(MARGIN_DIFFERENT_VIEW)
@@ -190,7 +192,7 @@ internal fun SignUpScreen(
             label = stringResource(id = R.string.phoneTitle),
             typeInput = KeyboardType.Number,
             errorText = phoneError,
-            trailingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Phone),
+            trailingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.PhoneOutLine),
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
         )

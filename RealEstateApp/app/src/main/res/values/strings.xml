@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">RealEstateApp</string>
+    <string name="map_api_key">AIzaSyBTwhzVXvilswU_TYmTfxY3tLf2tojpfSE</string>
     <string name="homeTitle">Trang chủ</string>
     <string name="postTitle">Bài đăng</string>
     <string name="notificationTitle">Thông báo</string>
@@ -45,6 +46,15 @@
     <string name="titleDefault">Nhà bán</string>
     <string name="idPostTitle">Mã tin: %s</string>
     <string name="descriptionTitle">Mô tả chi tiết</string>
+    <string name="mapTitle">Vị trí trên bản đồ</string>
+    <string name="locationTitle">Bất động sản</string>
+    <string name="contactTitle">Liên hệ</string>
+    <string name="callTitle">Gọi điện</string>
+    <string name="directTitle">Chỉ đường</string>
+    <string name="reportTitle">Báo cáo</string>
+    <string name="locationDes">Vị trí BĐS trong khu vực</string>
+    <string name="suggestTitle">Có thể bạn cũng muốn xem</string>
+    <string name="samePriceTitle">BĐS ngang giá</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
@@ -53,4 +63,5 @@
     <string name="errorDialogTitle">Lỗi</string>
     <string name="dialogBackBtn">Trở về</string>
     <string name="dialogYesBtn">Có</string>
+
 </resources>

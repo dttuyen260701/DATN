@@ -49,26 +49,27 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(HomeUiState.InitView)
     internal var listTypeData = mutableStateListOf<ItemChoose>()
-    internal var listRealEstateLatest = mutableStateListOf<RealEstateList>()
-    internal var listRealEstateMostView = mutableStateListOf<RealEstateList>()
-    internal var listRealEstateHighestPrice = mutableStateListOf<RealEstateList>()
-    internal var listRealEstateLowestPrice = mutableStateListOf<RealEstateList>()
+    internal var realEstatesLatest = mutableStateListOf<RealEstateList>()
+    internal var realEstatesMostView = mutableStateListOf<RealEstateList>()
+    internal var realEstatesHighestPrice = mutableStateListOf<RealEstateList>()
+    internal var realEstatesLowestPrice = mutableStateListOf<RealEstateList>()
 
     internal fun backgroundSignIn() {
         uiState.value = HomeUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             application.baseContext.readStoreLauncher(onReadSuccess = { email, pass ->
                 viewModelScope.launch {
-                    callAPIOnThread(funCallApis = mutableListOf(
-                        appRepository.signIn(
-                            email = email, password = pass, showLoading = false
-                        )
-                    ), apiSuccess = {
-                        getUser().value = it.body
-                        AuthenticationObject.token = it.body?.token ?: ""
-                    }, onDoneCallApi = {
-                        uiState.value = HomeUiState.DoneSignInBackground
-                    }, showDialog = false
+                    callAPIOnThread(
+                        funCallApis = mutableListOf(
+                            appRepository.signIn(
+                                email = email, password = pass, showLoading = false
+                            )
+                        ), apiSuccess = {
+                            getUser().value = it.body
+                            AuthenticationObject.token = it.body?.token ?: ""
+                        }, onDoneCallApi = {
+                            uiState.value = HomeUiState.DoneSignInBackground
+                        }, showDialog = false
                     )
                 }
             }, onErrorAction = {

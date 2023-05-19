@@ -2,10 +2,7 @@ package com.example.realestateapp.ui.base
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -30,6 +27,7 @@ internal fun BaseScreen(
     verticalArrangement: Arrangement.Vertical = Arrangement.Center,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     toolbar: @Composable ColumnScope.() -> Unit = {},
+    footer: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
@@ -41,6 +39,8 @@ internal fun BaseScreen(
             modifier = Modifier
                 .background(bgColor)
                 .padding(horizontal = paddingHorizontal.dp)
+                .weight(1f)
+                .fillMaxWidth()
                 .then(modifier)
                 .verticalScroll(scrollState),
             verticalArrangement = verticalArrangement,
@@ -48,5 +48,6 @@ internal fun BaseScreen(
         ) {
             content()
         }
+        footer()
     }
 }

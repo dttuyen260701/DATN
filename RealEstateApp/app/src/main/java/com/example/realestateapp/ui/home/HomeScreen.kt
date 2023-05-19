@@ -53,10 +53,10 @@ internal fun HomeRoute(
         val user by remember { getUser() }
         val listTypeState = rememberLazyListState()
         val listType = remember { listTypeData }
-        val listRealEstateLatest = remember { listRealEstateLatest }
-        val listRealEstateMostView = remember { listRealEstateMostView }
-        val listRealEstateHighestPrice = remember { listRealEstateHighestPrice }
-        val listRealEstateLowestPrice = remember { listRealEstateLowestPrice }
+        val realEstatesLatest = remember { realEstatesLatest }
+        val realEstatesMostView = remember { realEstatesMostView }
+        val realEstatesHighestPrice = remember { realEstatesHighestPrice }
+        val realEstatesLowestPrice = remember { realEstatesLowestPrice }
         var uiState by remember { uiState }
         val coroutineScope = rememberCoroutineScope()
 
@@ -73,23 +73,23 @@ internal fun HomeRoute(
                 getPostsWOptions(isLatest = true)
             }
             is HomeUiState.GetLatestSuccess -> {
-                listRealEstateLatest.clear()
-                listRealEstateLatest.addAll((uiState as HomeUiState.GetLatestSuccess).data)
+                realEstatesLatest.clear()
+                realEstatesLatest.addAll((uiState as HomeUiState.GetLatestSuccess).data)
                 getPostsWOptions(isMostView = true)
             }
             is HomeUiState.GetMostViewSuccess -> {
-                listRealEstateMostView.clear()
-                listRealEstateMostView.addAll((uiState as HomeUiState.GetMostViewSuccess).data)
+                realEstatesMostView.clear()
+                realEstatesMostView.addAll((uiState as HomeUiState.GetMostViewSuccess).data)
                 getPostsWOptions(isHighestPrice = true)
             }
             is HomeUiState.GetHighestPriceSuccess -> {
-                listRealEstateHighestPrice.clear()
-                listRealEstateHighestPrice.addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
+                realEstatesHighestPrice.clear()
+                realEstatesHighestPrice.addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
                 getPostsWOptions(isLowestPrice = true)
             }
             is HomeUiState.GetLowestPriceSuccess -> {
-                listRealEstateLowestPrice.clear()
-                listRealEstateLowestPrice.addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
+                realEstatesLowestPrice.clear()
+                realEstatesLowestPrice.addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
                 uiState = HomeUiState.Success
             }
             else -> {}
@@ -121,14 +121,16 @@ internal fun HomeRoute(
                     }
                 }
             },
-            listLRealEstateLatest = listRealEstateLatest,
-            listRealEstateMostView = listRealEstateMostView,
-            listRealEstateHighestPrice = listRealEstateHighestPrice,
-            listRealEstateLowestPrice = listRealEstateLowestPrice,
+            realEstatesLatest = realEstatesLatest,
+            realEstatesMostView = realEstatesMostView,
+            realEstatesHighestPrice = realEstatesHighestPrice,
+            realEstatesLowestPrice = realEstatesLowestPrice,
             onItemRealEstateClick = remember { onRealEstateItemClick },
-            onSearchClick = remember { {
-                onRealEstateItemClick(2)
-            } }
+            onSearchClick = remember {
+                {
+                    onRealEstateItemClick(2)
+                }
+            }
         )
     }
 }
@@ -142,10 +144,10 @@ internal fun HomeScreen(
     listTypeState: LazyListState,
     listType: MutableList<ItemChoose>,
     onItemTypeClick: (ItemChoose) -> Unit,
-    listLRealEstateLatest: MutableList<RealEstateList>,
-    listRealEstateMostView: MutableList<RealEstateList>,
-    listRealEstateHighestPrice: MutableList<RealEstateList>,
-    listRealEstateLowestPrice: MutableList<RealEstateList>,
+    realEstatesLatest: MutableList<RealEstateList>,
+    realEstatesMostView: MutableList<RealEstateList>,
+    realEstatesHighestPrice: MutableList<RealEstateList>,
+    realEstatesLowestPrice: MutableList<RealEstateList>,
     onItemRealEstateClick: (Int) -> Unit,
     onSearchClick: () -> Unit
 ) {
@@ -238,19 +240,21 @@ internal fun HomeScreen(
         }
         Spacing(MARGIN_VIEW)
     }) {
-        listLRealEstateLatest.let {
+        realEstatesLatest.let {
             if (it.size > 0) {
                 Spacing(MARGIN_VIEW)
-                ListItemHome(title = stringResource(id = R.string.latestTitle),
+                ListItemHome(
+                    title = stringResource(id = R.string.latestTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
 
                     },
                     listRealEstate = it,
-                    onItemClick = { item -> onItemRealEstateClick(item.id) })
+                    onItemClick = { item -> onItemRealEstateClick(item.id) }
+                )
             }
         }
-        listRealEstateMostView.let {
+        realEstatesMostView.let {
             if (it.size > 0) {
                 Spacing(MARGIN_DIFFERENT_VIEW)
                 ListItemHome(title = stringResource(id = R.string.mostViewTitle),
@@ -262,28 +266,32 @@ internal fun HomeScreen(
                     onItemClick = { item -> onItemRealEstateClick(item.id) })
             }
         }
-        listRealEstateHighestPrice.let {
+        realEstatesHighestPrice.let {
             if (it.size > 0) {
                 Spacing(MARGIN_DIFFERENT_VIEW)
-                ListItemHome(title = stringResource(id = R.string.highestPriceTitle),
+                ListItemHome(
+                    title = stringResource(id = R.string.highestPriceTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
 
                     },
                     listRealEstate = it,
-                    onItemClick = { item -> onItemRealEstateClick(item.id) })
+                    onItemClick = { item -> onItemRealEstateClick(item.id) }
+                )
             }
         }
-        listRealEstateLowestPrice.let {
+        realEstatesLowestPrice.let {
             if (it.size > 0) {
                 Spacing(MARGIN_DIFFERENT_VIEW)
-                ListItemHome(title = stringResource(id = R.string.lowestPriceTitle),
+                ListItemHome(
+                    title = stringResource(id = R.string.lowestPriceTitle),
                     btnTitle = stringResource(id = R.string.btnSeeAll),
                     btnClick = {
 
                     },
                     listRealEstate = it,
-                    onItemClick = { item -> onItemRealEstateClick(item.id) })
+                    onItemClick = { item -> onItemRealEstateClick(item.id) }
+                )
             }
         }
         Spacing(MARGIN_DIFFERENT_VIEW)

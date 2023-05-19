@@ -1,6 +1,8 @@
 package com.example.realestateapp.designsystem.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -111,11 +113,18 @@ internal fun TextIconVertical(
                 .background(
                     color = bgIconTint
                 )
+                .border(
+                    border = BorderStroke(
+                        width = 0.2f.dp,
+                        color = textColor
+                    ),
+                    shape = RoundedCornerShape(ROUND_DIALOG.dp)
+                )
                 .padding(MARGIN_VIEW.dp),
             contentDescription = null,
             tint = iconTint
         )
-
+        Spacer(modifier = Modifier.height(PADDING_VIEW.dp))
         Text(
             text = text,
             style = RealEstateTypography.body1.copy(

@@ -29,8 +29,8 @@ internal fun ListItemHome(
     modifier: Modifier = Modifier,
     title: String,
     titleColor: Color = Color.Black,
-    btnTitle: String,
-    btnClick: () -> Unit,
+    btnTitle: String? = null,
+    btnClick: () -> Unit = {},
     btnColor: Color = RealEstateAppTheme.colors.primary,
     listRealEstate: MutableList<RealEstateList>,
     onItemClick: (RealEstateList) -> Unit,
@@ -62,24 +62,26 @@ internal fun ListItemHome(
                     )
                 }
         )
-        TextButton(
-            onClick = btnClick,
-            modifier = Modifier
-                .wrapContentSize()
-                .constrainAs(btnSeeAll) {
-                    linkTo(top = tvTitle.top, bottom = tvTitle.bottom)
-                    end.linkTo(parent.end, PADDING_HORIZONTAL_SCREEN.dp)
-                },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Transparent
-            )
-        ) {
-            Text(
-                text = btnTitle,
-                style = RealEstateTypography.button.copy(
-                    color = btnColor
+        btnTitle?.let {
+            TextButton(
+                onClick = btnClick,
+                modifier = Modifier
+                    .wrapContentSize()
+                    .constrainAs(btnSeeAll) {
+                        linkTo(top = tvTitle.top, bottom = tvTitle.bottom)
+                        end.linkTo(parent.end, PADDING_HORIZONTAL_SCREEN.dp)
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Transparent
                 )
-            )
+            ) {
+                Text(
+                    text = it,
+                    style = RealEstateTypography.button.copy(
+                        color = btnColor
+                    )
+                )
+            }
         }
         LazyRow(
             modifier = Modifier

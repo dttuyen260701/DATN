@@ -97,8 +97,7 @@ internal fun SettingScreen(
     onSignOutListener: () -> Unit
 ) {
     BaseScreen(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.Top,
         toolbar = {
             ToolbarView(title = stringResource(id = R.string.settingTitle))

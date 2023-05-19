@@ -12,6 +12,12 @@ class Constants {
         const val AUTHORIZATION = "Authorization"
     }
 
+    object MapConfig {
+        const val MAX_ZOOM = 20f
+        const val MIN_ZOOM = 12f
+        const val DEFAULT_ZOOM = 16f
+    }
+
     object DataStore {
         const val NAME = "real_estate"
         const val KEY_EMAIL = "email"
@@ -27,6 +33,7 @@ class Constants {
         const val PADDING_HORIZONTAL_SCREEN = 20
         const val PADDING_TEXT = 10
         const val ROUND_CIRCLE = 50
+        const val BOTTOM_ICON_SIZE = 50
         const val ROUND_RECTANGLE = 20
         const val ROUND_DIALOG = 10
         const val TRAILING_ICON_SIZE = 20

@@ -2,7 +2,6 @@ package com.example.realestateapp.ui.home.navigation
 
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.example.realestateapp.navigation.navigateSingleTopTo
 import com.example.realestateapp.ui.home.HomeRoute
 import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailRoute
 
@@ -20,18 +19,17 @@ internal fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 }
 
 internal fun NavHostController.navigateToRealEstateDetail(
-    beforeNavigated: () -> Unit = {},
     realEstateId: Int
 ) {
-    this.navigateSingleTopTo(
-        route = "$realEstateDetailNavigationRoute/$realEstateId",
-        beforeNavigated = beforeNavigated
+    this.navigate(
+        route = "$realEstateDetailNavigationRoute/$realEstateId"
     )
 }
 
 internal fun NavGraphBuilder.homeGraph(
     onSearchClick: () -> Unit,
-    onRealEstateItemClick: (Int) -> Unit
+    onRealEstateItemClick: (Int) -> Unit,
+    onBackClick: () -> Unit
 ) {
     navigation(
         route = homeNavigationGraphRoute,
@@ -41,7 +39,10 @@ internal fun NavGraphBuilder.homeGraph(
             onSearchClick = onSearchClick,
             onRealEstateItemClick = onRealEstateItemClick
         )
-        realEstateDetailScreen()
+        realEstateDetailScreen(
+            onRealEstateItemClick = onRealEstateItemClick,
+            onBackClick = onBackClick
+        )
     }
 }
 
@@ -57,13 +58,18 @@ internal fun NavGraphBuilder.homeScreen(
     }
 }
 
-internal fun NavGraphBuilder.realEstateDetailScreen() {
+internal fun NavGraphBuilder.realEstateDetailScreen(
+    onRealEstateItemClick: (Int) -> Unit,
+    onBackClick: () -> Unit
+) {
     composable(
         route = "$realEstateDetailNavigationRoute/{$realEstateIdKey}",
         arguments = listOf(navArgument(realEstateIdKey) { type = NavType.IntType })
     ) { backStackEntry ->
         RealEstateDetailRoute(
-            realEstateId = backStackEntry.arguments?.getInt(realEstateIdKey) ?: 0
+            realEstateId = backStackEntry.arguments?.getInt(realEstateIdKey) ?: 0,
+            onRealEstateItemClick = onRealEstateItemClick,
+            onBackClick = onBackClick
         )
     }
 }
