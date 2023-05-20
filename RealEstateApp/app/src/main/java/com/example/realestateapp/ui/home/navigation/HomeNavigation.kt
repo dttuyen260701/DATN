@@ -59,7 +59,8 @@ internal fun NavGraphBuilder.homeGraph(
             onBackClick = onBackClick
         )
         searchScreen(
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onRealEstateItemClick = onRealEstateItemClick
         )
     }
 }
@@ -93,7 +94,8 @@ internal fun NavGraphBuilder.realEstateDetailScreen(
 }
 
 internal fun NavGraphBuilder.searchScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRealEstateItemClick: (Int) -> Unit
 ) {
     composable(
         route = "$searchNavigationRoute/{$searchOptionKey}",
@@ -101,7 +103,8 @@ internal fun NavGraphBuilder.searchScreen(
     ) { backStackEntry ->
         SearchRoute(
             searchOption = backStackEntry.arguments?.getInt(searchOptionKey) ?: 0,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onRealEstateItemClick = onRealEstateItemClick
         )
     }
 }

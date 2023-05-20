@@ -56,6 +56,13 @@
     <string name="suggestTitle">Có thể bạn cũng muốn xem</string>
     <string name="samePriceTitle">BĐS ngang giá</string>
 
+    <!--SearchScreen-->
+    <string name="sortTitle">Sắp xếp theo:</string>
+    <string name="latestSortTitle">Ngày đăng</string>
+    <string name="viewSortTitle">Lượt xem</string>
+    <string name="highestPriceSortTitle">Giá cao nhất</string>
+    <string name="lowestPriceSortTitle">Giá thấp nhất</string>
+
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
 

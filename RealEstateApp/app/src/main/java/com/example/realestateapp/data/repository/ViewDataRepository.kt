@@ -10,11 +10,11 @@ import com.example.realestateapp.designsystem.icon.RealEstateIcon
  */
 
 object ViewDataRepository {
-    private val listSettingButtonSignIn = mutableListOf<SettingButton>()
-    private val listSettingButtonSignOut = mutableListOf<SettingButton>()
+    private val settingButtonsSignIn = mutableListOf<SettingButton>()
+    private val settingButtonsSignOut = mutableListOf<SettingButton>()
 
     init {
-        listSettingButtonSignIn.run {
+        settingButtonsSignIn.run {
             add(
                 SettingButton(
                     title = R.string.settingChangePassTitle,
@@ -41,7 +41,7 @@ object ViewDataRepository {
             )
         }
 
-        listSettingButtonSignOut.run {
+        settingButtonsSignOut.run {
             add(
                 SettingButton(
                     title = R.string.settingSignInTitle,
@@ -69,7 +69,7 @@ object ViewDataRepository {
         }
     }
 
-    fun getListSettingSignIn() = listSettingButtonSignIn
+    fun getListSettingSignIn() = settingButtonsSignIn
 
-    fun getListSettingSignOut() = listSettingButtonSignOut
+    fun getListSettingSignOut() = settingButtonsSignOut
 }

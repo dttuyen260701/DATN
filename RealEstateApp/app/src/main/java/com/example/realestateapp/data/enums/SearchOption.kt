@@ -1,9 +1,12 @@
 package com.example.realestateapp.data.enums
 
+/**
+ * Created by tuyen.dang on 5/19/2023.
+ */
+
 enum class SearchOption(val option: Int) {
-    NONE(0),
-    LATEST(1),
-    MOST_VIEW(2),
-    HIGHEST_PRICE(3),
-    LOWEST_PRICE(4)
+    LATEST(0),
+    MOST_VIEW(1),
+    HIGHEST_PRICE(2),
+    LOWEST_PRICE(3)
 }

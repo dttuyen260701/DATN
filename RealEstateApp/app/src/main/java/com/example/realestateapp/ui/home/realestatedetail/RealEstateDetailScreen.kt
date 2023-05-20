@@ -60,26 +60,26 @@ internal fun RealEstateDetailRoute(
         val user by remember { getUser() }
         val realEstatesSamePrice = remember { realEstatesSamePrice }
         val realEstatesCluster = remember { realEstatesCluster }
-        var uiState by remember { uiState }
+        val uiState by remember { uiState }
 
-        when (uiState) {
-            is RealEstateDetailUiState.InitView -> {
-                getRealEstateDetail(realEstateId)
+        LaunchedEffect(key1 = uiState) {
+            when (uiState) {
+                is RealEstateDetailUiState.InitView -> {
+                    getRealEstateDetail(realEstateId)
+                }
+                is RealEstateDetailUiState.GetRealEstateDetailSuccess -> {
+                    getRealEstatesSamePrice(12f)
+                }
+                is RealEstateDetailUiState.GetSamePriceSuccess -> {
+                    realEstatesSamePrice.clear()
+                    realEstatesSamePrice.addAll((uiState as RealEstateDetailUiState.GetSamePriceSuccess).data)
+                    getRealEstatesCluster(2)
+                }
+                is RealEstateDetailUiState.GetClusterSuccess -> {
+                    realEstatesCluster.clear()
+                    realEstatesCluster.addAll((uiState as RealEstateDetailUiState.GetClusterSuccess).data)
+                }
             }
-            is RealEstateDetailUiState.GetRealEstateDetailSuccess -> {
-                getRealEstatesSamePrice(12f)
-            }
-            is RealEstateDetailUiState.GetSamePriceSuccess -> {
-                realEstatesSamePrice.clear()
-                realEstatesSamePrice.addAll((uiState as RealEstateDetailUiState.GetSamePriceSuccess).data)
-                getRealEstatesCluster(2)
-            }
-            is RealEstateDetailUiState.GetClusterSuccess -> {
-                realEstatesCluster.clear()
-                realEstatesCluster.addAll((uiState as RealEstateDetailUiState.GetClusterSuccess).data)
-                uiState = RealEstateDetailUiState.Success
-            }
-            else -> {}
         }
 
         RealEstateDetailScreen(
@@ -211,10 +211,7 @@ internal fun RealEstateDetailScreen(
         scrollState = scrollState,
         paddingHorizontal = 0,
         footer = {
-            BorderLine(
-                height = 0.2f,
-                bgColor = RealEstateAppTheme.colors.primary
-            )
+            BorderLine()
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -438,7 +435,8 @@ internal fun RealEstateDetailScreen(
                     .constrainAs(borderTopGrid) {
                         top.linkTo(tvPostId.bottom, MARGIN_DIFFERENT_VIEW.dp)
                     },
-                height = 0.2f
+                height = 0.2f,
+                bgColor = Color.Gray
             )
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
@@ -466,7 +464,8 @@ internal fun RealEstateDetailScreen(
                     .constrainAs(borderBottomGrid) {
                         top.linkTo(gridLayout.bottom, MARGIN_VIEW.dp)
                     },
-                height = 0.2f
+                height = 0.2f,
+                bgColor = Color.Gray
             )
             Text(
                 text = stringResource(id = R.string.descriptionTitle),

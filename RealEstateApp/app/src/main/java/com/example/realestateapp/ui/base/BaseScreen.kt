@@ -28,6 +28,7 @@ internal fun BaseScreen(
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     toolbar: @Composable ColumnScope.() -> Unit = {},
     footer: @Composable ColumnScope.() -> Unit = {},
+    contentNonScroll: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
@@ -48,6 +49,7 @@ internal fun BaseScreen(
         ) {
             content()
         }
+        contentNonScroll()
         footer()
     }
 }

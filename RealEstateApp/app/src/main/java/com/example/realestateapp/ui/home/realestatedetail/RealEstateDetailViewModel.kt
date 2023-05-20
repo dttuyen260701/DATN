@@ -20,8 +20,6 @@ import javax.inject.Inject
 sealed class RealEstateDetailUiState : UiState() {
     object InitView : RealEstateDetailUiState()
 
-    object Success : RealEstateDetailUiState()
-
     object Error : RealEstateDetailUiState()
 
     data class GetRealEstateDetailSuccess(val data: String) :

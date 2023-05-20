@@ -53,60 +53,60 @@ internal fun HomeRoute(
     viewModel.run {
         val user by remember { getUser() }
         val listTypeState = rememberLazyListState()
-        val listType = remember { listTypeData }
+        val types = remember { typesData }
         val realEstatesLatest = remember { realEstatesLatest }
         val realEstatesMostView = remember { realEstatesMostView }
         val realEstatesHighestPrice = remember { realEstatesHighestPrice }
         val realEstatesLowestPrice = remember { realEstatesLowestPrice }
-        var uiState by remember { uiState }
+        val uiState by remember { uiState }
         val coroutineScope = rememberCoroutineScope()
 
-        when (uiState) {
-            is HomeUiState.InitView -> {
-                backgroundSignIn()
+        LaunchedEffect(key1 = uiState) {
+            when (uiState) {
+                is HomeUiState.InitView -> {
+                    backgroundSignIn()
+                }
+                is HomeUiState.DoneSignInBackground -> {
+                    getTypes()
+                }
+                is HomeUiState.GetTypesSuccess -> {
+                    types.clear()
+                    types.addAll((uiState as HomeUiState.GetTypesSuccess).data)
+                    getPostsWOptions(isLatest = true)
+                }
+                is HomeUiState.GetLatestSuccess -> {
+                    realEstatesLatest.clear()
+                    realEstatesLatest.addAll((uiState as HomeUiState.GetLatestSuccess).data)
+                    getPostsWOptions(isMostView = true)
+                }
+                is HomeUiState.GetMostViewSuccess -> {
+                    realEstatesMostView.clear()
+                    realEstatesMostView.addAll((uiState as HomeUiState.GetMostViewSuccess).data)
+                    getPostsWOptions(isHighestPrice = true)
+                }
+                is HomeUiState.GetHighestPriceSuccess -> {
+                    realEstatesHighestPrice.clear()
+                    realEstatesHighestPrice.addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
+                    getPostsWOptions(isLowestPrice = true)
+                }
+                is HomeUiState.GetLowestPriceSuccess -> {
+                    realEstatesLowestPrice.clear()
+                    realEstatesLowestPrice.addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
+                }
             }
-            is HomeUiState.DoneSignInBackground -> {
-                getTypes()
-            }
-            is HomeUiState.GetTypesSuccess -> {
-                listType.clear()
-                listType.addAll((uiState as HomeUiState.GetTypesSuccess).data)
-                getPostsWOptions(isLatest = true)
-            }
-            is HomeUiState.GetLatestSuccess -> {
-                realEstatesLatest.clear()
-                realEstatesLatest.addAll((uiState as HomeUiState.GetLatestSuccess).data)
-                getPostsWOptions(isMostView = true)
-            }
-            is HomeUiState.GetMostViewSuccess -> {
-                realEstatesMostView.clear()
-                realEstatesMostView.addAll((uiState as HomeUiState.GetMostViewSuccess).data)
-                getPostsWOptions(isHighestPrice = true)
-            }
-            is HomeUiState.GetHighestPriceSuccess -> {
-                realEstatesHighestPrice.clear()
-                realEstatesHighestPrice.addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
-                getPostsWOptions(isLowestPrice = true)
-            }
-            is HomeUiState.GetLowestPriceSuccess -> {
-                realEstatesLowestPrice.clear()
-                realEstatesLowestPrice.addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
-                uiState = HomeUiState.Success
-            }
-            else -> {}
         }
 
         HomeScreen(modifier = modifier,
             uiState = uiState,
             user = user,
             listTypeState = listTypeState,
-            listType = listType,
+            types = types,
             onItemTypeClick = remember {
                 {
-                    if (listType.indexOf(it) != -1) {
+                    if (types.indexOf(it) != -1) {
                         val newValue = it.copy(isSelected = !it.isSelected)
-                        listType[listType.indexOf(it)] = newValue
-                        listType.run {
+                        types[types.indexOf(it)] = newValue
+                        types.run {
                             sortBy { item ->
                                 item.id
                             }
@@ -126,7 +126,7 @@ internal fun HomeRoute(
             realEstatesMostView = realEstatesMostView,
             realEstatesHighestPrice = realEstatesHighestPrice,
             realEstatesLowestPrice = realEstatesLowestPrice,
-            onItemRealEstateClick = remember { onRealEstateItemClick },
+            onRealEstateItemClick = remember { onRealEstateItemClick },
             onItemSaveClick = remember { {} },
             navigateToSearch = remember { navigateToSearch }
         )
@@ -140,13 +140,13 @@ internal fun HomeScreen(
     uiState: UiState,
     user: User?,
     listTypeState: LazyListState,
-    listType: MutableList<ItemChoose>,
+    types: MutableList<ItemChoose>,
     onItemTypeClick: (ItemChoose) -> Unit,
     realEstatesLatest: MutableList<RealEstateList>,
     realEstatesMostView: MutableList<RealEstateList>,
     realEstatesHighestPrice: MutableList<RealEstateList>,
     realEstatesLowestPrice: MutableList<RealEstateList>,
-    onItemRealEstateClick: (Int) -> Unit,
+    onRealEstateItemClick: (Int) -> Unit,
     onItemSaveClick: (Int) -> Unit,
     navigateToSearch: (SearchOption) -> Unit
 ) {
@@ -205,18 +205,18 @@ internal fun HomeScreen(
             readOnly = true,
             leadingIconColor = RealEstateAppTheme.colors.primary,
             onLeadingIconClick = {
-                navigateToSearch(SearchOption.NONE)
+                navigateToSearch(SearchOption.LATEST)
             },
             trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
             trailingIconColor = RealEstateAppTheme.colors.primary,
             onTrailingIconClick = {
-                navigateToSearch(SearchOption.NONE)
+                navigateToSearch(SearchOption.LATEST)
             },
             onItemClick = {
-                navigateToSearch(SearchOption.NONE)
+                navigateToSearch(SearchOption.LATEST)
             }
         )
-        listType.let {
+        types.let {
             if (it.size > 0) {
                 Spacing(MARGIN_DIFFERENT_VIEW)
                 LazyRow(
@@ -245,10 +245,7 @@ internal fun HomeScreen(
             }
         }
         Spacing(MARGIN_VIEW)
-        BorderLine(
-            height = 0.2f,
-            bgColor = RealEstateAppTheme.colors.primary
-        )
+        BorderLine()
     }) {
         realEstatesLatest.let {
             if (it.size > 0) {
@@ -260,7 +257,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.LATEST)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemClick = { id -> onRealEstateItemClick(id) },
                     onItemSaveClick = { id -> onItemSaveClick(id) }
                 )
             }
@@ -275,7 +272,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.MOST_VIEW)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemClick = { id -> onRealEstateItemClick(id) },
                     onItemSaveClick = { id -> onItemSaveClick(id) }
                 )
             }
@@ -290,7 +287,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.HIGHEST_PRICE)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemClick = { id -> onRealEstateItemClick(id) },
                     onItemSaveClick = { id -> onItemSaveClick(id) }
                 )
             }
@@ -305,7 +302,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.LOWEST_PRICE)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onItemRealEstateClick(id) },
+                    onItemClick = { id -> onRealEstateItemClick(id) },
                     onItemSaveClick = { id -> onItemSaveClick(id) }
                 )
             }

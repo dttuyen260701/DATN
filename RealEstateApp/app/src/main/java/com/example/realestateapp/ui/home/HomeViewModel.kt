@@ -26,8 +26,6 @@ sealed class HomeUiState : UiState() {
 
     object Loading : HomeUiState()
 
-    object Success : HomeUiState()
-
     object Error : HomeUiState()
 
     object DoneSignInBackground : HomeUiState()
@@ -48,7 +46,7 @@ class HomeViewModel @Inject constructor(
     private val appRepository: AppRepository, private val application: Application
 ) : BaseViewModel<HomeUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(HomeUiState.InitView)
-    internal var listTypeData = mutableStateListOf<ItemChoose>()
+    internal var typesData = mutableStateListOf<ItemChoose>()
     internal var realEstatesLatest = mutableStateListOf<RealEstateList>()
     internal var realEstatesMostView = mutableStateListOf<RealEstateList>()
     internal var realEstatesHighestPrice = mutableStateListOf<RealEstateList>()
@@ -103,7 +101,7 @@ class HomeViewModel @Inject constructor(
     ) {
         uiState.value = HomeUiState.Loading
         viewModelScope.launch {
-            val typePropertyIds = listTypeData.filter { it.isSelected }.map { it.id }
+            val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
             callAPIOnThread(funCallApis = mutableListOf(
                 appRepository.getPostsWOptions(
                     pageIndex = 1,

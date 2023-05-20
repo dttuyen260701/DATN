@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 
 @Composable
 fun Spacing(height: Int = 0) {
@@ -22,8 +23,8 @@ fun Spacing(height: Int = 0) {
 @Composable
 fun BorderLine(
     modifier: Modifier = Modifier,
-    height: Float = 0f,
-    bgColor: Color = Color.Gray
+    height: Float = 0.2f,
+    bgColor: Color = RealEstateAppTheme.colors.primary
 ) {
     Spacer(
         modifier = Modifier
