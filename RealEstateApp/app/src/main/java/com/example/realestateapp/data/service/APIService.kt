@@ -1,14 +1,12 @@
 package com.example.realestateapp.data.service
 
 import com.example.realestateapp.data.apiresult.ResponseAPI
-import com.example.realestateapp.data.models.ItemChoose
-import com.example.realestateapp.data.models.PagingItem
-import com.example.realestateapp.data.models.RealEstateList
-import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.models.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -32,4 +30,11 @@ interface APIService {
     @POST("/api/Posts/options")
     @JvmSuppressWildcards
     suspend fun getPostsWOptions(@Body options: Map<String, Any>): Response<ResponseAPI<PagingItem<RealEstateList>>>
+
+    @GET("/api/Posts/{idPost}/detail-info/{idUser}")
+    @JvmSuppressWildcards
+    suspend fun getPostDetailById(
+        @Path("idPost") idPost: String,
+        @Path("idUser") idUser: String
+    ): Response<ResponseAPI<RealEstateDetail>>
 }

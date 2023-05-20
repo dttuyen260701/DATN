@@ -1,10 +1,7 @@
 package com.example.realestateapp.data.repository
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
-import com.example.realestateapp.data.models.ItemChoose
-import com.example.realestateapp.data.models.PagingItem
-import com.example.realestateapp.data.models.RealEstateList
-import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.models.*
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -40,4 +37,10 @@ interface AppRepository {
         userId: Int = 0,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
+
+    suspend fun getPostDetailById(
+        idPost: String,
+        idUser: String,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<RealEstateDetail>>
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.example.realestateapp.R
+import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -33,7 +34,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 @Composable
 internal fun SlideShowImage(
     modifier: Modifier = Modifier,
-    photos: MutableList<String>
+    photos: MutableList<Image>
 ) {
     val pageState = rememberPagerState()
     ConstraintLayout(
@@ -55,7 +56,7 @@ internal fun SlideShowImage(
             AsyncImage(
                 modifier = Modifier
                     .fillMaxSize(),
-                model = photos[page],
+                model = photos[page].url,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 error = painterResource(R.drawable.ic_user)

@@ -2,10 +2,7 @@ package com.example.realestateapp.data.repository
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.datasource.RetrofitDataSource
-import com.example.realestateapp.data.models.ItemChoose
-import com.example.realestateapp.data.models.PagingItem
-import com.example.realestateapp.data.models.RealEstateList
-import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.models.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
@@ -80,6 +77,21 @@ class AppRepositoryImpl @Inject constructor(
                     isHighestPrice = isHighestPrice,
                     isLowestPrice = isLowestPrice,
                     userId = userId
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun getPostDetailById(
+        idPost: String,
+        idUser: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<RealEstateDetail>> {
+        return flow {
+            emit(
+                dataSource.getPostDetailById(
+                    idPost = idPost,
+                    idUser = idUser
                 )
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }

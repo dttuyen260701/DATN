@@ -1,10 +1,7 @@
 package com.example.realestateapp.data.datasource
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
-import com.example.realestateapp.data.models.ItemChoose
-import com.example.realestateapp.data.models.PagingItem
-import com.example.realestateapp.data.models.RealEstateList
-import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.models.*
 import com.example.realestateapp.data.network.SafeAPI
 import com.example.realestateapp.data.service.APIService
 import javax.inject.Inject
@@ -71,6 +68,18 @@ class RetrofitDataSourceImpl @Inject constructor(
         options["userId"] = userId
         return callApi {
             apiService.getPostsWOptions(options)
+        }
+    }
+
+    override suspend fun getPostDetailById(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<RealEstateDetail> {
+        return callApi {
+            apiService.getPostDetailById(
+                idPost = idPost,
+                idUser = idUser
+            )
         }
     }
 }

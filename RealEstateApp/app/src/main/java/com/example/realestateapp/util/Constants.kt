@@ -1,5 +1,7 @@
 package com.example.realestateapp.util
 
+import com.example.realestateapp.data.models.RealEstateDetail
+
 /**
  * Created by tuyen.dang on 4/30/2023.
  */
@@ -44,6 +46,35 @@ class Constants {
         const val ALPHA_HINT_COLOR = 0.7f
         const val TWEEN_ANIMATION_TIME = 300
         const val CLICK_BUTTON_TIME = 500L
+        const val MAP_INSTALL_REQUEST = "Vui lòng cài đặt Google Map!"
+        val REAL_ESTATE_DEFAULT = RealEstateDetail(
+            postId = 0,
+            description = "",
+            title = null,
+            createdDate = "",
+            ownerName = null,
+            ownerPhone = null,
+            price = 0f,
+            views = 0,
+            isSaved = 0,
+            legalName = "",
+            propertyTypeName = "",
+            nameDirection = "",
+            width = 0f,
+            square = 0f,
+            carParking = null,
+            streetInFront = null,
+            length = 0f,
+            address = "",
+            latitude = 16.0739283,
+            longitude = 108.1473172,
+            bedrooms = null,
+            floors = null,
+            kitchen = null,
+            rooftop = null,
+            diningRoom = null,
+            images = mutableListOf()
+        )
     }
 
     object PriceUnit {

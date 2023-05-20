@@ -1,10 +1,7 @@
 package com.example.realestateapp.data.datasource
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
-import com.example.realestateapp.data.models.ItemChoose
-import com.example.realestateapp.data.models.PagingItem
-import com.example.realestateapp.data.models.RealEstateList
-import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.models.*
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -34,4 +31,9 @@ interface RetrofitDataSource {
         isLowestPrice: Boolean,
         userId: Int
     ): ApiResultWrapper<PagingItem<RealEstateList>>
+
+    suspend fun getPostDetailById(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<RealEstateDetail>
 }
