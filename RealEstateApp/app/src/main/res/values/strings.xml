@@ -43,6 +43,12 @@
 
     <!--RealEstate Item, Detail-->
     <string name="squareUnit">%s m²</string>
+    <string name="unitMTitle">%s m</string>
+    <string name="bedRoomTitle">%s PN</string>
+    <string name="floorsTitle">%s Tầng</string>
+    <string name="kitchenTitle">Nhà bếp</string>
+    <string name="rooftopTitle">Sân thượng</string>
+    <string name="diningRoomTitle">Phòng ăn</string>
     <string name="titleDefault">Nhà bán</string>
     <string name="idPostTitle">Mã tin: %s</string>
     <string name="descriptionTitle">Mô tả chi tiết</string>
@@ -65,6 +71,11 @@
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
+
+    <!--Request Permission-->
+    <string name="denyBtnTitle">Để sau</string>
+    <string name="acceptBtnTitle">Đã hiểu</string>
+    <string name="requestPermission">Để sử dụng tính năng này bạn vui lòng cấp quyền "<b><i>%s</i></b>" cho ứng dụng!!!</string>
 
     <!--Dialog-->
     <string name="errorDialogTitle">Lỗi</string>

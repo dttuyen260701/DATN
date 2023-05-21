@@ -45,6 +45,15 @@ object RealEstateIcon {
     const val Warning = R.drawable.ic_warning
     const val Phone = R.drawable.ic_phone
     const val Direct = R.drawable.ic_direct
+    const val Legal = R.drawable.ic_legal
+    const val RealEstateType = R.drawable.ic_real_estate_type
+    const val Compass = R.drawable.ic_compass
+    const val Width = R.drawable.ic_width
+    const val Length = R.drawable.ic_length
+    const val StreetInFront = R.drawable.ic_street_in_front
+    const val Kitchen = R.drawable.ic_kitchen
+    const val Rooftop = R.drawable.ic_rooftop
+    const val DiningRoom = R.drawable.ic_dining_room
 }
 
 /**

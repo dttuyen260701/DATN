@@ -43,4 +43,16 @@ interface AppRepository {
         idUser: String,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<RealEstateDetail>>
+
+    suspend fun getPostSamePrice(
+        idPost: String,
+        idUser: String,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<MutableList<RealEstateList>>>
+
+    suspend fun getPostSameCluster(
+        idPost: String,
+        idUser: String,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<MutableList<RealEstateList>>>
 }

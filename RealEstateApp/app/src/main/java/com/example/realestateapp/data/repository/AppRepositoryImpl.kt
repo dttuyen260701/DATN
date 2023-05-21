@@ -96,4 +96,34 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun getPostSamePrice(
+        idPost: String,
+        idUser: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<MutableList<RealEstateList>>> {
+        return flow {
+            emit(
+                dataSource.getPostSamePrice(
+                    idPost = idPost,
+                    idUser = idUser
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun getPostSameCluster(
+        idPost: String,
+        idUser: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<MutableList<RealEstateList>>> {
+        return flow {
+            emit(
+                dataSource.getPostSameCluster(
+                    idPost = idPost,
+                    idUser = idUser
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

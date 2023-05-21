@@ -32,6 +32,12 @@ internal fun Context.openMap(latitude: Double, longitude: Double) {
     }
 }
 
+internal fun Context.callPhone(phone: String) {
+    val callIntent = Intent(Intent.ACTION_CALL)
+    callIntent.data = Uri.parse("tel:$phone")
+    startActivity(callIntent)
+}
+
 internal fun Context.makeToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

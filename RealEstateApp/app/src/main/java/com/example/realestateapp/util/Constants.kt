@@ -26,6 +26,10 @@ class Constants {
         const val KEY_PASSWORD = "password"
     }
 
+    object PermissionTitle {
+        const val PHONE = "Gọi điện thoại"
+    }
+
     object DefaultValue {
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24
@@ -56,7 +60,7 @@ class Constants {
             ownerPhone = null,
             price = 0f,
             views = 0,
-            isSaved = 0,
+            isSaved = false,
             legalName = "",
             propertyTypeName = "",
             nameDirection = "",
@@ -66,8 +70,8 @@ class Constants {
             streetInFront = null,
             length = 0f,
             address = "",
-            latitude = 16.0739283,
-            longitude = 108.1473172,
+            latitude = 0.0,
+            longitude = 0.0,
             bedrooms = null,
             floors = null,
             kitchen = null,

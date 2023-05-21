@@ -42,9 +42,26 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         private val isLoading = mutableStateOf(false)
 
         private var dialogType: MutableState<TypeDialog> = mutableStateOf(TypeDialog.Hide)
+
+        private var requestPermission: (String) -> Unit = { _ -> }
+
+        private var grantedPermission: () -> Unit = {}
     }
 
     abstract var uiState: MutableState<UiState>
+
+    internal fun requestPermissionListener(permission: String, onGranted: () -> Unit) {
+        requestPermission(permission)
+        grantedPermission = onGranted
+    }
+
+    internal fun setRequestPermissionListener(requestPermissionNew: (String) -> Unit) {
+        requestPermission = requestPermissionNew
+    }
+
+    internal fun onGrantedPermission() {
+        grantedPermission()
+    }
 
     internal fun getUser() = user
 

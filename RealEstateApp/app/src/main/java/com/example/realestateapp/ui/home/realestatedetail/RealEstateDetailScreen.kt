@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.home.realestatedetail
 
+import android.Manifest
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateInt
 import androidx.compose.animation.core.spring
@@ -36,7 +37,9 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.extension.callPhone
 import com.example.realestateapp.extension.formatToMoney
+import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.extension.openMap
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.util.Constants.DefaultValue.BOTTOM_ICON_SIZE
@@ -46,6 +49,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
+import com.example.realestateapp.util.Constants.MessageErrorAPI.AUTHENTICATION_ERROR
 import com.google.android.gms.maps.model.LatLng
 
 /**
@@ -55,7 +59,7 @@ import com.google.android.gms.maps.model.LatLng
 @Composable
 internal fun RealEstateDetailRoute(
     modifier: Modifier = Modifier,
-    viewModel: PostDetailViewModel = hiltViewModel(),
+    viewModel: RealEstateDetailViewModel = hiltViewModel(),
     realEstateId: Int,
     onRealEstateItemClick: (Int) -> Unit,
     onBackClick: () -> Unit
@@ -64,6 +68,7 @@ internal fun RealEstateDetailRoute(
     viewModel.run {
         val user by remember { getUser() }
         var realEstateItem by remember { realEstateItem }
+        val realEstateProperty = remember { realEstateProperty }
         val realEstatesSamePrice = remember { realEstatesSamePrice }
         val realEstatesCluster = remember { realEstatesCluster }
         val uiState by remember { uiState }
@@ -76,32 +81,56 @@ internal fun RealEstateDetailRoute(
                 is RealEstateDetailUiState.GetRealEstateDetailSuccess -> {
                     realEstateItem =
                         (uiState as RealEstateDetailUiState.GetRealEstateDetailSuccess).data
+                    getRealEstatesSamePrice(realEstateId)
+                }
+                is RealEstateDetailUiState.GetSamePriceSuccess -> {
+                    realEstatesSamePrice.run {
+                        clear()
+                        addAll((uiState as RealEstateDetailUiState.GetSamePriceSuccess).data)
+                    }
+                    getRealEstatesCluster(realEstateId)
+                }
+                is RealEstateDetailUiState.GetClusterSuccess -> {
+                    realEstatesCluster.run {
+                        clear()
+                        addAll((uiState as RealEstateDetailUiState.GetClusterSuccess).data)
+                    }
                 }
             }
         }
-        realEstateItem.let {
-            RealEstateDetailScreen(
-                modifier = modifier,
-                user = user,
-                item = it,
-                itemProperties = mutableListOf(),
-                realEstatesSamePrice = realEstatesSamePrice,
-                realEstatesCluster = realEstatesCluster,
-                onRealEstateItemClick = remember { onRealEstateItemClick },
-                onItemSaveClick = remember { {} },
-                onBackClick = remember { onBackClick },
-                onDirectClick = remember {
-                    { latitude, longitude ->
-                        context.openMap(
-                            latitude = latitude,
-                            longitude = longitude
-                        )
+        RealEstateDetailScreen(
+            modifier = modifier,
+            user = user,
+            item = realEstateItem,
+            itemProperties = realEstateProperty,
+            realEstatesSamePrice = realEstatesSamePrice,
+            realEstatesCluster = realEstatesCluster,
+            onRealEstateItemClick = remember { onRealEstateItemClick },
+            onItemSaveClick = remember { {} },
+            onBackClick = remember { onBackClick },
+            onDirectClick = remember {
+                { latitude, longitude ->
+                    context.openMap(
+                        latitude = latitude,
+                        longitude = longitude
+                    )
+                }
+            },
+            onCallClick = remember {
+                {
+                    if (user != null) {
+                        requestPermissionListener(
+                            permission = Manifest.permission.CALL_PHONE
+                        ) {
+                            realEstateItem.ownerPhone?.let { context.callPhone(it) }
+                        }
+                    } else {
+                        context.makeToast(AUTHENTICATION_ERROR)
                     }
-                },
-                onCallClick = remember { {} },
-                onWarningClick = remember { {} }
-            )
-        }
+                }
+            },
+            onWarningClick = remember { {} }
+        )
     }
 }
 
@@ -474,38 +503,40 @@ internal fun RealEstateDetailScreen(
                             )
                         }
                 )
-                Text(
-                    text = stringResource(id = R.string.mapTitle),
-                    style = RealEstateTypography.body1.copy(
-                        fontSize = 18.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Start
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
-                        .constrainAs(tvMapTitle) {
-                            top.linkTo(tvDescription.bottom, MARGIN_DIFFERENT_VIEW.dp)
-                            linkTo(
-                                start = parent.start,
-                                end = parent.end,
-                                bias = 0f
-                            )
-                            width = Dimension.fillToConstraints
-                        }
-                )
-                MapviewShowMarker(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(2f)
-                        .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
-                        .constrainAs(mapView) {
-                            top.linkTo(
-                                tvMapTitle.bottom, MARGIN_VIEW.dp
-                            )
-                        },
-                    location = LatLng(latitude, longitude)
-                )
+                if (latitude != 0.0 && longitude != 0.0) {
+                    Text(
+                        text = stringResource(id = R.string.mapTitle),
+                        style = RealEstateTypography.body1.copy(
+                            fontSize = 18.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Start
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                            .constrainAs(tvMapTitle) {
+                                top.linkTo(tvDescription.bottom, MARGIN_DIFFERENT_VIEW.dp)
+                                linkTo(
+                                    start = parent.start,
+                                    end = parent.end,
+                                    bias = 0f
+                                )
+                                width = Dimension.fillToConstraints
+                            }
+                    )
+                    MapviewShowMarker(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(2f)
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                            .constrainAs(mapView) {
+                                top.linkTo(
+                                    tvMapTitle.bottom, MARGIN_VIEW.dp
+                                )
+                            },
+                        location = LatLng(latitude, longitude)
+                    )
+                }
                 Text(
                     text = stringResource(id = R.string.contactTitle),
                     style = RealEstateTypography.body1.copy(
@@ -517,7 +548,10 @@ internal fun RealEstateDetailScreen(
                     modifier = Modifier
                         .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
                         .constrainAs(tvContact) {
-                            top.linkTo(mapView.bottom, MARGIN_DIFFERENT_VIEW.dp)
+                            top.linkTo(
+                                (if (latitude != 0.0 && longitude != 0.0) mapView else tvDescriptionTitle).bottom,
+                                MARGIN_DIFFERENT_VIEW.dp
+                            )
                             linkTo(
                                 start = parent.start,
                                 end = parent.end,
@@ -576,7 +610,7 @@ internal fun RealEstateDetailScreen(
                             modifier = Modifier
                                 .constrainAs(clusterList) {
                                     top.linkTo(
-                                        (if (realEstatesSamePrice.size > 0) samePriceList else tvDescription).bottom,
+                                        (if (realEstatesSamePrice.size > 0) samePriceList else tvPhoneUser).bottom,
                                         (if (realEstatesSamePrice.size > 0) MARGIN_VIEW else MARGIN_DIFFERENT_VIEW).dp
                                     )
                                 }
@@ -594,7 +628,7 @@ internal fun RealEstateDetailScreen(
             bgColor = bgToolbar,
             leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.LeftArrow),
             onLeadingIconClick = onBackClick,
-            trainingIcon = if (isSaved == 1) AppIcon.DrawableResourceIcon(RealEstateIcon.PostSaved) else
+            trainingIcon = if (isSaved) AppIcon.DrawableResourceIcon(RealEstateIcon.PostSaved) else
                 AppIcon.DrawableResourceIcon(RealEstateIcon.PostSavedOutline),
             onTrainingIconClick = {
                 onItemSaveClick(postId)

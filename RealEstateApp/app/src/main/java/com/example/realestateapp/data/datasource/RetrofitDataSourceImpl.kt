@@ -82,4 +82,28 @@ class RetrofitDataSourceImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getPostSamePrice(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<MutableList<RealEstateList>> {
+        return callApi {
+            apiService.getPostSamePrice(
+                idPost = idPost,
+                idUser = idUser
+            )
+        }
+    }
+
+    override suspend fun getPostSameCluster(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<MutableList<RealEstateList>> {
+        return callApi {
+            apiService.getPostSameCluster(
+                idPost = idPost,
+                idUser = idUser
+            )
+        }
+    }
 }

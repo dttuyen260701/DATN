@@ -31,10 +31,24 @@ interface APIService {
     @JvmSuppressWildcards
     suspend fun getPostsWOptions(@Body options: Map<String, Any>): Response<ResponseAPI<PagingItem<RealEstateList>>>
 
-    @GET("/api/Posts/{idPost}/detail-info/{idUser}")
+    @GET("/api/Posts/{postId}/detail-info/{userId}")
     @JvmSuppressWildcards
     suspend fun getPostDetailById(
-        @Path("idPost") idPost: String,
-        @Path("idUser") idUser: String
+        @Path("postId") idPost: String,
+        @Path("userId") idUser: String
     ): Response<ResponseAPI<RealEstateDetail>>
+
+    @GET("/api/Posts/{postId}/same-price/{userId}")
+    @JvmSuppressWildcards
+    suspend fun getPostSamePrice(
+        @Path("postId") idPost: String,
+        @Path("userId") idUser: String
+    ): Response<ResponseAPI<MutableList<RealEstateList>>>
+
+    @GET("/api/Posts/{postId}/same-cluster/{userId}")
+    @JvmSuppressWildcards
+    suspend fun getPostSameCluster(
+        @Path("postId") idPost: String,
+        @Path("userId") idUser: String
+    ): Response<ResponseAPI<MutableList<RealEstateList>>>
 }

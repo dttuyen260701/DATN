@@ -15,7 +15,7 @@ data class RealEstateDetail(
     @SerializedName("phone") val ownerPhone: String?,
     @SerializedName("price") val price: Float,
     @SerializedName("views") val views: Int,
-    @SerializedName("isSaved") val isSaved: Int,
+    @SerializedName("isSaved") val isSaved: Boolean,
     @SerializedName("legalName") val legalName: String,
     @SerializedName("propertyTypeName") val propertyTypeName: String,
     @SerializedName("nameDirection") val nameDirection: String,

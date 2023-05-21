@@ -70,28 +70,38 @@ internal fun HomeRoute(
                     getTypes()
                 }
                 is HomeUiState.GetTypesSuccess -> {
-                    types.clear()
-                    types.addAll((uiState as HomeUiState.GetTypesSuccess).data)
+                    types.run {
+                        clear()
+                        addAll((uiState as HomeUiState.GetTypesSuccess).data)
+                    }
                     getPostsWOptions(isLatest = true)
                 }
                 is HomeUiState.GetLatestSuccess -> {
-                    realEstatesLatest.clear()
-                    realEstatesLatest.addAll((uiState as HomeUiState.GetLatestSuccess).data)
+                    realEstatesLatest.run {
+                        clear()
+                        addAll((uiState as HomeUiState.GetLatestSuccess).data)
+                    }
                     getPostsWOptions(isMostView = true)
                 }
                 is HomeUiState.GetMostViewSuccess -> {
-                    realEstatesMostView.clear()
-                    realEstatesMostView.addAll((uiState as HomeUiState.GetMostViewSuccess).data)
+                    realEstatesMostView.run {
+                        clear()
+                        addAll((uiState as HomeUiState.GetMostViewSuccess).data)
+                    }
                     getPostsWOptions(isHighestPrice = true)
                 }
                 is HomeUiState.GetHighestPriceSuccess -> {
-                    realEstatesHighestPrice.clear()
-                    realEstatesHighestPrice.addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
+                    realEstatesHighestPrice.run {
+                        clear()
+                        addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
+                    }
                     getPostsWOptions(isLowestPrice = true)
                 }
                 is HomeUiState.GetLowestPriceSuccess -> {
-                    realEstatesLowestPrice.clear()
-                    realEstatesLowestPrice.addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
+                    realEstatesLowestPrice.run {
+                        clear()
+                        addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
+                    }
                 }
             }
         }

@@ -36,4 +36,14 @@ interface RetrofitDataSource {
         idPost: String,
         idUser: String
     ): ApiResultWrapper<RealEstateDetail>
+
+    suspend fun getPostSamePrice(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<MutableList<RealEstateList>>
+
+    suspend fun getPostSameCluster(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<MutableList<RealEstateList>>
 }
