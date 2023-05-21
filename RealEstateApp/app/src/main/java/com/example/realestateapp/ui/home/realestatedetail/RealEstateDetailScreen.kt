@@ -155,12 +155,6 @@ internal fun RealEstateDetailScreen(
         LocalConfiguration.current.screenWidthDp.dp.toPx()
             .toInt() * 3 / 4
     }
-    val titleToolbar by remember {
-        derivedStateOf {
-            if (scrollState.value > threadAnimation) item.title
-            else ""
-        }
-    }
     val bgToolbar by transition.animateColor(
         transitionSpec = {
             spring(
@@ -624,7 +618,8 @@ internal fun RealEstateDetailScreen(
             modifier = Modifier
                 .padding(horizontal = paddingToolbar.dp),
             toolbarHeight = toolbarHeight,
-            title = titleToolbar ?: "",
+            title = if (scrollState.value > threadAnimation) item.title ?: ""
+            else "",
             bgColor = bgToolbar,
             leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.LeftArrow),
             onLeadingIconClick = onBackClick,

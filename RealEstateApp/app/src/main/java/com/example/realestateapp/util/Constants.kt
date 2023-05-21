@@ -34,6 +34,7 @@ class Constants {
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24
         const val TOOLBAR_HEIGHT = 56
+        const val SELECT_BOX_HEIGHT = 48
         const val PADDING_VIEW = 5
         const val PADDING_ICON = 7
         const val PADDING_HORIZONTAL_SCREEN = 20

@@ -1,16 +1,13 @@
 package com.example.realestateapp.ui.home
 
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -34,10 +31,6 @@ import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
-import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
-import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -52,14 +45,12 @@ internal fun HomeRoute(
 ) {
     viewModel.run {
         val user by remember { getUser() }
-        val listTypeState = rememberLazyListState()
         val types = remember { typesData }
         val realEstatesLatest = remember { realEstatesLatest }
         val realEstatesMostView = remember { realEstatesMostView }
         val realEstatesHighestPrice = remember { realEstatesHighestPrice }
         val realEstatesLowestPrice = remember { realEstatesLowestPrice }
         val uiState by remember { uiState }
-        val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -109,27 +100,10 @@ internal fun HomeRoute(
         HomeScreen(modifier = modifier,
             uiState = uiState,
             user = user,
-            listTypeState = listTypeState,
             types = types,
             onItemTypeClick = remember {
                 {
-                    if (types.indexOf(it) != -1) {
-                        val newValue = it.copy(isSelected = !it.isSelected)
-                        types[types.indexOf(it)] = newValue
-                        types.run {
-                            sortBy { item ->
-                                item.id
-                            }
-                            sortByDescending { item ->
-                                item.isSelected
-                            }
-                            coroutineScope.launch {
-                                delay(TWEEN_ANIMATION_TIME.toLong())
-                                listTypeState.animateScrollToItem(0)
-                                getPostsWOptions(isLatest = true)
-                            }
-                        }
-                    }
+                    getPostsWOptions(isLatest = true)
                 }
             },
             realEstatesLatest = realEstatesLatest,
@@ -143,15 +117,13 @@ internal fun HomeRoute(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: UiState,
     user: User?,
-    listTypeState: LazyListState,
     types: MutableList<ItemChoose>,
-    onItemTypeClick: (ItemChoose) -> Unit,
+    onItemTypeClick: () -> Unit,
     realEstatesLatest: MutableList<RealEstateList>,
     realEstatesMostView: MutableList<RealEstateList>,
     realEstatesHighestPrice: MutableList<RealEstateList>,
@@ -229,29 +201,10 @@ internal fun HomeScreen(
         types.let {
             if (it.size > 0) {
                 Spacing(MARGIN_DIFFERENT_VIEW)
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    state = listTypeState,
-                    horizontalArrangement = Arrangement.spacedBy(PADDING_VIEW.dp),
-                    contentPadding = PaddingValues(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
-                ) {
-                    items(
-                        items = it,
-                        key = { typeKey ->
-                            typeKey.toString()
-                        },
-                    ) { type ->
-                        ItemType(
-                            item = type,
-                            onItemClick = onItemTypeClick,
-                            modifier = Modifier.animateItemPlacement(
-                                tween(durationMillis = TWEEN_ANIMATION_TIME)
-                            )
-                        )
-                    }
-                }
+                ListTypes(
+                    types = types,
+                    onItemClick = onItemTypeClick
+                )
             }
         }
         Spacing(MARGIN_VIEW)

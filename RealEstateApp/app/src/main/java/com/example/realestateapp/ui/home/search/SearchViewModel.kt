@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.SearchOption
 import com.example.realestateapp.data.models.ItemChoose
@@ -11,6 +12,7 @@ import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -19,6 +21,10 @@ import javax.inject.Inject
 
 sealed class SearchUiState : UiState() {
     object InitView : SearchUiState()
+
+    object Error : SearchUiState()
+
+    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : SearchUiState()
 }
 
 @HiltViewModel
@@ -28,6 +34,7 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel<SearchUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(SearchUiState.InitView)
     internal var filter = mutableStateOf("")
+    internal var typesData = mutableStateListOf<ItemChoose>()
     internal var sortOptions =
         mutableStateListOf(
             ItemChoose(
@@ -56,6 +63,19 @@ class SearchViewModel @Inject constructor(
                 sortOptions[oldIndex] =
                     sortOptions[oldIndex].copy(isSelected = false)
             sortOptions[newIndex] = sortOptions[newIndex].copy(isSelected = true)
+        }
+    }
+
+    internal fun getTypes() {
+        viewModelScope.launch {
+            callAPIOnThread(funCallApis = mutableListOf(
+                appRepository.getTypes(showLoading = false),
+            ), apiSuccess = {
+                uiState.value = SearchUiState.GetTypesSuccess(it.body)
+            }, apiError = {
+                uiState.value = SearchUiState.Error
+            }, showDialog = false
+            )
         }
     }
 }

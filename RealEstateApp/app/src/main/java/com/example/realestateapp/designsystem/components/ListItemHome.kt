@@ -1,5 +1,7 @@
 package com.example.realestateapp.designsystem.components
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -8,17 +10,23 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Created by tuyen.dang on 5/14/2023.
@@ -107,6 +115,62 @@ internal fun ListItemHome(
                     onSaveClick = onItemSaveClick
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+internal fun ListTypes(
+    modifier: Modifier = Modifier,
+    types: MutableList<ItemChoose>,
+    onItemClick: () -> Unit,
+    paddingHorizontal: Int = PADDING_HORIZONTAL_SCREEN
+) {
+    val listTypeState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .then(modifier),
+        state = listTypeState,
+        horizontalArrangement = Arrangement.spacedBy(PADDING_VIEW.dp),
+        contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+    ) {
+        items(
+            items = types,
+            key = { typeKey ->
+                typeKey.toString()
+            },
+        ) { type ->
+            ItemType(
+                item = type,
+                onItemClick =
+                {
+                    if (types.indexOf(it) != -1) {
+                        val newValue = it.copy(isSelected = !it.isSelected)
+                        types[types.indexOf(it)] = newValue
+                        types.run {
+                            sortBy { item ->
+                                item.id
+                            }
+                            sortByDescending { item ->
+                                item.isSelected
+                            }
+                            coroutineScope.launch {
+                                delay(Constants.DefaultValue.TWEEN_ANIMATION_TIME.toLong())
+                                listTypeState.animateScrollToItem(0)
+                                onItemClick()
+                            }
+                        }
+                    }
+                },
+                modifier = Modifier.animateItemPlacement(
+                    tween(durationMillis = Constants.DefaultValue.TWEEN_ANIMATION_TIME)
+                )
+            )
         }
     }
 }

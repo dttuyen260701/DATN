@@ -38,6 +38,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VI
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.SELECT_BOX_HEIGHT
 
 /**
  * Created by tuyen.dang on 5/19/2023.
@@ -54,6 +55,7 @@ internal fun SearchRoute(
     viewModel.run {
         var filter by remember { filter }
         val sortOptions = remember { sortOptions }
+        val types = remember { typesData }
         var isShowSearchOption by remember { mutableStateOf(true) }
         val uiState by remember { uiState }
 
@@ -61,6 +63,13 @@ internal fun SearchRoute(
             when (uiState) {
                 is SearchUiState.InitView -> {
                     onChoiceSortType(searchOption)
+                    getTypes()
+                }
+                is SearchUiState.GetTypesSuccess -> {
+                    types.run {
+                        clear()
+                        addAll((uiState as SearchUiState.GetTypesSuccess).data)
+                    }
                 }
             }
         }
@@ -70,11 +79,17 @@ internal fun SearchRoute(
             onBackClick = onBackClick,
             isShowSearchOption = isShowSearchOption,
             onTrainingIconTextClick = remember {
-                { isShowSearchOption = !isShowSearchOption }
+                {
+                    isShowSearchOption = !isShowSearchOption
+                }
             },
             filter = filter,
             onFilterChange = {
                 filter = it
+            },
+            types = types,
+            onTypeItemClick = remember {
+                {}
             },
             sortOptions = sortOptions,
             onSortItemClick = remember {
@@ -152,6 +167,8 @@ internal fun SearchScreen(
     onTrainingIconTextClick: () -> Unit,
     filter: String,
     onFilterChange: (String) -> Unit,
+    types: MutableList<ItemChoose>,
+    onTypeItemClick: () -> Unit,
     sortOptions: MutableList<ItemChoose>,
     onSortItemClick: (ItemChoose) -> Unit,
     realEstates: MutableList<RealEstateList>,
@@ -214,17 +231,62 @@ internal fun SearchScreen(
                             width = Dimension.fillToConstraints
                         }
                 )
-                ConstraintLayout(
+                Column(
                     modifier = Modifier
-                        .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
                         .animateContentSize()
-                        .height(100.dp)
                         .constrainAs(searchOptionGroup) {
                             top.linkTo(edtSearch.bottom, MARGIN_DIFFERENT_VIEW.dp)
                             visibility = setVisibility(isShowSearchOption)
                         }
-                        .background(Color.Green)
                 ) {
+                    Text(
+                        text = stringResource(id = R.string.typesTitle),
+                        style = RealEstateTypography.body1.copy(
+                            fontSize = 13.sp,
+                            color = RealEstateAppTheme.colors.primary.copy(0.8f),
+                            textAlign = TextAlign.Start
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
+                    )
+                    Spacing(PADDING_VIEW)
+                    ListTypes(
+                        types = types,
+                        onItemClick = onTypeItemClick,
+                        modifier = Modifier
+                    )
+                    Spacing(MARGIN_VIEW)
+                    Text(
+                        text = stringResource(id = R.string.addressTitle),
+                        style = RealEstateTypography.body1.copy(
+                            fontSize = 13.sp,
+                            color = RealEstateAppTheme.colors.primary.copy(0.8f),
+                            textAlign = TextAlign.Start
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
+                    )
+                    Spacing(PADDING_VIEW)
+                    EditTextFullIconBorderRadius(
+                        modifier = Modifier
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                            .height(SELECT_BOX_HEIGHT.dp),
+                        onTextChange = {},
+                        hint = stringResource(id = R.string.addressHint),
+                        leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Search),
+                        borderColor = RealEstateAppTheme.colors.primary,
+                        readOnly = true,
+                        leadingIconColor = RealEstateAppTheme.colors.primary,
+                        onLeadingIconClick = {
+                        },
+                        trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
+                        trailingIconColor = RealEstateAppTheme.colors.primary,
+                        onTrailingIconClick = {
+                        },
+                        onItemClick = {
+                        }
+                    )
+                    Spacing(MARGIN_VIEW)
 
                 }
                 Text(
@@ -248,7 +310,7 @@ internal fun SearchScreen(
                     modifier = Modifier
                         .wrapContentHeight()
                         .constrainAs(sortTypes) {
-                            top.linkTo(tvSortTitle.bottom, 3.dp)
+                            top.linkTo(tvSortTitle.bottom, PADDING_VIEW.dp)
                             width = Dimension.matchParent
                         },
                     state = rememberLazyListState(),
