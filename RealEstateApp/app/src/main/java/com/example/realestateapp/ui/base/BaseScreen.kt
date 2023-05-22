@@ -28,7 +28,7 @@ internal fun BaseScreen(
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     toolbar: @Composable ColumnScope.() -> Unit = {},
     footer: @Composable ColumnScope.() -> Unit = {},
-    contentNonScroll: @Composable ColumnScope.() -> Unit = {},
+    contentNonScroll: @Composable (ColumnScope.() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
@@ -36,20 +36,23 @@ internal fun BaseScreen(
             .background(bgToolbarColor)
     ) {
         toolbar()
-        Column(
-            modifier = Modifier
-                .background(bgColor)
-                .padding(horizontal = paddingHorizontal.dp)
-                .weight(1f)
-                .fillMaxWidth()
-                .then(modifier)
-                .verticalScroll(scrollState),
-            verticalArrangement = verticalArrangement,
-            horizontalAlignment = horizontalAlignment
-        ) {
-            content()
+        if (contentNonScroll != null) {
+            contentNonScroll()
+        } else {
+            Column(
+                modifier = Modifier
+                    .background(bgColor)
+                    .padding(horizontal = paddingHorizontal.dp)
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .then(modifier)
+                    .verticalScroll(scrollState),
+                verticalArrangement = verticalArrangement,
+                horizontalAlignment = horizontalAlignment
+            ) {
+                content()
+            }
         }
-        contentNonScroll()
         footer()
     }
 }

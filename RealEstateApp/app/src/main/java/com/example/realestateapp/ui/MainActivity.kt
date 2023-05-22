@@ -39,7 +39,9 @@ class MainActivity : ComponentActivity() {
                         val launcherActivity = rememberLauncherForActivityResult(
                             contract = ActivityResultContracts.RequestPermission(),
                             onResult = {
-                                onGrantedPermission()
+                                if (it) {
+                                    onGrantedPermission()
+                                }
                             }
                         )
 

@@ -32,7 +32,7 @@ android {
     applicationVariants.all { variant ->
         switch (variant.getName()) {
             case "debug":
-                variant.buildConfigField "String", "API_URL", '"https://a779-101-96-79-34.ngrok-free.app"'
+                variant.buildConfigField "String", "API_URL", '"https://64db-101-96-79-34.ngrok-free.app"'
                 break
             case "release":
                 variant.buildConfigField "String", "API_URL", '"https://api.monstar.ch/"'
@@ -72,6 +72,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
     implementation 'com.google.maps.android:maps-compose:2.11.4'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'

@@ -68,9 +68,13 @@
     <string name="viewSortTitle">Lượt xem</string>
     <string name="addressTitle">Địa chỉ</string>
     <string name="addressHint">Đà Nẵng</string>
+    <string name="searchBtnTitle">Tìm kiếm</string>
     <string name="typesTitle">Loại nhà đất</string>
     <string name="highestPriceSortTitle">Giá cao nhất</string>
     <string name="lowestPriceSortTitle">Giá thấp nhất</string>
+
+    <!--PickAddressScreen-->
+    <string name="pickAddressTitle">Chọn vị trí</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>

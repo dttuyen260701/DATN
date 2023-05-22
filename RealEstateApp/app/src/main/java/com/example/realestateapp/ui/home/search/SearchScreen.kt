@@ -1,6 +1,7 @@
 package com.example.realestateapp.ui.home.search
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,7 +30,6 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
-import com.example.realestateapp.extension.setVisibility
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.util.Constants
@@ -39,6 +39,8 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.SELECT_BOX_HEIGHT
+import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
+import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 
 /**
  * Created by tuyen.dang on 5/19/2023.
@@ -50,7 +52,9 @@ internal fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel(),
     searchOption: Int,
     onBackClick: () -> Unit,
-    onRealEstateItemClick: (Int) -> Unit
+    onRealEstateItemClick: (Int) -> Unit,
+    navigateToPickAddress: () -> Unit,
+    addressDetail: String
 ) {
     viewModel.run {
         var filter by remember { filter }
@@ -58,6 +62,7 @@ internal fun SearchRoute(
         val types = remember { typesData }
         var isShowSearchOption by remember { mutableStateOf(true) }
         val uiState by remember { uiState }
+        var addressDetailDisplay by remember { mutableStateOf(addressDetail) }
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -77,6 +82,21 @@ internal fun SearchRoute(
         SearchScreen(
             modifier = modifier,
             onBackClick = onBackClick,
+            navigateToPickAddress = navigateToPickAddress,
+            addressDetail = addressDetailDisplay,
+            onClearData = remember {
+                {
+                    when (it) {
+                        KEY_ADDRESS -> {
+                            addressDetailDisplay = ""
+                        }
+                        else -> {}
+                    }
+                }
+            },
+            onSearchClick = remember {
+                {}
+            },
             isShowSearchOption = isShowSearchOption,
             onTrainingIconTextClick = remember {
                 {
@@ -163,6 +183,10 @@ internal fun SearchRoute(
 internal fun SearchScreen(
     modifier: Modifier,
     onBackClick: () -> Unit,
+    navigateToPickAddress: () -> Unit,
+    addressDetail: String,
+    onClearData: (Int) -> Unit,
+    onSearchClick: () -> Unit,
     isShowSearchOption: Boolean,
     onTrainingIconTextClick: () -> Unit,
     filter: String,
@@ -216,7 +240,9 @@ internal fun SearchScreen(
                     borderColor = RealEstateAppTheme.colors.primary,
                     leadingIconColor = RealEstateAppTheme.colors.primary,
                     onLeadingIconClick = {},
-                    trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
+                    trailingIcon =
+                    if (isShowSearchOption) AppIcon.DrawableResourceIcon(RealEstateIcon.DropDownBig)
+                    else AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
                     trailingIconColor = RealEstateAppTheme.colors.primary,
                     onTrailingIconClick = onTrainingIconTextClick,
                     modifier = Modifier
@@ -233,11 +259,18 @@ internal fun SearchScreen(
                 )
                 Column(
                     modifier = Modifier
-                        .animateContentSize()
                         .constrainAs(searchOptionGroup) {
                             top.linkTo(edtSearch.bottom, MARGIN_DIFFERENT_VIEW.dp)
-                            visibility = setVisibility(isShowSearchOption)
+                            height =
+                                if (isShowSearchOption) Dimension.wrapContent else Dimension.value(0.dp)
+                            width = Dimension.matchParent
                         }
+                        .animateContentSize(
+                            spring(
+                                stiffness = (TWEEN_ANIMATION_TIME / 2).toFloat(),
+                                dampingRatio = 2f
+                            )
+                        )
                 ) {
                     Text(
                         text = stringResource(id = R.string.typesTitle),
@@ -267,24 +300,15 @@ internal fun SearchScreen(
                             .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
                     )
                     Spacing(PADDING_VIEW)
-                    EditTextFullIconBorderRadius(
+                    ComboBox(
                         modifier = Modifier
-                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
-                            .height(SELECT_BOX_HEIGHT.dp),
-                        onTextChange = {},
+                            .height(SELECT_BOX_HEIGHT.dp)
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
+                        onItemClick = navigateToPickAddress,
+                        leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Location),
+                        value = addressDetail,
                         hint = stringResource(id = R.string.addressHint),
-                        leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Search),
-                        borderColor = RealEstateAppTheme.colors.primary,
-                        readOnly = true,
-                        leadingIconColor = RealEstateAppTheme.colors.primary,
-                        onLeadingIconClick = {
-                        },
-                        trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
-                        trailingIconColor = RealEstateAppTheme.colors.primary,
-                        onTrailingIconClick = {
-                        },
-                        onItemClick = {
-                        }
+                        onClearData = { onClearData(KEY_ADDRESS) }
                     )
                     Spacing(MARGIN_VIEW)
 
@@ -301,8 +325,6 @@ internal fun SearchScreen(
                         .constrainAs(tvSortTitle) {
                             top.linkTo(
                                 searchOptionGroup.bottom,
-                                MARGIN_DIFFERENT_VIEW.dp,
-                                MARGIN_DIFFERENT_VIEW.dp
                             )
                         },
                 )
@@ -345,7 +367,8 @@ internal fun SearchScreen(
         contentNonScroll = {
             LazyColumn(
                 modifier = modifier
-                    .fillMaxSize()
+                    .weight(1f)
+                    .fillMaxWidth()
                     .background(RealEstateAppTheme.colors.bgScreen),
                 state = rememberLazyListState(),
                 verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
@@ -365,6 +388,38 @@ internal fun SearchScreen(
                     )
                 }
             }
+        },
+        footer = {
+            BorderLine()
+            Box(
+                modifier = Modifier
+                    .padding(
+                        horizontal = PADDING_HORIZONTAL_SCREEN.dp,
+                        vertical = if (isShowSearchOption) PADDING_VIEW.dp else 0.dp
+                    )
+                    .animateContentSize(
+                        animationSpec = spring(
+                            stiffness = TWEEN_ANIMATION_TIME.toFloat(),
+                            dampingRatio = 2f
+                        )
+                    )
+                    .height(
+                        if (isShowSearchOption) (TOOLBAR_HEIGHT + PADDING_VIEW).dp
+                        else 0.dp
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                ButtonRadius(
+                    onClick = onSearchClick,
+                    title = stringResource(id = R.string.searchBtnTitle),
+                    bgColor = RealEstateAppTheme.colors.primary,
+                    modifier = Modifier
+                        .height(TOOLBAR_HEIGHT.dp)
+                        .fillMaxWidth()
+                )
+            }
         }
     ) {}
 }
+
+const val KEY_ADDRESS = 1

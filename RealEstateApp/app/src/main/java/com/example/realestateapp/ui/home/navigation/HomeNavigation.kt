@@ -3,10 +3,12 @@ package com.example.realestateapp.ui.home.navigation
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.example.realestateapp.data.enums.SearchOption
+import com.example.realestateapp.navigation.getBackEntryData
 import com.example.realestateapp.navigation.navigateSingleTopTo
 import com.example.realestateapp.ui.home.HomeRoute
 import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailRoute
 import com.example.realestateapp.ui.home.search.SearchRoute
+import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -44,7 +46,9 @@ internal fun NavHostController.navigateToSearch(
 internal fun NavGraphBuilder.homeGraph(
     navigateToSearch: (SearchOption) -> Unit,
     onRealEstateItemClick: (Int) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onClickProfile: () -> Unit,
+    navigateToPickAddress: () -> Unit
 ) {
     navigation(
         route = homeNavigationGraphRoute,
@@ -52,7 +56,8 @@ internal fun NavGraphBuilder.homeGraph(
     ) {
         homeScreen(
             navigateToSearch = navigateToSearch,
-            onRealEstateItemClick = onRealEstateItemClick
+            onRealEstateItemClick = onRealEstateItemClick,
+            navigateProfile = onClickProfile
         )
         realEstateDetailScreen(
             onRealEstateItemClick = onRealEstateItemClick,
@@ -60,19 +65,22 @@ internal fun NavGraphBuilder.homeGraph(
         )
         searchScreen(
             onBackClick = onBackClick,
-            onRealEstateItemClick = onRealEstateItemClick
+            onRealEstateItemClick = onRealEstateItemClick,
+            navigateToPickAddress = navigateToPickAddress
         )
     }
 }
 
 internal fun NavGraphBuilder.homeScreen(
     navigateToSearch: (SearchOption) -> Unit,
-    onRealEstateItemClick: (Int) -> Unit
+    onRealEstateItemClick: (Int) -> Unit,
+    navigateProfile: () -> Unit
 ) {
     composable(route = homeNavigationRoute) {
         HomeRoute(
             navigateToSearch = navigateToSearch,
-            onRealEstateItemClick = onRealEstateItemClick
+            onRealEstateItemClick = onRealEstateItemClick,
+            navigateProfile = navigateProfile
         )
     }
 }
@@ -95,7 +103,8 @@ internal fun NavGraphBuilder.realEstateDetailScreen(
 
 internal fun NavGraphBuilder.searchScreen(
     onBackClick: () -> Unit,
-    onRealEstateItemClick: (Int) -> Unit
+    onRealEstateItemClick: (Int) -> Unit,
+    navigateToPickAddress: () -> Unit
 ) {
     composable(
         route = "$searchNavigationRoute/{$searchOptionKey}",
@@ -104,7 +113,9 @@ internal fun NavGraphBuilder.searchScreen(
         SearchRoute(
             searchOption = backStackEntry.arguments?.getInt(searchOptionKey) ?: 0,
             onBackClick = onBackClick,
-            onRealEstateItemClick = onRealEstateItemClick
+            onRealEstateItemClick = onRealEstateItemClick,
+            navigateToPickAddress = navigateToPickAddress,
+            addressDetail = backStackEntry.getBackEntryData<String>(key = searchAddressKey) ?: ""
         )
     }
 }

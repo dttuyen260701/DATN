@@ -1,6 +1,7 @@
 package com.example.realestateapp.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -41,7 +42,8 @@ internal fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToSearch: (SearchOption) -> Unit,
-    onRealEstateItemClick: (Int) -> Unit
+    onRealEstateItemClick: (Int) -> Unit,
+    navigateProfile: () -> Unit
 ) {
     viewModel.run {
         val user by remember { getUser() }
@@ -112,7 +114,8 @@ internal fun HomeRoute(
             realEstatesLowestPrice = realEstatesLowestPrice,
             onRealEstateItemClick = remember { onRealEstateItemClick },
             onItemSaveClick = remember { {} },
-            navigateToSearch = remember { navigateToSearch }
+            navigateToSearch = remember { navigateToSearch },
+            navigateProfile = navigateProfile
         )
     }
 }
@@ -130,7 +133,8 @@ internal fun HomeScreen(
     realEstatesLowestPrice: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
     onItemSaveClick: (Int) -> Unit,
-    navigateToSearch: (SearchOption) -> Unit
+    navigateToSearch: (SearchOption) -> Unit,
+    navigateProfile: () -> Unit
 ) {
     BaseScreen(modifier = modifier, paddingHorizontal = 0, toolbar = {
         user?.run {
@@ -174,7 +178,9 @@ internal fun HomeScreen(
                             end.linkTo(parent.end)
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
-                        })
+                        }
+                        .clickable { navigateProfile() }
+                )
             }
         }
         Spacing(MARGIN_DIFFERENT_VIEW)

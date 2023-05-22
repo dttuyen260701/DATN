@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.apiresult.ResponseAPI
 import com.example.realestateapp.data.models.User
+import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -55,11 +56,11 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         grantedPermission = onGranted
     }
 
-    internal fun setRequestPermissionListener(requestPermissionNew: (String) -> Unit) {
+    internal fun MainActivityViewModel.setRequestPermissionListener(requestPermissionNew: (String) -> Unit) {
         requestPermission = requestPermissionNew
     }
 
-    internal fun onGrantedPermission() {
+    internal fun MainActivityViewModel.onGrantedPermission() {
         grantedPermission()
     }
 

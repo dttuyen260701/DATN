@@ -46,23 +46,25 @@ internal fun ToolbarView(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = onLeftIconClick,
-            modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(1f, false)
-                .padding(PADDING_VIEW.dp),
-            enabled = (leftIcon != null)
-        ) {
-            leftIcon?.run {
-                BaseIcon(
-                    icon = this,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(PADDING_ICON.dp),
-                    contentDescription = null,
-                    tint = Color.White
-                )
+        ButtonUnRepeating(onLeftIconClick) {
+            IconButton(
+                onClick = it,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1f, false)
+                    .padding(PADDING_VIEW.dp),
+                enabled = (leftIcon != null)
+            ) {
+                leftIcon?.run {
+                    BaseIcon(
+                        icon = this,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(PADDING_ICON.dp),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
             }
         }
 
@@ -72,23 +74,25 @@ internal fun ToolbarView(
             color = Color.White
         )
 
-        IconButton(
-            onClick = onRightIconClick,
-            modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(1f, false)
-                .padding(PADDING_VIEW.dp),
-            enabled = (rightIcon != null)
-        ) {
-            rightIcon?.run {
-                BaseIcon(
-                    icon = this,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(PADDING_ICON.dp),
-                    contentDescription = null,
-                    tint = Color.White
-                )
+        ButtonUnRepeating(onRightIconClick) {
+            IconButton(
+                onClick = it,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1f, false)
+                    .padding(PADDING_VIEW.dp),
+                enabled = (rightIcon != null)
+            ) {
+                rightIcon?.run {
+                    BaseIcon(
+                        icon = this,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(PADDING_ICON.dp),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
             }
         }
     }

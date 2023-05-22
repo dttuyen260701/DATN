@@ -1,11 +1,17 @@
 package com.example.realestateapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.realestateapp.ui.home.navigation.*
 import com.example.realestateapp.ui.notification.navigation.notificationScreen
+import com.example.realestateapp.ui.pickaddress.navigation.navigateToPickAddress
+import com.example.realestateapp.ui.pickaddress.navigation.pickAddressScreen
+import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
 import com.example.realestateapp.ui.post.navigation.postScreen
 import com.example.realestateapp.ui.setting.navigation.*
 
@@ -37,6 +43,12 @@ fun RealEstateNavHost(
             },
             onBackClick = {
                 navController.popBackStack()
+            },
+            onClickProfile = {
+                navController.navigateToProfile()
+            },
+            navigateToPickAddress = {
+                navController.navigateToPickAddress()
             }
         )
         postScreen()
@@ -78,6 +90,17 @@ fun RealEstateNavHost(
                 navController.navigateToHome()
             }
         )
+        pickAddressScreen(
+            onPickAddressSuccess = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(searchAddressKey, it)
+                navController.popBackStack()
+            },
+            onBackClick = {
+                navController.popBackStack()
+            }
+        )
     }
 }
 
@@ -94,4 +117,13 @@ fun NavHostController.navigateSingleTopTo(
     launchSingleTop = true
     restoreState = true
     beforeNavigated.invoke()
+}
+
+@Composable
+fun <T> NavBackStackEntry.getBackEntryData(key: String): T? {
+    val data: State<T?> = savedStateHandle
+        .getLiveData<T>(key)
+        .observeAsState()
+    savedStateHandle.remove<T>(key)
+    return data.value
 }
