@@ -26,11 +26,16 @@ class Constants {
         const val KEY_PASSWORD = "password"
     }
 
+    object DefaultField {
+        const val FIELD_ADDRESS = "address"
+    }
+
     object PermissionTitle {
         const val PHONE = "Gọi điện thoại"
     }
 
     object DefaultValue {
+        const val ALPHA_TITLE = 0.8f
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24
         const val TOOLBAR_HEIGHT = 56
@@ -48,7 +53,7 @@ class Constants {
         const val TRAILING_ICON_PADDING = 17
         const val BORDER_WIDTH = 4
         const val WARNING_TEXT_SIZE = 10
-        const val ALPHA_HINT_COLOR = 0.7f
+        const val ALPHA_HINT_COLOR = 0.5f
         const val TWEEN_ANIMATION_TIME = 300
         const val CLICK_BUTTON_TIME = 500L
         const val MAP_INSTALL_REQUEST = "Vui lòng cài đặt Google Map!"

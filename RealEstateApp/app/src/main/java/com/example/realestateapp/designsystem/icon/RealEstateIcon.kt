@@ -59,6 +59,9 @@ object RealEstateIcon {
     const val DropDownBig = R.drawable.ic_drop_down_big
     const val Clear = R.drawable.ic_cancel
     const val TargetLocation = R.drawable.ic_target_location
+    const val City = R.drawable.ic_city
+    const val District = R.drawable.ic_district
+    const val Ward = R.drawable.ic_ward
 }
 
 /**

@@ -85,4 +85,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if(viewModel.getDialogType().value is TypeDialog.ChoiceDataDialog)
+            viewModel.getDialogType().value = TypeDialog.Hide
+        else {
+            super.onBackPressed()
+        }
+    }
 }

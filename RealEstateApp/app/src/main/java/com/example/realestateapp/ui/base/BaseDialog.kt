@@ -1,6 +1,7 @@
 package com.example.realestateapp.ui.base
 
 import androidx.compose.runtime.Composable
+import com.example.realestateapp.designsystem.components.DialogChoiceData
 import com.example.realestateapp.designsystem.components.DialogConfirm
 import com.example.realestateapp.designsystem.components.DialogMessage
 
@@ -37,6 +38,15 @@ internal fun BaseDialog(
                 positiveBtnText = dialog.positiveBtnText,
                 onBtnPositiveClick = dialog.onBtnPositiveClick,
                 onDismissDialog = onDismissDialog
+            )
+        }
+        is TypeDialog.ChoiceDataDialog -> {
+            DialogChoiceData(
+                onDismissDialog = onDismissDialog,
+                isLoading = dialog.isLoading,
+                title = dialog.title,
+                filter = dialog.filter,
+                onFilterChange = dialog.onFilterChange
             )
         }
         else -> {}

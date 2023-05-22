@@ -39,19 +39,23 @@ class SearchViewModel @Inject constructor(
         mutableStateListOf(
             ItemChoose(
                 id = SearchOption.LATEST.option,
-                name = application.getString(R.string.latestSortTitle)
+                name = application.getString(R.string.latestSortTitle),
+                score = -1
             ),
             ItemChoose(
                 id = SearchOption.MOST_VIEW.option,
-                name = application.getString(R.string.viewSortTitle)
+                name = application.getString(R.string.viewSortTitle),
+                score = -2
             ),
             ItemChoose(
                 id = SearchOption.HIGHEST_PRICE.option,
-                name = application.getString(R.string.highestPriceSortTitle)
+                name = application.getString(R.string.highestPriceSortTitle),
+                score = -3
             ),
             ItemChoose(
                 id = SearchOption.LOWEST_PRICE.option,
-                name = application.getString(R.string.lowestPriceSortTitle)
+                name = application.getString(R.string.lowestPriceSortTitle),
+                score = -4
             )
         )
 

@@ -33,12 +33,13 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
+import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
-import com.example.realestateapp.util.Constants.DefaultValue.SELECT_BOX_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 
@@ -87,7 +88,7 @@ internal fun SearchRoute(
             onClearData = remember {
                 {
                     when (it) {
-                        KEY_ADDRESS -> {
+                        FIELD_ADDRESS -> {
                             addressDetailDisplay = ""
                         }
                         else -> {}
@@ -185,7 +186,7 @@ internal fun SearchScreen(
     onBackClick: () -> Unit,
     navigateToPickAddress: () -> Unit,
     addressDetail: String,
-    onClearData: (Int) -> Unit,
+    onClearData: (String) -> Unit,
     onSearchClick: () -> Unit,
     isShowSearchOption: Boolean,
     onTrainingIconTextClick: () -> Unit,
@@ -276,7 +277,7 @@ internal fun SearchScreen(
                         text = stringResource(id = R.string.typesTitle),
                         style = RealEstateTypography.body1.copy(
                             fontSize = 13.sp,
-                            color = RealEstateAppTheme.colors.primary.copy(0.8f),
+                            color = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
                             textAlign = TextAlign.Start
                         ),
                         modifier = Modifier
@@ -289,26 +290,15 @@ internal fun SearchScreen(
                         modifier = Modifier
                     )
                     Spacing(MARGIN_VIEW)
-                    Text(
-                        text = stringResource(id = R.string.addressTitle),
-                        style = RealEstateTypography.body1.copy(
-                            fontSize = 13.sp,
-                            color = RealEstateAppTheme.colors.primary.copy(0.8f),
-                            textAlign = TextAlign.Start
-                        ),
-                        modifier = Modifier
-                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
-                    )
-                    Spacing(PADDING_VIEW)
                     ComboBox(
                         modifier = Modifier
-                            .height(SELECT_BOX_HEIGHT.dp)
                             .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
                         onItemClick = navigateToPickAddress,
                         leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Location),
+                        title = stringResource(id = R.string.addressTitle),
                         value = addressDetail,
                         hint = stringResource(id = R.string.addressHint),
-                        onClearData = { onClearData(KEY_ADDRESS) }
+                        onClearData = { onClearData(FIELD_ADDRESS) }
                     )
                     Spacing(MARGIN_VIEW)
 
@@ -317,7 +307,7 @@ internal fun SearchScreen(
                     text = stringResource(id = R.string.sortTitle),
                     style = RealEstateTypography.body1.copy(
                         fontSize = 13.sp,
-                        color = RealEstateAppTheme.colors.primary.copy(0.8f),
+                        color = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -421,5 +411,3 @@ internal fun SearchScreen(
         }
     ) {}
 }
-
-const val KEY_ADDRESS = 1

@@ -75,6 +75,12 @@
 
     <!--PickAddressScreen-->
     <string name="pickAddressTitle">Chọn vị trí</string>
+    <string name="cityTitle">Thành phố/Tỉnh</string>
+    <string name="districtTitle">Quận/Huyện</string>
+    <string name="wardTitle">Phường/Xã</string>
+    <string name="streetTitle">Đường</string>
+    <string name="pleaseChoiceHint">Vui lòng chọn %s</string>
+    <string name="confirmTitle">Xác nhận</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
@@ -88,5 +94,6 @@
     <string name="errorDialogTitle">Lỗi</string>
     <string name="dialogBackBtn">Trở về</string>
     <string name="dialogYesBtn">Có</string>
+    <string name="hintSearchTitle">Tìm kiếm %s</string>
 
 </resources>

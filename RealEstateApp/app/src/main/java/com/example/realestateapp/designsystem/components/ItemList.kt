@@ -35,6 +35,7 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.extension.formatToMoney
 import com.example.realestateapp.extension.formatToUnit
 import com.example.realestateapp.ui.base.BaseIcon
+import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -187,7 +188,7 @@ internal fun ItemRealEstate(
                 text = address,
                 style = RealEstateTypography.body1.copy(
                     fontSize = 12.sp,
-                    color = Color.Black.copy(0.8f),
+                    color = Color.Black.copy(ALPHA_TITLE),
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
@@ -291,6 +292,27 @@ internal fun ItemRealEstate(
     }
 }
 
+@Composable
+internal fun ItemChoiceDialog(
+    modifier: Modifier = Modifier,
+    item: ItemChoose,
+    textColor: Color = RealEstateAppTheme.colors.primary,
+) {
+    item.run {
+        Row(
+            modifier = modifier
+                .padding(vertical = MARGIN_VIEW.dp)
+        ) {
+            Text(
+                text = name,
+                style = RealEstateTypography.body1.copy(
+                    color = textColor
+                )
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun PreviewItemRealEstate() {
@@ -316,7 +338,7 @@ private fun PreviewItemRealEstate() {
 @Preview
 @Composable
 private fun PreviewItemType() {
-    var item = ItemChoose(2, "Test")
+    var item = ItemChoose(2, "Test", -1)
     ItemType(item = item, onItemClick = {
         item = it.copy(isSelected = !it.isSelected)
     })

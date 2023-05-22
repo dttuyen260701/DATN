@@ -42,6 +42,7 @@ import com.example.realestateapp.extension.formatToMoney
 import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.extension.openMap
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.BOTTOM_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -352,7 +353,7 @@ internal fun RealEstateDetailScreen(
                     text = address,
                     style = RealEstateTypography.body1.copy(
                         fontSize = 13.sp,
-                        color = Color.Black.copy(0.8f),
+                        color = Color.Black.copy(ALPHA_TITLE),
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -557,9 +558,9 @@ internal fun RealEstateDetailScreen(
                 TextIcon(
                     text = ownerName ?: "",
                     icon = AppIcon.DrawableResourceIcon(RealEstateIcon.User),
-                    textColor = Color.Black.copy(0.8f),
+                    textColor = Color.Black.copy(ALPHA_TITLE),
                     size = 13,
-                    iconTint = Color.Black.copy(0.8f),
+                    iconTint = Color.Black.copy(ALPHA_TITLE),
                     modifier = Modifier
                         .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
                         .constrainAs(tvNameUser) {
@@ -569,9 +570,9 @@ internal fun RealEstateDetailScreen(
                 TextIcon(
                     text = if (user != null) ownerPhone ?: "" else "********",
                     icon = AppIcon.ImageVectorIcon(RealEstateIcon.PhoneOutLine),
-                    textColor = Color.Black.copy(0.8f),
+                    textColor = Color.Black.copy(ALPHA_TITLE),
                     size = 13,
-                    iconTint = Color.Black.copy(0.8f),
+                    iconTint = Color.Black.copy(ALPHA_TITLE),
                     modifier = Modifier
                         .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
                         .constrainAs(tvPhoneUser) {

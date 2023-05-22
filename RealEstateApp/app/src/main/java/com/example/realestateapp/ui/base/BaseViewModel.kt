@@ -21,18 +21,25 @@ import kotlinx.coroutines.flow.Flow
 sealed interface TypeDialog {
     object Hide : TypeDialog
 
-    class ErrorDialog(val message: String) : TypeDialog
+    data class ErrorDialog(val message: String) : TypeDialog
 
-    class MessageDialog(val title: String, val message: String, val btnText: String) :
+    data class MessageDialog(val title: String, val message: String, val btnText: String) :
         TypeDialog
 
-    class ConfirmDialog(
+    data class ConfirmDialog(
         val title: String? = null,
         val message: String,
         val negativeBtnText: String,
         val onBtnNegativeClick: () -> Unit,
         val positiveBtnText: String,
         val onBtnPositiveClick: () -> Unit,
+    ) : TypeDialog
+
+    data class ChoiceDataDialog(
+        val isLoading: Boolean,
+        val title: String,
+        val filter: String,
+        val onFilterChange: (String) -> Unit
     ) : TypeDialog
 }
 
