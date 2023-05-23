@@ -99,7 +99,8 @@ internal fun HomeRoute(
             }
         }
 
-        HomeScreen(modifier = modifier,
+        HomeScreen(
+            modifier = modifier,
             uiState = uiState,
             user = user,
             types = types,
@@ -136,86 +137,91 @@ internal fun HomeScreen(
     navigateToSearch: (SearchOption) -> Unit,
     navigateProfile: () -> Unit
 ) {
-    BaseScreen(modifier = modifier, paddingHorizontal = 0, toolbar = {
-        user?.run {
-            Spacing(MARGIN_DIFFERENT_VIEW)
-            ConstraintLayout(
-                modifier = Modifier
-                    .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
-                    .background(Color.Transparent)
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-            ) {
-                val (imgUser, tvWelcome, tvName) = createRefs()
-                val verticalGuideLine = createGuidelineFromTop(0.5f)
-                Text(text = stringResource(id = R.string.welcomeTitle),
-                    style = RealEstateTypography.h1.copy(
-                        fontSize = 23.sp, color = Color.Black
-                    ),
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .wrapContentWidth()
-                        .constrainAs(tvWelcome) {
-                            start.linkTo(parent.start)
-                            linkTo(parent.top, verticalGuideLine)
-                        })
-                Text(text = fullName, style = RealEstateTypography.h1.copy(
-                    fontSize = 25.sp,
-                    color = RealEstateAppTheme.colors.primary,
-                    fontStyle = FontStyle.Italic
-                ), modifier = Modifier
-                    .wrapContentSize()
-                    .constrainAs(tvName) {
-                        start.linkTo(parent.start)
-                        linkTo(verticalGuideLine, parent.bottom)
-                    })
-                ImageProfile(size = 50,
-                    model = user.imgUrl ?: "",
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(1f, true)
-                        .constrainAs(imgUser) {
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .clickable { navigateProfile() }
-                )
-            }
-        }
-        Spacing(MARGIN_DIFFERENT_VIEW)
-        EditTextFullIconBorderRadius(
-            modifier = Modifier.padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
-            onTextChange = {},
-            hint = stringResource(id = R.string.searchHint),
-            leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Search),
-            borderColor = RealEstateAppTheme.colors.primary,
-            readOnly = true,
-            leadingIconColor = RealEstateAppTheme.colors.primary,
-            onLeadingIconClick = {
-                navigateToSearch(SearchOption.LATEST)
-            },
-            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
-            trailingIconColor = RealEstateAppTheme.colors.primary,
-            onTrailingIconClick = {
-                navigateToSearch(SearchOption.LATEST)
-            },
-            onItemClick = {
-                navigateToSearch(SearchOption.LATEST)
-            }
-        )
-        types.let {
-            if (it.size > 0) {
+    BaseScreen(
+        modifier = modifier,
+        paddingHorizontal = 0,
+        verticalArrangement = Arrangement.Top,
+        toolbar = {
+            user?.run {
                 Spacing(MARGIN_DIFFERENT_VIEW)
-                ListTypes(
-                    types = types,
-                    onItemClick = onItemTypeClick
-                )
+                ConstraintLayout(
+                    modifier = Modifier
+                        .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                        .background(Color.Transparent)
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                ) {
+                    val (imgUser, tvWelcome, tvName) = createRefs()
+                    val verticalGuideLine = createGuidelineFromTop(0.5f)
+                    Text(text = stringResource(id = R.string.welcomeTitle),
+                        style = RealEstateTypography.h1.copy(
+                            fontSize = 23.sp, color = Color.Black
+                        ),
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .wrapContentWidth()
+                            .constrainAs(tvWelcome) {
+                                start.linkTo(parent.start)
+                                linkTo(parent.top, verticalGuideLine)
+                            })
+                    Text(text = fullName, style = RealEstateTypography.h1.copy(
+                        fontSize = 25.sp,
+                        color = RealEstateAppTheme.colors.primary,
+                        fontStyle = FontStyle.Italic
+                    ), modifier = Modifier
+                        .wrapContentSize()
+                        .constrainAs(tvName) {
+                            start.linkTo(parent.start)
+                            linkTo(verticalGuideLine, parent.bottom)
+                        })
+                    ImageProfile(size = 50,
+                        model = user.imgUrl ?: "",
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(1f, true)
+                            .constrainAs(imgUser) {
+                                end.linkTo(parent.end)
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                            }
+                            .clickable { navigateProfile() }
+                    )
+                }
             }
+            Spacing(MARGIN_DIFFERENT_VIEW)
+            EditTextFullIconBorderRadius(
+                modifier = Modifier.padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
+                onTextChange = {},
+                hint = stringResource(id = R.string.searchHint),
+                leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Search),
+                borderColor = RealEstateAppTheme.colors.primary,
+                readOnly = true,
+                leadingIconColor = RealEstateAppTheme.colors.primary,
+                onLeadingIconClick = {
+                    navigateToSearch(SearchOption.LATEST)
+                },
+                trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
+                trailingIconColor = RealEstateAppTheme.colors.primary,
+                onTrailingIconClick = {
+                    navigateToSearch(SearchOption.LATEST)
+                },
+                onItemClick = {
+                    navigateToSearch(SearchOption.LATEST)
+                }
+            )
+            types.let {
+                if (it.size > 0) {
+                    Spacing(MARGIN_DIFFERENT_VIEW)
+                    ListTypes(
+                        types = types,
+                        onItemClick = onItemTypeClick
+                    )
+                }
+            }
+            Spacing(MARGIN_VIEW)
+            BorderLine()
         }
-        Spacing(MARGIN_VIEW)
-        BorderLine()
-    }) {
+    ) {
         realEstatesLatest.let {
             if (it.size > 0) {
                 Spacing(MARGIN_VIEW)

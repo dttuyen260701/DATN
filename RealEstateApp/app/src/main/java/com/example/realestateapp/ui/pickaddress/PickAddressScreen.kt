@@ -26,7 +26,7 @@ import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DISTRICT
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_WARD
-import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_CHOSEN
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 
@@ -45,31 +45,46 @@ internal fun PickAddressRoute(
     viewModel.run {
         val districts = remember { districtsData }
         val wards = remember { wardsData }
+        val streets = remember { streetsData }
+        var districtChosen by remember { PickAddressViewModel.districtChosen }
+        var wardChosen by remember { PickAddressViewModel.wardChosen }
+        var streetChosen by remember { PickAddressViewModel.streetChosen }
         val uiState by remember { uiState }
-        val isLoadingDialog by remember {
-            derivedStateOf {
-                uiState is PickAddressUiState.Loading
-            }
+        var isLoadingDialog by remember {
+            mutableStateOf(false)
         }
-
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is PickAddressUiState.InitView -> {
 
                 }
+                is PickAddressUiState.Loading -> {
+                    isLoadingDialog = true
+                }
                 is PickAddressUiState.GetDistrictSuccess -> {
+                    isLoadingDialog = false
                     districts.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetDistrictSuccess).data)
                     }
                 }
                 is PickAddressUiState.GetWardSuccess -> {
+                    isLoadingDialog = false
                     wards.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetWardSuccess).data)
                     }
                 }
-                else -> {}
+                is PickAddressUiState.GetStreetSuccess -> {
+                    isLoadingDialog = false
+                    streets.run {
+                        clear()
+                        addAll((uiState as PickAddressUiState.GetStreetSuccess).data)
+                    }
+                }
+                else -> {
+                    isLoadingDialog = false
+                }
             }
         }
 
@@ -81,34 +96,36 @@ internal fun PickAddressRoute(
                 {
                     var title = ""
                     var data = mutableListOf<ItemChoose>()
-                    var loadData: (String) -> Unit = { _ -> }
+                    var loadData: (String, () -> Unit) -> Unit = { _, _ -> }
                     var onItemClick: (ItemChoose) -> Unit = { _ -> }
                     var isValid = true
                     when (it) {
                         FIELD_DISTRICT -> {
                             title = context.getString(R.string.districtTitle)
-                            data = districtsData
+                            data = districts
                             onItemClick = { itemChoose ->
                                 onChoiceData(
-                                    data = districtsData,
                                     itemChoose = itemChoose,
                                     key = it
                                 )
+                                showDialog(dialog = TypeDialog.Hide)
+                                districts.clear()
                             }
-                            loadData = ::getDistrictData
+                            loadData = ::getDistricts
                         }
                         FIELD_WARD -> {
-                            if (PickAddressViewModel.districtIdChosen != DEFAULT_ID_CHOSEN) {
+                            if (districtChosen != DEFAULT_ITEM_CHOSEN) {
                                 title = context.getString(R.string.wardTitle)
-                                data = wardsData
+                                data = wards
                                 onItemClick = { itemChoose ->
                                     onChoiceData(
-                                        data = wardsData,
                                         itemChoose = itemChoose,
                                         key = it
                                     )
+                                    showDialog(dialog = TypeDialog.Hide)
+                                    wards.clear()
                                 }
-                                loadData = ::getWardData
+                                loadData = ::getWards
                             } else {
                                 context.run {
                                     makeToast(
@@ -122,7 +139,17 @@ internal fun PickAddressRoute(
                             }
                         }
                         FIELD_STREET -> {
-
+                            title = context.getString(R.string.streetTitle)
+                            data = streets
+                            onItemClick = { itemChoose ->
+                                onChoiceData(
+                                    itemChoose = itemChoose,
+                                    key = it
+                                )
+                                showDialog(dialog = TypeDialog.Hide)
+                                streets.clear()
+                            }
+                            loadData = ::getStreets
                         }
                         else -> {}
                     }
@@ -133,6 +160,7 @@ internal fun PickAddressRoute(
                                 data = data,
                                 loadData = loadData,
                                 onItemClick = onItemClick,
+                                isEnableSearchFromApi = (it == FIELD_STREET),
                                 isLoadingDialog = isLoadingDialog
                             )
                         )
@@ -140,8 +168,38 @@ internal fun PickAddressRoute(
                 }
             },
             onBtnConfirmClick = remember {
-                {}
+                {
+                    val streetName =
+                        if (streetChosen != DEFAULT_ITEM_CHOSEN) "${streetChosen.name}, " else ""
+                    val wardName =
+                        if (wardChosen != DEFAULT_ITEM_CHOSEN) "${wardChosen.name}, " else ""
+                    onPickAddressSuccess(
+                        "$streetName$wardName${districtChosen.name}"
+                    )
+                }
             },
+            onClearData = remember {
+                {
+                    when (it) {
+                        FIELD_DISTRICT -> {
+                            districtChosen = DEFAULT_ITEM_CHOSEN
+                            wardChosen = DEFAULT_ITEM_CHOSEN
+                            streetChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_WARD -> {
+                            wardChosen = DEFAULT_ITEM_CHOSEN
+                            streetChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_STREET -> {
+                            streetChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        else -> {}
+                    }
+                }
+            },
+            districtChosen = districtChosen,
+            wardChosen = wardChosen,
+            streetChosen = streetChosen
         )
     }
 }
@@ -149,7 +207,7 @@ internal fun PickAddressRoute(
 private fun showDialogChoiceData(
     title: String,
     data: MutableList<ItemChoose>,
-    loadData: (String) -> Unit,
+    loadData: (String, () -> Unit) -> Unit,
     onItemClick: (ItemChoose) -> Unit,
     isEnableSearchFromApi: Boolean = false,
     isLoadingDialog: Boolean
@@ -170,7 +228,11 @@ internal fun PickAddressScreen(
     onBackClick: () -> Unit,
     onComboBoxClick: (String) -> Unit,
     enableBtnConfirm: Boolean,
-    onBtnConfirmClick: () -> Unit
+    onBtnConfirmClick: () -> Unit,
+    onClearData: (String) -> Unit,
+    districtChosen: ItemChoose,
+    wardChosen: ItemChoose,
+    streetChosen: ItemChoose
 ) {
     BaseScreen(
         modifier = modifier,
@@ -207,12 +269,14 @@ internal fun PickAddressScreen(
             },
             leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.District),
             title = stringResource(id = R.string.districtTitle),
-            value = "",
+            value = districtChosen.name,
             hint = stringResource(
                 id = R.string.pleaseChoiceHint,
                 stringResource(id = R.string.districtTitle)
             ),
-            onClearData = { }
+            onClearData = {
+                onClearData(FIELD_DISTRICT)
+            }
         )
         Spacing(PADDING_HORIZONTAL_SCREEN)
         ComboBox(
@@ -222,25 +286,31 @@ internal fun PickAddressScreen(
             },
             leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Ward),
             title = stringResource(id = R.string.wardTitle),
-            value = "",
+            value = wardChosen.name,
             hint = stringResource(
                 id = R.string.pleaseChoiceHint,
                 stringResource(id = R.string.wardTitle)
             ),
-            onClearData = { }
+            onClearData = {
+                onClearData(FIELD_WARD)
+            }
         )
         Spacing(PADDING_HORIZONTAL_SCREEN)
         ComboBox(
             modifier = Modifier,
-            onItemClick = {},
+            onItemClick = {
+                onComboBoxClick(FIELD_STREET)
+            },
             leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.StreetInFront),
             title = stringResource(id = R.string.streetTitle),
-            value = "",
+            value = streetChosen.name,
             hint = stringResource(
                 id = R.string.pleaseChoiceHint,
                 stringResource(id = R.string.streetTitle)
             ),
-            onClearData = { }
+            onClearData = {
+                onClearData(FIELD_STREET)
+            }
         )
         Spacer(modifier = Modifier.weight(1f))
         ButtonRadius(

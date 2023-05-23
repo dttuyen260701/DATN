@@ -58,7 +58,7 @@ fun RealEstateApp(
         }
         BaseDialog(
             dialog = dialogType.value,
-            onDismissDialog = {
+            dismissDialog = {
                 viewModel.showDialog(
                     dialog = TypeDialog.Hide
                 )

@@ -32,6 +32,7 @@ import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
@@ -63,7 +64,11 @@ internal fun SearchRoute(
         val types = remember { typesData }
         var isShowSearchOption by remember { mutableStateOf(true) }
         val uiState by remember { uiState }
-        var addressDetailDisplay by remember { mutableStateOf(addressDetail) }
+        var addressDetailDisplay by remember { detailAddress }
+
+        if(addressDetail.trim().isNotEmpty()) {
+            addressDetailDisplay = addressDetail
+        }
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -90,6 +95,7 @@ internal fun SearchRoute(
                     when (it) {
                         FIELD_ADDRESS -> {
                             addressDetailDisplay = ""
+                            PickAddressViewModel.clearDataChosen()
                         }
                         else -> {}
                     }

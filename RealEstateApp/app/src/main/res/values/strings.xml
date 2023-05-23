@@ -81,6 +81,7 @@
     <string name="streetTitle">Đường</string>
     <string name="pleaseChoiceHint">Vui lòng chọn %s</string>
     <string name="confirmTitle">Xác nhận</string>
+    <string name="emptyTitle">Không tìm thấy dữ liệu.</string>
 
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>

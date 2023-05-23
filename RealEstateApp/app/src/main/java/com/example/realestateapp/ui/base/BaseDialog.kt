@@ -12,13 +12,13 @@ import com.example.realestateapp.designsystem.components.DialogMessage
 @Composable
 internal fun BaseDialog(
     dialog: TypeDialog,
-    onDismissDialog: () -> Unit
+    dismissDialog: () -> Unit
 ) {
     when (dialog) {
         is TypeDialog.ErrorDialog -> {
             DialogMessage(
                 message = dialog.message,
-                onDismissDialog = onDismissDialog
+                onDismissDialog = dismissDialog
             )
         }
         is TypeDialog.MessageDialog -> {
@@ -26,7 +26,7 @@ internal fun BaseDialog(
                 title = dialog.title,
                 message = dialog.message,
                 btnText = dialog.btnText,
-                onDismissDialog = onDismissDialog
+                onDismissDialog = dismissDialog
             )
         }
         is TypeDialog.ConfirmDialog -> {
@@ -37,13 +37,12 @@ internal fun BaseDialog(
                 onBtnNegativeClick = dialog.onBtnNegativeClick,
                 positiveBtnText = dialog.positiveBtnText,
                 onBtnPositiveClick = dialog.onBtnPositiveClick,
-                onDismissDialog = onDismissDialog
+                onDismissDialog = dismissDialog
             )
         }
         is TypeDialog.ChoiceDataDialog -> {
             DialogChoiceData(
-                onDismissDialog = onDismissDialog,
-                isLoading = dialog.isLoading,
+                onDismissDialog = dismissDialog,
                 title = dialog.title,
                 onItemClick = dialog.onItemClick,
                 isEnableSearchFromApi = dialog.isEnableSearchFromApi,

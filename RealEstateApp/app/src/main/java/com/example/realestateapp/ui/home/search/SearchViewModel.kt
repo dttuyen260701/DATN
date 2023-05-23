@@ -34,6 +34,7 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel<SearchUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(SearchUiState.InitView)
     internal var filter = mutableStateOf("")
+    internal var detailAddress = mutableStateOf("")
     internal var typesData = mutableStateListOf<ItemChoose>()
     internal var sortOptions =
         mutableStateListOf(

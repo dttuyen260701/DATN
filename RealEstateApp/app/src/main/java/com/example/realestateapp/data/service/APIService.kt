@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -62,5 +63,11 @@ interface APIService {
     @JvmSuppressWildcards
     suspend fun getWards(
         @Path("districtId") districtId: String
+    ): Response<ResponseAPI<MutableList<ItemChoose>>>
+
+    @GET("/api/Streets")
+    @JvmSuppressWildcards
+    suspend fun getStreets(
+        @Query("search") filter: String
     ): Response<ResponseAPI<MutableList<ItemChoose>>>
 }

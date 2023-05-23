@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +33,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.extension.setVisibility
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
@@ -199,14 +199,14 @@ internal fun DialogConfirm(
 internal fun DialogChoiceData(
     modifier: Modifier = Modifier,
     onDismissDialog: () -> Unit,
-    isLoading: Boolean,
     title: String,
     onItemClick: (ItemChoose) -> Unit,
-    loadData: (String) -> Unit,
+    loadData: (String, () -> Unit) -> Unit,
     isEnableSearchFromApi: Boolean = false,
     data: MutableList<ItemChoose>
 ) {
     var filter by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(true) }
     var dataSearch = data.filter { it.name.contains(filter) }
     Column(
         modifier = Modifier
@@ -217,12 +217,14 @@ internal fun DialogChoiceData(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LaunchedEffect(key1 = true) {
-            loadData(filter)
+            loadData(filter) {
+                isLoading = false
+            }
         }
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(0.dp, LocalConfiguration.current.screenHeightDp.dp * 0.7f)
+                .fillMaxHeight(0.7f)
                 .border(
                     BorderStroke(width = 1.dp, color = RealEstateAppTheme.colors.primary),
                     shape = RoundedCornerShape(
@@ -280,7 +282,9 @@ internal fun DialogChoiceData(
                 onTextChange = { textEdt ->
                     filter = textEdt
                     if (isEnableSearchFromApi) {
-                        loadData(filter)
+                        loadData(filter) {
+                            isLoading = false
+                        }
                     } else {
                         dataSearch = data.filter { it.name == filter }
                     }
@@ -299,30 +303,47 @@ internal fun DialogChoiceData(
                         width = Dimension.fillToConstraints
                     }
             )
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = (PADDING_HORIZONTAL_SCREEN * 2).dp)
-                    .constrainAs(lzItems) {
-                        top.linkTo(edtSearch.bottom, MARGIN_VIEW.dp)
-                    },
-                state = rememberLazyListState(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(
-                    bottom = if (dataSearch.isNotEmpty()) PADDING_HORIZONTAL_SCREEN.dp else 0.dp
-                ),
-            ) {
-                items(
-                    items = dataSearch,
-                    key = { keyData ->
-                        keyData.toString()
-                    },
-                ) { itemData ->
-                    ItemChoiceDialog(
-                        item = itemData,
-                        onItemClick = onItemClick
-                    )
+            if (dataSearch.isNotEmpty() || isLoading) {
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = (PADDING_HORIZONTAL_SCREEN * 2).dp)
+                        .constrainAs(lzItems) {
+                            top.linkTo(edtSearch.bottom, MARGIN_VIEW.dp)
+                        },
+                    state = rememberLazyListState(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(
+                        bottom = if (dataSearch.isNotEmpty()) PADDING_HORIZONTAL_SCREEN.dp else 0.dp
+                    ),
+                ) {
+                    items(
+                        items = dataSearch,
+                        key = { keyData ->
+                            keyData.toString()
+                        },
+                    ) { itemData ->
+                        ItemChoiceDialog(
+                            item = itemData,
+                            onItemClick = onItemClick
+                        )
+                    }
                 }
+            } else {
+                Text(
+                    text = stringResource(id = R.string.emptyTitle),
+                    style = RealEstateTypography.body1.copy(
+                        color = RealEstateAppTheme.colors.primary,
+                        textAlign = TextAlign.Center,
+                        fontSize = 14.sp
+                    ),
+                    modifier = Modifier
+                        .constrainAs(lzItems) {
+                            top.linkTo(edtSearch.bottom, MARGIN_VIEW.dp)
+                            width = Dimension.matchParent
+                            visibility = setVisibility(filter.trim().isNotEmpty())
+                        }
+                )
             }
 
             if (isLoading) {

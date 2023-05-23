@@ -1,5 +1,6 @@
 package com.example.realestateapp.util
 
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateDetail
 
 /**
@@ -38,7 +39,7 @@ class Constants {
     }
 
     object DefaultValue {
-        const val DEFAULT_ID_CHOSEN = -1
+        val DEFAULT_ITEM_CHOSEN = ItemChoose(-1, "", 1)
         const val ALPHA_TITLE = 0.8f
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24

@@ -148,4 +148,15 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun getStreets(
+        filter: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
+        return flow {
+            emit(
+                dataSource.getStreets(filter)
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

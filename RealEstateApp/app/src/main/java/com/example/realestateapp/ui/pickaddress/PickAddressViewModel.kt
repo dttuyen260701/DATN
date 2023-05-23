@@ -9,7 +9,7 @@ import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.Constants
-import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_CHOSEN
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,6 +28,8 @@ sealed class PickAddressUiState : UiState() {
     data class GetDistrictSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
 
     data class GetWardSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
+
+    data class GetStreetSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
 }
 
 @HiltViewModel
@@ -35,69 +37,97 @@ class PickAddressViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : BaseViewModel<PickAddressUiState>() {
     companion object {
-        internal var districtIdChosen: Int = DEFAULT_ID_CHOSEN
+        internal var districtChosen: MutableState<ItemChoose> = mutableStateOf(DEFAULT_ITEM_CHOSEN)
             private set
-        internal var wardIdChosen: Int = DEFAULT_ID_CHOSEN
+        internal var wardChosen: MutableState<ItemChoose> = mutableStateOf(DEFAULT_ITEM_CHOSEN)
             private set
-        internal var streetIdChosen: Int = DEFAULT_ID_CHOSEN
+        internal var streetChosen: MutableState<ItemChoose> = mutableStateOf(DEFAULT_ITEM_CHOSEN)
             private set
+
+        internal fun clearDataChosen() {
+            districtChosen.value = DEFAULT_ITEM_CHOSEN
+            wardChosen.value = DEFAULT_ITEM_CHOSEN
+            streetChosen.value = DEFAULT_ITEM_CHOSEN
+        }
     }
 
     override var uiState: MutableState<UiState> = mutableStateOf(PickAddressUiState.InitView)
     internal var districtsData = mutableStateListOf<ItemChoose>()
     internal var wardsData = mutableStateListOf<ItemChoose>()
+    internal var streetsData = mutableStateListOf<ItemChoose>()
 
-    internal fun getDistrictData(filter: String) {
+    internal fun getDistricts(filter: String, onDoneApi: () -> Unit) {
         uiState.value = PickAddressUiState.Loading
         viewModelScope.launch {
-            callAPIOnThread(funCallApis = mutableListOf(
-                appRepository.getTypes(),
-            ), apiSuccess = {
-                it.body.map { itemChoose ->
-                    itemChoose.isSelected = (itemChoose.id == districtIdChosen)
-                }.toMutableList()
-                uiState.value = PickAddressUiState.GetDistrictSuccess(it.body)
-            }, apiError = {
-                uiState.value = PickAddressUiState.Error
-            }, showDialog = false
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getDistricts(),
+                ), apiSuccess = {
+                    if (it.body.indexOf(districtChosen.value) != -1) {
+                        it.body[it.body.indexOf(districtChosen.value)].isSelected = true
+                    }
+                    uiState.value = PickAddressUiState.GetDistrictSuccess(it.body)
+                }, apiError = {
+                    uiState.value = PickAddressUiState.Error
+                },
+                onDoneCallApi = onDoneApi,
+                showDialog = false
             )
         }
     }
 
-    internal fun getWardData(filter: String) {
+    internal fun getWards(filter: String, onDoneApi: () -> Unit) {
         uiState.value = PickAddressUiState.Loading
         viewModelScope.launch {
-            callAPIOnThread(funCallApis = mutableListOf(
-                appRepository.getWards(districtId = districtIdChosen.toString()),
-            ), apiSuccess = {
-                uiState.value = PickAddressUiState.GetDistrictSuccess(it.body)
-            }, apiError = {
-                uiState.value = PickAddressUiState.Error
-            }, showDialog = false
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getWards(districtId = districtChosen.value.id.toString()),
+                ), apiSuccess = {
+                    if (it.body.indexOf(wardChosen.value) != -1) {
+                        it.body[it.body.indexOf(wardChosen.value)].isSelected = true
+                    }
+                    uiState.value = PickAddressUiState.GetWardSuccess(it.body)
+                }, apiError = {
+                    uiState.value = PickAddressUiState.Error
+                },
+                onDoneCallApi = onDoneApi,
+                showDialog = false
             )
         }
     }
 
-    internal fun onChoiceData(data: MutableList<ItemChoose>, itemChoose: ItemChoose, key: String) {
+    internal fun getStreets(filter: String, onDoneApi: () -> Unit) {
+        uiState.value = PickAddressUiState.Loading
+        viewModelScope.launch {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getStreets(filter = filter),
+                ), apiSuccess = {
+                    if (it.body.indexOf(streetChosen.value) != -1) {
+                        it.body[it.body.indexOf(streetChosen.value)].isSelected = true
+                    }
+                    uiState.value = PickAddressUiState.GetStreetSuccess(it.body)
+                }, apiError = {
+                    uiState.value = PickAddressUiState.Error
+                },
+                onDoneCallApi = onDoneApi,
+                showDialog = false
+            )
+        }
+    }
+
+    internal fun onChoiceData(itemChoose: ItemChoose, key: String) {
         when (key) {
             Constants.DefaultField.FIELD_DISTRICT -> {
-                districtIdChosen = itemChoose.id
+                districtChosen.value = itemChoose
             }
             Constants.DefaultField.FIELD_WARD -> {
-                wardIdChosen = itemChoose.id
+                wardChosen.value = itemChoose
             }
             Constants.DefaultField.FIELD_STREET -> {
-                streetIdChosen = itemChoose.id
+                streetChosen.value = itemChoose
             }
             else -> {}
-        }
-        val oldIndex = data.indexOfFirst { it.isSelected }
-        val newIndex = data.indexOf(itemChoose)
-        if (oldIndex != newIndex) {
-            if (oldIndex != -1)
-                data[oldIndex] =
-                    data[oldIndex].copy(isSelected = false)
-            data[newIndex] = data[newIndex].copy(isSelected = true)
         }
     }
 }

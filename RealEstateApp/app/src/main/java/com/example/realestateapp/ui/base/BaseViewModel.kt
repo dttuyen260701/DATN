@@ -39,7 +39,7 @@ sealed interface TypeDialog {
     data class ChoiceDataDialog(
         val isLoading: Boolean,
         val title: String,
-        val loadData: (String) -> Unit,
+        val loadData: (String, () -> Unit) -> Unit,
         val isEnableSearchFromApi: Boolean,
         val onItemClick: (ItemChoose) -> Unit,
         val data: MutableList<ItemChoose>
