@@ -28,6 +28,9 @@ class Constants {
 
     object DefaultField {
         const val FIELD_ADDRESS = "address"
+        const val FIELD_DISTRICT = "district"
+        const val FIELD_WARD = "ward"
+        const val FIELD_STREET = "street"
     }
 
     object PermissionTitle {
@@ -35,6 +38,7 @@ class Constants {
     }
 
     object DefaultValue {
+        const val DEFAULT_ID_CHOSEN = -1
         const val ALPHA_TITLE = 0.8f
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24

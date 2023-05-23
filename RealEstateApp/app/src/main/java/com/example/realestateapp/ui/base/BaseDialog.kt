@@ -45,8 +45,10 @@ internal fun BaseDialog(
                 onDismissDialog = onDismissDialog,
                 isLoading = dialog.isLoading,
                 title = dialog.title,
-                filter = dialog.filter,
-                onFilterChange = dialog.onFilterChange
+                onItemClick = dialog.onItemClick,
+                isEnableSearchFromApi = dialog.isEnableSearchFromApi,
+                loadData = dialog.loadData,
+                data = dialog.data
             )
         }
         else -> {}

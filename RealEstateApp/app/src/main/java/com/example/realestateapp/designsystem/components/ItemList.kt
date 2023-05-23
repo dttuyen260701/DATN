@@ -5,8 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
+import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -297,17 +300,39 @@ internal fun ItemChoiceDialog(
     modifier: Modifier = Modifier,
     item: ItemChoose,
     textColor: Color = RealEstateAppTheme.colors.primary,
+    onItemClick: (ItemChoose) -> Unit
 ) {
     item.run {
         Row(
             modifier = modifier
+                .fillMaxWidth()
+                .clickable { onItemClick(item) }
                 .padding(vertical = MARGIN_VIEW.dp)
         ) {
             Text(
                 text = name,
                 style = RealEstateTypography.body1.copy(
                     color = textColor
-                )
+                ),
+                modifier = Modifier
+                    .weight(1f)
+            )
+            RadioButton(
+                selected = item.isSelected,
+                onClick = null,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = RealEstateAppTheme.colors.primary,
+                    unselectedColor = RealEstateAppTheme.colors.bgScrPrimaryLight,
+                    disabledColor = Color.Gray
+                ),
+                modifier = Modifier
+                    .border(
+                        border = BorderStroke(
+                            width = 2.dp,
+                            color = RealEstateAppTheme.colors.primary
+                        ),
+                        shape = CircleShape
+                    )
             )
         }
     }

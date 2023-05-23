@@ -5,16 +5,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,6 +29,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.realestateapp.R
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
@@ -196,21 +201,28 @@ internal fun DialogChoiceData(
     onDismissDialog: () -> Unit,
     isLoading: Boolean,
     title: String,
-    filter: String,
-    onFilterChange: (String) -> Unit
+    onItemClick: (ItemChoose) -> Unit,
+    loadData: (String) -> Unit,
+    isEnableSearchFromApi: Boolean = false,
+    data: MutableList<ItemChoose>
 ) {
+    var filter by remember { mutableStateOf("") }
+    var dataSearch = data.filter { it.name.contains(filter) }
     Column(
         modifier = Modifier
             .background(Color.Black.copy(alpha = 0.3f))
             .fillMaxSize()
             .clickable { onDismissDialog() },
-        verticalArrangement = Arrangement.Bottom
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        LaunchedEffect(key1 = true) {
+            loadData(filter)
+        }
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.7f)
-//                .heightIn(0.dp, LocalConfiguration.current.screenHeightDp.dp * 0.7f)
+                .heightIn(0.dp, LocalConfiguration.current.screenHeightDp.dp * 0.7f)
                 .border(
                     BorderStroke(width = 1.dp, color = RealEstateAppTheme.colors.primary),
                     shape = RoundedCornerShape(
@@ -226,15 +238,16 @@ internal fun DialogChoiceData(
                     )
                 )
                 .then(modifier)
-                .padding(top = MARGIN_VIEW.dp)
-                .clickable { }
+                .padding(vertical = MARGIN_VIEW.dp)
+                .clickable(enabled = false) { }
         ) {
-            val (tvTitle, btnClose, edtSearch, lzItems) = createRefs()
+            val (tvTitle, btnClose, edtSearch, lzItems, prgBar) = createRefs()
 
             Text(
                 text = title,
                 style = RealEstateTypography.body1.copy(
-                    color = RealEstateAppTheme.colors.primary
+                    color = RealEstateAppTheme.colors.primary,
+                    fontSize = 14.sp
                 ),
                 modifier = Modifier
                     .constrainAs(tvTitle) {
@@ -264,7 +277,14 @@ internal fun DialogChoiceData(
             }
             EditTextFullIconBorderRadius(
                 text = filter,
-                onTextChange = onFilterChange,
+                onTextChange = { textEdt ->
+                    filter = textEdt
+                    if (isEnableSearchFromApi) {
+                        loadData(filter)
+                    } else {
+                        dataSearch = data.filter { it.name == filter }
+                    }
+                },
                 hint = stringResource(id = R.string.hintSearchTitle, title),
                 leadingIcon = AppIcon.ImageVectorIcon(RealEstateIcon.Search),
                 readOnly = false,
@@ -275,17 +295,51 @@ internal fun DialogChoiceData(
                 modifier = Modifier
                     .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
                     .constrainAs(edtSearch) {
-                        top.linkTo(parent.top, MARGIN_DIFFERENT_VIEW.dp)
+                        top.linkTo(tvTitle.bottom, MARGIN_DIFFERENT_VIEW.dp)
                         width = Dimension.fillToConstraints
                     }
             )
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = (PADDING_HORIZONTAL_SCREEN * 2).dp)
+                    .constrainAs(lzItems) {
+                        top.linkTo(edtSearch.bottom, MARGIN_VIEW.dp)
+                    },
+                state = rememberLazyListState(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(
+                    bottom = if (dataSearch.isNotEmpty()) PADDING_HORIZONTAL_SCREEN.dp else 0.dp
+                ),
+            ) {
+                items(
+                    items = dataSearch,
+                    key = { keyData ->
+                        keyData.toString()
+                    },
+                ) { itemData ->
+                    ItemChoiceDialog(
+                        item = itemData,
+                        onItemClick = onItemClick
+                    )
+                }
+            }
 
-        }
-
-        if (isLoading) {
-            CircularProgressIndicator(
-                color = RealEstateAppTheme.colors.progressBar
-            )
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = RealEstateAppTheme.colors.progressBar,
+                    modifier = Modifier
+                        .constrainAs(prgBar) {
+                            linkTo(
+                                top = lzItems.bottom,
+                                bottom = parent.bottom,
+                                topMargin = MARGIN_VIEW.dp,
+                                bottomMargin = MARGIN_DIFFERENT_VIEW.dp
+                            )
+                            linkTo(start = parent.start, end = parent.end)
+                        }
+                )
+            }
         }
     }
 }

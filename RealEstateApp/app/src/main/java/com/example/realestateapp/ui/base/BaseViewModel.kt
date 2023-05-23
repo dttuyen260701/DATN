@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.apiresult.ResponseAPI
+import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
@@ -38,8 +39,10 @@ sealed interface TypeDialog {
     data class ChoiceDataDialog(
         val isLoading: Boolean,
         val title: String,
-        val filter: String,
-        val onFilterChange: (String) -> Unit
+        val loadData: (String) -> Unit,
+        val isEnableSearchFromApi: Boolean,
+        val onItemClick: (ItemChoose) -> Unit,
+        val data: MutableList<ItemChoose>
     ) : TypeDialog
 }
 
@@ -125,6 +128,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
                         }
                         else -> {
                             isLoading.value = false
+                            apiError()
                             if (showDialog) showDialog(
                                 dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR)
                             )

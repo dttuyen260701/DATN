@@ -126,4 +126,26 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun getDistricts(
+        provinceId: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
+        return flow {
+            emit(
+                dataSource.getDistricts(provinceId)
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun getWards(
+        districtId: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
+        return flow {
+            emit(
+                dataSource.getWards(districtId)
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

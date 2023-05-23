@@ -106,4 +106,24 @@ class RetrofitDataSourceImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getDistricts(
+        provinceId: String
+    ): ApiResultWrapper<MutableList<ItemChoose>> {
+        return callApi {
+            apiService.getDistricts(
+                provinceId = provinceId
+            )
+        }
+    }
+
+    override suspend fun getWards(
+        districtId: String
+    ): ApiResultWrapper<MutableList<ItemChoose>> {
+        return callApi {
+            apiService.getWards(
+                districtId = districtId
+            )
+        }
+    }
 }

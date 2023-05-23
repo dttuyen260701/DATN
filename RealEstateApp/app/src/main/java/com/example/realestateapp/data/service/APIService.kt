@@ -51,4 +51,16 @@ interface APIService {
         @Path("postId") idPost: String,
         @Path("userId") idUser: String
     ): Response<ResponseAPI<MutableList<RealEstateList>>>
+
+    @GET("/api/Addresses/{provinceId}/districts")
+    @JvmSuppressWildcards
+    suspend fun getDistricts(
+        @Path("provinceId") provinceId: String
+    ): Response<ResponseAPI<MutableList<ItemChoose>>>
+
+    @GET("/api/Addresses/{districtId}/wards")
+    @JvmSuppressWildcards
+    suspend fun getWards(
+        @Path("districtId") districtId: String
+    ): Response<ResponseAPI<MutableList<ItemChoose>>>
 }

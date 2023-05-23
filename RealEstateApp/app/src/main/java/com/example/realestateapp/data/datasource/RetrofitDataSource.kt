@@ -46,4 +46,12 @@ interface RetrofitDataSource {
         idPost: String,
         idUser: String
     ): ApiResultWrapper<MutableList<RealEstateList>>
+
+    suspend fun getDistricts(
+        provinceId: String
+    ): ApiResultWrapper<MutableList<ItemChoose>>
+
+    suspend fun getWards(
+        districtId: String
+    ): ApiResultWrapper<MutableList<ItemChoose>>
 }

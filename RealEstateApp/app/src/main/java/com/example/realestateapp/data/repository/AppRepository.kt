@@ -55,4 +55,15 @@ interface AppRepository {
         idUser: String,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<MutableList<RealEstateList>>>
+
+    //pick Address
+    suspend fun getDistricts(
+        provinceId: String = "1",
+        showLoading: Boolean = false
+    ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
+
+    suspend fun getWards(
+        districtId: String,
+        showLoading: Boolean = false
+    ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
 }
