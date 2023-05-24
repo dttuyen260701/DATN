@@ -150,12 +150,13 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getStreets(
+        districtId: String,
         filter: String,
         showLoading: Boolean
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         return flow {
             emit(
-                dataSource.getStreets(filter)
+                dataSource.getStreets(districtId, filter)
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }

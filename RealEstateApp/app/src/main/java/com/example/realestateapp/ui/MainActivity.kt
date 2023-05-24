@@ -39,43 +39,44 @@ class MainActivity : ComponentActivity() {
                         val launcherActivity = rememberLauncherForActivityResult(
                             contract = ActivityResultContracts.RequestMultiplePermissions(),
                             onResult = {
-//                                if (it) {
-//                                    onGrantedPermission()
-//                                }
+                                onGrantedPermission(it)
                             }
                         )
 
-                        setRequestPermissionListener {
-                            if (checkSelfPermission(it) == PackageManager.PERMISSION_GRANTED) {
-                                onGrantedPermission()
-                            } else {
-                                val title = when (it) {
-                                    Manifest.permission.CALL_PHONE -> Constants.PermissionTitle.PHONE
-                                    Manifest.permission.ACCESS_COARSE_LOCATION -> Constants.PermissionTitle.COARSE_LOCATION
-                                    Manifest.permission.ACCESS_FINE_LOCATION -> Constants.PermissionTitle.COARSE_LOCATION
-                                    else -> null
+                        setRequestPermissionListener { permissions ->
+                            val permissionsDeny = permissions.filter {
+                                checkSelfPermission(it) == PackageManager.PERMISSION_DENIED
+                            }
+                            val permissionsAccept = permissions.filter {
+                                checkSelfPermission(it) == PackageManager.PERMISSION_GRANTED
+                            }
+                            val resultAccept: MutableMap<String, Boolean> = mutableMapOf()
+                            permissionsAccept.map {
+                                resultAccept.put(it, true)
+                            }
+                            if (permissionsAccept.isNotEmpty()) {
+                                onGrantedPermission(resultAccept)
+                            }
+                            if (permissionsDeny.isNotEmpty()) {
+                                var title = ""
+                                permissionsDeny.forEachIndexed { index, item ->
+                                    title += ((if (index in 1 until permissionsDeny.size) ", " else "")
+                                            + getPermissionTitle(item))
                                 }
-                                title?.let { titlePermission ->
-                                    showDialog(
-                                        dialog = TypeDialog.ConfirmDialog(
-                                            message = getString(
-                                                R.string.requestPermission,
-                                                titlePermission
-                                            ),
-                                            negativeBtnText = getString(R.string.denyBtnTitle),
-                                            onBtnNegativeClick = {},
-                                            positiveBtnText = getString(R.string.acceptBtnTitle),
-                                            onBtnPositiveClick = {
-                                                launcherActivity.launch(
-                                                    mutableListOf(
-                                                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                                                        Manifest.permission.CALL_PHONE
-                                                    ).toTypedArray()
-                                                )
-                                            }
-                                        )
+                                showDialog(
+                                    dialog = TypeDialog.ConfirmDialog(
+                                        message = getString(
+                                            R.string.requestPermission,
+                                            title
+                                        ),
+                                        negativeBtnText = getString(R.string.denyBtnTitle),
+                                        onBtnNegativeClick = {},
+                                        positiveBtnText = getString(R.string.acceptBtnTitle),
+                                        onBtnPositiveClick = {
+                                            launcherActivity.launch(permissionsDeny.toTypedArray())
+                                        }
                                     )
-                                }
+                                )
                             }
                         }
 
@@ -93,9 +94,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun getPermissionTitle(permission: String) = when (permission) {
+        Manifest.permission.CALL_PHONE -> Constants.PermissionTitle.PHONE
+        Manifest.permission.ACCESS_COARSE_LOCATION -> Constants.PermissionTitle.COARSE_LOCATION
+        Manifest.permission.ACCESS_FINE_LOCATION -> Constants.PermissionTitle.FINE_LOCATION
+        Manifest.permission.CAMERA -> Constants.PermissionTitle.CAMERA
+        else -> ""
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if(viewModel.getDialogType().value is TypeDialog.ChoiceDataDialog)
+        if (viewModel.getDialogType().value is TypeDialog.ChoiceDataDialog)
             viewModel.getDialogType().value = TypeDialog.Hide
         else {
             super.onBackPressed()

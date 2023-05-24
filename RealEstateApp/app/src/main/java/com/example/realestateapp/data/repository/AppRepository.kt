@@ -68,6 +68,7 @@ interface AppRepository {
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
 
     suspend fun getStreets(
+        districtId: String,
         filter: String,
         showLoading: Boolean = false
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>

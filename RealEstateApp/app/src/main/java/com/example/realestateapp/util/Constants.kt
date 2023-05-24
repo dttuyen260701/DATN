@@ -38,6 +38,7 @@ class Constants {
         const val PHONE = "Gọi điện thoại"
         const val COARSE_LOCATION = "Vị trí chính xác"
         const val FINE_LOCATION = "Vị trí tương đối"
+        const val CAMERA = "Sử dụng Camera"
     }
 
     object DefaultValue {

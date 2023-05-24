@@ -121,9 +121,15 @@ internal fun RealEstateDetailRoute(
                 {
                     if (user != null) {
                         requestPermissionListener(
-                            permission = Manifest.permission.CALL_PHONE
+                            permission = mutableListOf(Manifest.permission.CALL_PHONE)
                         ) {
-                            realEstateItem.ownerPhone?.let { context.callPhone(it) }
+                            it.entries.forEach { result ->
+                                if (result.key == Manifest.permission.CALL_PHONE && result.value) {
+                                    realEstateItem.ownerPhone?.let { phoneNumber ->
+                                        context.callPhone(phoneNumber)
+                                    }
+                                }
+                            }
                         }
                     } else {
                         context.makeToast(AUTHENTICATION_ERROR)

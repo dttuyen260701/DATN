@@ -65,9 +65,10 @@ interface APIService {
         @Path("districtId") districtId: String
     ): Response<ResponseAPI<MutableList<ItemChoose>>>
 
-    @GET("/api/Streets")
+    @GET("/api/Streets/district/{districtId}")
     @JvmSuppressWildcards
     suspend fun getStreets(
+        @Path("districtId") districtId: String,
         @Query("search") filter: String
     ): Response<ResponseAPI<MutableList<ItemChoose>>>
 }

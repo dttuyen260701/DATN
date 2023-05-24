@@ -1,6 +1,10 @@
 package com.example.realestateapp.ui.pickaddress
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.location.Geocoder
+import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,11 +35,15 @@ import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.google.android.gms.location.LocationServices
+import java.io.IOException
+import java.util.*
 
 /**
  * Created by tuyen.dang on 5/22/2023.
  */
 
+@Suppress("DEPRECATION")
+@SuppressLint("MissingPermission")
 @Composable
 internal fun PickAddressRoute(
     modifier: Modifier = Modifier,
@@ -96,14 +104,34 @@ internal fun PickAddressRoute(
             onBackClick = onBackClick,
             onFindLocationClick = remember {
                 {
+                    Log.e("TTT", "onFindLocationClick: ")
                     requestPermissionListener(
-                        permission = Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) {
-                        requestPermissionListener(
-                            permission = Manifest.permission.ACCESS_FINE_LOCATION
-                        ) {
+                        permission = mutableListOf(
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                        )
+                    ) { results ->
+                        if (results.entries.all { it.value }) {
                             val fusedLocationClient =
                                 LocationServices.getFusedLocationProviderClient(context)
+                            fusedLocationClient.lastLocation
+                                .addOnSuccessListener { location: Location? ->
+                                    location?.run {
+                                        val coder = Geocoder(context, Locale.getDefault())
+                                        var addressLine = ""
+                                        try {
+                                            val result = coder.getFromLocation(
+                                                latitude, longitude, 1
+                                            )
+                                            if (!result.isNullOrEmpty()) {
+                                                addressLine = result[0].getAddressLine(0)
+                                            }
+                                        } catch (e: IOException) {
+                                            e.printStackTrace()
+                                        }
+                                        Log.e("TTT", "PickAddressRoute: $addressLine ")
+                                    }
+                                }
                         }
                     }
                 }
@@ -117,6 +145,7 @@ internal fun PickAddressRoute(
                     var isValid = true
                     when (it) {
                         FIELD_DISTRICT -> {
+                            districts.clear()
                             title = context.getString(R.string.districtTitle)
                             data = districts
                             onItemClick = { itemChoose ->
@@ -125,12 +154,12 @@ internal fun PickAddressRoute(
                                     key = it
                                 )
                                 showDialog(dialog = TypeDialog.Hide)
-                                districts.clear()
                             }
                             loadData = ::getDistricts
                         }
                         FIELD_WARD -> {
                             if (districtChosen != DEFAULT_ITEM_CHOSEN) {
+                                wards.clear()
                                 title = context.getString(R.string.wardTitle)
                                 data = wards
                                 onItemClick = { itemChoose ->
@@ -139,7 +168,6 @@ internal fun PickAddressRoute(
                                         key = it
                                     )
                                     showDialog(dialog = TypeDialog.Hide)
-                                    wards.clear()
                                 }
                                 loadData = ::getWards
                             } else {
@@ -155,17 +183,29 @@ internal fun PickAddressRoute(
                             }
                         }
                         FIELD_STREET -> {
-                            title = context.getString(R.string.streetTitle)
-                            data = streets
-                            onItemClick = { itemChoose ->
-                                onChoiceData(
-                                    itemChoose = itemChoose,
-                                    key = it
-                                )
-                                showDialog(dialog = TypeDialog.Hide)
+                            if (districtChosen != DEFAULT_ITEM_CHOSEN) {
                                 streets.clear()
+                                title = context.getString(R.string.streetTitle)
+                                data = streets
+                                onItemClick = { itemChoose ->
+                                    onChoiceData(
+                                        itemChoose = itemChoose,
+                                        key = it
+                                    )
+                                    showDialog(dialog = TypeDialog.Hide)
+                                }
+                                loadData = ::getStreets
+                            } else {
+                                context.run {
+                                    makeToast(
+                                        getString(
+                                            R.string.pleaseChoiceHint,
+                                            getString(R.string.districtTitle)
+                                        )
+                                    )
+                                }
+                                isValid = false
                             }
-                            loadData = ::getStreets
                         }
                         else -> {}
                     }

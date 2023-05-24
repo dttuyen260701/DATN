@@ -54,24 +54,24 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
 
         private var dialogType: MutableState<TypeDialog> = mutableStateOf(TypeDialog.Hide)
 
-        private var requestPermission: (String) -> Unit = { _ -> }
+        private var requestPermission: (MutableList<String>) -> Unit = { _ -> }
 
-        private var grantedPermission: () -> Unit = {}
+        private var grantedPermission: (Map<String, Boolean>) -> Unit = {}
     }
 
     abstract var uiState: MutableState<UiState>
 
-    internal fun requestPermissionListener(permission: String, onGranted: () -> Unit) {
+    internal fun requestPermissionListener(permission: MutableList<String>, onGranted: (Map<String, Boolean>) -> Unit) {
         requestPermission(permission)
         grantedPermission = onGranted
     }
 
-    internal fun MainActivityViewModel.setRequestPermissionListener(requestPermissionNew: (String) -> Unit) {
+    internal fun MainActivityViewModel.setRequestPermissionListener(requestPermissionNew: (MutableList<String>) -> Unit) {
         requestPermission = requestPermissionNew
     }
 
-    internal fun MainActivityViewModel.onGrantedPermission() {
-        grantedPermission()
+    internal fun MainActivityViewModel.onGrantedPermission(result: Map<String, Boolean>) {
+        grantedPermission(result)
     }
 
     internal fun getUser() = user

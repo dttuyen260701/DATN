@@ -128,10 +128,12 @@ class RetrofitDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getStreets(
+        districtId : String,
         filter: String
     ): ApiResultWrapper<MutableList<ItemChoose>> {
         return callApi {
             apiService.getStreets(
+                districtId = districtId,
                 filter = filter
             )
         }

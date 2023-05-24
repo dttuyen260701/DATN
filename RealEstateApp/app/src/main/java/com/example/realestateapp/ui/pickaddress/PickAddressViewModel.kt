@@ -101,7 +101,10 @@ class PickAddressViewModel @Inject constructor(
         viewModelScope.launch {
             callAPIOnThread(
                 funCallApis = mutableListOf(
-                    appRepository.getStreets(filter = filter),
+                    appRepository.getStreets(
+                        districtId = districtChosen.value.id.toString(),
+                        filter = filter
+                    ),
                 ), apiSuccess = {
                     if (it.body.indexOf(streetChosen.value) != -1) {
                         it.body[it.body.indexOf(streetChosen.value)].isSelected = true
@@ -119,13 +122,15 @@ class PickAddressViewModel @Inject constructor(
     internal fun onChoiceData(itemChoose: ItemChoose, key: String) {
         when (key) {
             Constants.DefaultField.FIELD_DISTRICT -> {
-                districtChosen.value = itemChoose
+                districtChosen.value = itemChoose.copy(isSelected = false)
+                wardChosen.value = DEFAULT_ITEM_CHOSEN
+                streetChosen.value = DEFAULT_ITEM_CHOSEN
             }
             Constants.DefaultField.FIELD_WARD -> {
-                wardChosen.value = itemChoose
+                wardChosen.value = itemChoose.copy(isSelected = false)
             }
             Constants.DefaultField.FIELD_STREET -> {
-                streetChosen.value = itemChoose
+                streetChosen.value = itemChoose.copy(isSelected = false)
             }
             else -> {}
         }

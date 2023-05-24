@@ -56,6 +56,7 @@ interface RetrofitDataSource {
     ): ApiResultWrapper<MutableList<ItemChoose>>
 
     suspend fun getStreets(
+        districtId: String,
         filter: String
     ): ApiResultWrapper<MutableList<ItemChoose>>
 }
