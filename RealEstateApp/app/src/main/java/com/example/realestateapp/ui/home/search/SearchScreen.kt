@@ -56,7 +56,7 @@ internal fun SearchRoute(
     onBackClick: () -> Unit,
     onRealEstateItemClick: (Int) -> Unit,
     navigateToPickAddress: () -> Unit,
-    addressDetail: String
+    addressDetails: MutableList<String>
 ) {
     viewModel.run {
         var filter by remember { filter }
@@ -65,9 +65,12 @@ internal fun SearchRoute(
         var isShowSearchOption by remember { mutableStateOf(true) }
         val uiState by remember { uiState }
         var addressDetailDisplay by remember { detailAddress }
+        val addressDetailsScr = remember {
+            addressDetails
+        }
 
-        if(addressDetail.trim().isNotEmpty()) {
-            addressDetailDisplay = addressDetail
+        if (addressDetailsScr[0].isNotEmpty()) {
+            addressDetailDisplay = addressDetailsScr[0]
         }
 
         LaunchedEffect(key1 = uiState) {
@@ -94,8 +97,9 @@ internal fun SearchRoute(
                 {
                     when (it) {
                         FIELD_ADDRESS -> {
-                            addressDetailDisplay = ""
                             PickAddressViewModel.clearDataChosen()
+                            addressDetailsScr[0] = ""
+                            addressDetailDisplay = ""
                         }
                         else -> {}
                     }
@@ -248,7 +252,7 @@ internal fun SearchScreen(
                     leadingIconColor = RealEstateAppTheme.colors.primary,
                     onLeadingIconClick = {},
                     trailingIcon =
-                    if (isShowSearchOption) AppIcon.DrawableResourceIcon(RealEstateIcon.DropDownBig)
+                    if (isShowSearchOption) AppIcon.DrawableResourceIcon(RealEstateIcon.DropDown)
                     else AppIcon.DrawableResourceIcon(RealEstateIcon.Config),
                     trailingIconColor = RealEstateAppTheme.colors.primary,
                     onTrailingIconClick = onTrainingIconTextClick,

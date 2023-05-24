@@ -37,11 +37,11 @@ class MainActivity : ComponentActivity() {
                     viewModel.run {
 
                         val launcherActivity = rememberLauncherForActivityResult(
-                            contract = ActivityResultContracts.RequestPermission(),
+                            contract = ActivityResultContracts.RequestMultiplePermissions(),
                             onResult = {
-                                if (it) {
-                                    onGrantedPermission()
-                                }
+//                                if (it) {
+//                                    onGrantedPermission()
+//                                }
                             }
                         )
 
@@ -51,6 +51,8 @@ class MainActivity : ComponentActivity() {
                             } else {
                                 val title = when (it) {
                                     Manifest.permission.CALL_PHONE -> Constants.PermissionTitle.PHONE
+                                    Manifest.permission.ACCESS_COARSE_LOCATION -> Constants.PermissionTitle.COARSE_LOCATION
+                                    Manifest.permission.ACCESS_FINE_LOCATION -> Constants.PermissionTitle.COARSE_LOCATION
                                     else -> null
                                 }
                                 title?.let { titlePermission ->
@@ -64,7 +66,12 @@ class MainActivity : ComponentActivity() {
                                             onBtnNegativeClick = {},
                                             positiveBtnText = getString(R.string.acceptBtnTitle),
                                             onBtnPositiveClick = {
-                                                launcherActivity.launch(it)
+                                                launcherActivity.launch(
+                                                    mutableListOf(
+                                                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                                                        Manifest.permission.CALL_PHONE
+                                                    ).toTypedArray()
+                                                )
                                             }
                                         )
                                     )

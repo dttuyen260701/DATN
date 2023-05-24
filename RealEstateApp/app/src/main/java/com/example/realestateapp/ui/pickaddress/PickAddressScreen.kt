@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.pickaddress
 
+import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +30,7 @@ import com.example.realestateapp.util.Constants.DefaultField.FIELD_WARD
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.google.android.gms.location.LocationServices
 
 /**
  * Created by tuyen.dang on 5/22/2023.
@@ -92,6 +94,20 @@ internal fun PickAddressRoute(
             modifier = modifier,
             enableBtnConfirm = true,
             onBackClick = onBackClick,
+            onFindLocationClick = remember {
+                {
+                    requestPermissionListener(
+                        permission = Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) {
+                        requestPermissionListener(
+                            permission = Manifest.permission.ACCESS_FINE_LOCATION
+                        ) {
+                            val fusedLocationClient =
+                                LocationServices.getFusedLocationProviderClient(context)
+                        }
+                    }
+                }
+            },
             onComboBoxClick = remember {
                 {
                     var title = ""
@@ -226,6 +242,7 @@ private fun showDialogChoiceData(
 internal fun PickAddressScreen(
     modifier: Modifier,
     onBackClick: () -> Unit,
+    onFindLocationClick: () -> Unit,
     onComboBoxClick: (String) -> Unit,
     enableBtnConfirm: Boolean,
     onBtnConfirmClick: () -> Unit,
@@ -241,7 +258,7 @@ internal fun PickAddressScreen(
             ToolbarView(
                 title = stringResource(id = R.string.pickAddressTitle),
                 rightIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.TargetLocation),
-                onRightIconClick = {},
+                onRightIconClick = onFindLocationClick,
                 leftIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.BackArrow),
                 onLeftIconClick = onBackClick
             )

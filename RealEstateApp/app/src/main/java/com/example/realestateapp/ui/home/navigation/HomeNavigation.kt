@@ -115,7 +115,9 @@ internal fun NavGraphBuilder.searchScreen(
             onBackClick = onBackClick,
             onRealEstateItemClick = onRealEstateItemClick,
             navigateToPickAddress = navigateToPickAddress,
-            addressDetail = backStackEntry.getBackEntryData<String>(key = searchAddressKey) ?: ""
+            addressDetails = mutableListOf(
+                backStackEntry.getBackEntryData<String>(key = searchAddressKey) ?: ""
+            )
         )
     }
 }
