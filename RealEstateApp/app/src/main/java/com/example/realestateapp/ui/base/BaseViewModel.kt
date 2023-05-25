@@ -62,8 +62,8 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     abstract var uiState: MutableState<UiState>
 
     internal fun requestPermissionListener(permission: MutableList<String>, onGranted: (Map<String, Boolean>) -> Unit) {
-        requestPermission(permission)
         grantedPermission = onGranted
+        requestPermission(permission)
     }
 
     internal fun MainActivityViewModel.setRequestPermissionListener(requestPermissionNew: (MutableList<String>) -> Unit) {

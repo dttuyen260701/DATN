@@ -76,13 +76,21 @@ class PickAddressViewModel @Inject constructor(
         }
     }
 
-    internal fun getWards(filter: String, onDoneApi: () -> Unit) {
+    internal fun getWards(
+        onApiSuccess: (MutableList<ItemChoose>) -> Unit = {},
+        showLoading: Boolean = false,
+        onDoneApi: () -> Unit
+    ) {
         uiState.value = PickAddressUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 funCallApis = mutableListOf(
-                    appRepository.getWards(districtId = districtChosen.value.id.toString()),
+                    appRepository.getWards(
+                        districtId = districtChosen.value.id.toString(),
+                        showLoading = showLoading
+                    ),
                 ), apiSuccess = {
+                    onApiSuccess(it.body)
                     if (it.body.indexOf(wardChosen.value) != -1) {
                         it.body[it.body.indexOf(wardChosen.value)].isSelected = true
                     }
@@ -96,16 +104,23 @@ class PickAddressViewModel @Inject constructor(
         }
     }
 
-    internal fun getStreets(filter: String, onDoneApi: () -> Unit) {
+    internal fun getStreets(
+        filter: String,
+        showLoading: Boolean = false,
+        onApiSuccess: (MutableList<ItemChoose>) -> Unit = {},
+        onDoneApi: () -> Unit
+    ) {
         uiState.value = PickAddressUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 funCallApis = mutableListOf(
                     appRepository.getStreets(
                         districtId = districtChosen.value.id.toString(),
-                        filter = filter
+                        filter = filter,
+                        showLoading = showLoading
                     ),
                 ), apiSuccess = {
+                    onApiSuccess(it.body)
                     if (it.body.indexOf(streetChosen.value) != -1) {
                         it.body[it.body.indexOf(streetChosen.value)].isSelected = true
                     }
@@ -116,6 +131,63 @@ class PickAddressViewModel @Inject constructor(
                 onDoneCallApi = onDoneApi,
                 showDialog = false
             )
+        }
+    }
+
+    internal fun updateChoiceData(
+        nameDistrict: String?,
+        nameWard: String?,
+        nameStreet: String?
+    ) {
+        nameDistrict?.let { district ->
+            districtChosen.value =
+                districtsData.firstOrNull { it.name.contains(district, true) }
+                    ?: ItemChoose(
+                        id = -1,
+                        name = nameDistrict,
+                        score = 1
+                    )
+            if (districtChosen.value != DEFAULT_ITEM_CHOSEN) {
+                nameWard?.let {
+                    getWards(
+                        showLoading = true,
+                        onApiSuccess = { data ->
+                            wardChosen.value =
+                                data.firstOrNull {
+                                    it.name.contains(
+                                        nameWard, true
+                                    )
+                                } ?: ItemChoose(
+                                    id = -1,
+                                    name = nameWard,
+                                    score = 1
+                                )
+                        }
+                    ) {}
+                }
+                nameStreet?.let {
+                    getStreets(
+                        nameStreet.replace("Đường ", ""),
+                        showLoading = true,
+                        onApiSuccess = { data ->
+                            streetChosen.value =
+                                data.firstOrNull {
+                                    it.name.contains(
+                                        nameStreet.replace(
+                                            "Đường ",
+                                            ""
+                                        ),
+                                        true
+                                    )
+                                } ?: ItemChoose(
+                                    id = -1,
+                                    name = nameStreet,
+                                    score = 1
+                                )
+                        }
+                    ) {}
+                }
+            }
         }
     }
 

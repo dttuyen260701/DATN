@@ -309,7 +309,12 @@ internal fun DialogChoiceData(
                         .fillMaxWidth()
                         .padding(horizontal = (PADDING_HORIZONTAL_SCREEN * 2).dp)
                         .constrainAs(lzItems) {
-                            top.linkTo(edtSearch.bottom, MARGIN_VIEW.dp)
+                            linkTo(
+                                top = edtSearch.bottom,
+                                topMargin = MARGIN_VIEW.dp,
+                                bottom = parent.bottom,
+                                bias = 0f
+                            )
                         },
                     state = rememberLazyListState(),
                     horizontalAlignment = Alignment.CenterHorizontally,

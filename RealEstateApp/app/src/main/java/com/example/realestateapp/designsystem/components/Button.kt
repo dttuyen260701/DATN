@@ -139,8 +139,8 @@ internal fun ButtonUnRepeating(
     var latest by remember {
         mutableStateOf(0L)
     }
-    val now = System.currentTimeMillis()
     content {
+        val now = System.currentTimeMillis()
         if (now - latest >= timeBlock) {
             latest = now
             onClick()

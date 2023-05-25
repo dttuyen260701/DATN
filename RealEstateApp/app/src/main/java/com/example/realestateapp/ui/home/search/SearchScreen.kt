@@ -90,8 +90,15 @@ internal fun SearchRoute(
 
         SearchScreen(
             modifier = modifier,
-            onBackClick = onBackClick,
-            navigateToPickAddress = navigateToPickAddress,
+            onBackClick = remember { onBackClick },
+            navigateToPickAddress = remember {
+                {
+                    if (addressDetailDisplay.isBlank() || addressDetailDisplay.isEmpty()) {
+                        PickAddressViewModel.clearDataChosen()
+                    }
+                    navigateToPickAddress()
+                }
+            },
             addressDetail = addressDetailDisplay,
             onClearData = remember {
                 {
@@ -128,60 +135,7 @@ internal fun SearchRoute(
                     onChoiceSortType(it.id)
                 }
             },
-            realEstates = mutableListOf(
-                RealEstateList(
-                    id = 1,
-                    imageUrl = "https://photo-cms-plo.epicdn.me/w850/Uploaded/2023/yqjvzdjwp/2022_05_01/bernabeu-real-madrid-2550.jpg",
-                    title = "Bán rất nhiều đất",
-                    createdDate = "20/05/2023",
-                    square = 123f,
-                    price = 1_200_000f,
-                    bedRooms = null,
-                    floors = null,
-                    address = "54 Nguyễn Lương Bằng",
-                    views = 12,
-                    isSaved = true,
-                ),
-                RealEstateList(
-                    id = 2,
-                    imageUrl = "https://photo-cms-plo.epicdn.me/w850/Uploaded/2023/yqjvzdjwp/2022_05_01/bernabeu-real-madrid-2550.jpg",
-                    title = "Bán rất nhiều đất",
-                    createdDate = "20/05/2023",
-                    square = 123f,
-                    price = 1_200_000f,
-                    bedRooms = null,
-                    floors = null,
-                    address = "54 Nguyễn Lương Bằng",
-                    views = 12,
-                    isSaved = true,
-                ),
-                RealEstateList(
-                    id = 3,
-                    imageUrl = "https://photo-cms-plo.epicdn.me/w850/Uploaded/2023/yqjvzdjwp/2022_05_01/bernabeu-real-madrid-2550.jpg",
-                    title = "Bán rất nhiều đất",
-                    createdDate = "20/05/2023",
-                    square = 123f,
-                    price = 1_200_000f,
-                    bedRooms = null,
-                    floors = null,
-                    address = "54 Nguyễn Lương Bằng",
-                    views = 12,
-                    isSaved = true,
-                ),
-                RealEstateList(
-                    id = 4,
-                    imageUrl = "https://photo-cms-plo.epicdn.me/w850/Uploaded/2023/yqjvzdjwp/2022_05_01/bernabeu-real-madrid-2550.jpg",
-                    title = "Bán rất nhiều đất",
-                    createdDate = "20/05/2023",
-                    square = 123f,
-                    price = 1_200_000f,
-                    bedRooms = null,
-                    floors = null,
-                    address = "54 Nguyễn Lương Bằng",
-                    views = 12,
-                    isSaved = true,
-                )
-            ),
+            realEstates = mutableListOf(),
             onRealEstateItemClick = remember { onRealEstateItemClick },
             onItemSaveClick = remember {
                 {}

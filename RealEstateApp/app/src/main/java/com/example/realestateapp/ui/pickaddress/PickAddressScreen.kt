@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.location.Geocoder
 import android.location.Location
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,7 +65,7 @@ internal fun PickAddressRoute(
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is PickAddressUiState.InitView -> {
-
+                    getDistricts("") {}
                 }
                 is PickAddressUiState.Loading -> {
                     isLoadingDialog = true
@@ -104,7 +103,6 @@ internal fun PickAddressRoute(
             onBackClick = onBackClick,
             onFindLocationClick = remember {
                 {
-                    Log.e("TTT", "onFindLocationClick: ")
                     requestPermissionListener(
                         permission = mutableListOf(
                             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -126,10 +124,17 @@ internal fun PickAddressRoute(
                                             if (!result.isNullOrEmpty()) {
                                                 addressLine = result[0].getAddressLine(0)
                                             }
+                                            updateChoiceData(
+                                                nameDistrict = result?.get(0)?.subAdminArea,
+                                                nameWard = getWardFromAddressLine(
+                                                    addressLine,
+                                                    result?.get(0)?.subAdminArea ?: ""
+                                                ),
+                                                nameStreet = result?.get(0)?.thoroughfare
+                                            )
                                         } catch (e: IOException) {
                                             e.printStackTrace()
                                         }
-                                        Log.e("TTT", "PickAddressRoute: $addressLine ")
                                     }
                                 }
                         }
@@ -169,7 +174,9 @@ internal fun PickAddressRoute(
                                     )
                                     showDialog(dialog = TypeDialog.Hide)
                                 }
-                                loadData = ::getWards
+                                loadData = { _, onDone ->
+                                    getWards(onDoneApi = onDone)
+                                }
                             } else {
                                 context.run {
                                     makeToast(
@@ -194,7 +201,12 @@ internal fun PickAddressRoute(
                                     )
                                     showDialog(dialog = TypeDialog.Hide)
                                 }
-                                loadData = ::getStreets
+                                loadData = { filter, onDone ->
+                                    getStreets(
+                                        filter = filter,
+                                        onDoneApi = onDone
+                                    )
+                                }
                             } else {
                                 context.run {
                                     makeToast(
@@ -258,6 +270,14 @@ internal fun PickAddressRoute(
             streetChosen = streetChosen
         )
     }
+}
+
+private fun getWardFromAddressLine(addressLine: String, districtName: String): String {
+    val temp = addressLine.split(", $districtName,")[0]
+    return temp
+        .split(",")[temp.split(",").lastIndex]
+        .replace("Hoà", "Hòa")
+        .replace("Hòa Thuận Nam", "Hòa Thuận Tây")
 }
 
 private fun showDialogChoiceData(
