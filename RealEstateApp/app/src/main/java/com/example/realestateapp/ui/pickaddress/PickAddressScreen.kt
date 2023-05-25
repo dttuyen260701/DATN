@@ -16,10 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.ItemChoose
-import com.example.realestateapp.designsystem.components.ButtonRadius
-import com.example.realestateapp.designsystem.components.ComboBox
-import com.example.realestateapp.designsystem.components.Spacing
-import com.example.realestateapp.designsystem.components.ToolbarView
+import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
@@ -59,41 +56,34 @@ internal fun PickAddressRoute(
         var wardChosen by remember { PickAddressViewModel.wardChosen }
         var streetChosen by remember { PickAddressViewModel.streetChosen }
         val uiState by remember { uiState }
-        var isLoadingDialog by remember {
-            mutableStateOf(false)
-        }
+
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is PickAddressUiState.InitView -> {
                     getDistricts("") {}
                 }
                 is PickAddressUiState.Loading -> {
-                    isLoadingDialog = true
+
                 }
                 is PickAddressUiState.GetDistrictSuccess -> {
-                    isLoadingDialog = false
                     districts.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetDistrictSuccess).data)
                     }
                 }
                 is PickAddressUiState.GetWardSuccess -> {
-                    isLoadingDialog = false
                     wards.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetWardSuccess).data)
                     }
                 }
                 is PickAddressUiState.GetStreetSuccess -> {
-                    isLoadingDialog = false
                     streets.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetStreetSuccess).data)
                     }
                 }
-                else -> {
-                    isLoadingDialog = false
-                }
+                else -> {}
             }
         }
 
@@ -142,13 +132,13 @@ internal fun PickAddressRoute(
                 }
             },
             onComboBoxClick = remember {
-                {
+                { key ->
                     var title = ""
                     var data = mutableListOf<ItemChoose>()
                     var loadData: (String, () -> Unit) -> Unit = { _, _ -> }
                     var onItemClick: (ItemChoose) -> Unit = { _ -> }
                     var isValid = true
-                    when (it) {
+                    when (key) {
                         FIELD_DISTRICT -> {
                             districts.clear()
                             title = context.getString(R.string.districtTitle)
@@ -156,7 +146,7 @@ internal fun PickAddressRoute(
                             onItemClick = { itemChoose ->
                                 onChoiceData(
                                     itemChoose = itemChoose,
-                                    key = it
+                                    key = key
                                 )
                                 showDialog(dialog = TypeDialog.Hide)
                             }
@@ -170,7 +160,7 @@ internal fun PickAddressRoute(
                                 onItemClick = { itemChoose ->
                                     onChoiceData(
                                         itemChoose = itemChoose,
-                                        key = it
+                                        key = key
                                     )
                                     showDialog(dialog = TypeDialog.Hide)
                                 }
@@ -197,7 +187,7 @@ internal fun PickAddressRoute(
                                 onItemClick = { itemChoose ->
                                     onChoiceData(
                                         itemChoose = itemChoose,
-                                        key = it
+                                        key = key
                                     )
                                     showDialog(dialog = TypeDialog.Hide)
                                 }
@@ -223,13 +213,12 @@ internal fun PickAddressRoute(
                     }
                     if (isValid) {
                         showDialog(
-                            dialog = showDialogChoiceData(
+                            dialog = TypeDialog.ChoiceDataDialog(
                                 title = title,
                                 data = data,
                                 loadData = loadData,
                                 onItemClick = onItemClick,
-                                isEnableSearchFromApi = (it == FIELD_STREET),
-                                isLoadingDialog = isLoadingDialog
+                                isEnableSearchFromApi = (key == FIELD_STREET)
                             )
                         )
                     }
@@ -278,24 +267,6 @@ private fun getWardFromAddressLine(addressLine: String, districtName: String): S
         .split(",")[temp.split(",").lastIndex]
         .replace("Hoà", "Hòa")
         .replace("Hòa Thuận Nam", "Hòa Thuận Tây")
-}
-
-private fun showDialogChoiceData(
-    title: String,
-    data: MutableList<ItemChoose>,
-    loadData: (String, () -> Unit) -> Unit,
-    onItemClick: (ItemChoose) -> Unit,
-    isEnableSearchFromApi: Boolean = false,
-    isLoadingDialog: Boolean
-): TypeDialog {
-    return TypeDialog.ChoiceDataDialog(
-        isLoading = isLoadingDialog,
-        title = title,
-        loadData = loadData,
-        onItemClick = onItemClick,
-        isEnableSearchFromApi = isEnableSearchFromApi,
-        data = data
-    )
 }
 
 @Composable

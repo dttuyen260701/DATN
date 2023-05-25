@@ -56,11 +56,14 @@ object RealEstateIcon {
     const val DiningRoom = R.drawable.ic_dining_room
     const val Location = R.drawable.ic_location
     const val DropDown = R.drawable.ic_caret_down
+    const val DropDownBig = R.drawable.ic_drop_down_big
+    const val DropUpBig = R.drawable.ic_caret_up
     const val Clear = R.drawable.ic_cancel
     const val TargetLocation = R.drawable.ic_target_location
     const val City = R.drawable.ic_city
     const val District = R.drawable.ic_district
     const val Ward = R.drawable.ic_ward
+    const val Money = R.drawable.ic_money
 }
 
 /**

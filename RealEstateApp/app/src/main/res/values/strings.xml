@@ -71,7 +71,12 @@
     <string name="searchBtnTitle">Tìm kiếm</string>
     <string name="typesTitle">Loại nhà đất</string>
     <string name="highestPriceSortTitle">Giá cao nhất</string>
+    <string name="priceTitle">Giá</string>
+    <string name="priceHint">Chọn mức giá</string>
     <string name="lowestPriceSortTitle">Giá thấp nhất</string>
+    <string name="openSearchHighTitle">Mở rộng</string>
+    <string name="closeSearchHighTitle">Thu gọn</string>
+    <string name="allTitle">Bất kì</string>
 
     <!--PickAddressScreen-->
     <string name="pickAddressTitle">Chọn vị trí</string>

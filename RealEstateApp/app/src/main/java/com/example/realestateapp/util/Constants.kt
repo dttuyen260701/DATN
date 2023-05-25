@@ -32,6 +32,7 @@ class Constants {
         const val FIELD_DISTRICT = "district"
         const val FIELD_WARD = "ward"
         const val FIELD_STREET = "street"
+        const val FIELD_PRICE = "price"
     }
 
     object PermissionTitle {

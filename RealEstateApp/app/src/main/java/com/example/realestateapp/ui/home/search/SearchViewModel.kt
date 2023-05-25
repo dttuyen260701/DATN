@@ -6,11 +6,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
+import com.example.realestateapp.data.enums.PriceOption
 import com.example.realestateapp.data.enums.SearchOption
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_PRICE
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,29 +39,30 @@ class SearchViewModel @Inject constructor(
     internal var filter = mutableStateOf("")
     internal var detailAddress = mutableStateOf("")
     internal var typesData = mutableStateListOf<ItemChoose>()
-    internal var sortOptions =
-        mutableStateListOf(
-            ItemChoose(
-                id = SearchOption.LATEST.option,
-                name = application.getString(R.string.latestSortTitle),
-                score = -1
-            ),
-            ItemChoose(
-                id = SearchOption.MOST_VIEW.option,
-                name = application.getString(R.string.viewSortTitle),
-                score = -2
-            ),
+    internal var sortOptions = mutableStateListOf(
+        ItemChoose(
+            id = SearchOption.LATEST.option,
+            name = application.getString(R.string.latestSortTitle),
+            score = -1
+        ),
+        ItemChoose(
+            id = SearchOption.MOST_VIEW.option,
+            name = application.getString(R.string.viewSortTitle),
+            score = -2
+        ),
             ItemChoose(
                 id = SearchOption.HIGHEST_PRICE.option,
                 name = application.getString(R.string.highestPriceSortTitle),
                 score = -3
             ),
-            ItemChoose(
-                id = SearchOption.LOWEST_PRICE.option,
-                name = application.getString(R.string.lowestPriceSortTitle),
-                score = -4
-            )
+        ItemChoose(
+            id = SearchOption.LOWEST_PRICE.option,
+            name = application.getString(R.string.lowestPriceSortTitle),
+            score = -4
         )
+    )
+    internal var priceChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var priceOptions = mutableStateListOf<ItemChoose>()
 
     internal fun onChoiceSortType(idType: Int) {
         val oldIndex = sortOptions.indexOfFirst { it.isSelected }
@@ -82,5 +86,23 @@ class SearchViewModel @Inject constructor(
             }, showDialog = false
             )
         }
+    }
+
+    internal fun getDataChoice(key: String, onDone: () -> Unit) {
+        when (key) {
+            FIELD_PRICE -> {
+                priceOptions.run {
+                    clear()
+                    addAll(
+                        PriceOption.values().map { price ->
+                            price.value.isSelected = (price.value == priceChosen.value)
+                            price.value
+                        }.toMutableList()
+                    )
+                }
+            }
+            else -> {}
+        }
+        onDone()
     }
 }

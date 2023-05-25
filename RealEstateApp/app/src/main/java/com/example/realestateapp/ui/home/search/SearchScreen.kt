@@ -3,6 +3,7 @@ package com.example.realestateapp.ui.home.search
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,10 +34,13 @@ import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_PRICE
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -58,6 +63,7 @@ internal fun SearchRoute(
     navigateToPickAddress: () -> Unit,
     addressDetails: MutableList<String>
 ) {
+    val context = LocalContext.current
     viewModel.run {
         var filter by remember { filter }
         val sortOptions = remember { sortOptions }
@@ -65,9 +71,9 @@ internal fun SearchRoute(
         var isShowSearchOption by remember { mutableStateOf(true) }
         val uiState by remember { uiState }
         var addressDetailDisplay by remember { detailAddress }
-        val addressDetailsScr = remember {
-            addressDetails
-        }
+        var priceChosen by remember { priceChosen }
+        val priceOptions = remember { priceOptions }
+        val addressDetailsScr = remember { addressDetails }
 
         if (addressDetailsScr[0].isNotEmpty()) {
             addressDetailDisplay = addressDetailsScr[0]
@@ -91,15 +97,47 @@ internal fun SearchRoute(
         SearchScreen(
             modifier = modifier,
             onBackClick = remember { onBackClick },
-            navigateToPickAddress = remember {
-                {
-                    if (addressDetailDisplay.isBlank() || addressDetailDisplay.isEmpty()) {
-                        PickAddressViewModel.clearDataChosen()
+            addressDetail = addressDetailDisplay,
+            onComboBoxClick = remember {
+                { key ->
+                    var title = ""
+                    var data = mutableListOf<ItemChoose>()
+                    var loadData: (String, () -> Unit) -> Unit = { _, _ -> }
+                    var onItemClick: (ItemChoose) -> Unit = { _ -> }
+                    when (key) {
+                        FIELD_ADDRESS -> {
+                            if (addressDetailDisplay.isBlank() || addressDetailDisplay.isEmpty()) {
+                                PickAddressViewModel.clearDataChosen()
+                            }
+                            navigateToPickAddress()
+                        }
+                        FIELD_PRICE -> {
+                            priceOptions.clear()
+                            title = context.getString(R.string.priceTitle)
+                            data = priceOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                priceChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        else -> {}
                     }
-                    navigateToPickAddress()
+                    if (key != FIELD_ADDRESS) {
+                        showDialog(
+                            dialog = TypeDialog.ChoiceDataDialog(
+                                title = title,
+                                data = data,
+                                loadData = loadData,
+                                onItemClick = onItemClick,
+                                isEnableSearchFromApi = (key == Constants.DefaultField.FIELD_STREET)
+                            )
+                        )
+                    }
                 }
             },
-            addressDetail = addressDetailDisplay,
             onClearData = remember {
                 {
                     when (it) {
@@ -107,6 +145,9 @@ internal fun SearchRoute(
                             PickAddressViewModel.clearDataChosen()
                             addressDetailsScr[0] = ""
                             addressDetailDisplay = ""
+                        }
+                        FIELD_PRICE -> {
+                            priceChosen = DEFAULT_ITEM_CHOSEN
                         }
                         else -> {}
                     }
@@ -139,7 +180,8 @@ internal fun SearchRoute(
             onRealEstateItemClick = remember { onRealEstateItemClick },
             onItemSaveClick = remember {
                 {}
-            }
+            },
+            priceChosen = priceChosen
         )
     }
 }
@@ -148,8 +190,8 @@ internal fun SearchRoute(
 internal fun SearchScreen(
     modifier: Modifier,
     onBackClick: () -> Unit,
-    navigateToPickAddress: () -> Unit,
     addressDetail: String,
+    onComboBoxClick: (String) -> Unit,
     onClearData: (String) -> Unit,
     onSearchClick: () -> Unit,
     isShowSearchOption: Boolean,
@@ -162,14 +204,21 @@ internal fun SearchScreen(
     onSortItemClick: (ItemChoose) -> Unit,
     realEstates: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
-    onItemSaveClick: (Int) -> Unit
+    onItemSaveClick: (Int) -> Unit,
+    priceChosen: ItemChoose
 ) {
+    var isShowSearchHighOption by remember { mutableStateOf(false) }
+
     BaseScreen(
         toolbar = {
             ConstraintLayout(
                 modifier = Modifier
                     .padding(top = PADDING_HORIZONTAL_SCREEN.dp)
                     .fillMaxWidth()
+                    .then(
+                        if (isShowSearchHighOption) Modifier.weight(1f)
+                        else Modifier
+                    )
             ) {
                 val (btnBack, edtSearch, searchOptionGroup,
                     tvSortTitle, sortTypes, borderBottom) = createRefs()
@@ -235,7 +284,8 @@ internal fun SearchScreen(
                                 stiffness = (TWEEN_ANIMATION_TIME / 2).toFloat(),
                                 dampingRatio = 2f
                             )
-                        )
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = stringResource(id = R.string.typesTitle),
@@ -245,6 +295,7 @@ internal fun SearchScreen(
                             textAlign = TextAlign.Start
                         ),
                         modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
                     )
                     Spacing(PADDING_VIEW)
@@ -257,7 +308,9 @@ internal fun SearchScreen(
                     ComboBox(
                         modifier = Modifier
                             .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
-                        onItemClick = navigateToPickAddress,
+                        onItemClick = {
+                            onComboBoxClick(FIELD_ADDRESS)
+                        },
                         leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Location),
                         title = stringResource(id = R.string.addressTitle),
                         value = addressDetail,
@@ -265,7 +318,37 @@ internal fun SearchScreen(
                         onClearData = { onClearData(FIELD_ADDRESS) }
                     )
                     Spacing(MARGIN_VIEW)
-
+                    ComboBox(
+                        modifier = Modifier
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
+                        onItemClick = {
+                            onComboBoxClick(FIELD_PRICE)
+                        },
+                        leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Money),
+                        title = stringResource(id = R.string.priceTitle),
+                        value = priceChosen.name,
+                        hint = stringResource(id = R.string.priceHint),
+                        onClearData = { onClearData(FIELD_PRICE) }
+                    )
+                    Spacing(MARGIN_VIEW)
+                    TextIcon(
+                        size = 13,
+                        textColor = RealEstateAppTheme.colors.primary,
+                        iconTint = RealEstateAppTheme.colors.primary,
+                        text = stringResource(
+                            if (isShowSearchHighOption) R.string.closeSearchHighTitle
+                            else R.string.openSearchHighTitle
+                        ),
+                        icon = AppIcon.DrawableResourceIcon(
+                            if (isShowSearchHighOption) RealEstateIcon.DropUpBig
+                            else RealEstateIcon.DropDownBig
+                        ),
+                        modifier = Modifier
+                            .clickable {
+                                isShowSearchHighOption = !isShowSearchHighOption
+                            }
+                    )
+                    Spacing(MARGIN_VIEW)
                 }
                 Text(
                     text = stringResource(id = R.string.sortTitle),
@@ -319,27 +402,29 @@ internal fun SearchScreen(
             }
         },
         contentNonScroll = {
-            LazyColumn(
-                modifier = modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .background(RealEstateAppTheme.colors.bgScreen),
-                state = rememberLazyListState(),
-                verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
-            ) {
-                items(
-                    items = realEstates,
-                    key = { realEstate ->
-                        realEstate.id
-                    },
-                ) { realEstate ->
-                    ItemRealEstate(
-                        item = realEstate,
-                        onItemClick = onRealEstateItemClick,
-                        onSaveClick = onItemSaveClick
-                    )
+            if (!isShowSearchHighOption) {
+                LazyColumn(
+                    modifier = modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(RealEstateAppTheme.colors.bgScreen),
+                    state = rememberLazyListState(),
+                    verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
+                ) {
+                    items(
+                        items = realEstates,
+                        key = { realEstate ->
+                            realEstate.id
+                        },
+                    ) { realEstate ->
+                        ItemRealEstate(
+                            item = realEstate,
+                            onItemClick = onRealEstateItemClick,
+                            onSaveClick = onItemSaveClick
+                        )
+                    }
                 }
             }
         },
