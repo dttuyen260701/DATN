@@ -9,7 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -38,7 +40,19 @@ import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_BED_ROOM
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_CAR_PARKING
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_DINING_ROOM
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_FLOOR
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_KITCHEN_ROOM
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_LENGTH
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_PRICE
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_ROOFTOP
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_SQUARE
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET_OF_FRONT
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_WIDTH
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
@@ -73,6 +87,30 @@ internal fun SearchRoute(
         var addressDetailDisplay by remember { detailAddress }
         var priceChosen by remember { priceChosen }
         val priceOptions = remember { priceOptions }
+        var squareChosen by remember { squareChosen }
+        val squareOptions = remember { squareOptions }
+        var bedroomChosen by remember { bedroomChosen }
+        val bedroomOptions = remember { bedroomOptions }
+        var floorChosen by remember { floorChosen }
+        val floorOptions = remember { floorOptions }
+        var juridicalChosen by remember { juridicalChosen }
+        val juridicalOptions = remember { juridicalOptions }
+        var directionChosen by remember { directionChosen }
+        val directionOptions = remember { directionOptions }
+        var streetInFrontChosen by remember { streetInFrontChosen }
+        val streetInFrontOptions = remember { streetInFrontOptions }
+        var widthChosen by remember { widthChosen }
+        val widthOptions = remember { widthOptions }
+        var lengthChosen by remember { lengthChosen }
+        val lengthOptions = remember { lengthOptions }
+        var carParkingChosen by remember { carParkingChosen }
+        val carParkingOptions = remember { carParkingOptions }
+        var rooftopChosen by remember { rooftopChosen }
+        val rooftopOptions = remember { rooftopOptions }
+        var dinningRoomChosen by remember { dinningRoomChosen }
+        val dinningRoomOptions = remember { dinningRoomOptions }
+        var kitchenRoomChosen by remember { kitchenRoomChosen }
+        val kitchenRoomOptions = remember { kitchenRoomOptions }
         val addressDetailsScr = remember { addressDetails }
 
         if (addressDetailsScr[0].isNotEmpty()) {
@@ -123,6 +161,18 @@ internal fun SearchRoute(
                                 showDialog(dialog = TypeDialog.Hide)
                             }
                         }
+                        FIELD_SQUARE -> {
+                            squareOptions.clear()
+                            title = context.getString(R.string.squareTitle)
+                            data = squareOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                squareChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
                         else -> {}
                     }
                     if (key != FIELD_ADDRESS) {
@@ -149,6 +199,42 @@ internal fun SearchRoute(
                         FIELD_PRICE -> {
                             priceChosen = DEFAULT_ITEM_CHOSEN
                         }
+                        FIELD_SQUARE -> {
+                            squareChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_BED_ROOM -> {
+                            bedroomChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_FLOOR -> {
+                            floorChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_JURIDICAL -> {
+                            juridicalChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_DIRECTION -> {
+                            directionChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_STREET_OF_FRONT -> {
+                            streetInFrontChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_WIDTH -> {
+                            widthChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_LENGTH -> {
+                            lengthChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_CAR_PARKING -> {
+                            carParkingChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_ROOFTOP -> {
+                            rooftopChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_DINING_ROOM -> {
+                            dinningRoomChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_KITCHEN_ROOM -> {
+                            kitchenRoomChosen = DEFAULT_ITEM_CHOSEN
+                        }
                         else -> {}
                     }
                 }
@@ -157,6 +243,7 @@ internal fun SearchRoute(
                 {}
             },
             isShowSearchOption = isShowSearchOption,
+            isShowSearchHighOptionVM = isShowSearchHighOption,
             onTrainingIconTextClick = remember {
                 {
                     isShowSearchOption = !isShowSearchOption
@@ -181,7 +268,19 @@ internal fun SearchRoute(
             onItemSaveClick = remember {
                 {}
             },
-            priceChosen = priceChosen
+            priceChosen = priceChosen,
+            squareChosen = squareChosen,
+            bedroomChosen = bedroomChosen,
+            floorChosen = floorChosen,
+            juridicalChosen = juridicalChosen,
+            directionChosen = directionChosen,
+            streetInFrontChosen = streetInFrontChosen,
+            widthChosen = widthChosen,
+            lengthChosen = lengthChosen,
+            carParkingChosen = carParkingChosen,
+            rooftopChosen = rooftopChosen,
+            dinningRoomChosen = dinningRoomChosen,
+            kitchenRoomChosen = kitchenRoomChosen
         )
     }
 }
@@ -195,6 +294,7 @@ internal fun SearchScreen(
     onClearData: (String) -> Unit,
     onSearchClick: () -> Unit,
     isShowSearchOption: Boolean,
+    isShowSearchHighOptionVM: MutableState<Boolean>,
     onTrainingIconTextClick: () -> Unit,
     filter: String,
     onFilterChange: (String) -> Unit,
@@ -205,9 +305,21 @@ internal fun SearchScreen(
     realEstates: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
     onItemSaveClick: (Int) -> Unit,
-    priceChosen: ItemChoose
+    priceChosen: ItemChoose,
+    squareChosen: ItemChoose,
+    bedroomChosen: ItemChoose,
+    floorChosen: ItemChoose,
+    juridicalChosen: ItemChoose,
+    directionChosen: ItemChoose,
+    streetInFrontChosen: ItemChoose,
+    widthChosen: ItemChoose,
+    lengthChosen: ItemChoose,
+    carParkingChosen: ItemChoose,
+    rooftopChosen: ItemChoose,
+    dinningRoomChosen: ItemChoose,
+    kitchenRoomChosen: ItemChoose
 ) {
-    var isShowSearchHighOption by remember { mutableStateOf(false) }
+    var isShowSearchHighOption by remember { isShowSearchHighOptionVM }
 
     BaseScreen(
         toolbar = {
@@ -216,7 +328,7 @@ internal fun SearchScreen(
                     .padding(top = PADDING_HORIZONTAL_SCREEN.dp)
                     .fillMaxWidth()
                     .then(
-                        if (isShowSearchHighOption) Modifier.weight(1f)
+                        if (isShowSearchHighOption && isShowSearchOption) Modifier.weight(1f)
                         else Modifier
                     )
             ) {
@@ -274,9 +386,25 @@ internal fun SearchScreen(
                 Column(
                     modifier = Modifier
                         .constrainAs(searchOptionGroup) {
-                            top.linkTo(edtSearch.bottom, MARGIN_DIFFERENT_VIEW.dp)
-                            height =
-                                if (isShowSearchOption) Dimension.wrapContent else Dimension.value(0.dp)
+                            linkTo(
+                                top = edtSearch.bottom,
+                                topMargin = MARGIN_DIFFERENT_VIEW.dp,
+                                bottom = tvSortTitle.top,
+                                bottomMargin = MARGIN_VIEW.dp,
+                                bias = 0f
+                            )
+                            height = when {
+                                isShowSearchOption && !isShowSearchHighOption -> {
+                                    Dimension.wrapContent
+                                }
+                                isShowSearchOption && isShowSearchHighOption -> {
+                                    Dimension.fillToConstraints
+                                }
+                                else -> {
+                                    Dimension.value(0.dp)
+                                }
+                            }
+                            verticalChainWeight = 1f
                             width = Dimension.matchParent
                         }
                         .animateContentSize(
@@ -308,9 +436,7 @@ internal fun SearchScreen(
                     ComboBox(
                         modifier = Modifier
                             .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
-                        onItemClick = {
-                            onComboBoxClick(FIELD_ADDRESS)
-                        },
+                        onItemClick = { onComboBoxClick(FIELD_ADDRESS) },
                         leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Location),
                         title = stringResource(id = R.string.addressTitle),
                         value = addressDetail,
@@ -321,13 +447,14 @@ internal fun SearchScreen(
                     ComboBox(
                         modifier = Modifier
                             .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
-                        onItemClick = {
-                            onComboBoxClick(FIELD_PRICE)
-                        },
+                        onItemClick = { onComboBoxClick(FIELD_PRICE) },
                         leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Money),
                         title = stringResource(id = R.string.priceTitle),
                         value = priceChosen.name,
-                        hint = stringResource(id = R.string.priceHint),
+                        hint = stringResource(
+                            id = R.string.chooseHint,
+                            stringResource(id = R.string.priceTitle)
+                        ),
                         onClearData = { onClearData(FIELD_PRICE) }
                     )
                     Spacing(MARGIN_VIEW)
@@ -348,7 +475,161 @@ internal fun SearchScreen(
                                 isShowSearchHighOption = !isShowSearchHighOption
                             }
                     )
-                    Spacing(MARGIN_VIEW)
+                    if (isShowSearchHighOption) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                                .background(RealEstateAppTheme.colors.bgScreen)
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_SQUARE) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Square),
+                                title = stringResource(id = R.string.squareTitle),
+                                value = squareChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.squareTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_SQUARE) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_BED_ROOM) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Bed),
+                                title = stringResource(id = R.string.bedroomTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.bedroomTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_BED_ROOM) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_FLOOR) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Floors),
+                                title = stringResource(id = R.string.floorTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.floorTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_FLOOR) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_JURIDICAL) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Legal),
+                                title = stringResource(id = R.string.juridicalTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.juridicalTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_JURIDICAL) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_DIRECTION) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Compass),
+                                title = stringResource(id = R.string.directionTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.directionTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_DIRECTION) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_STREET_OF_FRONT) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.StreetInFront),
+                                title = stringResource(id = R.string.streetOfFrontTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.streetOfFrontTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_STREET_OF_FRONT) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_WIDTH) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Width),
+                                title = stringResource(id = R.string.widthTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.widthTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_WIDTH) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_LENGTH) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Length),
+                                title = stringResource(id = R.string.lengthTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.lengthTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_LENGTH) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_CAR_PARKING) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.CarParking),
+                                title = stringResource(id = R.string.carParkingTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.carParkingTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_CAR_PARKING) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_ROOFTOP) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Rooftop),
+                                title = stringResource(id = R.string.rooftopTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.rooftopTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_ROOFTOP) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_DINING_ROOM) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.DiningRoom),
+                                title = stringResource(id = R.string.diningTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.diningTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_DINING_ROOM) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                            ComboBox(
+                                onItemClick = { onComboBoxClick(FIELD_KITCHEN_ROOM) },
+                                leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Kitchen),
+                                title = stringResource(id = R.string.kitchenTitle),
+                                value = priceChosen.name,
+                                hint = stringResource(
+                                    id = R.string.chooseHint,
+                                    stringResource(id = R.string.kitchenTitle)
+                                ),
+                                onClearData = { onClearData(FIELD_KITCHEN_ROOM) }
+                            )
+                            Spacing(MARGIN_VIEW)
+                        }
+                    }
                 }
                 Text(
                     text = stringResource(id = R.string.sortTitle),
@@ -360,16 +641,14 @@ internal fun SearchScreen(
                     modifier = Modifier
                         .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
                         .constrainAs(tvSortTitle) {
-                            top.linkTo(
-                                searchOptionGroup.bottom,
-                            )
+                            bottom.linkTo(sortTypes.top, PADDING_VIEW.dp)
                         },
                 )
                 LazyRow(
                     modifier = Modifier
                         .wrapContentHeight()
                         .constrainAs(sortTypes) {
-                            top.linkTo(tvSortTitle.bottom, PADDING_VIEW.dp)
+                            bottom.linkTo(borderBottom.top, PADDING_VIEW.dp)
                             width = Dimension.matchParent
                         },
                     state = rememberLazyListState(),
@@ -391,40 +670,42 @@ internal fun SearchScreen(
                 BorderLine(
                     modifier = Modifier
                         .constrainAs(borderBottom) {
-                            linkTo(
-                                top = sortTypes.bottom,
-                                topMargin = MARGIN_VIEW.dp,
-                                bottom = parent.bottom,
-                                bias = 1f
-                            )
+                            bottom.linkTo(parent.bottom)
                         }
                 )
             }
         },
         contentNonScroll = {
-            if (!isShowSearchHighOption) {
-                LazyColumn(
-                    modifier = modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .background(RealEstateAppTheme.colors.bgScreen),
-                    state = rememberLazyListState(),
-                    verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
-                ) {
-                    items(
-                        items = realEstates,
-                        key = { realEstate ->
-                            realEstate.id
-                        },
-                    ) { realEstate ->
-                        ItemRealEstate(
-                            item = realEstate,
-                            onItemClick = onRealEstateItemClick,
-                            onSaveClick = onItemSaveClick
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(RealEstateAppTheme.colors.bgScreen)
+                    .animateContentSize(
+                        animationSpec = spring(
+                            stiffness = TWEEN_ANIMATION_TIME.toFloat(),
+                            dampingRatio = 2f
                         )
-                    }
+                    )
+                    .then(
+                        if (isShowSearchHighOption) Modifier.height(0.dp)
+                        else Modifier.weight(1f)
+                    ),
+                state = rememberLazyListState(),
+                verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
+            ) {
+                items(
+                    items = realEstates,
+                    key = { realEstate ->
+                        realEstate.id
+                    },
+                ) { realEstate ->
+                    ItemRealEstate(
+                        item = realEstate,
+                        onItemClick = onRealEstateItemClick,
+                        onSaveClick = onItemSaveClick
+                    )
                 }
             }
         },

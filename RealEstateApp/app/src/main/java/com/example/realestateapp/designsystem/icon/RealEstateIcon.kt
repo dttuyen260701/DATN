@@ -64,6 +64,7 @@ object RealEstateIcon {
     const val District = R.drawable.ic_district
     const val Ward = R.drawable.ic_ward
     const val Money = R.drawable.ic_money
+    const val CarParking = R.drawable.ic_car_parking
 }
 
 /**

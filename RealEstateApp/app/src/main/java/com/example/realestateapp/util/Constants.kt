@@ -33,6 +33,18 @@ class Constants {
         const val FIELD_WARD = "ward"
         const val FIELD_STREET = "street"
         const val FIELD_PRICE = "price"
+        const val FIELD_SQUARE = "square"
+        const val FIELD_BED_ROOM = "bedroom"
+        const val FIELD_FLOOR = "floor"
+        const val FIELD_JURIDICAL = "juridical"
+        const val FIELD_DIRECTION = "direction"
+        const val FIELD_STREET_OF_FRONT = "street_of_front"
+        const val FIELD_WIDTH = "width"
+        const val FIELD_LENGTH = "length"
+        const val FIELD_CAR_PARKING = "car_parking"
+        const val FIELD_ROOFTOP = "rooftop"
+        const val FIELD_DINING_ROOM = "dining_room"
+        const val FIELD_KITCHEN_ROOM = "kitchen_room"
     }
 
     object PermissionTitle {

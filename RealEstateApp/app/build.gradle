@@ -32,7 +32,7 @@ android {
     applicationVariants.all { variant ->
         switch (variant.getName()) {
             case "debug":
-                variant.buildConfigField "String", "API_URL", '"https://0436-14-254-245-241.ngrok-free.app"'
+                variant.buildConfigField "String", "API_URL", '"https://3d67-42-119-200-209.ngrok-free.app"'
                 break
             case "release":
                 variant.buildConfigField "String", "API_URL", '"https://api.monstar.ch/"'
@@ -87,7 +87,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.activity:activity-compose:1.7.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material:material:1.4.3"

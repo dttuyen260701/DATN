@@ -36,6 +36,7 @@ class SearchViewModel @Inject constructor(
     application: Application
 ) : BaseViewModel<SearchUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(SearchUiState.InitView)
+    internal var isShowSearchHighOption = mutableStateOf(false)
     internal var filter = mutableStateOf("")
     internal var detailAddress = mutableStateOf("")
     internal var typesData = mutableStateListOf<ItemChoose>()
@@ -50,11 +51,11 @@ class SearchViewModel @Inject constructor(
             name = application.getString(R.string.viewSortTitle),
             score = -2
         ),
-            ItemChoose(
-                id = SearchOption.HIGHEST_PRICE.option,
-                name = application.getString(R.string.highestPriceSortTitle),
-                score = -3
-            ),
+        ItemChoose(
+            id = SearchOption.HIGHEST_PRICE.option,
+            name = application.getString(R.string.highestPriceSortTitle),
+            score = -3
+        ),
         ItemChoose(
             id = SearchOption.LOWEST_PRICE.option,
             name = application.getString(R.string.lowestPriceSortTitle),
@@ -63,6 +64,30 @@ class SearchViewModel @Inject constructor(
     )
     internal var priceChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var priceOptions = mutableStateListOf<ItemChoose>()
+    internal var squareChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var squareOptions = mutableStateListOf<ItemChoose>()
+    internal var bedroomChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var bedroomOptions = mutableStateListOf<ItemChoose>()
+    internal var floorChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var floorOptions = mutableStateListOf<ItemChoose>()
+    internal var juridicalChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var juridicalOptions = mutableStateListOf<ItemChoose>()
+    internal var directionChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var directionOptions = mutableStateListOf<ItemChoose>()
+    internal var streetInFrontChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var streetInFrontOptions = mutableStateListOf<ItemChoose>()
+    internal var widthChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var widthOptions = mutableStateListOf<ItemChoose>()
+    internal var lengthChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var lengthOptions = mutableStateListOf<ItemChoose>()
+    internal var carParkingChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var carParkingOptions = mutableStateListOf<ItemChoose>()
+    internal var rooftopChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var rooftopOptions = mutableStateListOf<ItemChoose>()
+    internal var dinningRoomChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var dinningRoomOptions = mutableStateListOf<ItemChoose>()
+    internal var kitchenRoomChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var kitchenRoomOptions = mutableStateListOf<ItemChoose>()
 
     internal fun onChoiceSortType(idType: Int) {
         val oldIndex = sortOptions.indexOfFirst { it.isSelected }
