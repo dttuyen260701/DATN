@@ -56,6 +56,7 @@ class Constants {
 
     object DefaultValue {
         val DEFAULT_ITEM_CHOSEN = ItemChoose(-1, "", 1)
+        val DEFAULT_ITEM_SEARCH = ItemChoose(0, "", 0)
         const val ALPHA_TITLE = 0.8f
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24

@@ -44,7 +44,7 @@
     <!--RealEstate Item, Detail-->
     <string name="squareUnit">%s m²</string>
     <string name="unitMTitle">%s m</string>
-    <string name="bedRoomTitle">%s PN</string>
+    <string name="numberBedRoomTitle">%s PN</string>
     <string name="floorsTitle">%s Tầng</string>
     <string name="kitchenTitle">Nhà bếp</string>
     <string name="rooftopTitle">Sân thượng</string>

@@ -173,6 +173,138 @@ internal fun SearchRoute(
                                 showDialog(dialog = TypeDialog.Hide)
                             }
                         }
+                        FIELD_BED_ROOM -> {
+                            bedroomOptions.clear()
+                            title = context.getString(R.string.bedroomTitle)
+                            data = bedroomOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                bedroomChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_FLOOR -> {
+                            floorOptions.clear()
+                            title = context.getString(R.string.floorTitle)
+                            data = floorOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                floorChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_JURIDICAL -> {
+                            juridicalOptions.clear()
+                            title = context.getString(R.string.juridicalTitle)
+                            data = juridicalOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                juridicalChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_DIRECTION -> {
+                            directionOptions.clear()
+                            title = context.getString(R.string.directionTitle)
+                            data = directionOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                directionChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_STREET_OF_FRONT -> {
+                            streetInFrontOptions.clear()
+                            title = context.getString(R.string.streetOfFrontTitle)
+                            data = streetInFrontOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                streetInFrontChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_WIDTH -> {
+                            widthOptions.clear()
+                            title = context.getString(R.string.widthTitle)
+                            data = widthOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                widthChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_LENGTH -> {
+                            lengthOptions.clear()
+                            title = context.getString(R.string.lengthTitle)
+                            data = lengthOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                lengthChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_CAR_PARKING -> {
+                            carParkingOptions.clear()
+                            title = context.getString(R.string.carParkingTitle)
+                            data = carParkingOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                carParkingChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_ROOFTOP -> {
+                            rooftopOptions.clear()
+                            title = context.getString(R.string.rooftopTitle)
+                            data = rooftopOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                rooftopChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_DINING_ROOM -> {
+                            dinningRoomOptions.clear()
+                            title = context.getString(R.string.diningRoomTitle)
+                            data = dinningRoomOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                dinningRoomChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_KITCHEN_ROOM -> {
+                            kitchenRoomOptions.clear()
+                            title = context.getString(R.string.kitchenTitle)
+                            data = kitchenRoomOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                kitchenRoomChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
                         else -> {}
                     }
                     if (key != FIELD_ADDRESS) {
@@ -500,7 +632,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_BED_ROOM) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Bed),
                                 title = stringResource(id = R.string.bedroomTitle),
-                                value = priceChosen.name,
+                                value = bedroomChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.bedroomTitle)
@@ -512,7 +644,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_FLOOR) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Floors),
                                 title = stringResource(id = R.string.floorTitle),
-                                value = priceChosen.name,
+                                value = floorChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.floorTitle)
@@ -524,7 +656,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_JURIDICAL) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Legal),
                                 title = stringResource(id = R.string.juridicalTitle),
-                                value = priceChosen.name,
+                                value = juridicalChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.juridicalTitle)
@@ -536,7 +668,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_DIRECTION) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Compass),
                                 title = stringResource(id = R.string.directionTitle),
-                                value = priceChosen.name,
+                                value = directionChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.directionTitle)
@@ -548,7 +680,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_STREET_OF_FRONT) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.StreetInFront),
                                 title = stringResource(id = R.string.streetOfFrontTitle),
-                                value = priceChosen.name,
+                                value = streetInFrontChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.streetOfFrontTitle)
@@ -560,7 +692,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_WIDTH) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Width),
                                 title = stringResource(id = R.string.widthTitle),
-                                value = priceChosen.name,
+                                value = widthChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.widthTitle)
@@ -572,7 +704,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_LENGTH) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Length),
                                 title = stringResource(id = R.string.lengthTitle),
-                                value = priceChosen.name,
+                                value = lengthChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.lengthTitle)
@@ -584,7 +716,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_CAR_PARKING) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.CarParking),
                                 title = stringResource(id = R.string.carParkingTitle),
-                                value = priceChosen.name,
+                                value = carParkingChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.carParkingTitle)
@@ -596,7 +728,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_ROOFTOP) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Rooftop),
                                 title = stringResource(id = R.string.rooftopTitle),
-                                value = priceChosen.name,
+                                value = rooftopChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.rooftopTitle)
@@ -608,7 +740,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_DINING_ROOM) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.DiningRoom),
                                 title = stringResource(id = R.string.diningTitle),
-                                value = priceChosen.name,
+                                value = dinningRoomChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.diningTitle)
@@ -620,7 +752,7 @@ internal fun SearchScreen(
                                 onItemClick = { onComboBoxClick(FIELD_KITCHEN_ROOM) },
                                 leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Kitchen),
                                 title = stringResource(id = R.string.kitchenTitle),
-                                value = priceChosen.name,
+                                value = kitchenRoomChosen.name,
                                 hint = stringResource(
                                     id = R.string.chooseHint,
                                     stringResource(id = R.string.kitchenTitle)

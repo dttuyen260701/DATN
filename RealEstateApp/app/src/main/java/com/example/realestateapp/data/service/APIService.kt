@@ -6,6 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -71,4 +72,11 @@ interface APIService {
         @Path("districtId") districtId: String,
         @Query("search") filter: String
     ): Response<ResponseAPI<MutableList<ItemChoose>>>
+
+    @PUT("/api/Posts/search/{userId}")
+    @JvmSuppressWildcards
+    suspend fun searchPostWithOptions(
+        @Path("userId") idUser: String,
+        @Body options: Map<String, Any>
+    ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 }

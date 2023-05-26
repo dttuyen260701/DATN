@@ -207,7 +207,7 @@ internal fun DialogChoiceData(
 ) {
     var filter by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(true) }
-    var dataSearch = data.filter { it.name.contains(filter) }
+    var dataSearch = data.filter { it.name.contains(filter, true) }
     Column(
         modifier = Modifier
             .background(Color.Black.copy(alpha = 0.3f))

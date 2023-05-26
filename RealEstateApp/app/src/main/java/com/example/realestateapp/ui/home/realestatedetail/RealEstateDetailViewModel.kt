@@ -155,7 +155,7 @@ class RealEstateDetailViewModel @Inject constructor(
                                 add(
                                     RealEstateProperty(
                                         title = application.getString(
-                                            R.string.bedRoomTitle,
+                                            R.string.numberBedRoomTitle,
                                             it.toString()
                                         ),
                                         leadingIcon = AppIcon.DrawableResourceIcon(
