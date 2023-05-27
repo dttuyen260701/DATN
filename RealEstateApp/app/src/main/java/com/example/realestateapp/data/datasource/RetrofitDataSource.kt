@@ -59,4 +59,33 @@ interface RetrofitDataSource {
         districtId: String,
         filter: String
     ): ApiResultWrapper<MutableList<ItemChoose>>
+
+    suspend fun searchPostWithOptions(
+        idUser: String,
+        minBedRoom: Int,
+        maxBedRoom: Int,
+        minWidth: Int,
+        maxWidth: Int,
+        minSquare: Int,
+        maxSquare: Int,
+        minLength: Int,
+        maxLength: Int,
+        minFloor: Int,
+        maxFloor: Int,
+        minKitchen: Int,
+        maxKitchen: Int,
+        propertyTypeId: Int,
+        legalId: Int,
+        carParking: Boolean?,
+        directionId: Int,
+        rooftop: Boolean?,
+        districtId: Int?,
+        wardId: Int?,
+        streetId: Int?,
+        minWidthRoad: Int,
+        maxWidthRoad: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        search: String
+    ): ApiResultWrapper<PagingItem<RealEstateList>>
 }

@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.*
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_BED_ROOM
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_CAR_PARKING
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DINING_ROOM
@@ -24,7 +26,7 @@ import com.example.realestateapp.util.Constants.DefaultField.FIELD_ROOFTOP
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_SQUARE
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET_OF_FRONT
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_WIDTH
-import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_SEARCH
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,9 +38,15 @@ import javax.inject.Inject
 sealed class SearchUiState : UiState() {
     object InitView : SearchUiState()
 
+    object Loading : SearchUiState()
+
     object Error : SearchUiState()
 
+    object Done : SearchUiState()
+
     data class GetTypesSuccess(val data: MutableList<ItemChoose>) : SearchUiState()
+
+    data class GetSearchDataSuccess(val data: MutableList<RealEstateList>) : SearchUiState()
 }
 
 @HiltViewModel
@@ -47,7 +55,11 @@ class SearchViewModel @Inject constructor(
     application: Application
 ) : BaseViewModel<SearchUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(SearchUiState.InitView)
+    internal var searchResult = mutableStateListOf<RealEstateList>()
+    internal var isShowSearchOption = mutableStateOf(true)
     internal var isShowSearchHighOption = mutableStateOf(false)
+    internal var isFirstComposing = mutableStateOf(true)
+    internal var isNavigateAnotherScr = mutableStateOf(false)
     internal var filter = mutableStateOf("")
     internal var detailAddress = mutableStateOf("")
     internal var typesData = mutableStateListOf<ItemChoose>()
@@ -73,34 +85,34 @@ class SearchViewModel @Inject constructor(
             score = -4
         )
     )
-    internal var priceChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var priceChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var priceOptions = mutableStateListOf<ItemChoose>()
-    internal var squareChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var squareChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var squareOptions = mutableStateListOf<ItemChoose>()
-    internal var bedroomChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var bedroomChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var bedroomOptions = mutableStateListOf<ItemChoose>()
-    internal var floorChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var floorChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var floorOptions = mutableStateListOf<ItemChoose>()
-    internal var juridicalChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var juridicalChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var juridicalOptions = mutableStateListOf<ItemChoose>()
-    internal var directionChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var directionChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var directionOptions = mutableStateListOf<ItemChoose>()
-    internal var streetInFrontChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var streetInFrontChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var streetInFrontOptions = mutableStateListOf<ItemChoose>()
-    internal var widthChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var widthChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var widthOptions = mutableStateListOf<ItemChoose>()
-    internal var lengthChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var lengthChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var lengthOptions = mutableStateListOf<ItemChoose>()
-    internal var carParkingChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var carParkingChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var carParkingOptions = mutableStateListOf<ItemChoose>()
-    internal var rooftopChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var rooftopChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var rooftopOptions = mutableStateListOf<ItemChoose>()
-    internal var dinningRoomChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var dinningRoomChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var dinningRoomOptions = mutableStateListOf<ItemChoose>()
-    internal var kitchenRoomChosen = mutableStateOf(DEFAULT_ITEM_SEARCH)
+    internal var kitchenRoomChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var kitchenRoomOptions = mutableStateListOf<ItemChoose>()
 
-    internal fun onChoiceSortType(idType: Int) {
+    internal fun onChoiceSortType(idType: Int, isCallApi: Boolean) {
         val oldIndex = sortOptions.indexOfFirst { it.isSelected }
         val newIndex = sortOptions.indexOfFirst { it.id == idType }
         if (oldIndex != newIndex) {
@@ -109,17 +121,81 @@ class SearchViewModel @Inject constructor(
                     sortOptions[oldIndex].copy(isSelected = false)
             sortOptions[newIndex] = sortOptions[newIndex].copy(isSelected = true)
         }
+        if (isCallApi) {
+            searchPostWithOptions(isResetPaging = true)
+        }
     }
 
     internal fun getTypes() {
         viewModelScope.launch {
-            callAPIOnThread(funCallApis = mutableListOf(
-                appRepository.getTypes(showLoading = false),
-            ), apiSuccess = {
-                uiState.value = SearchUiState.GetTypesSuccess(it.body)
-            }, apiError = {
-                uiState.value = SearchUiState.Error
-            }, showDialog = false
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getTypes(showLoading = false),
+                ), apiSuccess = {
+                    uiState.value = SearchUiState.GetTypesSuccess(it.body)
+                }, apiError = {
+                    uiState.value = SearchUiState.Error
+                }, showDialog = false
+            )
+        }
+    }
+
+    internal fun searchPostWithOptions(
+        key: String = filter.value,
+        isResetPaging: Boolean = false
+    ) {
+        if (isResetPaging) {
+            resetPaging()
+            searchResult.clear()
+        }
+        uiState.value = SearchUiState.Loading
+        viewModelScope.launch {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.searchPostWithOptions(
+                        idUser = getUser().value?.id?.toString() ?: "",
+                        minBedRoom = bedroomChosen.value.id,
+                        maxBedRoom = bedroomChosen.value.score,
+                        minWidth = widthChosen.value.id,
+                        maxWidth = widthChosen.value.score,
+                        minSquare = squareChosen.value.id,
+                        maxSquare = squareChosen.value.score,
+                        minLength = lengthChosen.value.id,
+                        maxLength = lengthChosen.value.score,
+                        minFloor = floorChosen.value.id,
+                        maxFloor = floorChosen.value.score,
+                        minKitchen = kitchenRoomChosen.value.id,
+                        maxKitchen = kitchenRoomChosen.value.score,
+                        propertyTypeId = typesData.firstOrNull { it.isSelected }?.id
+                            ?: DEFAULT_ITEM_CHOSEN.id,
+                        legalId = juridicalChosen.value.id,
+                        carParking = (carParkingChosen.value.id == 1),
+                        directionId = directionChosen.value.id,
+                        rooftop = (rooftopChosen.value.id == 1),
+                        districtId = PickAddressViewModel.districtChosen.value.id,
+                        wardId = PickAddressViewModel.wardChosen.value.id,
+                        streetId = PickAddressViewModel.streetChosen.value.id,
+                        minWidthRoad = streetInFrontChosen.value.id,
+                        maxWidthRoad = streetInFrontChosen.value.score,
+                        pageIndex = getPagingModel().pageIndex,
+                        pageSize = getPagingModel().pageSize,
+                        search = key,
+                        showLoading = false
+                    )
+                ), apiSuccess = {
+                    if (key == filter.value) {
+                        it.body.run {
+                            uiState.value =
+                                SearchUiState.GetSearchDataSuccess(items ?: mutableListOf())
+                            updatePagingModel(
+                                totalPageNew = pageCount,
+                                totalRecordsNew = totalRecords
+                            )
+                        }
+                    }
+                }, apiError = {
+                    uiState.value = SearchUiState.Error
+                }
             )
         }
     }

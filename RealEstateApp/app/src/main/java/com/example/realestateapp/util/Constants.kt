@@ -55,8 +55,7 @@ class Constants {
     }
 
     object DefaultValue {
-        val DEFAULT_ITEM_CHOSEN = ItemChoose(-1, "", 1)
-        val DEFAULT_ITEM_SEARCH = ItemChoose(0, "", 0)
+        val DEFAULT_ITEM_CHOSEN = ItemChoose(0, "", 0)
         const val ALPHA_TITLE = 0.8f
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24
@@ -77,7 +76,8 @@ class Constants {
         const val WARNING_TEXT_SIZE = 10
         const val ALPHA_HINT_COLOR = 0.5f
         const val TWEEN_ANIMATION_TIME = 300
-        const val CLICK_BUTTON_TIME = 500L
+        const val CLICK_BUTTON_TIME = 2000L
+        const val SEARCH_TIME = 700L
         const val MAP_INSTALL_REQUEST = "Vui lòng cài đặt Google Map!"
         val REAL_ESTATE_DEFAULT = RealEstateDetail(
             postId = 0,
@@ -86,7 +86,7 @@ class Constants {
             createdDate = "",
             ownerName = null,
             ownerPhone = null,
-            price = 0f,
+            price = 0.0,
             views = 0,
             isSaved = false,
             legalName = "",
@@ -110,8 +110,10 @@ class Constants {
     }
 
     object PriceUnit {
+        const val THOUSAND_BILLION = "Ngàn Tỷ"
         const val BILLION = "Tỷ"
         const val MILLION = "Triệu"
+        const val THOUSAND = "Ngàn"
         const val THOUSAND_CHAR = "k"
         const val MILLION_CHAR = "m"
         const val BILLION_CHAR = "b"

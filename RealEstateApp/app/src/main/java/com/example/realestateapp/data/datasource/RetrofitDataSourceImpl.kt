@@ -128,13 +128,75 @@ class RetrofitDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getStreets(
-        districtId : String,
+        districtId: String,
         filter: String
     ): ApiResultWrapper<MutableList<ItemChoose>> {
         return callApi {
             apiService.getStreets(
                 districtId = districtId,
                 filter = filter
+            )
+        }
+    }
+
+    override suspend fun searchPostWithOptions(
+        idUser: String,
+        minBedRoom: Int,
+        maxBedRoom: Int,
+        minWidth: Int,
+        maxWidth: Int,
+        minSquare: Int,
+        maxSquare: Int,
+        minLength: Int,
+        maxLength: Int,
+        minFloor: Int,
+        maxFloor: Int,
+        minKitchen: Int,
+        maxKitchen: Int,
+        propertyTypeId: Int,
+        legalId: Int,
+        carParking: Boolean?,
+        directionId: Int,
+        rooftop: Boolean?,
+        districtId: Int?,
+        wardId: Int?,
+        streetId: Int?,
+        minWidthRoad: Int,
+        maxWidthRoad: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        search: String
+    ): ApiResultWrapper<PagingItem<RealEstateList>> {
+        val options: MutableMap<String, Any?> = HashMap()
+        options["minBedRoom"] = minBedRoom
+        options["maxBedRoom"] = maxBedRoom
+        options["minWidth"] = minWidth
+        options["maxWidth"] = maxWidth
+        options["minSquare"] = minSquare
+        options["maxSquare"] = maxSquare
+        options["minLength"] = minLength
+        options["maxLength"] = maxLength
+        options["minFloor"] = minFloor
+        options["maxFloor"] = maxFloor
+        options["minKitchen"] = minKitchen
+        options["maxKitchen"] = maxKitchen
+        options["propertyTypeId"] = propertyTypeId
+        options["legalId"] = legalId
+        options["carParking"] = carParking
+        options["directionId"] = directionId
+        options["rooftop"] = rooftop
+        options["districtId"] = districtId
+        options["wardId"] = wardId
+        options["streetId"] = streetId
+        options["minWidthRoad"] = minWidthRoad
+        options["maxWidthRoad"] = maxWidthRoad
+        options["pageIndex"] = pageIndex
+        options["pageSize"] = pageSize
+        options["search"] = search
+        return callApi {
+            apiService.searchPostWithOptions(
+                idUser = idUser,
+                options = options
             )
         }
     }

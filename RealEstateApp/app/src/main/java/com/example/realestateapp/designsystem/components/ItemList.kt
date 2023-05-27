@@ -347,7 +347,7 @@ private fun PreviewItemRealEstate() {
             imageUrl = "https://cdn.dribbble.com/userupload/4259155/file/original-9c5357566528015850f4375ca16fee72.jpg?compress=1&resize=1024x768",
             title = "Nhà 3 ",
             square = 100.0f,
-            price = 3_000_000f,
+            price = 3_000_000.0,
             bedRooms = 3,
             floors = 3,
             address = "15 Lỗ giáng 19",

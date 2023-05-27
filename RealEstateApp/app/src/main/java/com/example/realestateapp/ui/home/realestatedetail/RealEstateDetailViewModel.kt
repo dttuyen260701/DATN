@@ -29,6 +29,8 @@ sealed class RealEstateDetailUiState : UiState() {
 
     object Error : RealEstateDetailUiState()
 
+    object Done : RealEstateDetailUiState()
+
     data class GetRealEstateDetailSuccess(val data: RealEstateDetail) :
         RealEstateDetailUiState()
 

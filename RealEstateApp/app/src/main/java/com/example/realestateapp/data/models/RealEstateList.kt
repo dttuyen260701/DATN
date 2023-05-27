@@ -12,7 +12,7 @@ data class RealEstateList(
     @SerializedName("title") val title: String?,
     @SerializedName("createdDate") val createdDate: String,
     @SerializedName("square") val square: Float,
-    @SerializedName("price") val price: Float,
+    @SerializedName("price") val price: Double,
     @SerializedName("bedRooms") val bedRooms: Int?,
     @SerializedName("floors") val floors: Int?,
     @SerializedName("address") val address: String,

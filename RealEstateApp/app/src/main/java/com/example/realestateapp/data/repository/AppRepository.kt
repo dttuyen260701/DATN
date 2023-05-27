@@ -72,4 +72,34 @@ interface AppRepository {
         filter: String,
         showLoading: Boolean = false
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
+
+    suspend fun searchPostWithOptions(
+        idUser: String = "",
+        minBedRoom: Int,
+        maxBedRoom: Int,
+        minWidth: Int,
+        maxWidth: Int,
+        minSquare: Int,
+        maxSquare: Int,
+        minLength: Int,
+        maxLength: Int,
+        minFloor: Int,
+        maxFloor: Int,
+        minKitchen: Int,
+        maxKitchen: Int,
+        propertyTypeId: Int,
+        legalId: Int,
+        carParking: Boolean? = null,
+        directionId: Int,
+        rooftop: Boolean? = null,
+        districtId: Int? = null,
+        wardId: Int? = null,
+        streetId: Int? = null,
+        minWidthRoad: Int,
+        maxWidthRoad: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        search: String,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 }

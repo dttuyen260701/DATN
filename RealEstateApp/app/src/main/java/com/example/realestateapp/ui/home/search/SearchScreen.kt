@@ -5,13 +5,11 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -60,8 +58,10 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VI
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.SEARCH_TIME
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
+import kotlinx.coroutines.delay
 
 /**
  * Created by tuyen.dang on 5/19/2023.
@@ -80,10 +80,12 @@ internal fun SearchRoute(
     val context = LocalContext.current
     viewModel.run {
         var filter by remember { filter }
+        val searchResultListState = rememberLazyListState()
+        val searchResult = remember { searchResult }
         val sortOptions = remember { sortOptions }
         val types = remember { typesData }
-        var isShowSearchOption by remember { mutableStateOf(true) }
-        val uiState by remember { uiState }
+        var isShowSearchOption by remember { isShowSearchOption }
+        var uiState by remember { uiState }
         var addressDetailDisplay by remember { detailAddress }
         var priceChosen by remember { priceChosen }
         val priceOptions = remember { priceOptions }
@@ -112,6 +114,13 @@ internal fun SearchRoute(
         var kitchenRoomChosen by remember { kitchenRoomChosen }
         val kitchenRoomOptions = remember { kitchenRoomOptions }
         val addressDetailsScr = remember { addressDetails }
+        var isFirstComposing by remember { isFirstComposing }
+        val isLoading by remember {
+            derivedStateOf {
+                uiState is SearchUiState.Loading
+            }
+        }
+        var isNavigateAnotherScr by remember { isNavigateAnotherScr }
 
         if (addressDetailsScr[0].isNotEmpty()) {
             addressDetailDisplay = addressDetailsScr[0]
@@ -120,7 +129,7 @@ internal fun SearchRoute(
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is SearchUiState.InitView -> {
-                    onChoiceSortType(searchOption)
+                    onChoiceSortType(searchOption, false)
                     getTypes()
                 }
                 is SearchUiState.GetTypesSuccess -> {
@@ -129,11 +138,41 @@ internal fun SearchRoute(
                         addAll((uiState as SearchUiState.GetTypesSuccess).data)
                     }
                 }
+                is SearchUiState.GetSearchDataSuccess -> {
+                    searchResult.addAll((uiState as SearchUiState.GetSearchDataSuccess).data)
+                    if (isFirstComposing) {
+                        isFirstComposing = false
+                    } else {
+                        isShowSearchOption = false
+                    }
+                    uiState = SearchUiState.Done
+                }
+                else -> {}
+            }
+        }
+
+        LaunchedEffect(key1 = searchResultListState.canScrollForward) {
+            if (!searchResultListState.canScrollForward
+                && getPagingModel().checkAvailableCallApi()
+                && !isFirstComposing
+                && !isNavigateAnotherScr
+            ) {
+                searchPostWithOptions()
+            }
+        }
+
+        LaunchedEffect(key1 = filter) {
+            if (isNavigateAnotherScr) {
+                isNavigateAnotherScr = false
+            } else {
+                delay(SEARCH_TIME)
+                searchPostWithOptions(filter, true)
             }
         }
 
         SearchScreen(
             modifier = modifier,
+            isLoading = isLoading,
             onBackClick = remember { onBackClick },
             addressDetail = addressDetailDisplay,
             onComboBoxClick = remember {
@@ -148,6 +187,7 @@ internal fun SearchRoute(
                                 PickAddressViewModel.clearDataChosen()
                             }
                             navigateToPickAddress()
+                            isNavigateAnotherScr = true
                         }
                         FIELD_PRICE -> {
                             priceOptions.clear()
@@ -372,7 +412,9 @@ internal fun SearchRoute(
                 }
             },
             onSearchClick = remember {
-                {}
+                {
+                    searchPostWithOptions(isResetPaging = true)
+                }
             },
             isShowSearchOption = isShowSearchOption,
             isShowSearchHighOptionVM = isShowSearchHighOption,
@@ -387,16 +429,27 @@ internal fun SearchRoute(
             },
             types = types,
             onTypeItemClick = remember {
-                {}
+                {
+
+                }
             },
             sortOptions = sortOptions,
             onSortItemClick = remember {
                 {
-                    onChoiceSortType(it.id)
+                    onChoiceSortType(
+                        idType = it.id,
+                        isCallApi = !isShowSearchHighOption.value
+                    )
                 }
             },
-            realEstates = mutableListOf(),
-            onRealEstateItemClick = remember { onRealEstateItemClick },
+            searchResultListState = searchResultListState,
+            realEstates = searchResult,
+            onRealEstateItemClick = remember {
+                {
+                    isNavigateAnotherScr = true
+                    onRealEstateItemClick(it)
+                }
+            },
             onItemSaveClick = remember {
                 {}
             },
@@ -420,6 +473,7 @@ internal fun SearchRoute(
 @Composable
 internal fun SearchScreen(
     modifier: Modifier,
+    isLoading: Boolean,
     onBackClick: () -> Unit,
     addressDetail: String,
     onComboBoxClick: (String) -> Unit,
@@ -434,6 +488,7 @@ internal fun SearchScreen(
     onTypeItemClick: () -> Unit,
     sortOptions: MutableList<ItemChoose>,
     onSortItemClick: (ItemChoose) -> Unit,
+    searchResultListState: LazyListState,
     realEstates: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
     onItemSaveClick: (Int) -> Unit,
@@ -520,7 +575,8 @@ internal fun SearchScreen(
                         .constrainAs(searchOptionGroup) {
                             linkTo(
                                 top = edtSearch.bottom,
-                                topMargin = MARGIN_DIFFERENT_VIEW.dp,
+                                topMargin = if (!isShowSearchOption && !isShowSearchHighOption) 0.dp
+                                else MARGIN_DIFFERENT_VIEW.dp,
                                 bottom = tvSortTitle.top,
                                 bottomMargin = MARGIN_VIEW.dp,
                                 bias = 0f
@@ -808,35 +864,84 @@ internal fun SearchScreen(
             }
         },
         contentNonScroll = {
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(RealEstateAppTheme.colors.bgScreen)
-                    .animateContentSize(
-                        animationSpec = spring(
-                            stiffness = TWEEN_ANIMATION_TIME.toFloat(),
-                            dampingRatio = 2f
+            if (realEstates.isNotEmpty()) {
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .background(RealEstateAppTheme.colors.bgScreen)
+                        .animateContentSize(
+                            animationSpec = spring(
+                                stiffness = TWEEN_ANIMATION_TIME.toFloat(),
+                                dampingRatio = 2f
+                            )
                         )
-                    )
-                    .then(
-                        if (isShowSearchHighOption) Modifier.height(0.dp)
-                        else Modifier.weight(1f)
-                    ),
-                state = rememberLazyListState(),
-                verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
-            ) {
-                items(
-                    items = realEstates,
-                    key = { realEstate ->
-                        realEstate.id
-                    },
-                ) { realEstate ->
-                    ItemRealEstate(
-                        item = realEstate,
-                        onItemClick = onRealEstateItemClick,
-                        onSaveClick = onItemSaveClick
+                        .then(
+                            if (isShowSearchHighOption && isShowSearchOption) Modifier.height(0.dp)
+                            else Modifier.weight(1f)
+                        ),
+                    state = searchResultListState,
+                    verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
+                ) {
+                    items(
+                        items = realEstates,
+                        key = { realEstate ->
+                            realEstate.id
+                        },
+                    ) { realEstate ->
+                        ItemRealEstate(
+                            item = realEstate,
+                            onItemClick = onRealEstateItemClick,
+                            onSaveClick = onItemSaveClick
+                        )
+                    }
+                }
+                Spacing(MARGIN_VIEW)
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Transparent),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = RealEstateAppTheme.colors.progressBar
+                        )
+                    }
+                }
+            } else {
+                Spacing(MARGIN_DIFFERENT_VIEW)
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Transparent)
+                            .then(
+                                if (isShowSearchHighOption && isShowSearchOption) Modifier.height(0.dp)
+                                else Modifier.weight(1f)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = RealEstateAppTheme.colors.progressBar
+                        )
+                    }
+                } else {
+                    Text(
+                        text = stringResource(id = R.string.emptyTitle),
+                        style = RealEstateTypography.body1.copy(
+                            color = RealEstateAppTheme.colors.primary,
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Transparent)
+                            .then(
+                                if (isShowSearchHighOption && isShowSearchOption) Modifier.height(0.dp)
+                                else Modifier.weight(1f)
+                            )
                     )
                 }
             }

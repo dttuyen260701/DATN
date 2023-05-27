@@ -7,7 +7,7 @@ import kotlin.math.round
  * Created by tuyen.dang on 5/14/2023.
  */
  
-internal fun Float.formatToMoney(): String {
+internal fun Double.formatToMoney(): String {
     return try {
         var price = this
         var count = 0
@@ -17,8 +17,10 @@ internal fun Float.formatToMoney(): String {
         }
         "$price ${
             when (count) {
-                1 -> Constants.PriceUnit.MILLION
-                2 -> Constants.PriceUnit.BILLION
+                1 -> Constants.PriceUnit.THOUSAND
+                2 -> Constants.PriceUnit.MILLION
+                3 -> Constants.PriceUnit.BILLION
+                4 -> Constants.PriceUnit.THOUSAND_BILLION
                 else -> ""
             }
         }".replace(".", ",")

@@ -28,6 +28,8 @@ sealed class HomeUiState : UiState() {
 
     object Error : HomeUiState()
 
+    object Done : HomeUiState()
+
     object DoneSignInBackground : HomeUiState()
 
     data class GetTypesSuccess(val data: MutableList<ItemChoose>) : HomeUiState()

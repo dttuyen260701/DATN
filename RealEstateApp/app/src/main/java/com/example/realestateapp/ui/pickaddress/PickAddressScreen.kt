@@ -20,6 +20,7 @@ import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.extension.handleAddressException
 import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
@@ -55,7 +56,7 @@ internal fun PickAddressRoute(
         var districtChosen by remember { PickAddressViewModel.districtChosen }
         var wardChosen by remember { PickAddressViewModel.wardChosen }
         var streetChosen by remember { PickAddressViewModel.streetChosen }
-        val uiState by remember { uiState }
+        var uiState by remember { uiState }
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -70,18 +71,21 @@ internal fun PickAddressRoute(
                         clear()
                         addAll((uiState as PickAddressUiState.GetDistrictSuccess).data)
                     }
+                    uiState = PickAddressUiState.Done
                 }
                 is PickAddressUiState.GetWardSuccess -> {
                     wards.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetWardSuccess).data)
                     }
+                    uiState = PickAddressUiState.Done
                 }
                 is PickAddressUiState.GetStreetSuccess -> {
                     streets.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetStreetSuccess).data)
                     }
+                    uiState = PickAddressUiState.Done
                 }
                 else -> {}
             }
@@ -115,12 +119,13 @@ internal fun PickAddressRoute(
                                                 addressLine = result[0].getAddressLine(0)
                                             }
                                             updateChoiceData(
-                                                nameDistrict = result?.get(0)?.subAdminArea,
+                                                nameDistrict = result?.get(0)?.subAdminArea?.handleAddressException(),
                                                 nameWard = getWardFromAddressLine(
                                                     addressLine,
-                                                    result?.get(0)?.subAdminArea ?: ""
+                                                    result?.get(0)?.subAdminArea?.handleAddressException()
+                                                        ?: ""
                                                 ),
-                                                nameStreet = result?.get(0)?.thoroughfare
+                                                nameStreet = result?.get(0)?.thoroughfare?.handleAddressException()
                                             )
                                         } catch (e: IOException) {
                                             e.printStackTrace()
@@ -265,7 +270,7 @@ private fun getWardFromAddressLine(addressLine: String, districtName: String): S
     val temp = addressLine.split(", $districtName,")[0]
     return temp
         .split(",")[temp.split(",").lastIndex]
-        .replace("Hoà", "Hòa")
+        .replace("Hòa", "Hoà")
         .replace("Hòa Thuận Nam", "Hòa Thuận Tây")
 }
 

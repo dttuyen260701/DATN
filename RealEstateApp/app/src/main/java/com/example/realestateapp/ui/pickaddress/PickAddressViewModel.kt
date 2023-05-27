@@ -25,6 +25,8 @@ sealed class PickAddressUiState : UiState() {
 
     object Error : PickAddressUiState()
 
+    object Done : PickAddressUiState()
+
     data class GetDistrictSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
 
     data class GetWardSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
@@ -142,11 +144,7 @@ class PickAddressViewModel @Inject constructor(
         nameDistrict?.let { district ->
             districtChosen.value =
                 districtsData.firstOrNull { it.name.contains(district, true) }
-                    ?: ItemChoose(
-                        id = -1,
-                        name = nameDistrict,
-                        score = 1
-                    )
+                    ?: DEFAULT_ITEM_CHOSEN
             if (districtChosen.value != DEFAULT_ITEM_CHOSEN) {
                 nameWard?.let {
                     getWards(

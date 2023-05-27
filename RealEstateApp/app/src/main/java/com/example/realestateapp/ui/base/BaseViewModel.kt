@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.apiresult.ResponseAPI
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.PagingModel
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
@@ -56,11 +57,34 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         private var requestPermission: (MutableList<String>) -> Unit = { _ -> }
 
         private var grantedPermission: (Map<String, Boolean>) -> Unit = {}
+
+        private var pagingModel = PagingModel()
     }
 
     abstract var uiState: MutableState<UiState>
 
-    internal fun requestPermissionListener(permission: MutableList<String>, onGranted: (Map<String, Boolean>) -> Unit) {
+    internal fun getPagingModel() = pagingModel
+
+    internal fun updatePagingModel(
+        totalRecordsNew: Int = 0,
+        totalPageNew: Int = 1
+    ) {
+        pagingModel.run {
+            totalPage = totalPageNew
+            totalRecords = totalRecordsNew
+            if(pageIndex <= totalPage)
+                pageIndex += 1
+        }
+    }
+
+    internal fun resetPaging() {
+        pagingModel = PagingModel()
+    }
+
+    internal fun requestPermissionListener(
+        permission: MutableList<String>,
+        onGranted: (Map<String, Boolean>) -> Unit
+    ) {
         grantedPermission = onGranted
         requestPermission(permission)
     }

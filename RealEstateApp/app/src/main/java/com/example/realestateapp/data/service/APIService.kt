@@ -77,6 +77,6 @@ interface APIService {
     @JvmSuppressWildcards
     suspend fun searchPostWithOptions(
         @Path("userId") idUser: String,
-        @Body options: Map<String, Any>
+        @Body options: Map<String, Any?>
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 }

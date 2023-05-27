@@ -160,4 +160,67 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun searchPostWithOptions(
+        idUser: String,
+        minBedRoom: Int,
+        maxBedRoom: Int,
+        minWidth: Int,
+        maxWidth: Int,
+        minSquare: Int,
+        maxSquare: Int,
+        minLength: Int,
+        maxLength: Int,
+        minFloor: Int,
+        maxFloor: Int,
+        minKitchen: Int,
+        maxKitchen: Int,
+        propertyTypeId: Int,
+        legalId: Int,
+        carParking: Boolean?,
+        directionId: Int,
+        rooftop: Boolean?,
+        districtId: Int?,
+        wardId: Int?,
+        streetId: Int?,
+        minWidthRoad: Int,
+        maxWidthRoad: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        search: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
+        return flow {
+            emit(
+                dataSource.searchPostWithOptions(
+                    idUser = idUser,
+                    minBedRoom = minBedRoom,
+                    maxBedRoom = maxBedRoom,
+                    minWidth = minWidth,
+                    maxWidth = maxWidth,
+                    minSquare = minSquare,
+                    maxSquare = maxSquare,
+                    minLength = minLength,
+                    maxLength = maxLength,
+                    minFloor = minFloor,
+                    maxFloor = maxFloor,
+                    minKitchen = minKitchen,
+                    maxKitchen = maxKitchen,
+                    propertyTypeId = propertyTypeId,
+                    legalId = legalId,
+                    carParking = carParking,
+                    directionId = directionId,
+                    rooftop = rooftop,
+                    districtId = districtId,
+                    wardId = wardId,
+                    streetId = streetId,
+                    minWidthRoad = minWidthRoad,
+                    maxWidthRoad = maxWidthRoad,
+                    pageIndex = pageIndex,
+                    pageSize = pageSize,
+                    search = search
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

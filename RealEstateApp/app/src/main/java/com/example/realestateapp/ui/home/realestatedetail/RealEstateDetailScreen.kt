@@ -72,7 +72,7 @@ internal fun RealEstateDetailRoute(
         val realEstateProperty = remember { realEstateProperty }
         val realEstatesSamePrice = remember { realEstatesSamePrice }
         val realEstatesCluster = remember { realEstatesCluster }
-        val uiState by remember { uiState }
+        var uiState by remember { uiState }
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -96,7 +96,9 @@ internal fun RealEstateDetailRoute(
                         clear()
                         addAll((uiState as RealEstateDetailUiState.GetClusterSuccess).data)
                     }
+                    uiState = RealEstateDetailUiState.Done
                 }
+                else -> {}
             }
         }
         RealEstateDetailScreen(
