@@ -5,7 +5,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
-import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.EMAIL_ADDRESS
 import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.extension.writeStoreLauncher
@@ -27,7 +26,6 @@ sealed class LauncherUiState : UiState() {
 
 @HiltViewModel
 class LauncherViewModel @Inject constructor(
-    private val appRepository: AppRepository,
     private val application: Application
 ) : BaseViewModel<LauncherUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(LauncherUiState.InitView)

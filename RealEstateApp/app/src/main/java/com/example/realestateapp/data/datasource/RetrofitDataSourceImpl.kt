@@ -208,8 +208,8 @@ class RetrofitDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateSavePost(
-        idPost: String,
-        idUser: String
+        idPost: Int,
+        idUser: Int
     ): ApiResultWrapper<Any?> {
         val options: MutableMap<String, Any> = HashMap()
         options["postId"] = idPost

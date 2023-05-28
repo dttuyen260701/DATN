@@ -231,8 +231,8 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateSavePost(
-        idPost: String,
-        idUser: String
+        idPost: Int,
+        idUser: Int
     ): Flow<ApiResultWrapper<Any?>> {
         return flow {
             emit(

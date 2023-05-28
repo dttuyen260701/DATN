@@ -107,7 +107,7 @@ interface AppRepository {
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 
     suspend fun updateSavePost(
-        idPost: String,
-        idUser: String
+        idPost: Int,
+        idUser: Int
     ): Flow<ApiResultWrapper<Any?>>
 }

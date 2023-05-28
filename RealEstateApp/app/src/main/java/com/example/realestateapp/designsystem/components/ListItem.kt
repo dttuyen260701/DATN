@@ -106,7 +106,9 @@ internal fun ListItemHome(
             items(
                 items = listRealEstate,
                 key = { realEstate ->
-                    realEstate.id
+                    realEstate.run {
+                        "$id - $isSaved"
+                    }
                 },
             ) { realEstate ->
                 ItemRealEstate(

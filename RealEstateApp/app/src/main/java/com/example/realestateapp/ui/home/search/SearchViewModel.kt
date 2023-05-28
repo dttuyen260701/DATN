@@ -9,7 +9,6 @@ import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.*
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
-import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
@@ -51,8 +50,7 @@ sealed class SearchUiState : UiState() {
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val appRepository: AppRepository,
-    application: Application
+    private val application: Application
 ) : BaseViewModel<SearchUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(SearchUiState.InitView)
     internal var searchResult = mutableStateListOf<RealEstateList>()
@@ -182,7 +180,8 @@ class SearchViewModel @Inject constructor(
                         pageIndex = getPagingModel().pageIndex,
                         pageSize = getPagingModel().pageSize,
                         search = key,
-                        optionSort = (sortOptions.firstOrNull {it.isSelected} ?: DEFAULT_ITEM_CHOSEN).id,
+                        optionSort = (sortOptions.firstOrNull { it.isSelected }
+                            ?: DEFAULT_ITEM_CHOSEN).id,
                         showLoading = false
                     )
                 ), apiSuccess = {

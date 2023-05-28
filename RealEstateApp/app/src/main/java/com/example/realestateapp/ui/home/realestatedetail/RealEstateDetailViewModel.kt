@@ -9,7 +9,6 @@ import com.example.realestateapp.R
 import com.example.realestateapp.data.models.RealEstateDetail
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.view.RealEstateProperty
-import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.ui.base.BaseViewModel
@@ -43,7 +42,6 @@ sealed class RealEstateDetailUiState : UiState() {
 
 @HiltViewModel
 class RealEstateDetailViewModel @Inject constructor(
-    private val appRepository: AppRepository,
     private val application: Application
 ) : BaseViewModel<RealEstateDetailUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(RealEstateDetailUiState.InitView)

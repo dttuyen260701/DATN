@@ -10,10 +10,12 @@ import com.example.realestateapp.data.apiresult.ResponseAPI
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.PagingModel
 import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -63,6 +65,28 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
 
     abstract var uiState: MutableState<UiState>
 
+    @Inject
+    lateinit var appRepository: AppRepository
+
+    internal fun updateSavedPost(
+        idPost: Int,
+        onSuccess: (Int) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.updateSavePost(
+                        idPost = idPost,
+                        idUser = user.value?.id ?: 0
+                    )
+                ),
+                apiSuccess = {
+                    onSuccess(idPost)
+                }
+            )
+        }
+    }
+
     internal fun getPagingModel() = pagingModel
 
     internal fun updatePagingModel(
@@ -72,7 +96,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         pagingModel.run {
             totalPage = totalPageNew
             totalRecords = totalRecordsNew
-            if(pageIndex <= totalPage)
+            if (pageIndex <= totalPage)
                 pageIndex += 1
         }
     }

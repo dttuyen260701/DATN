@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
-import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.readStoreLauncher
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
@@ -45,7 +44,7 @@ sealed class HomeUiState : UiState() {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val appRepository: AppRepository, private val application: Application
+    private val application: Application
 ) : BaseViewModel<HomeUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(HomeUiState.InitView)
     internal var typesData = mutableStateListOf<ItemChoose>()
@@ -53,6 +52,29 @@ class HomeViewModel @Inject constructor(
     internal var realEstatesMostView = mutableStateListOf<RealEstateList>()
     internal var realEstatesHighestPrice = mutableStateListOf<RealEstateList>()
     internal var realEstatesLowestPrice = mutableStateListOf<RealEstateList>()
+
+    internal fun onUpdatePostSaved(idPost: Int) {
+        val indexInLatest = realEstatesLatest.indexOfFirst { it.id == idPost }
+        if (indexInLatest != -1) {
+            realEstatesLatest[indexInLatest] =
+                realEstatesLatest[indexInLatest].copy(isSaved = !realEstatesLatest[indexInLatest].isSaved)
+        }
+        val indexInMostView = realEstatesMostView.indexOfFirst { it.id == idPost }
+        if (indexInMostView != -1) {
+            realEstatesMostView[indexInLatest] =
+                realEstatesMostView[indexInMostView].copy(isSaved = !realEstatesMostView[indexInMostView].isSaved)
+        }
+        val indexInHighestPrice = realEstatesHighestPrice.indexOfFirst { it.id == idPost }
+        if (indexInLatest != -1) {
+            realEstatesHighestPrice[indexInHighestPrice] =
+                realEstatesHighestPrice[indexInHighestPrice].copy(isSaved = !realEstatesHighestPrice[indexInHighestPrice].isSaved)
+        }
+        val indexInLowestPrice = realEstatesLowestPrice.indexOfFirst { it.id == idPost }
+        if (indexInLatest != -1) {
+            realEstatesLowestPrice[indexInLowestPrice] =
+                realEstatesLowestPrice[indexInLowestPrice].copy(isSaved = !realEstatesLowestPrice[indexInLowestPrice].isSaved)
+        }
+    }
 
     internal fun backgroundSignIn() {
         uiState.value = HomeUiState.Loading

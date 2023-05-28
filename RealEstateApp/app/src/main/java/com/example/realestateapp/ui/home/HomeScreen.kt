@@ -113,7 +113,13 @@ internal fun HomeRoute(
             realEstatesHighestPrice = realEstatesHighestPrice,
             realEstatesLowestPrice = realEstatesLowestPrice,
             onRealEstateItemClick = remember { onRealEstateItemClick },
-            onItemSaveClick = remember { {} },
+            onItemSaveClick = remember {
+                { idPost ->
+                    updateSavedPost(idPost = idPost) { idResult ->
+                        onUpdatePostSaved(idResult)
+                    }
+                }
+            },
             navigateToSearch = remember { navigateToSearch },
             navigateProfile = navigateProfile
         )
