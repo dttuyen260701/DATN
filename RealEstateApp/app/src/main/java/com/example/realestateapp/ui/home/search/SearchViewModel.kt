@@ -148,12 +148,15 @@ class SearchViewModel @Inject constructor(
             resetPaging()
             searchResult.clear()
         }
+        val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
         uiState.value = SearchUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 funCallApis = mutableListOf(
                     appRepository.searchPostWithOptions(
                         idUser = getUser().value?.id?.toString() ?: "",
+                        minPrice = priceChosen.value.id,
+                        maxPrice = priceChosen.value.score,
                         minBedRoom = bedroomChosen.value.id,
                         maxBedRoom = bedroomChosen.value.score,
                         minWidth = widthChosen.value.id,
@@ -166,8 +169,7 @@ class SearchViewModel @Inject constructor(
                         maxFloor = floorChosen.value.score,
                         minKitchen = kitchenRoomChosen.value.id,
                         maxKitchen = kitchenRoomChosen.value.score,
-                        propertyTypeId = typesData.firstOrNull { it.isSelected }?.id
-                            ?: DEFAULT_ITEM_CHOSEN.id,
+                        propertyTypeId = typePropertyIds.toMutableList(),
                         legalId = juridicalChosen.value.id,
                         carParking = (carParkingChosen.value.id == 1),
                         directionId = directionChosen.value.id,
@@ -180,6 +182,7 @@ class SearchViewModel @Inject constructor(
                         pageIndex = getPagingModel().pageIndex,
                         pageSize = getPagingModel().pageSize,
                         search = key,
+                        optionSort = (sortOptions.firstOrNull {it.isSelected} ?: DEFAULT_ITEM_CHOSEN).id,
                         showLoading = false
                     )
                 ), apiSuccess = {

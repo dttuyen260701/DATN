@@ -17,10 +17,10 @@ internal fun Double.formatToMoney(): String {
         }
         "$price ${
             when (count) {
-                1 -> Constants.PriceUnit.THOUSAND
-                2 -> Constants.PriceUnit.MILLION
-                3 -> Constants.PriceUnit.BILLION
-                4 -> Constants.PriceUnit.THOUSAND_BILLION
+//                1 -> Constants.PriceUnit.THOUSAND
+                1 -> Constants.PriceUnit.MILLION
+                2 -> Constants.PriceUnit.BILLION
+                3 -> Constants.PriceUnit.THOUSAND_BILLION
                 else -> ""
             }
         }".replace(".", ",")

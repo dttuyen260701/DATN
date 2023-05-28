@@ -98,6 +98,15 @@
     <string name="confirmTitle">Xác nhận</string>
     <string name="emptyTitle">Không tìm thấy dữ liệu.</string>
 
+    <!--AddPostScreen-->
+    <string name="managePostTitle">Quản lí bài đăng</string>
+    <string name="yourPostTitle">Bài đăng của bạn</string>
+    <string name="savePostTitle">Bài đăng đã lưu</string>
+    <string name="addPostTitle">Thêm bài đăng</string>
+
+    <!--RecordScreen-->
+    <string name="SearchTitle">Tìm kiếm</string>
+
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
 

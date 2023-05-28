@@ -141,6 +141,8 @@ class RetrofitDataSourceImpl @Inject constructor(
 
     override suspend fun searchPostWithOptions(
         idUser: String,
+        minPrice: Int,
+        maxPrice: Int,
         minBedRoom: Int,
         maxBedRoom: Int,
         minWidth: Int,
@@ -153,7 +155,7 @@ class RetrofitDataSourceImpl @Inject constructor(
         maxFloor: Int,
         minKitchen: Int,
         maxKitchen: Int,
-        propertyTypeId: Int,
+        propertyTypeId: MutableList<Int>,
         legalId: Int,
         carParking: Boolean?,
         directionId: Int,
@@ -165,9 +167,12 @@ class RetrofitDataSourceImpl @Inject constructor(
         maxWidthRoad: Int,
         pageIndex: Int,
         pageSize: Int,
-        search: String
+        search: String,
+        optionSort: Int
     ): ApiResultWrapper<PagingItem<RealEstateList>> {
         val options: MutableMap<String, Any?> = HashMap()
+        options["minPrice"] = minPrice
+        options["maxPrice"] = maxPrice
         options["minBedRoom"] = minBedRoom
         options["maxBedRoom"] = maxBedRoom
         options["minWidth"] = minWidth
@@ -193,11 +198,24 @@ class RetrofitDataSourceImpl @Inject constructor(
         options["pageIndex"] = pageIndex
         options["pageSize"] = pageSize
         options["search"] = search
+        options["optionSort"] = optionSort
         return callApi {
             apiService.searchPostWithOptions(
                 idUser = idUser,
                 options = options
             )
+        }
+    }
+
+    override suspend fun updateSavePost(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<Any?> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["postId"] = idPost
+        options["userId"] = idUser
+        return callApi {
+            apiService.updateSavePost(options)
         }
     }
 }

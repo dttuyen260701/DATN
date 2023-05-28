@@ -75,6 +75,8 @@ interface AppRepository {
 
     suspend fun searchPostWithOptions(
         idUser: String = "",
+        minPrice: Int,
+        maxPrice: Int,
         minBedRoom: Int,
         maxBedRoom: Int,
         minWidth: Int,
@@ -87,7 +89,7 @@ interface AppRepository {
         maxFloor: Int,
         minKitchen: Int,
         maxKitchen: Int,
-        propertyTypeId: Int,
+        propertyTypeId: MutableList<Int>,
         legalId: Int,
         carParking: Boolean? = null,
         directionId: Int,
@@ -100,6 +102,12 @@ interface AppRepository {
         pageIndex: Int,
         pageSize: Int,
         search: String,
+        optionSort: Int,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
+
+    suspend fun updateSavePost(
+        idPost: String,
+        idUser: String
+    ): Flow<ApiResultWrapper<Any?>>
 }

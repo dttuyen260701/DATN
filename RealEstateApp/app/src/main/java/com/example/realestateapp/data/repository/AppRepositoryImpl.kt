@@ -163,6 +163,8 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun searchPostWithOptions(
         idUser: String,
+        minPrice: Int,
+        maxPrice: Int,
         minBedRoom: Int,
         maxBedRoom: Int,
         minWidth: Int,
@@ -175,7 +177,7 @@ class AppRepositoryImpl @Inject constructor(
         maxFloor: Int,
         minKitchen: Int,
         maxKitchen: Int,
-        propertyTypeId: Int,
+        propertyTypeId: MutableList<Int>,
         legalId: Int,
         carParking: Boolean?,
         directionId: Int,
@@ -188,12 +190,15 @@ class AppRepositoryImpl @Inject constructor(
         pageIndex: Int,
         pageSize: Int,
         search: String,
+        optionSort: Int,
         showLoading: Boolean
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         return flow {
             emit(
                 dataSource.searchPostWithOptions(
                     idUser = idUser,
+                    minPrice = minPrice,
+                    maxPrice = maxPrice,
                     minBedRoom = minBedRoom,
                     maxBedRoom = maxBedRoom,
                     minWidth = minWidth,
@@ -218,9 +223,24 @@ class AppRepositoryImpl @Inject constructor(
                     maxWidthRoad = maxWidthRoad,
                     pageIndex = pageIndex,
                     pageSize = pageSize,
-                    search = search
+                    search = search,
+                    optionSort = optionSort
                 )
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun updateSavePost(
+        idPost: String,
+        idUser: String
+    ): Flow<ApiResultWrapper<Any?>> {
+        return flow {
+            emit(
+                dataSource.updateSavePost(
+                    idPost = idPost,
+                    idUser = idUser
+                )
+            )
+        }
     }
 }

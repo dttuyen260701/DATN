@@ -79,4 +79,10 @@ interface APIService {
         @Path("userId") idUser: String,
         @Body options: Map<String, Any?>
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
+
+    @PUT("/api/Posts/save-post")
+    @JvmSuppressWildcards
+    suspend fun updateSavePost(
+        @Body options: Map<String, Any>
+    ): Response<ResponseAPI<Any?>>
 }

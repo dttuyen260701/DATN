@@ -21,5 +21,5 @@ class PostViewModel @Inject constructor(
     appRepository: AppRepository
 ) : BaseViewModel<PostUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(PostUiState.InitView)
-
+    internal var filter = mutableStateOf("")
 }

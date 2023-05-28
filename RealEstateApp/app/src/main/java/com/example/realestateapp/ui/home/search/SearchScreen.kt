@@ -428,11 +428,7 @@ internal fun SearchRoute(
                 filter = it
             },
             types = types,
-            onTypeItemClick = remember {
-                {
-
-                }
-            },
+            onTypeItemClick = remember { {} },
             sortOptions = sortOptions,
             onSortItemClick = remember {
                 {
@@ -575,7 +571,7 @@ internal fun SearchScreen(
                         .constrainAs(searchOptionGroup) {
                             linkTo(
                                 top = edtSearch.bottom,
-                                topMargin = if (!isShowSearchOption && !isShowSearchHighOption) 0.dp
+                                topMargin = if (!isShowSearchOption) 0.dp
                                 else MARGIN_DIFFERENT_VIEW.dp,
                                 bottom = tvSortTitle.top,
                                 bottomMargin = MARGIN_VIEW.dp,

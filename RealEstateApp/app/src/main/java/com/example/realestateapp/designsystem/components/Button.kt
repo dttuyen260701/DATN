@@ -10,6 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -118,6 +120,45 @@ internal fun ButtonRadius(
             backgroundColor = bgColor,
             disabledBackgroundColor = bgDisableColor
         ),
+        elevation = null
+    ) {
+        Text(
+            text = title,
+            style = RealEstateTypography.button.copy(
+                color = textColor,
+                fontSize = textSize.sp
+            )
+        )
+    }
+}
+
+@Composable
+internal fun ButtonRadiusGradient(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    radius: Int = ROUND_CIRCLE,
+    title: String,
+    textSize: Int = 14,
+    bgColor: List<Color>,
+    textColor: Color = Color.White,
+    bgDisableColor: Color = RealEstateAppTheme.colors.bgBtnDisable
+) {
+    Button(
+        enabled = enabled,
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Transparent,
+            disabledBackgroundColor = bgDisableColor
+        ),
+        modifier = Modifier
+            .clip(RoundedCornerShape(radius.dp))
+            .then(modifier)
+            .background(
+                Brush.horizontalGradient(
+                    bgColor
+                ),
+            ),
         elevation = null
     ) {
         Text(

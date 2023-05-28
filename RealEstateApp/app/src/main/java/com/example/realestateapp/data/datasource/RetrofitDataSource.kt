@@ -62,6 +62,8 @@ interface RetrofitDataSource {
 
     suspend fun searchPostWithOptions(
         idUser: String,
+        minPrice: Int,
+        maxPrice: Int,
         minBedRoom: Int,
         maxBedRoom: Int,
         minWidth: Int,
@@ -74,7 +76,7 @@ interface RetrofitDataSource {
         maxFloor: Int,
         minKitchen: Int,
         maxKitchen: Int,
-        propertyTypeId: Int,
+        propertyTypeId: MutableList<Int>,
         legalId: Int,
         carParking: Boolean?,
         directionId: Int,
@@ -86,6 +88,12 @@ interface RetrofitDataSource {
         maxWidthRoad: Int,
         pageIndex: Int,
         pageSize: Int,
-        search: String
+        search: String,
+        optionSort: Int
     ): ApiResultWrapper<PagingItem<RealEstateList>>
+
+    suspend fun updateSavePost(
+        idPost: String,
+        idUser: String
+    ): ApiResultWrapper<Any?>
 }
