@@ -19,6 +19,7 @@ import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.ToolbarView
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
@@ -30,20 +31,25 @@ import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 @Composable
 internal fun PostRoute(
     modifier: Modifier = Modifier,
-    viewModel: PostViewModel = hiltViewModel()
+    viewModel: PostViewModel = hiltViewModel(),
+    navigateToRecord: (Boolean) -> Unit,
+    navigateToAddPost: (Int) -> Unit
 ) {
     viewModel.run {
 
         PostScreen(
-            modifier = modifier
+            modifier = modifier,
+            navigateToRecord = navigateToRecord,
+            navigateToAddPost = navigateToAddPost
         )
     }
 }
 
 @Composable
 internal fun PostScreen(
-    modifier: Modifier
-
+    modifier: Modifier,
+    navigateToRecord: (Boolean) -> Unit,
+    navigateToAddPost: (Int) -> Unit
 ) {
     BaseScreen(
         modifier = modifier,
@@ -68,7 +74,9 @@ internal fun PostScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
         ButtonRadiusGradient(
-            onClick = {},
+            onClick = {
+                navigateToRecord(true)
+            },
             title = stringResource(id = R.string.yourPostTitle),
             bgColor = RealEstateAppTheme.colors.bgButtonGradient,
             modifier = Modifier
@@ -77,7 +85,9 @@ internal fun PostScreen(
         )
         Spacing(MARGIN_VIEW)
         ButtonRadiusGradient(
-            onClick = {},
+            onClick = {
+                navigateToRecord(false)
+            },
             title = stringResource(id = R.string.savePostTitle),
             bgColor = RealEstateAppTheme.colors.bgButtonGradient,
             modifier = Modifier
@@ -86,7 +96,7 @@ internal fun PostScreen(
         )
         Spacing(MARGIN_VIEW)
         ButtonRadiusGradient(
-            onClick = {},
+            onClick = { navigateToAddPost(DEFAULT_ID_POST) },
             title = stringResource(id = R.string.addPostTitle),
             bgColor = RealEstateAppTheme.colors.bgButtonGradient,
             modifier = Modifier

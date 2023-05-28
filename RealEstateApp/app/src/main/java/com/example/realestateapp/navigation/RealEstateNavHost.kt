@@ -12,7 +12,9 @@ import com.example.realestateapp.ui.notification.navigation.notificationScreen
 import com.example.realestateapp.ui.pickaddress.navigation.navigateToPickAddress
 import com.example.realestateapp.ui.pickaddress.navigation.pickAddressScreen
 import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
-import com.example.realestateapp.ui.post.navigation.postScreen
+import com.example.realestateapp.ui.post.navigation.navigateToAddPost
+import com.example.realestateapp.ui.post.navigation.navigateToRecords
+import com.example.realestateapp.ui.post.navigation.postGraph
 import com.example.realestateapp.ui.setting.navigation.*
 
 /**
@@ -51,7 +53,27 @@ fun RealEstateNavHost(
                 navController.navigateToPickAddress()
             }
         )
-        postScreen()
+        postGraph(
+            navigateToRecord = {
+                navController.navigateToRecords(
+                    isMyRecord = it
+                )
+            },
+            onBackClick = {
+                navController.popBackStack()
+            },
+            onRealEstateItemClick = {
+                navController.navigateToRealEstateDetail(
+                    realEstateId = it
+                )
+            },
+            navigateToPickAddress = {
+                navController.navigateToPickAddress()
+            },
+            navigateToAddPost = {
+                navController.navigateToAddPost(postId = it)
+            }
+        )
         notificationScreen()
         settingGraph(
             onEditClick = {

@@ -9,6 +9,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.ToolbarView
+import com.example.realestateapp.designsystem.icon.AppIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.post.PostViewModel
 
@@ -19,12 +21,17 @@ import com.example.realestateapp.ui.post.PostViewModel
 @Composable
 internal fun AddPostRoute(
     modifier: Modifier = Modifier,
-    viewModel: PostViewModel = hiltViewModel()
+    viewModel: PostViewModel = hiltViewModel(),
+    idPost: Int,
+    onBackClick: () -> Unit,
+    navigateToPickAddress: () -> Unit,
+    addressDetails: MutableList<String>
 ) {
     viewModel.run {
         var filter by remember { filter }
         AddPostScreen(
             modifier = modifier,
+            onBackClick = onBackClick
         )
     }
 }
@@ -32,11 +39,16 @@ internal fun AddPostRoute(
 @Composable
 internal fun AddPostScreen(
     modifier: Modifier,
+    onBackClick: () -> Unit,
 ) {
     BaseScreen(
         modifier = modifier,
         toolbar = {
-            ToolbarView(title = stringResource(id = R.string.addPostTitle))
+            ToolbarView(
+                title = stringResource(id = R.string.addPostTitle),
+                leftIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.BackArrow),
+                onLeftIconClick = onBackClick
+            )
         },
     ) {
 
