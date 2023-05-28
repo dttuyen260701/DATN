@@ -21,10 +21,10 @@ import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -160,7 +160,7 @@ internal fun ListTypes(
                                 item.isSelected
                             }
                             coroutineScope.launch {
-                                delay(Constants.DefaultValue.TWEEN_ANIMATION_TIME.toLong())
+                                delay(TWEEN_ANIMATION_TIME.toLong())
                                 listTypeState.animateScrollToItem(0)
                                 onItemClick()
                             }
@@ -168,7 +168,7 @@ internal fun ListTypes(
                     }
                 },
                 modifier = Modifier.animateItemPlacement(
-                    tween(durationMillis = Constants.DefaultValue.TWEEN_ANIMATION_TIME)
+                    tween(durationMillis = TWEEN_ANIMATION_TIME)
                 )
             )
         }

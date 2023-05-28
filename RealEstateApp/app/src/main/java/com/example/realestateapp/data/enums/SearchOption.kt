@@ -5,8 +5,8 @@ package com.example.realestateapp.data.enums
  */
 
 enum class SearchOption(val option: Int) {
-    LATEST(0),
-    MOST_VIEW(1),
-    HIGHEST_PRICE(2),
-    LOWEST_PRICE(3)
+    LATEST(1),
+    MOST_VIEW(2),
+    HIGHEST_PRICE(3),
+    LOWEST_PRICE(4)
 }

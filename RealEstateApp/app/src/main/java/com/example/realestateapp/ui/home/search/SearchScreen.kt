@@ -145,6 +145,7 @@ internal fun SearchRoute(
                     } else {
                         isShowSearchOption = false
                     }
+                    searchResultListState.animateScrollToItem(0)
                     uiState = SearchUiState.Done
                 }
                 else -> {}
@@ -434,7 +435,7 @@ internal fun SearchRoute(
                 {
                     onChoiceSortType(
                         idType = it.id,
-                        isCallApi = !isShowSearchHighOption.value
+                        isCallApi = !isShowSearchOption
                     )
                 }
             },
