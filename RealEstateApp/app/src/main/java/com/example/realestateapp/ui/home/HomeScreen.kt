@@ -116,7 +116,7 @@ internal fun HomeRoute(
             onItemSaveClick = remember {
                 { idPost ->
                     updateSavedPost(idPost = idPost) { idResult ->
-                        onUpdatePostSaved(idResult)
+                        onUpdatePostSavedSuccess(idResult)
                     }
                 }
             },
@@ -142,6 +142,7 @@ internal fun HomeScreen(
     navigateToSearch: (SearchOption) -> Unit,
     navigateProfile: () -> Unit
 ) {
+
     BaseScreen(
         modifier = modifier,
         paddingHorizontal = 0,

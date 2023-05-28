@@ -53,7 +53,7 @@ class HomeViewModel @Inject constructor(
     internal var realEstatesHighestPrice = mutableStateListOf<RealEstateList>()
     internal var realEstatesLowestPrice = mutableStateListOf<RealEstateList>()
 
-    internal fun onUpdatePostSaved(idPost: Int) {
+    internal fun onUpdatePostSavedSuccess(idPost: Int) {
         val indexInLatest = realEstatesLatest.indexOfFirst { it.id == idPost }
         if (indexInLatest != -1) {
             realEstatesLatest[indexInLatest] =

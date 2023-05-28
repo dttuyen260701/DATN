@@ -40,9 +40,9 @@ enum class PriceOption(val value: ItemChoose) {
     ),
     From5Bto7B(
         ItemChoose(
-            id = 5000_000,
+            id = 5_000_000,
             name = "5 Tỷ - 7 Tỷ",
-            score = 7000_000
+            score = 7_000_000
         )
     ),
     From7Bto10B(
@@ -54,16 +54,16 @@ enum class PriceOption(val value: ItemChoose) {
     ),
     From10Bto20B(
         ItemChoose(
-            id = 10000_000,
+            id = 10_000_000,
             name = "10 Tỷ - 20 Tỷ",
-            score = 20000_000
+            score = 20_000_000
         )
     ),
     From20B(
         ItemChoose(
-            id = 20000_000,
+            id = 20_000_000,
             name = "Trên 20 Tỷ",
-            score = 99999_000
+            score = 999_999_000
         )
     )
 }

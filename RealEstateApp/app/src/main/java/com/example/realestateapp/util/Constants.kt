@@ -76,7 +76,7 @@ class Constants {
         const val WARNING_TEXT_SIZE = 10
         const val ALPHA_HINT_COLOR = 0.5f
         const val TWEEN_ANIMATION_TIME = 300
-        const val CLICK_BUTTON_TIME = 2000L
+        const val CLICK_BUTTON_TIME = 1000L
         const val SEARCH_TIME = 700L
         const val MAP_INSTALL_REQUEST = "Vui lòng cài đặt Google Map!"
         val REAL_ESTATE_DEFAULT = RealEstateDetail(

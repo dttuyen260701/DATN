@@ -109,7 +109,17 @@ internal fun RealEstateDetailRoute(
             realEstatesSamePrice = realEstatesSamePrice,
             realEstatesCluster = realEstatesCluster,
             onRealEstateItemClick = remember { onRealEstateItemClick },
-            onItemSaveClick = remember { {} },
+            onItemSaveClick = remember {
+                { idPost ->
+                    updateSavedPost(idPost = idPost) { idResult ->
+                        if (idResult == realEstateItem.postId) {
+                            realEstateItem = realEstateItem.copy(isSaved = !realEstateItem.isSaved)
+                        } else {
+                            onUpdatePostSavedSuccess(idResult)
+                        }
+                    }
+                }
+            },
             onBackClick = remember { onBackClick },
             onDirectClick = remember {
                 { latitude, longitude ->

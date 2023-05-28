@@ -124,6 +124,14 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    internal fun onUpdatePostSavedSuccess(idPost: Int) {
+        val index = searchResult.indexOfFirst { it.id == idPost }
+        if (index != -1) {
+            searchResult[index] =
+                searchResult[index].copy(isSaved = !searchResult[index].isSaved)
+        }
+    }
+
     internal fun getTypes() {
         viewModelScope.launch {
             callAPIOnThread(

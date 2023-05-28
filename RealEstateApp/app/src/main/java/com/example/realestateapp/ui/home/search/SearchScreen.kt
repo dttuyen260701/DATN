@@ -448,7 +448,11 @@ internal fun SearchRoute(
                 }
             },
             onItemSaveClick = remember {
-                {}
+                { idPost ->
+                    updateSavedPost(idPost = idPost) { idResult ->
+                        onUpdatePostSavedSuccess(idResult)
+                    }
+                }
             },
             priceChosen = priceChosen,
             squareChosen = squareChosen,
