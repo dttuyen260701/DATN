@@ -19,10 +19,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
+import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.components.ButtonRadius
 import com.example.realestateapp.designsystem.components.EditTextTrailingIconCustom
-import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.TextTitle
+import com.example.realestateapp.designsystem.components.ToolbarView
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
@@ -42,7 +43,8 @@ internal fun SignUpRoute(
     modifier: Modifier = Modifier,
     viewModel: LauncherViewModel = hiltViewModel(),
     onSignInClick: () -> Unit,
-    onSignUpSuccess: () -> Unit
+    onSignUpSuccess: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     viewModel.run {
         val context = LocalContext.current
@@ -141,7 +143,8 @@ internal fun SignUpRoute(
                         )
                     }
                 }
-            }
+            },
+            onBackClick = onBackClick
         )
     }
 }
@@ -166,11 +169,19 @@ internal fun SignUpScreen(
     rePasswordError: String,
     enableBtnSignUp: Boolean,
     onSignInClick: () -> Unit,
-    onBtnSignUpClick: () -> Unit
+    onBtnSignUpClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     BaseScreen(
         modifier = modifier,
-        bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight
+        bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight,
+        toolbar = {
+            ToolbarView(
+                title = stringResource(id = R.string.settingSignUpTitle),
+                leftIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.BackArrow),
+                onLeftIconClick = onBackClick
+            )
+        },
     ) {
         Spacing(MARGIN_DIFFERENT_VIEW)
         TextTitle(stringResource(id = R.string.settingSignUpTitle))

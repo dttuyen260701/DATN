@@ -110,6 +110,9 @@ fun RealEstateNavHost(
             onSignOutSuccess = {
                 navController.clearBackStack()
                 navController.navigateToHome()
+            },
+            onBackClick = {
+                navController.popBackStack()
             }
         )
         pickAddressScreen(

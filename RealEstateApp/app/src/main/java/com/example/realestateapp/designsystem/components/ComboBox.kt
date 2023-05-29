@@ -23,6 +23,7 @@ import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.SELECT_BOX_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
@@ -45,6 +46,7 @@ internal fun ComboBox(
     isAllowClearData: Boolean = true,
     onClearData: () -> Unit = {},
     leadingIcon: AppIcon? = null,
+    errorText: String? = null
 ) {
     Column(
         modifier = Modifier
@@ -114,6 +116,20 @@ internal fun ComboBox(
                     tint = textColor
                 )
             }
+        }
+        if(!errorText.isNullOrEmpty()) {
+            Spacing(PADDING_VIEW)
+            Text(
+                text = errorText,
+                style = RealEstateTypography.caption.copy(
+                    color = Color.Red,
+                    fontSize = Constants.DefaultValue.WARNING_TEXT_SIZE.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(horizontal = MARGIN_VIEW.dp)
+            )
         }
     }
 }

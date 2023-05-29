@@ -68,25 +68,6 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     @Inject
     lateinit var appRepository: AppRepository
 
-    internal fun updateSavedPost(
-        idPost: Int,
-        onSuccess: (Int) -> Unit
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            callAPIOnThread(
-                funCallApis = mutableListOf(
-                    appRepository.updateSavePost(
-                        idPost = idPost,
-                        idUser = user.value?.id ?: 0
-                    )
-                ),
-                apiSuccess = {
-                    onSuccess(idPost)
-                }
-            )
-        }
-    }
-
     internal fun getPagingModel() = pagingModel
 
     internal fun updatePagingModel(

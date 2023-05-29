@@ -130,17 +130,19 @@ internal fun EditTextRadius(
             if (typeInput != KeyboardType.Password || isShowPassword) VisualTransformation.None
             else PasswordVisualTransformation()
         )
-        Text(
-            text = errorText,
-            style = RealEstateTypography.caption.copy(
-                color = Color.Red,
-                fontSize = WARNING_TEXT_SIZE.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(horizontal = MARGIN_VIEW.dp)
-        )
+        if (errorText.isNotEmpty()) {
+            Text(
+                text = errorText,
+                style = RealEstateTypography.caption.copy(
+                    color = Color.Red,
+                    fontSize = WARNING_TEXT_SIZE.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(horizontal = MARGIN_VIEW.dp)
+            )
+        }
     }
 }
 
@@ -157,7 +159,8 @@ internal fun EditTextTrailingIconCustom(
     trailingIcon: AppIcon,
     textColor: Color = Color.Black,
     backgroundColor: Color = Color.White,
-    isLastEditText: Boolean = false
+    isLastEditText: Boolean = false,
+    isShowErrorStart: Boolean = false
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -222,10 +225,10 @@ internal fun EditTextTrailingIconCustom(
                 backgroundColor = backgroundColor,
                 cursorColor = textColor,
                 trailingIconColor = textColor,
-                unfocusedIndicatorColor = Color.Gray,
+                unfocusedIndicatorColor = textColor.copy(ALPHA_HINT_COLOR),
                 focusedIndicatorColor = textColor,
                 focusedLabelColor = textColor,
-                unfocusedLabelColor = Color.Gray,
+                unfocusedLabelColor = textColor,
                 errorCursorColor = Color.Red,
                 placeholderColor = textColor
             ),
@@ -264,12 +267,18 @@ internal fun EditTextTrailingIconCustom(
                 fontSize = WARNING_TEXT_SIZE.sp
             ),
             modifier = Modifier
-                .wrapContentHeight()
                 .constrainAs(tvError) {
-                    start.linkTo(edt.start)
+                    start.linkTo(
+                        if (isShowErrorStart) parent.start
+                        else edt.start,
+                        (if (isShowErrorStart) MARGIN_VIEW
+                        else 0).dp
+                    )
                     end.linkTo(edt.end)
                     top.linkTo(edt.bottom)
                     width = Dimension.fillToConstraints
+                    height =
+                        if (errorText.isNotEmpty()) Dimension.wrapContent else Dimension.value(0.dp)
                 }
         )
     }

@@ -16,10 +16,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
-import com.example.realestateapp.designsystem.components.ButtonRadius
-import com.example.realestateapp.designsystem.components.EditTextRadius
-import com.example.realestateapp.designsystem.components.Spacing
-import com.example.realestateapp.designsystem.components.TextTitle
+import com.example.realestateapp.designsystem.components.*
+import com.example.realestateapp.designsystem.icon.AppIcon
+import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
@@ -37,7 +36,8 @@ internal fun SignInRoute(
     modifier: Modifier = Modifier,
     viewModel: LauncherViewModel = hiltViewModel(),
     onSignUpClick: () -> Unit,
-    onSignInSuccess: () -> Unit
+    onSignInSuccess: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     viewModel.run {
         var email by remember { email }
@@ -80,7 +80,8 @@ internal fun SignInRoute(
                         onSignInSuccess = onSignInSuccess
                     )
                 }
-            }
+            },
+            onBackClick = remember { onBackClick }
         )
     }
 }
@@ -96,10 +97,18 @@ internal fun SignInScreen(
     passwordError: String,
     enableBtnSignIn: Boolean,
     onSignUpClick: () -> Unit,
-    onBtnSignInClick: () -> Unit
+    onBtnSignInClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     BaseScreen(
-        modifier = modifier
+        modifier = modifier,
+        toolbar = {
+            ToolbarView(
+                title = stringResource(id = R.string.settingSignInTitle),
+                leftIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.BackArrow),
+                onLeftIconClick = onBackClick
+            )
+        },
     ) {
         Image(
             painter = painterResource(id = R.drawable.storyset_login),
@@ -178,5 +187,4 @@ internal fun SignInScreen(
         )
         Spacing(MARGIN_DIFFERENT_VIEW)
     }
-
 }

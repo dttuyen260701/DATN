@@ -51,6 +51,25 @@ class RealEstateDetailViewModel @Inject constructor(
     internal val realEstatesSamePrice = mutableStateListOf<RealEstateList>()
     internal val realEstatesCluster = mutableStateListOf<RealEstateList>()
 
+    internal fun updateSavedPost(
+        idPost: Int,
+        onSuccess: (Int) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.updateSavePost(
+                        idPost = idPost,
+                        idUser = getUser().value?.id ?: 0
+                    )
+                ),
+                apiSuccess = {
+                    onSuccess(idPost)
+                }
+            )
+        }
+    }
+
     internal fun getRealEstateDetail(
         realEstateId: Int
     ) {

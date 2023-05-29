@@ -60,6 +60,7 @@ internal fun NavGraphBuilder.settingGraph(
     onSignUpSuccess: () -> Unit,
     onSignInSuccess: () -> Unit,
     onSignOutSuccess: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     navigation(
         route = settingNavigationRouteGraph,
@@ -72,15 +73,18 @@ internal fun NavGraphBuilder.settingGraph(
             onPolicyClick = onPolicyClick,
             onAboutUsClick = onAboutUsClick,
             onChangePassClick = onChangePassClick,
-            onSignOutSuccess = onSignOutSuccess
+            onSignOutSuccess = onSignOutSuccess,
+
         )
         singInScreen(
             onSignUpClick = onSignUpClick,
-            onSignInSuccess = onSignInSuccess
+            onSignInSuccess = onSignInSuccess,
+            onBackClick = onBackClick
         )
         singUpScreen(
             onSignInClick = onSignInClick,
-            onSignUpSuccess = onSignUpSuccess
+            onSignUpSuccess = onSignUpSuccess,
+            onBackClick = onBackClick
         )
         profileScreen()
         changePassScreen()
@@ -111,24 +115,28 @@ internal fun NavGraphBuilder.settingScreen(
 
 internal fun NavGraphBuilder.singInScreen(
     onSignUpClick: () -> Unit,
-    onSignInSuccess: () -> Unit
+    onSignInSuccess: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     composable(signInNavigationRoute) {
         SignInRoute(
             onSignUpClick = onSignUpClick,
-            onSignInSuccess = onSignInSuccess
+            onSignInSuccess = onSignInSuccess,
+            onBackClick = onBackClick
         )
     }
 }
 
 internal fun NavGraphBuilder.singUpScreen(
     onSignInClick: () -> Unit,
-    onSignUpSuccess: () -> Unit
+    onSignUpSuccess: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     composable(signUpNavigationRoute) {
         SignUpRoute(
             onSignInClick = onSignInClick,
-            onSignUpSuccess = onSignUpSuccess
+            onSignUpSuccess = onSignUpSuccess,
+            onBackClick = onBackClick
         )
     }
 }

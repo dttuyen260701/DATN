@@ -28,6 +28,7 @@ class Constants {
     }
 
     object DefaultField {
+        const val FIELD_TYPE = "type"
         const val FIELD_ADDRESS = "address"
         const val FIELD_DISTRICT = "district"
         const val FIELD_WARD = "ward"
