@@ -113,13 +113,6 @@ internal fun HomeRoute(
             realEstatesHighestPrice = realEstatesHighestPrice,
             realEstatesLowestPrice = realEstatesLowestPrice,
             onRealEstateItemClick = remember { onRealEstateItemClick },
-            onItemSaveClick = remember {
-                { idPost ->
-                    updateSavedPost(idPost = idPost) { idResult ->
-                        onUpdatePostSavedSuccess(idResult)
-                    }
-                }
-            },
             navigateToSearch = remember { navigateToSearch },
             navigateProfile = navigateProfile
         )
@@ -138,7 +131,6 @@ internal fun HomeScreen(
     realEstatesHighestPrice: MutableList<RealEstateList>,
     realEstatesLowestPrice: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
-    onItemSaveClick: (Int) -> Unit,
     navigateToSearch: (SearchOption) -> Unit,
     navigateProfile: () -> Unit
 ) {
@@ -238,8 +230,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.LATEST)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onRealEstateItemClick(id) },
-                    onItemSaveClick = { id -> onItemSaveClick(id) }
+                    onItemClick = { id -> onRealEstateItemClick(id) }
                 )
             }
         }
@@ -253,8 +244,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.MOST_VIEW)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onRealEstateItemClick(id) },
-                    onItemSaveClick = { id -> onItemSaveClick(id) }
+                    onItemClick = { id -> onRealEstateItemClick(id) }
                 )
             }
         }
@@ -268,8 +258,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.HIGHEST_PRICE)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onRealEstateItemClick(id) },
-                    onItemSaveClick = { id -> onItemSaveClick(id) }
+                    onItemClick = { id -> onRealEstateItemClick(id) }
                 )
             }
         }
@@ -283,8 +272,7 @@ internal fun HomeScreen(
                         navigateToSearch(SearchOption.LOWEST_PRICE)
                     },
                     listRealEstate = it,
-                    onItemClick = { id -> onRealEstateItemClick(id) },
-                    onItemSaveClick = { id -> onItemSaveClick(id) }
+                    onItemClick = { id -> onRealEstateItemClick(id) }
                 )
             }
         }

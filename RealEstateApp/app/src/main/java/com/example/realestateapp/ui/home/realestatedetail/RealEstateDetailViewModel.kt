@@ -51,19 +51,6 @@ class RealEstateDetailViewModel @Inject constructor(
     internal val realEstatesSamePrice = mutableStateListOf<RealEstateList>()
     internal val realEstatesCluster = mutableStateListOf<RealEstateList>()
 
-    internal fun onUpdatePostSavedSuccess(idPost: Int) {
-        val indexInSamePrice = realEstatesSamePrice.indexOfFirst { it.id == idPost }
-        if (indexInSamePrice != -1) {
-            realEstatesSamePrice[indexInSamePrice] =
-                realEstatesSamePrice[indexInSamePrice].copy(isSaved = !realEstatesSamePrice[indexInSamePrice].isSaved)
-        }
-        val indexInSameCluster = realEstatesCluster.indexOfFirst { it.id == idPost }
-        if (indexInSameCluster != -1) {
-            realEstatesCluster[indexInSameCluster] =
-                realEstatesCluster[indexInSameCluster].copy(isSaved = !realEstatesCluster[indexInSameCluster].isSaved)
-        }
-    }
-
     internal fun getRealEstateDetail(
         realEstateId: Int
     ) {

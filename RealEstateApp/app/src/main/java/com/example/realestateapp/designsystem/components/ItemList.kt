@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.IconButton
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
@@ -37,15 +36,11 @@ import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.extension.formatToMoney
 import com.example.realestateapp.extension.formatToUnit
-import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
-import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
-import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
-import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 
 /**
  * Created by tuyen.dang on 5/12/2023.
@@ -91,8 +86,7 @@ internal fun ItemType(
 internal fun ItemRealEstate(
     modifier: Modifier = Modifier,
     item: RealEstateList,
-    onItemClick: (Int) -> Unit,
-    onSaveClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit
 ) {
     val roundedCornerShape = RoundedCornerShape(ROUND_RECTANGLE.dp)
     val configuration = LocalConfiguration.current
@@ -117,7 +111,7 @@ internal fun ItemRealEstate(
                     onItemClick(item.id)
                 }
         ) {
-            val (img, btnSave, tvViews, tvName, tvCreatedDate, tvAddress,
+            val (img, tvViews, tvName, tvCreatedDate, tvAddress,
                 tvSquare, tvFloors, tvBedrooms, tvPrice) = createRefs()
 
             AsyncImage(
@@ -132,28 +126,6 @@ internal fun ItemRealEstate(
                     },
                 placeholder = painterResource(id = R.drawable.sale_real_estate)
             )
-            ButtonUnRepeating({ onSaveClick(item.id) }) {
-                IconButton(modifier = Modifier
-                    .clip(RoundedCornerShape(ROUND_DIALOG.dp))
-                    .background(RealEstateAppTheme.colors.bgIconsBlack50)
-                    .constrainAs(btnSave) {
-                        top.linkTo(parent.top, MARGIN_VIEW.dp)
-                        end.linkTo(parent.end, MARGIN_VIEW.dp)
-                    }
-                    .size(ICON_ITEM_SIZE.dp),
-                    onClick = it
-                ) {
-                    BaseIcon(
-                        icon = AppIcon.DrawableResourceIcon(
-                            if (isSaved) RealEstateIcon.PostSaved
-                            else RealEstateIcon.PostSavedOutline
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier.size(TRAILING_ICON_SIZE.dp),
-                        tint = Color.White
-                    )
-                }
-            }
             TextIcon(
                 text = views.formatToUnit(),
                 icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Visibility),
@@ -355,7 +327,6 @@ private fun PreviewItemRealEstate() {
             isSaved = true,
             createdDate = ""
         ),
-        onSaveClick = {},
         onItemClick = {}
     )
 }

@@ -447,13 +447,6 @@ internal fun SearchRoute(
                     onRealEstateItemClick(it)
                 }
             },
-            onItemSaveClick = remember {
-                { idPost ->
-                    updateSavedPost(idPost = idPost) { idResult ->
-                        onUpdatePostSavedSuccess(idResult)
-                    }
-                }
-            },
             priceChosen = priceChosen,
             squareChosen = squareChosen,
             bedroomChosen = bedroomChosen,
@@ -492,7 +485,6 @@ internal fun SearchScreen(
     searchResultListState: LazyListState,
     realEstates: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
-    onItemSaveClick: (Int) -> Unit,
     priceChosen: ItemChoose,
     squareChosen: ItemChoose,
     bedroomChosen: ItemChoose,
@@ -893,8 +885,7 @@ internal fun SearchScreen(
                     ) { realEstate ->
                         ItemRealEstate(
                             item = realEstate,
-                            onItemClick = onRealEstateItemClick,
-                            onSaveClick = onItemSaveClick
+                            onItemClick = onRealEstateItemClick
                         )
                     }
                 }

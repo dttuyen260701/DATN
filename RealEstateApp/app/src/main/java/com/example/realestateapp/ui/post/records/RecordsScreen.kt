@@ -103,13 +103,6 @@ internal fun RecordsRoute(
                     onRealEstateItemClick(it)
                 }
             },
-            onItemSaveClick = remember {
-                { idPost ->
-                    updateSavedPost(idPost = idPost) { idResult ->
-
-                    }
-                }
-            },
         )
     }
 }
@@ -123,8 +116,7 @@ internal fun RecordsScreen(
     filter: String,
     onFilterChange: (String) -> Unit,
     searchResult: MutableList<RealEstateList>,
-    onRealEstateItemClick: (Int) -> Unit,
-    onItemSaveClick: (Int) -> Unit,
+    onRealEstateItemClick: (Int) -> Unit
 ) {
     BaseScreen(
         modifier = modifier,
@@ -140,6 +132,7 @@ internal fun RecordsScreen(
             )
             EditTextFullIconBorderRadius(
                 modifier = Modifier
+                    .background(RealEstateAppTheme.colors.bgScrPrimaryLight)
                     .padding(PADDING_HORIZONTAL_SCREEN.dp),
                 text = filter,
                 onTextChange = onFilterChange,
@@ -174,8 +167,7 @@ internal fun RecordsScreen(
                     ) { realEstate ->
                         ItemRealEstate(
                             item = realEstate,
-                            onItemClick = onRealEstateItemClick,
-                            onSaveClick = onItemSaveClick
+                            onItemClick = onRealEstateItemClick
                         )
                     }
                 }

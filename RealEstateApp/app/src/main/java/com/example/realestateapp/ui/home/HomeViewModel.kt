@@ -53,29 +53,6 @@ class HomeViewModel @Inject constructor(
     internal var realEstatesHighestPrice = mutableStateListOf<RealEstateList>()
     internal var realEstatesLowestPrice = mutableStateListOf<RealEstateList>()
 
-    internal fun onUpdatePostSavedSuccess(idPost: Int) {
-        val indexInLatest = realEstatesLatest.indexOfFirst { it.id == idPost }
-        if (indexInLatest != -1) {
-            realEstatesLatest[indexInLatest] =
-                realEstatesLatest[indexInLatest].copy(isSaved = !realEstatesLatest[indexInLatest].isSaved)
-        }
-        val indexInMostView = realEstatesMostView.indexOfFirst { it.id == idPost }
-        if (indexInMostView != -1) {
-            realEstatesMostView[indexInLatest] =
-                realEstatesMostView[indexInMostView].copy(isSaved = !realEstatesMostView[indexInMostView].isSaved)
-        }
-        val indexInHighestPrice = realEstatesHighestPrice.indexOfFirst { it.id == idPost }
-        if (indexInLatest != -1) {
-            realEstatesHighestPrice[indexInHighestPrice] =
-                realEstatesHighestPrice[indexInHighestPrice].copy(isSaved = !realEstatesHighestPrice[indexInHighestPrice].isSaved)
-        }
-        val indexInLowestPrice = realEstatesLowestPrice.indexOfFirst { it.id == idPost }
-        if (indexInLatest != -1) {
-            realEstatesLowestPrice[indexInLowestPrice] =
-                realEstatesLowestPrice[indexInLowestPrice].copy(isSaved = !realEstatesLowestPrice[indexInLowestPrice].isSaved)
-        }
-    }
-
     internal fun backgroundSignIn() {
         uiState.value = HomeUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {

@@ -1,9 +1,6 @@
 package com.example.realestateapp.ui.post.addpost
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,7 +25,6 @@ internal fun AddPostRoute(
     addressDetails: MutableList<String>
 ) {
     viewModel.run {
-        var filter by remember { filter }
         AddPostScreen(
             modifier = modifier,
             onBackClick = onBackClick

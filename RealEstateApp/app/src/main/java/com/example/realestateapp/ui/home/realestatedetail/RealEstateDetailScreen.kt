@@ -114,8 +114,6 @@ internal fun RealEstateDetailRoute(
                     updateSavedPost(idPost = idPost) { idResult ->
                         if (idResult == realEstateItem.postId) {
                             realEstateItem = realEstateItem.copy(isSaved = !realEstateItem.isSaved)
-                        } else {
-                            onUpdatePostSavedSuccess(idResult)
                         }
                     }
                 }
@@ -603,7 +601,6 @@ internal fun RealEstateDetailScreen(
                             title = stringResource(id = R.string.samePriceTitle),
                             listRealEstate = it,
                             onItemClick = { id -> onRealEstateItemClick(id) },
-                            onItemSaveClick = { id -> onItemSaveClick(id) },
                             modifier = Modifier
                                 .constrainAs(samePriceList) {
                                     top.linkTo(
@@ -619,7 +616,6 @@ internal fun RealEstateDetailScreen(
                             title = stringResource(id = R.string.suggestTitle),
                             listRealEstate = it,
                             onItemClick = { id -> onRealEstateItemClick(id) },
-                            onItemSaveClick = { id -> onItemSaveClick(id) },
                             modifier = Modifier
                                 .constrainAs(clusterList) {
                                     top.linkTo(
