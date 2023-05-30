@@ -29,10 +29,13 @@ import com.example.realestateapp.ui.post.PostUiState
 import com.example.realestateapp.ui.post.PostViewModel
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_TYPE
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 
@@ -78,6 +81,28 @@ internal fun AddPostRoute(
                 } else ""
             }
         }
+        var juridicalChosen by remember { juridicalChosen }
+        val juridicalError by remember {
+            derivedStateOf {
+                if (juridicalChosen == DEFAULT_ITEM_CHOSEN && !firstClick) {
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.juridicalTitle)
+                    )
+                } else ""
+            }
+        }
+        var directionChosen by remember { directionChosen }
+        val directionError by remember {
+            derivedStateOf {
+                if (directionChosen == DEFAULT_ITEM_CHOSEN && !firstClick) {
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.directionTitle)
+                    )
+                } else ""
+            }
+        }
         var square by remember { square }
         val squareError by remember {
             derivedStateOf {
@@ -111,7 +136,50 @@ internal fun AddPostRoute(
                 else ""
             }
         }
-        var juridicalChosen by remember { juridicalChosen }
+        var bedroom by remember { bedroom }
+        val bedroomError by remember {
+            derivedStateOf {
+                if (bedroom.isEmpty() && !firstClick)
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.bedroomTitle)
+                    )
+                else ""
+            }
+        }
+        var streetInFront by remember { streetInFront }
+        val streetInFrontError by remember {
+            derivedStateOf {
+                if (streetInFront.isEmpty() && !firstClick)
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.streetOfFrontTitle)
+                    )
+                else ""
+            }
+        }
+        var width by remember { width }
+        val widthError by remember {
+            derivedStateOf {
+                if (width.isEmpty() && !firstClick)
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.widthTitle)
+                    )
+                else ""
+            }
+        }
+        var length by remember { length }
+        val lengthError by remember {
+            derivedStateOf {
+                if (length.isEmpty() && !firstClick)
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.lengthTitle)
+                    )
+                else ""
+            }
+        }
 
         if (addressDetailsScr[0].isNotEmpty()) {
             addressDetailDisplay = addressDetailsScr[0]
@@ -163,6 +231,30 @@ internal fun AddPostRoute(
                                 showDialog(dialog = TypeDialog.Hide)
                             }
                         }
+                        FIELD_JURIDICAL -> {
+                            juridicalOptions.clear()
+                            title = context.getString(R.string.juridicalTitle)
+                            data = juridicalOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                juridicalChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
+                        FIELD_DIRECTION -> {
+                            directionOptions.clear()
+                            title = context.getString(R.string.directionTitle)
+                            data = directionOptions
+                            loadData = { _, onDone ->
+                                getDataChoice(key, onDone)
+                            }
+                            onItemClick = {
+                                directionChosen = it
+                                showDialog(dialog = TypeDialog.Hide)
+                            }
+                        }
                         else -> {}
                     }
                     if (key != FIELD_ADDRESS) {
@@ -189,12 +281,22 @@ internal fun AddPostRoute(
                         FIELD_TYPE -> {
                             typeChosen = DEFAULT_ITEM_CHOSEN
                         }
+                        FIELD_JURIDICAL -> {
+                            juridicalChosen = DEFAULT_ITEM_CHOSEN
+                        }
+                        FIELD_DIRECTION -> {
+                            directionChosen = DEFAULT_ITEM_CHOSEN
+                        }
                         else -> {}
                     }
                 }
             },
             typeChosen = typeChosen,
             typeError = typeError,
+            juridicalChosen = juridicalChosen,
+            juridicalError = juridicalError,
+            directionChosen = directionChosen,
+            directionError = directionError,
             square = square,
             onSquareChange = remember {
                 {
@@ -211,18 +313,81 @@ internal fun AddPostRoute(
             price = price,
             onPriceChange = remember {
                 {
-                    price = it
+                    try {
+                        if (it.toInt() > 0) price = it.trim()
+                    } catch (e: Exception) {
+                        if (it.isEmpty()) {
+                            price = it
+                        }
+                    }
                 }
             },
             priceError = priceError,
             floor = floor,
             onFloorChange = remember {
                 {
-                    floor = it
+                    try {
+                        if (it.toInt() > 0) floor = it.trim()
+                    } catch (e: Exception) {
+                        if (it.isEmpty()) {
+                            floor = it
+                        }
+                    }
                 }
             },
             floorError = floorError,
-            juridicalChosen = juridicalChosen,
+            bedroom = bedroom,
+            onBedroomChange = remember {
+                {
+                    try {
+                        if (it.toInt() > 0) bedroom = it.trim()
+                    } catch (e: Exception) {
+                        if (it.isEmpty()) {
+                            bedroom = it
+                        }
+                    }
+                }
+            },
+            bedroomError = bedroomError,
+            streetInFront = streetInFront,
+            onStreetInFrontChange = remember {
+                {
+                    try {
+                        if (it.toFloat() > 0) streetInFront = it.trim()
+                    } catch (e: Exception) {
+                        if (it.isEmpty()) {
+                            streetInFront = it
+                        }
+                    }
+                }
+            },
+            streetInFrontError = streetInFrontError,
+            width = width,
+            onWidthChange = remember {
+                {
+                    try {
+                        if (it.toFloat() > 0) width = it.trim()
+                    } catch (e: Exception) {
+                        if (it.isEmpty()) {
+                            width = it
+                        }
+                    }
+                }
+            },
+            widthError = widthError,
+            length = length,
+            onLengthChange = remember {
+                {
+                    try {
+                        if (it.toFloat() > 0) length = it.trim()
+                    } catch (e: Exception) {
+                        if (it.isEmpty()) {
+                            length = it
+                        }
+                    }
+                }
+            },
+            lengthError = lengthError,
             onSubmitClick = remember {
                 {
                     firstClick = false
@@ -243,6 +408,10 @@ internal fun AddPostScreen(
     onClearData: (String) -> Unit,
     typeChosen: ItemChoose,
     typeError: String,
+    juridicalChosen: ItemChoose,
+    juridicalError: String,
+    directionChosen: ItemChoose,
+    directionError: String,
     square: String,
     onSquareChange: (String) -> Unit,
     squareError: String,
@@ -252,12 +421,22 @@ internal fun AddPostScreen(
     floor: String,
     onFloorChange: (String) -> Unit,
     floorError: String,
-    juridicalChosen: ItemChoose,
+    bedroom: String,
+    onBedroomChange: (String) -> Unit,
+    bedroomError: String,
+    streetInFront: String,
+    onStreetInFrontChange: (String) -> Unit,
+    streetInFrontError: String,
+    width: String,
+    onWidthChange: (String) -> Unit,
+    widthError: String,
+    length: String,
+    onLengthChange: (String) -> Unit,
+    lengthError: String,
     onSubmitClick: () -> Unit
 ) {
     BaseScreen(
-        modifier = modifier
-            .padding(vertical = PADDING_HORIZONTAL_SCREEN.dp),
+        modifier = modifier,
         verticalArrangement = Arrangement.Top,
         toolbar = {
             ToolbarView(
@@ -289,6 +468,7 @@ internal fun AddPostScreen(
             }
         }
     ) {
+        Spacing(MARGIN_DIFFERENT_VIEW)
         Text(
             text = stringResource(id = R.string.basicInfoTitle),
             style = RealEstateTypography.body1.copy(
@@ -368,6 +548,32 @@ internal fun AddPostScreen(
                 .fillMaxWidth()
         )
         Spacing(MARGIN_VIEW)
+        ComboBox(
+            onItemClick = { onComboBoxClick(FIELD_JURIDICAL) },
+            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Legal),
+            title = stringResource(id = R.string.juridicalTitle),
+            value = juridicalChosen.name,
+            hint = stringResource(
+                id = R.string.chooseHint,
+                stringResource(id = R.string.juridicalTitle)
+            ),
+            onClearData = { onClearData(FIELD_JURIDICAL) },
+            errorText = juridicalError
+        )
+        Spacing(MARGIN_VIEW)
+        ComboBox(
+            onItemClick = { onComboBoxClick(FIELD_DIRECTION) },
+            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Compass),
+            title = stringResource(id = R.string.directionTitle),
+            value = directionChosen.name,
+            hint = stringResource(
+                id = R.string.chooseHint,
+                stringResource(id = R.string.directionTitle)
+            ),
+            onClearData = { onClearData(FIELD_DIRECTION) },
+            errorText = directionError
+        )
+        Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
             onTextChange = onSquareChange,
             text = square,
@@ -408,16 +614,103 @@ internal fun AddPostScreen(
             isLastEditText = true
         )
         Spacing(MARGIN_VIEW)
-        ComboBox(
-            onItemClick = { onComboBoxClick(Constants.DefaultField.FIELD_JURIDICAL) },
-            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Legal),
-            title = stringResource(id = R.string.juridicalTitle),
-            value = juridicalChosen.name,
-            hint = stringResource(
-                id = R.string.chooseHint,
-                stringResource(id = R.string.juridicalTitle)
+        EditTextTrailingIconCustom(
+            onTextChange = onBedroomChange,
+            text = bedroom,
+            label = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(id = R.string.bedroomTitle)
             ),
-            onClearData = { onClearData(Constants.DefaultField.FIELD_JURIDICAL) }
+            typeInput = KeyboardType.Number,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(id = R.string.bedroomTitle)
+            ),
+            errorText = bedroomError,
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Bed),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true
         )
+        Spacing(MARGIN_VIEW)
+        EditTextTrailingIconCustom(
+            onTextChange = onStreetInFrontChange,
+            text = streetInFront,
+            label = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(
+                    id = R.string.unitMBracketsTitle,
+                    stringResource(id = R.string.streetOfFrontTitle)
+                )
+            ),
+            typeInput = KeyboardType.Number,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(
+                    id = R.string.unitMBracketsTitle,
+                    stringResource(id = R.string.streetOfFrontTitle)
+                )
+            ),
+            errorText = streetInFrontError,
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.StreetInFront),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true
+        )
+        Spacing(MARGIN_VIEW)
+        EditTextTrailingIconCustom(
+            onTextChange = onWidthChange,
+            text = width,
+            label = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(
+                    id = R.string.unitMBracketsTitle,
+                    stringResource(id = R.string.widthTitle)
+                )
+            ),
+            typeInput = KeyboardType.Number,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(
+                    id = R.string.unitMBracketsTitle,
+                    stringResource(id = R.string.widthTitle)
+                )
+            ),
+            errorText = widthError,
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Width),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true
+        )
+        Spacing(MARGIN_VIEW)
+        EditTextTrailingIconCustom(
+            onTextChange = onLengthChange,
+            text = length,
+            label = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(
+                    id = R.string.unitMBracketsTitle,
+                    stringResource(id = R.string.lengthTitle)
+                )
+            ),
+            typeInput = KeyboardType.Number,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(
+                    id = R.string.unitMBracketsTitle,
+                    stringResource(id = R.string.lengthTitle)
+                )
+            ),
+            errorText = lengthError,
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Length),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true
+        )
+        Spacing(MARGIN_DIFFERENT_VIEW)
     }
 }

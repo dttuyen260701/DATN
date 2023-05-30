@@ -4,12 +4,14 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.example.realestateapp.data.enums.Direction
 import com.example.realestateapp.data.enums.Juridical
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.ui.home.HomeUiState
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,11 +49,17 @@ class PostViewModel @Inject constructor(
     internal var detailAddress = mutableStateOf("")
     internal var typeChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var typesData = mutableStateListOf<ItemChoose>()
+    internal var juridicalChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var juridicalOptions = mutableStateListOf<ItemChoose>()
+    internal var directionChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var directionOptions = mutableStateListOf<ItemChoose>()
     internal var square = mutableStateOf("")
     internal var price = mutableStateOf("")
     internal var floor = mutableStateOf("")
-    internal var juridicalChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
-    internal var juridicalOptions = mutableStateListOf<ItemChoose>()
+    internal var bedroom = mutableStateOf("")
+    internal var streetInFront = mutableStateOf("")
+    internal var width = mutableStateOf("")
+    internal var length = mutableStateOf("")
 
     internal fun resetData() {
 
@@ -63,14 +71,14 @@ class PostViewModel @Inject constructor(
             callAPIOnThread(
                 funCallApis = mutableListOf(
                     appRepository.getTypes(showLoading = false),
-            ), apiSuccess = {
-                if (it.body.indexOf(typeChosen.value) != -1) {
-                    it.body[it.body.indexOf(typeChosen.value)].isSelected = true
-                }
-                uiState.value = PostUiState.GetTypesSuccess(it.body)
-            }, apiError = {
-                uiState.value = PostUiState.Error
-            }, onDoneCallApi = onDone, showDialog = false
+                ), apiSuccess = {
+                    if (it.body.indexOf(typeChosen.value) != -1) {
+                        it.body[it.body.indexOf(typeChosen.value)].isSelected = true
+                    }
+                    uiState.value = PostUiState.GetTypesSuccess(it.body)
+                }, apiError = {
+                    uiState.value = PostUiState.Error
+                }, onDoneCallApi = onDone, showDialog = false
             )
         }
     }
@@ -118,6 +126,18 @@ class PostViewModel @Inject constructor(
                     )
                 }
             }
+            FIELD_DIRECTION -> {
+                directionOptions.run {
+                    clear()
+                    addAll(
+                        Direction.values().map { direction ->
+                            direction.value.isSelected = (direction.value == directionChosen.value)
+                            direction.value
+                        }.toMutableList()
+                    )
+                }
+            }
         }
+        onDone()
     }
 }

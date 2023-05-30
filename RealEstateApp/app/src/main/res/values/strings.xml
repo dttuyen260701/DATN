@@ -110,6 +110,7 @@
     <string name="mandatoryError">%s không được để trống</string>
     <string name="hintTitle">Nhập %s</string>
     <string name="priceWUnitTitle">Mức giá (Triệu đồng)</string>
+    <string name="unitMBracketsTitle">%s (m)</string>
 
     <!--RecordScreen-->
     <string name="SearchTitle">Tìm kiếm</string>
