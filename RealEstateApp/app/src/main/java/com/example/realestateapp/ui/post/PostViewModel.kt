@@ -4,11 +4,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.example.realestateapp.data.enums.Juridical
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.ui.home.HomeUiState
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +49,9 @@ class PostViewModel @Inject constructor(
     internal var typesData = mutableStateListOf<ItemChoose>()
     internal var square = mutableStateOf("")
     internal var price = mutableStateOf("")
+    internal var floor = mutableStateOf("")
+    internal var juridicalChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var juridicalOptions = mutableStateListOf<ItemChoose>()
 
     internal fun resetData() {
 
@@ -55,8 +60,9 @@ class PostViewModel @Inject constructor(
     internal fun getTypes(onDone: () -> Unit) {
         uiState.value = HomeUiState.Loading
         viewModelScope.launch {
-            callAPIOnThread(funCallApis = mutableListOf(
-                appRepository.getTypes(showLoading = false),
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getTypes(showLoading = false),
             ), apiSuccess = {
                 if (it.body.indexOf(typeChosen.value) != -1) {
                     it.body[it.body.indexOf(typeChosen.value)].isSelected = true
@@ -97,5 +103,21 @@ class PostViewModel @Inject constructor(
             )
         }
 
+    }
+
+    internal fun getDataChoice(key: String, onDone: () -> Unit) {
+        when (key) {
+            FIELD_JURIDICAL -> {
+                juridicalOptions.run {
+                    clear()
+                    addAll(
+                        Juridical.values().map { juridical ->
+                            juridical.value.isSelected = (juridical.value == juridicalChosen.value)
+                            juridical.value
+                        }.toMutableList()
+                    )
+                }
+            }
+        }
     }
 }

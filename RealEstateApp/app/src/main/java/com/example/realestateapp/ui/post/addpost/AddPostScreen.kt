@@ -100,6 +100,18 @@ internal fun AddPostRoute(
                 else ""
             }
         }
+        var floor by remember { floor }
+        val floorError by remember {
+            derivedStateOf {
+                if (floor.isEmpty() && !firstClick)
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.floorTitle)
+                    )
+                else ""
+            }
+        }
+        var juridicalChosen by remember { juridicalChosen }
 
         if (addressDetailsScr[0].isNotEmpty()) {
             addressDetailDisplay = addressDetailsScr[0]
@@ -187,8 +199,7 @@ internal fun AddPostRoute(
             onSquareChange = remember {
                 {
                     try {
-                        it.toInt()
-                        square = it.trim()
+                        if (it.toInt() > 0) square = it.trim()
                     } catch (e: Exception) {
                         if (it.isEmpty()) {
                             square = it
@@ -204,6 +215,14 @@ internal fun AddPostRoute(
                 }
             },
             priceError = priceError,
+            floor = floor,
+            onFloorChange = remember {
+                {
+                    floor = it
+                }
+            },
+            floorError = floorError,
+            juridicalChosen = juridicalChosen,
             onSubmitClick = remember {
                 {
                     firstClick = false
@@ -230,6 +249,10 @@ internal fun AddPostScreen(
     price: String,
     onPriceChange: (String) -> Unit,
     priceError: String,
+    floor: String,
+    onFloorChange: (String) -> Unit,
+    floorError: String,
+    juridicalChosen: ItemChoose,
     onSubmitClick: () -> Unit
 ) {
     BaseScreen(
@@ -312,26 +335,6 @@ internal fun AddPostScreen(
         )
         Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
-            onTextChange = onSquareChange,
-            text = square,
-            label = stringResource(
-                id = R.string.mandatoryTitle,
-                stringResource(id = R.string.squareWUnitTitle)
-            ),
-            typeInput = KeyboardType.Number,
-            hint = stringResource(
-                id = R.string.hintTitle,
-                stringResource(id = R.string.squareWUnitTitle)
-            ),
-            errorText = squareError,
-            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Square),
-            textColor = RealEstateAppTheme.colors.primary,
-            backgroundColor = Color.White,
-            isShowErrorStart = true,
-            isLastEditText = true
-        )
-        Spacing(MARGIN_VIEW)
-        EditTextTrailingIconCustom(
             onTextChange = onPriceChange,
             text = price,
             label = stringResource(
@@ -363,6 +366,58 @@ internal fun AddPostScreen(
             ),
             modifier = Modifier
                 .fillMaxWidth()
+        )
+        Spacing(MARGIN_VIEW)
+        EditTextTrailingIconCustom(
+            onTextChange = onSquareChange,
+            text = square,
+            label = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(id = R.string.squareWUnitTitle)
+            ),
+            typeInput = KeyboardType.Number,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(id = R.string.squareWUnitTitle)
+            ),
+            errorText = squareError,
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Square),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true
+        )
+        Spacing(MARGIN_VIEW)
+        EditTextTrailingIconCustom(
+            onTextChange = onFloorChange,
+            text = floor,
+            label = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(id = R.string.floorTitle)
+            ),
+            typeInput = KeyboardType.Number,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(id = R.string.floorTitle)
+            ),
+            errorText = floorError,
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Floors),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true
+        )
+        Spacing(MARGIN_VIEW)
+        ComboBox(
+            onItemClick = { onComboBoxClick(Constants.DefaultField.FIELD_JURIDICAL) },
+            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Legal),
+            title = stringResource(id = R.string.juridicalTitle),
+            value = juridicalChosen.name,
+            hint = stringResource(
+                id = R.string.chooseHint,
+                stringResource(id = R.string.juridicalTitle)
+            ),
+            onClearData = { onClearData(Constants.DefaultField.FIELD_JURIDICAL) }
         )
     }
 }
