@@ -85,4 +85,20 @@ interface APIService {
     suspend fun updateSavePost(
         @Body options: Map<String, Any>
     ): Response<ResponseAPI<Any?>>
+
+    @GET("api/Posts/get-post-saved")
+    @JvmSuppressWildcards
+    suspend fun getPostSaved(
+        @Query("userId") idUser: Int,
+        @Query("pageIndex") pageIndex: Int,
+        @Query("pageSize") pageSize: Int
+    ): Response<ResponseAPI<PagingItem<RealEstateList>>>
+
+    @GET("/api/Posts/created-by-user")
+    @JvmSuppressWildcards
+    suspend fun getPostCreatedByUser(
+        @Query("userId") idUser: Int,
+        @Query("pageIndex") pageIndex: Int,
+        @Query("pageSize") pageSize: Int
+    ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 }

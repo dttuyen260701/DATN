@@ -60,6 +60,12 @@ class PostViewModel @Inject constructor(
     internal var streetInFront = mutableStateOf("")
     internal var width = mutableStateOf("")
     internal var length = mutableStateOf("")
+    internal var isHaveCarParking = mutableStateOf(false)
+    internal var isHaveRooftop = mutableStateOf(false)
+    internal var isHaveKitchenRoom = mutableStateOf(false)
+    internal var isHaveDiningRoom = mutableStateOf(false)
+    internal var title = mutableStateOf("")
+    internal var description = mutableStateOf("")
 
     internal fun resetData() {
 
@@ -91,17 +97,19 @@ class PostViewModel @Inject constructor(
             uiState.value = PostUiState.Loading
             callAPIOnThread(
                 funCallApis = mutableListOf(
-                    appRepository.getPostsWOptions(
-                        pageIndex = 1,
-                        pageSize = 20,
-                        isMostView = true,
-                        typePropertyIds = mutableListOf(),
-                        isHighestPrice = false,
-                        isLowestPrice = false,
-                        isLatest = false,
-                        userId = getUser().value?.id ?: 0,
-                        showLoading = false
-                    )
+                    if (isMyRecords) {
+                        appRepository.getPostCreatedByUser(
+                            idUser = getUser().value?.id ?: 0,
+                            pageIndex = 1,
+                            pageSize = 200
+                        )
+                    } else {
+                        appRepository.getPostSaved(
+                            idUser = getUser().value?.id ?: 0,
+                            pageIndex = 1,
+                            pageSize = 200
+                        )
+                    }
                 ), apiSuccess = {
                     uiState.value =
                         PostUiState.GetSearchDataSuccess(it.body.items ?: mutableListOf())

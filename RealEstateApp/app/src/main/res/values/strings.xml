@@ -106,11 +106,15 @@
     <string name="addPostTitle">Đăng tin bán BĐS</string>
     <string name="basicInfoTitle">Thông tin cơ bản</string>
     <string name="detailInfoTitle">Thông tin chi tiết</string>
+    <string name="generalInfoTitle">Thông tin chung</string>
+    <string name="title">Tiêu Đề</string>
     <string name="mandatoryTitle">%s *</string>
     <string name="mandatoryError">%s không được để trống</string>
     <string name="hintTitle">Nhập %s</string>
     <string name="priceWUnitTitle">Mức giá (Triệu đồng)</string>
     <string name="unitMBracketsTitle">%s (m)</string>
+    <string name="limit100CharTitle">%s (tối đa 100 kí tự)</string>
+    <string name="limit300CharTitle">%s (tối đa 500 kí tự)</string>
 
     <!--RecordScreen-->
     <string name="SearchTitle">Tìm kiếm</string>

@@ -66,6 +66,7 @@ object RealEstateIcon {
     const val Money = R.drawable.ic_money
     const val CarParking = R.drawable.ic_car_parking
     const val Reset = R.drawable.ic_reset
+    const val Title = R.drawable.ic_title
 }
 
 /**

@@ -243,4 +243,38 @@ class AppRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getPostSaved(
+        idUser: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
+        return flow {
+            emit(
+                dataSource.getPostSaved(
+                    idUser = idUser,
+                    pageIndex = pageIndex,
+                    pageSize = pageSize
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun getPostCreatedByUser(
+        idUser: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
+        return flow {
+            emit(
+                dataSource.getPostCreatedByUser(
+                    idUser = idUser,
+                    pageIndex = pageIndex,
+                    pageSize = pageSize
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

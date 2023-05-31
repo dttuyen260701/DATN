@@ -1,12 +1,20 @@
 package com.example.realestateapp.ui.post.addpost
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +30,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
@@ -33,11 +42,14 @@ import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_TYPE
+import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
 
 /**
  * Created by tuyen.dang on 5/28/2023.
@@ -178,6 +190,32 @@ internal fun AddPostRoute(
                         context.getString(R.string.lengthTitle)
                     )
                 else ""
+            }
+        }
+        var isHaveCarParking by remember { isHaveCarParking }
+        var isHaveRooftop by remember { isHaveRooftop }
+        var isHaveKitchenRoom by remember { isHaveKitchenRoom }
+        var isHaveDiningRoom by remember { isHaveDiningRoom }
+        var titlePost by remember { title }
+        val titleError by remember {
+            derivedStateOf {
+                if (titlePost.isEmpty() && !firstClick) {
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.title)
+                    )
+                } else ""
+            }
+        }
+        var description by remember { description }
+        val descriptionError by remember {
+            derivedStateOf {
+                if (description.isEmpty() && !firstClick) {
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.title)
+                    )
+                } else ""
             }
         }
 
@@ -388,11 +426,61 @@ internal fun AddPostRoute(
                 }
             },
             lengthError = lengthError,
+            isHaveCarParking = isHaveCarParking,
+            onHaveCarChange = remember {
+                {
+                    isHaveCarParking = it
+                }
+            },
+            isHaveRooftop = isHaveRooftop,
+            onHaveRooftopChange = remember {
+                {
+                    isHaveRooftop = it
+                }
+            },
+            isHaveKitchenRoom = isHaveKitchenRoom,
+            onHaveKitchenChange = remember {
+                {
+                    isHaveKitchenRoom = it
+                }
+            },
+            isHaveDiningRoom = isHaveDiningRoom,
+            onHaveDiningRoomChange = remember {
+                {
+                    isHaveDiningRoom = it
+                }
+            },
+            title = titlePost,
+            onTitleChange = remember {
+                {
+                    if (it.length <= 100)
+                        titlePost = it
+                }
+            },
+            titleError = titleError,
+            onClearTitle = remember {
+                {
+                    titlePost = ""
+                }
+            },
+            description = description,
+            onDescriptionChange = remember {
+                {
+                    if (it.length <= 500)
+                        description = it
+                }
+            },
+            descriptionError = descriptionError,
+            onClearDescription = remember {
+                {
+                    description = ""
+                }
+            },
             onSubmitClick = remember {
                 {
                     firstClick = false
                 }
-            }
+            },
         )
     }
 }
@@ -433,6 +521,22 @@ internal fun AddPostScreen(
     length: String,
     onLengthChange: (String) -> Unit,
     lengthError: String,
+    isHaveCarParking: Boolean,
+    onHaveCarChange: (Boolean) -> Unit,
+    isHaveRooftop: Boolean,
+    onHaveRooftopChange: (Boolean) -> Unit,
+    isHaveKitchenRoom: Boolean,
+    onHaveKitchenChange: (Boolean) -> Unit,
+    isHaveDiningRoom: Boolean,
+    onHaveDiningRoomChange: (Boolean) -> Unit,
+    title: String,
+    onTitleChange: (String) -> Unit,
+    titleError: String,
+    onClearTitle: () -> Unit,
+    description: String,
+    onDescriptionChange: (String) -> Unit,
+    descriptionError: String,
+    onClearDescription: () -> Unit,
     onSubmitClick: () -> Unit
 ) {
     BaseScreen(
@@ -710,6 +814,186 @@ internal fun AddPostScreen(
             backgroundColor = Color.White,
             isShowErrorStart = true,
             isLastEditText = true
+        )
+        Spacing(MARGIN_VIEW)
+        Row(
+            modifier = modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            CheckBoxWIconText(
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.CarParking),
+                title = stringResource(id = R.string.carParkingTitle),
+                isChecked = isHaveCarParking,
+                onCheckedChange = onHaveCarChange,
+            )
+            CheckBoxWIconText(
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Rooftop),
+                title = stringResource(id = R.string.rooftopTitle),
+                isChecked = isHaveRooftop,
+                onCheckedChange = onHaveRooftopChange,
+            )
+        }
+        Spacing(MARGIN_VIEW)
+        Row(
+            modifier = modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            CheckBoxWIconText(
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.DiningRoom),
+                title = stringResource(id = R.string.diningRoomTitle),
+                isChecked = isHaveDiningRoom,
+                onCheckedChange = onHaveDiningRoomChange,
+            )
+            CheckBoxWIconText(
+                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Kitchen),
+                title = stringResource(id = R.string.kitchenTitle),
+                isChecked = isHaveKitchenRoom,
+                onCheckedChange = onHaveKitchenChange,
+            )
+        }
+        Spacing(MARGIN_VIEW)
+        BorderLine()
+        Spacing(MARGIN_VIEW)
+        Text(
+            text = stringResource(id = R.string.generalInfoTitle),
+            style = RealEstateTypography.body1.copy(
+                fontSize = 17.sp,
+                color = RealEstateAppTheme.colors.primary,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Start
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        Spacing(MARGIN_VIEW)
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            EditTextTrailingIconCustom(
+                onTextChange = onTitleChange,
+                text = title,
+                label = stringResource(
+                    id = R.string.mandatoryTitle,
+                    stringResource(id = R.string.title)
+                ),
+                typeInput = KeyboardType.Text,
+                hint = stringResource(
+                    id = R.string.hintTitle,
+                    stringResource(id = R.string.title)
+                ),
+                errorText = titleError,
+                trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Title),
+                textColor = RealEstateAppTheme.colors.primary,
+                backgroundColor = Color.White,
+                isShowErrorStart = true,
+                isLastEditText = true,
+                modifier = Modifier
+                    .weight(1f)
+            )
+            if (title.isNotEmpty()) {
+                ButtonUnRepeating(onClearTitle) {
+                    IconButton(
+                        onClick = it,
+                        modifier = Modifier
+                            .size(Constants.DefaultValue.ICON_ITEM_SIZE.dp)
+                            .clip(RoundedCornerShape(Constants.DefaultValue.ROUND_DIALOG.dp))
+                            .background(
+                                color = Color.Transparent
+                            )
+                    ) {
+                        BaseIcon(
+                            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Clear),
+                            modifier = Modifier
+                                .size(Constants.DefaultValue.TRAILING_ICON_SIZE.dp),
+                            contentDescription = null,
+                            tint = RealEstateAppTheme.colors.primary
+                        )
+                    }
+                }
+            }
+        }
+        Spacing(MARGIN_VIEW)
+        TextField(
+            value = description,
+            onValueChange = onDescriptionChange,
+            label = {
+                Text(
+                    text = stringResource(
+                        id = R.string.mandatoryTitle,
+                        stringResource(id = R.string.descriptionTitle)
+                    )
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(
+                        id = R.string.limit300CharTitle,
+                        stringResource(id = R.string.descriptionTitle)
+                    ),
+                    color = RealEstateAppTheme.colors.primary.copy(ALPHA_HINT_COLOR),
+                    style = RealEstateTypography.body1.copy(
+                        textAlign = TextAlign.Start
+                    ),
+                )
+            },
+            trailingIcon = {
+                if (description.isNotEmpty()) {
+                    IconButton(
+                        onClick = onClearDescription,
+                    ) {
+                        BaseIcon(
+                            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Clear),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(25.dp)
+                        )
+                    }
+                }
+            },
+            textStyle = RealEstateTypography.body1.copy(
+                textAlign = TextAlign.Start,
+                color = RealEstateAppTheme.colors.primary
+            ),
+            modifier = Modifier
+                .background(Color.Transparent)
+                .fillMaxWidth()
+                .heightIn(
+                    min = (LocalConfiguration.current.screenHeightDp * 0.2f).dp,
+                    max = (LocalConfiguration.current.screenHeightDp * 0.5f).dp
+                )
+                .border(
+                    width = 1.dp,
+                    shape = RoundedCornerShape(20.dp),
+                    color = RealEstateAppTheme.colors.primary
+                ),
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = RealEstateAppTheme.colors.primary,
+                backgroundColor = RealEstateAppTheme.colors.bgTextField,
+                cursorColor = RealEstateAppTheme.colors.primary,
+                leadingIconColor = RealEstateAppTheme.colors.primary,
+                trailingIconColor = RealEstateAppTheme.colors.primary,
+                focusedLabelColor = RealEstateAppTheme.colors.primary,
+                unfocusedLabelColor = RealEstateAppTheme.colors.primary,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                errorCursorColor = RealEstateAppTheme.colors.primary,
+                disabledIndicatorColor = Color.Transparent,
+            ),
+        )
+        Spacing(PADDING_VIEW)
+        Text(
+            text = descriptionError,
+            style = RealEstateTypography.caption.copy(
+                color = Color.Red,
+                fontSize = WARNING_TEXT_SIZE.sp
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(horizontal = MARGIN_VIEW.dp)
         )
         Spacing(MARGIN_DIFFERENT_VIEW)
     }

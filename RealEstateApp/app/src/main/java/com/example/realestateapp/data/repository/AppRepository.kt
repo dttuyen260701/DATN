@@ -110,4 +110,18 @@ interface AppRepository {
         idPost: Int,
         idUser: Int
     ): Flow<ApiResultWrapper<Any?>>
+
+    suspend fun getPostSaved(
+        idUser: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
+
+    suspend fun getPostCreatedByUser(
+        idUser: Int,
+        pageIndex: Int,
+        pageSize: Int,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 }

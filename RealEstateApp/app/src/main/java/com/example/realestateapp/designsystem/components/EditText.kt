@@ -32,6 +32,7 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_PADDING
@@ -275,7 +276,7 @@ internal fun EditTextTrailingIconCustom(
                         else 0).dp
                     )
                     end.linkTo(edt.end)
-                    top.linkTo(edt.bottom)
+                    top.linkTo(edt.bottom, PADDING_VIEW.dp)
                     width = Dimension.fillToConstraints
                     height =
                         if (errorText.isNotEmpty()) Dimension.wrapContent else Dimension.value(0.dp)
