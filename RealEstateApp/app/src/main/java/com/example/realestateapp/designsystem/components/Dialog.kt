@@ -28,6 +28,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.realestateapp.R
+import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
@@ -39,6 +40,7 @@ import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 
@@ -366,6 +368,92 @@ internal fun DialogChoiceData(
                         }
                 )
             }
+        }
+    }
+}
+
+@Composable
+internal fun DialogShowImage(
+    modifier: Modifier = Modifier,
+    onDismissDialog: () -> Unit,
+    data: MutableList<Image>,
+    currentPosition: Int
+) {
+    var position by remember { mutableStateOf(currentPosition) }
+    Box(
+        modifier = Modifier
+            .background(Color.Black.copy(alpha = 0.5f))
+            .fillMaxSize()
+            .clickable { onDismissDialog() },
+        contentAlignment = Alignment.Center
+    ) {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .fillMaxHeight(0.8f)
+                .background(
+                    color = Color.Black,
+                    shape = RoundedCornerShape(ROUND_RECTANGLE.dp)
+                )
+                .then(modifier)
+                .clickable(enabled = false) { }
+        ) {
+            val (tvTitle, btnClose, slideImage) = createRefs()
+            Text(
+                text = stringResource(
+                    id = R.string.numberImageTitle,
+                    position + 1,
+                    data.size
+                ),
+                style = RealEstateTypography.body1.copy(
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Start
+                ),
+                modifier = Modifier
+                    .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                    .constrainAs(tvTitle) {
+                        top.linkTo(parent.top, MARGIN_DIFFERENT_VIEW.dp)
+                        linkTo(parent.start, parent.end)
+                    },
+            )
+            ButtonUnRepeating(onDismissDialog) {
+                IconButton(
+                    onClick = it,
+                    modifier = Modifier
+                        .constrainAs(btnClose) {
+                            top.linkTo(parent.top, PADDING_VIEW.dp)
+                            end.linkTo(parent.end, PADDING_VIEW.dp)
+                        }
+                ) {
+                    BaseIcon(
+                        icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Clear),
+                        modifier = Modifier
+                            .size(Constants.DefaultValue.TRAILING_ICON_SIZE.dp),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
+            SlideShowImage(
+                modifier = Modifier
+                    .constrainAs(slideImage) {
+                        linkTo(
+                            top = parent.top,
+                            bottom = parent.bottom
+                        )
+                        width = Dimension.matchParent
+                        height = Dimension.wrapContent
+                    },
+                photos = data,
+                isShowIndicator = false,
+                currentPosition = position,
+                onPositionChange = remember {
+                    {
+                        position = it
+                    }
+                }
+            )
         }
     }
 }

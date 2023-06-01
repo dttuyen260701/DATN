@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.example.realestateapp.designsystem.components.DialogChoiceData
 import com.example.realestateapp.designsystem.components.DialogConfirm
 import com.example.realestateapp.designsystem.components.DialogMessage
+import com.example.realestateapp.designsystem.components.DialogShowImage
 
 /**
  * Created by tuyen.dang on 5/10/2023.
@@ -48,6 +49,13 @@ internal fun BaseDialog(
                 isEnableSearchFromApi = dialog.isEnableSearchFromApi,
                 loadData = dialog.loadData,
                 data = dialog.data
+            )
+        }
+        is TypeDialog.ShowImageDialog -> {
+            DialogShowImage(
+                onDismissDialog = dismissDialog,
+                data = dialog.data,
+                currentPosition = dialog.currentIndex
             )
         }
         else -> {}

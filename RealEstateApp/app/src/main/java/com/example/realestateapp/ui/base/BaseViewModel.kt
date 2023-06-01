@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.apiresult.ResponseAPI
+import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.PagingModel
 import com.example.realestateapp.data.models.User
@@ -45,6 +46,11 @@ sealed interface TypeDialog {
         val isEnableSearchFromApi: Boolean,
         val onItemClick: (ItemChoose) -> Unit,
         val data: MutableList<ItemChoose>
+    ) : TypeDialog
+
+    data class ShowImageDialog(
+        val data: MutableList<Image>,
+        val currentIndex: Int
     ) : TypeDialog
 }
 

@@ -32,7 +32,7 @@ android {
     applicationVariants.all { variant ->
         switch (variant.getName()) {
             case "debug":
-                variant.buildConfigField "String", "API_URL", '"https://6ddd-14-254-245-241.ngrok-free.app"'
+                variant.buildConfigField "String", "API_URL", '"https://5e4d-101-96-79-34.ngrok-free.app"'
                 break
             case "release":
                 variant.buildConfigField "String", "API_URL", '"https://api.monstar.ch/"'

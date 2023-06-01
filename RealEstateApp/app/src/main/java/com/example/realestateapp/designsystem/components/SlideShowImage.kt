@@ -6,13 +6,13 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -34,7 +34,11 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 @Composable
 internal fun SlideShowImage(
     modifier: Modifier = Modifier,
-    photos: MutableList<Image>
+    photos: MutableList<Image>,
+    isShowIndicator: Boolean = true,
+    currentPosition: Int = 0,
+    onPositionChange: (Int) -> Unit = {},
+    onItemClick: (Int) -> Unit = { _ -> }
 ) {
     val pageState = rememberPagerState()
     ConstraintLayout(
@@ -55,22 +59,33 @@ internal fun SlideShowImage(
         ) { page ->
             AsyncImage(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .clickable {
+                        onItemClick(page)
+                    },
                 model = photos[page].url,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 error = painterResource(R.drawable.ic_user)
             )
         }
-        DotsIndicator(
-            modifier = Modifier
-                .constrainAs(indicator) {
-                    bottom.linkTo(viewPager.bottom, MARGIN_VIEW.dp)
-                    linkTo(start = viewPager.start, end = viewPager.end)
-                },
-            totalDots = photos.size,
-            selectedIndex = pageState.currentPage
-        )
+        if (isShowIndicator) {
+            DotsIndicator(
+                modifier = Modifier
+                    .constrainAs(indicator) {
+                        bottom.linkTo(viewPager.bottom, MARGIN_VIEW.dp)
+                        linkTo(start = viewPager.start, end = viewPager.end)
+                    },
+                totalDots = photos.size,
+                selectedIndex = pageState.currentPage
+            )
+        }
+        LaunchedEffect(key1 = true) {
+            pageState.scrollToPage(currentPosition)
+        }
+        LaunchedEffect(key1 = pageState.currentPage) {
+            onPositionChange(pageState.currentPage)
+        }
     }
 }
 

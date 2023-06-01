@@ -42,6 +42,7 @@ import com.example.realestateapp.extension.formatToMoney
 import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.extension.openMap
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.BOTTOM_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
@@ -106,6 +107,16 @@ internal fun RealEstateDetailRoute(
             user = user,
             item = realEstateItem,
             itemProperties = realEstateProperty,
+            onImageClick = remember {
+                {
+                    showDialog(
+                        dialog = TypeDialog.ShowImageDialog(
+                            data = realEstateItem.images,
+                            currentIndex = it
+                        )
+                    )
+                }
+            },
             realEstatesSamePrice = realEstatesSamePrice,
             realEstatesCluster = realEstatesCluster,
             onRealEstateItemClick = remember { onRealEstateItemClick },
@@ -157,6 +168,7 @@ internal fun RealEstateDetailScreen(
     user: User?,
     item: RealEstateDetail,
     itemProperties: MutableList<RealEstateProperty>,
+    onImageClick: (Int) -> Unit,
     realEstatesSamePrice: MutableList<RealEstateList>,
     realEstatesCluster: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
@@ -315,7 +327,8 @@ internal fun RealEstateDetailScreen(
             }
         ) {
             SlideShowImage(
-                photos = images
+                photos = images,
+                onItemClick = onImageClick
             )
             ConstraintLayout(
                 modifier = Modifier

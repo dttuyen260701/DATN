@@ -119,6 +119,9 @@
     <!--RecordScreen-->
     <string name="SearchTitle">Tìm kiếm</string>
 
+    <!--DialogShowImage-->
+    <string name="numberImageTitle">%d/%d</string>
+
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
 
