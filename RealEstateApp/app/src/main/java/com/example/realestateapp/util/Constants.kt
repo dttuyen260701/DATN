@@ -57,11 +57,13 @@ class Constants {
 
     object DefaultValue {
         val DEFAULT_ITEM_CHOSEN = ItemChoose(0, "", 0)
+        const val MAX_IMAGE_POST = 10
         const val DEFAULT_ID_POST = -1
         const val ALPHA_TITLE = 0.8f
         const val MARGIN_VIEW = 10
         const val MARGIN_DIFFERENT_VIEW = 24
         const val TOOLBAR_HEIGHT = 56
+        const val IMAGE_SIZE = 78
         const val SELECT_BOX_HEIGHT = 42
         const val PADDING_VIEW = 5
         const val PADDING_ICON = 7

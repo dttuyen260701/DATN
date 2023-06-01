@@ -91,7 +91,8 @@ interface APIService {
     suspend fun getPostSaved(
         @Query("userId") idUser: Int,
         @Query("pageIndex") pageIndex: Int,
-        @Query("pageSize") pageSize: Int
+        @Query("pageSize") pageSize: Int,
+        @Query("search") filter: String
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 
     @GET("/api/Posts/created-by-user")
@@ -99,6 +100,7 @@ interface APIService {
     suspend fun getPostCreatedByUser(
         @Query("userId") idUser: Int,
         @Query("pageIndex") pageIndex: Int,
-        @Query("pageSize") pageSize: Int
+        @Query("pageSize") pageSize: Int,
+        @Query("search") filter: String
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 }

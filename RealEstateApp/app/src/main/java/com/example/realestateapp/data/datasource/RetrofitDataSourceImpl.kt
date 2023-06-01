@@ -222,13 +222,15 @@ class RetrofitDataSourceImpl @Inject constructor(
     override suspend fun getPostSaved(
         idUser: Int,
         pageIndex: Int,
-        pageSize: Int
+        pageSize: Int,
+        filter: String
     ): ApiResultWrapper<PagingItem<RealEstateList>> {
         return callApi {
             apiService.getPostSaved(
                 idUser = idUser,
                 pageIndex = pageIndex,
-                pageSize = pageSize
+                pageSize = pageSize,
+                filter = filter
             )
         }
     }
@@ -236,13 +238,15 @@ class RetrofitDataSourceImpl @Inject constructor(
     override suspend fun getPostCreatedByUser(
         idUser: Int,
         pageIndex: Int,
-        pageSize: Int
+        pageSize: Int,
+        filter: String
     ): ApiResultWrapper<PagingItem<RealEstateList>> {
         return callApi {
             apiService.getPostCreatedByUser(
                 idUser = idUser,
                 pageIndex = pageIndex,
-                pageSize = pageSize
+                pageSize = pageSize,
+                filter = filter
             )
         }
     }

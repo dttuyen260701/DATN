@@ -248,6 +248,7 @@ class AppRepositoryImpl @Inject constructor(
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
+        filter: String,
         showLoading: Boolean
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         return flow {
@@ -255,7 +256,8 @@ class AppRepositoryImpl @Inject constructor(
                 dataSource.getPostSaved(
                     idUser = idUser,
                     pageIndex = pageIndex,
-                    pageSize = pageSize
+                    pageSize = pageSize,
+                    filter = filter
                 )
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
@@ -265,6 +267,7 @@ class AppRepositoryImpl @Inject constructor(
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
+        filter: String,
         showLoading: Boolean
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         return flow {
@@ -272,7 +275,8 @@ class AppRepositoryImpl @Inject constructor(
                 dataSource.getPostCreatedByUser(
                     idUser = idUser,
                     pageIndex = pageIndex,
-                    pageSize = pageSize
+                    pageSize = pageSize,
+                    filter = filter
                 )
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }

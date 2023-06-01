@@ -115,6 +115,7 @@ interface AppRepository {
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
+        filter: String,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 
@@ -122,6 +123,7 @@ interface AppRepository {
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
+        filter: String,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 }

@@ -100,12 +100,14 @@ interface RetrofitDataSource {
     suspend fun getPostSaved(
         idUser: Int,
         pageIndex: Int,
-        pageSize: Int
+        pageSize: Int,
+        filter: String
     ): ApiResultWrapper<PagingItem<RealEstateList>>
 
     suspend fun getPostCreatedByUser(
         idUser: Int,
         pageIndex: Int,
-        pageSize: Int
+        pageSize: Int,
+        filter: String
     ): ApiResultWrapper<PagingItem<RealEstateList>>
 }

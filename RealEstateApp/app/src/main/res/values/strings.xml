@@ -115,6 +115,7 @@
     <string name="unitMBracketsTitle">%s (m)</string>
     <string name="limit100CharTitle">%s (tối đa 100 kí tự)</string>
     <string name="limit300CharTitle">%s (tối đa 500 kí tự)</string>
+    <string name="uploadImageTitle">Ảnh BĐS (tối đa %d ảnh)</string>
 
     <!--RecordScreen-->
     <string name="SearchTitle">Tìm kiếm</string>

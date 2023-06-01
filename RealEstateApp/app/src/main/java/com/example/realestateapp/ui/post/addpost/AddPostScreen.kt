@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
+import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.icon.AppIcon
@@ -47,6 +48,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.MAX_IMAGE_POST
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
@@ -218,6 +220,8 @@ internal fun AddPostRoute(
                 } else ""
             }
         }
+        var isUpLoading by remember { isUpLoading }
+        val images = remember { images }
 
         if (addressDetailsScr[0].isNotEmpty()) {
             addressDetailDisplay = addressDetailsScr[0]
@@ -476,6 +480,27 @@ internal fun AddPostRoute(
                     description = ""
                 }
             },
+            isUpLoading = isUpLoading,
+            images = images,
+            addImageClick = remember {
+                {
+                }
+            },
+            onImageClick = remember {
+                {
+                    showDialog(
+                        dialog = TypeDialog.ShowImageDialog(
+                            data = images,
+                            currentIndex = it
+                        )
+                    )
+                }
+            },
+            deleteImage = remember {
+                {
+                    images.remove(it)
+                }
+            },
             onSubmitClick = remember {
                 {
                     firstClick = false
@@ -537,6 +562,11 @@ internal fun AddPostScreen(
     onDescriptionChange: (String) -> Unit,
     descriptionError: String,
     onClearDescription: () -> Unit,
+    isUpLoading: Boolean,
+    images: MutableList<Image>,
+    addImageClick: () -> Unit,
+    onImageClick: (Int) -> Unit,
+    deleteImage: (Image) -> Unit,
     onSubmitClick: () -> Unit
 ) {
     BaseScreen(
@@ -995,6 +1025,20 @@ internal fun AddPostScreen(
                 .wrapContentHeight()
                 .padding(horizontal = MARGIN_VIEW.dp)
         )
+        Spacing(MARGIN_VIEW)
+        ItemUploadPhoto(
+            isUpLoading = isUpLoading,
+            title = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(id = R.string.uploadImageTitle, MAX_IMAGE_POST)
+            ),
+            maxSize = MAX_IMAGE_POST,
+            data = images,
+            onAddImageClick = addImageClick,
+            onItemClick = onImageClick,
+            onItemDelete = deleteImage
+        )
+        Spacing(MARGIN_VIEW)
         Spacing(MARGIN_DIFFERENT_VIEW)
     }
 }

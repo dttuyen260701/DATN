@@ -2,6 +2,7 @@ package com.example.realestateapp.designsystem.icon
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.Edit
@@ -67,6 +68,7 @@ object RealEstateIcon {
     const val CarParking = R.drawable.ic_car_parking
     const val Reset = R.drawable.ic_reset
     const val Title = R.drawable.ic_title
+    val Add = Icons.Filled.Add
 }
 
 /**
