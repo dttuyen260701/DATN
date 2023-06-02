@@ -293,4 +293,47 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun getPredictPrice(
+        bedRoom: Int,
+        width: Float,
+        acreage: Float,
+        length: Float,
+        floorNumber: Int,
+        kitchen: Int,
+        diningRoom: Int,
+        propertyTypeId: Int,
+        legalTypeId: Int,
+        carParking: Boolean,
+        directionId: Int,
+        rooftop: Boolean,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        widthRoad: Float,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<PredictResult>> {
+        return flow {
+            emit(
+                dataSource.getPredictPrice(
+                    bedRoom = bedRoom,
+                    width = width,
+                    acreage = acreage,
+                    length = length,
+                    floorNumber = floorNumber,
+                    kitchen = kitchen,
+                    diningRoom = diningRoom,
+                    propertyTypeId = propertyTypeId,
+                    legalTypeId = legalTypeId,
+                    carParking = carParking,
+                    directionId = directionId,
+                    rooftop = rooftop,
+                    districtId = districtId,
+                    wardId = wardId,
+                    streetId = streetId,
+                    widthRoad = widthRoad
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

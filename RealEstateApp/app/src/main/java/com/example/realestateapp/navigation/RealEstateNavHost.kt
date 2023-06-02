@@ -72,6 +72,11 @@ fun RealEstateNavHost(
             },
             navigateToAddPost = {
                 navController.navigateToAddPost(postId = it)
+            },
+            navigateSignIn = {
+                navController.navigateToSignIn {
+
+                }
             }
         )
         notificationScreen()

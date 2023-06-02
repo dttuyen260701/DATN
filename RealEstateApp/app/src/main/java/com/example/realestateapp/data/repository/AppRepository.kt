@@ -132,4 +132,24 @@ interface AppRepository {
         image: File,
         showLoading: Boolean = false
     ): Flow<ApiResultWrapper<String>>
+
+    suspend fun getPredictPrice(
+        bedRoom: Int,
+        width: Float,
+        acreage: Float,
+        length: Float,
+        floorNumber: Int,
+        kitchen: Int,
+        diningRoom: Int,
+        propertyTypeId: Int,
+        legalTypeId: Int,
+        carParking: Boolean,
+        directionId: Int,
+        rooftop: Boolean,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        widthRoad: Float,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<PredictResult>>
 }

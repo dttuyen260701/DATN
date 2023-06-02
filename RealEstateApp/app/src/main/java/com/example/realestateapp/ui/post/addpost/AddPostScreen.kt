@@ -45,6 +45,7 @@ import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_TYPE
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
+import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
@@ -52,6 +53,8 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MAX_IMAGE_POST
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
 
 /**
@@ -70,6 +73,7 @@ internal fun AddPostRoute(
     val context = LocalContext.current
 
     viewModel.run {
+        val user by remember { getUser() }
         val uiState by remember { uiState }
         var firstClick by remember { firstClick }
         var addressDetailDisplay by remember { detailAddress }
@@ -125,17 +129,6 @@ internal fun AddPostRoute(
                     context.getString(
                         R.string.mandatoryError,
                         context.getString(R.string.squareTitle)
-                    )
-                else ""
-            }
-        }
-        var price by remember { price }
-        val priceError by remember {
-            derivedStateOf {
-                if (price.isEmpty() && !firstClick)
-                    context.getString(
-                        R.string.mandatoryError,
-                        context.getString(R.string.priceTitle)
                     )
                 else ""
             }
@@ -227,7 +220,18 @@ internal fun AddPostRoute(
         if (addressDetailsScr[0].isNotEmpty()) {
             addressDetailDisplay = addressDetailsScr[0]
         }
-
+        val priceSuggest by remember { priceSuggest }
+        var price by remember { price }
+        val priceError by remember {
+            derivedStateOf {
+                if (price.isEmpty() && !firstClick)
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.priceTitle)
+                    )
+                else ""
+            }
+        }
 
         when (uiState) {
             is PostUiState.GetTypesSuccess -> {
@@ -353,19 +357,6 @@ internal fun AddPostRoute(
                 }
             },
             squareError = squareError,
-            price = price,
-            onPriceChange = remember {
-                {
-                    try {
-                        if (it.toInt() > 0) price = it.trim()
-                    } catch (e: Exception) {
-                        if (it.isEmpty()) {
-                            price = it
-                        }
-                    }
-                }
-            },
-            priceError = priceError,
             floor = floor,
             onFloorChange = remember {
                 {
@@ -527,6 +518,22 @@ internal fun AddPostRoute(
                     images.remove(it)
                 }
             },
+            priceSuggest = priceSuggest,
+            price = price,
+            onPriceChange = remember {
+                {
+                    try {
+                        if (it.toInt() > 0) price = it.trim()
+                    } catch (e: Exception) {
+                        if (it.isEmpty()) {
+                            price = it
+                        }
+                    }
+                }
+            },
+            priceError = priceError,
+            ownerName = user?.fullName ?: "",
+            ownerPhone = user?.phoneNumber ?: "",
             onSubmitClick = remember {
                 {
                     firstClick = false
@@ -554,9 +561,6 @@ internal fun AddPostScreen(
     square: String,
     onSquareChange: (String) -> Unit,
     squareError: String,
-    price: String,
-    onPriceChange: (String) -> Unit,
-    priceError: String,
     floor: String,
     onFloorChange: (String) -> Unit,
     floorError: String,
@@ -593,6 +597,12 @@ internal fun AddPostScreen(
     addImageClick: () -> Unit,
     onImageClick: (Int) -> Unit,
     deleteImage: (Image) -> Unit,
+    priceSuggest: String,
+    price: String,
+    onPriceChange: (String) -> Unit,
+    priceError: String,
+    ownerName: String,
+    ownerPhone: String,
     onSubmitClick: () -> Unit
 ) {
     BaseScreen(
@@ -630,6 +640,11 @@ internal fun AddPostScreen(
         }
     ) {
         Spacing(MARGIN_DIFFERENT_VIEW)
+        TextNotification(
+            title = stringResource(id = R.string.warningTitle),
+            message = stringResource(id = R.string.messageTitle)
+        )
+        Spacing(MARGIN_VIEW)
         Text(
             text = stringResource(id = R.string.basicInfoTitle),
             style = RealEstateTypography.body1.copy(
@@ -935,7 +950,7 @@ internal fun AddPostScreen(
                         onClick = it,
                         modifier = Modifier
                             .size(Constants.DefaultValue.ICON_ITEM_SIZE.dp)
-                            .clip(RoundedCornerShape(Constants.DefaultValue.ROUND_DIALOG.dp))
+                            .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                             .background(
                                 color = Color.Transparent
                             )
@@ -1002,7 +1017,7 @@ internal fun AddPostScreen(
                 )
                 .border(
                     width = 1.dp,
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(ROUND_RECTANGLE.dp),
                     color = RealEstateAppTheme.colors.primary
                 ),
             shape = RoundedCornerShape(20.dp),
@@ -1046,6 +1061,16 @@ internal fun AddPostScreen(
             onItemDelete = deleteImage
         )
         Spacing(MARGIN_VIEW)
+        ComboBox(
+            onItemClick = { },
+            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Money),
+            title = stringResource(id = R.string.priceSuggestTitle),
+            value = priceSuggest,
+            hint = stringResource(id = R.string.priceSuggestTitle),
+            onClearData = { },
+            errorText = typeError
+        )
+        Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
             onTextChange = onPriceChange,
             text = price,
@@ -1066,6 +1091,37 @@ internal fun AddPostScreen(
             isLastEditText = true
         )
         Spacing(MARGIN_VIEW)
+        BorderLine()
+        Spacing(MARGIN_VIEW)
+        Text(
+            text = stringResource(id = R.string.contactInfoTitle),
+            style = RealEstateTypography.body1.copy(
+                fontSize = 17.sp,
+                color = RealEstateAppTheme.colors.primary,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Start
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        TextIcon(
+            text = ownerName,
+            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.User),
+            textColor = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+            size = 14,
+            iconTint = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        TextIcon(
+            text = ownerPhone,
+            icon = AppIcon.ImageVectorIcon(RealEstateIcon.PhoneOutLine),
+            textColor = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+            size = 14,
+            iconTint = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+            modifier = Modifier
+                .fillMaxWidth()
+        )
         Spacing(MARGIN_DIFFERENT_VIEW)
     }
 }

@@ -49,7 +49,8 @@ internal fun NavGraphBuilder.postGraph(
     onBackClick: () -> Unit,
     onRealEstateItemClick: (Int) -> Unit,
     navigateToPickAddress: () -> Unit,
-    navigateToAddPost: (Int) -> Unit
+    navigateToAddPost: (Int) -> Unit,
+    navigateSignIn: () -> Unit
 ) {
     navigation(
         route = postNavigationGraphRoute,
@@ -57,7 +58,8 @@ internal fun NavGraphBuilder.postGraph(
     ) {
         postScreen(
             navigateToRecord = navigateToRecord,
-            navigateToAddPost = navigateToAddPost
+            navigateToAddPost = navigateToAddPost,
+            navigateSignIn = navigateSignIn
         )
         recordsScreen(
             onBackClick = onBackClick,
@@ -72,12 +74,14 @@ internal fun NavGraphBuilder.postGraph(
 
 internal fun NavGraphBuilder.postScreen(
     navigateToRecord: (Boolean) -> Unit,
-    navigateToAddPost: (Int) -> Unit
+    navigateToAddPost: (Int) -> Unit,
+    navigateSignIn: () -> Unit
 ) {
     composable(postNavigationRoute) {
         PostRoute(
             navigateToRecord = navigateToRecord,
-            navigateToAddPost = navigateToAddPost
+            navigateToAddPost = navigateToAddPost,
+            navigateSignIn = navigateSignIn
         )
     }
 }

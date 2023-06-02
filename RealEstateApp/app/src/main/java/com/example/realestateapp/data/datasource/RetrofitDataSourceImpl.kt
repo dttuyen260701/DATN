@@ -268,4 +268,44 @@ class RetrofitDataSourceImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getPredictPrice(
+        bedRoom: Int,
+        width: Float,
+        acreage: Float,
+        length: Float,
+        floorNumber: Int,
+        kitchen: Int,
+        diningRoom: Int,
+        propertyTypeId: Int,
+        legalTypeId: Int,
+        carParking: Boolean,
+        directionId: Int,
+        rooftop: Boolean,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        widthRoad: Float
+    ): ApiResultWrapper<PredictResult> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["bedRoom"] = bedRoom
+        options["width"] = width
+        options["acreage"] = acreage
+        options["length"] = length
+        options["floorNumber"] = floorNumber
+        options["kitchen"] = kitchen
+        options["diningRoom"] = diningRoom
+        options["propertyTypeId"] = propertyTypeId
+        options["legalTypeId"] = legalTypeId
+        options["carParking"] = carParking
+        options["directionId"] = directionId
+        options["rooftop"] = rooftop
+        options["districtId"] = districtId
+        options["wardId"] = wardId
+        options["streetId"] = streetId
+        options["widthRoad"] = widthRoad
+        return callApi {
+            apiService.getPredictPrice(options)
+        }
+    }
 }

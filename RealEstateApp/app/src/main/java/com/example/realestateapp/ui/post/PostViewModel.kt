@@ -55,7 +55,6 @@ class PostViewModel @Inject constructor(
     internal var directionChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
     internal var directionOptions = mutableStateListOf<ItemChoose>()
     internal var square = mutableStateOf("")
-    internal var price = mutableStateOf("")
     internal var floor = mutableStateOf("")
     internal var bedroom = mutableStateOf("")
     internal var streetInFront = mutableStateOf("")
@@ -69,9 +68,30 @@ class PostViewModel @Inject constructor(
     internal var description = mutableStateOf("")
     internal var isUpLoading = mutableStateOf(false)
     internal var images = mutableStateListOf<Image>()
+    internal var priceSuggest = mutableStateOf("")
+    internal var price = mutableStateOf("")
 
     internal fun resetData() {
-
+        firstClick.value = true
+        detailAddress.value = ""
+        typeChosen.value = DEFAULT_ITEM_CHOSEN
+        juridicalChosen.value = DEFAULT_ITEM_CHOSEN
+        directionChosen.value = DEFAULT_ITEM_CHOSEN
+        square.value = ""
+        floor.value = ""
+        bedroom.value = ""
+        streetInFront.value = ""
+        width.value = ""
+        length.value = ""
+        isHaveCarParking.value = false
+        isHaveRooftop.value = false
+        isHaveKitchenRoom.value = false
+        isHaveDiningRoom.value = false
+        title.value = ""
+        description.value = ""
+        images.clear()
+        priceSuggest.value = ""
+        price.value = ""
     }
 
     internal fun getTypes(onDone: () -> Unit) {

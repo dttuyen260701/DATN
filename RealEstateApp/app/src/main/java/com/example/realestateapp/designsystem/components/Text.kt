@@ -12,10 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
@@ -23,12 +26,89 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
+import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 
 /**
  * Created by tuyen.dang on 5/10/2023.
  */
+
+@Composable
+internal fun TextNotification(
+    modifier: Modifier = Modifier,
+    title: String,
+    message: String,
+    textSize: Int = 12
+) {
+    ConstraintLayout(
+        modifier = Modifier
+            .background(
+                color = RealEstateAppTheme.colors.bgTextField,
+                shape = RoundedCornerShape(ROUND_RECTANGLE.dp)
+            )
+            .border(
+                width = 1.dp,
+                shape = RoundedCornerShape(ROUND_RECTANGLE.dp),
+                color = RealEstateAppTheme.colors.primary
+            )
+            .padding(
+                horizontal = PADDING_HORIZONTAL_SCREEN.dp,
+                vertical = MARGIN_VIEW.dp
+            )
+            .then(modifier)
+    ) {
+        val (icWarning, tvTitle, tvMessage) = createRefs()
+        BaseIcon(
+            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Warning),
+            contentDescription = null,
+            tint = RealEstateAppTheme.colors.primary,
+            modifier = Modifier
+                .size(TRAILING_ICON_SIZE.dp)
+                .constrainAs(icWarning) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
+        )
+        Text(
+            text = title,
+            style = RealEstateTypography.body1.copy(
+                color = RealEstateAppTheme.colors.primary,
+                fontSize = textSize.sp,
+                textAlign = TextAlign.Start,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier
+                .constrainAs(tvTitle) {
+                    linkTo(
+                        start = icWarning.end,
+                        startMargin = PADDING_VIEW.dp,
+                        end = parent.end
+                    )
+                    linkTo(icWarning.top, icWarning.bottom)
+                    width = Dimension.fillToConstraints
+                }
+        )
+        Text(
+            text = message,
+            style = RealEstateTypography.body1.copy(
+                color = RealEstateAppTheme.colors.primary,
+                fontSize = textSize.sp,
+                textAlign = TextAlign.Start
+            ),
+            modifier = Modifier
+                .constrainAs(tvMessage) {
+                    linkTo(
+                        top = icWarning.bottom,
+                        bottom = parent.bottom
+                    )
+                    linkTo(parent.start, parent.end)
+                }
+        )
+    }
+}
 
 @Composable
 internal fun TextTitle(
