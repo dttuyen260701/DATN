@@ -67,8 +67,11 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
 
         private var grantedPermission: (Map<String, Boolean>) -> Unit = {}
 
-        private var choiceImageAndUploadPhoto:
-                    (onStart: () -> Unit, onDone: (String) -> Unit) -> Unit = { _, _ -> }
+        private var choiceImageAndUploadPhoto: () -> Unit = { }
+
+        private var onStartUpload: () -> Unit = {}
+
+        private var onDoneUpload: (String) -> Unit = {}
 
         private var pagingModel = PagingModel()
     }
@@ -105,7 +108,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     }
 
     internal fun MainActivityViewModel.setUploadImageAndGetURL(
-        function: (onStart: () -> Unit, onDone: (String) -> Unit) -> Unit
+        function: () -> Unit
     ) {
         this.run {
             choiceImageAndUploadPhoto = function
@@ -116,20 +119,23 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         onStart: () -> Unit,
         onDone: (String) -> Unit
     ) {
-        choiceImageAndUploadPhoto(onStart, onDone)
+        onStartUpload = onStart
+        onDoneUpload = onDone
+        choiceImageAndUploadPhoto()
     }
 
-    internal fun uploadImage(image: File, onDone: (String) -> Unit) {
+    internal fun uploadImage(image: File) {
         viewModelScope.launch(Dispatchers.IO) {
+            onStartUpload()
             callAPIOnThread(
                 funCallApis = mutableListOf(
                     appRepository.uploadImage(image)
                 ),
                 apiSuccess = {
-                    onDone(it.body)
+                    onDoneUpload(it.body)
                 },
                 apiError = {
-                    onDone("")
+                    onDoneUpload("")
                 }
             )
         }

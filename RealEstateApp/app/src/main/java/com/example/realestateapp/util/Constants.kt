@@ -53,6 +53,8 @@ class Constants {
         const val COARSE_LOCATION = "Vị trí chính xác"
         const val FINE_LOCATION = "Vị trí tương đối"
         const val CAMERA = "Sử dụng Camera"
+        const val WRITE_EXTERNAL = "Ghi bộ nhớ ngoài"
+        const val READ_EXTERNAL = "Đoc bộ nhớ ngoài"
     }
 
     object DefaultValue {

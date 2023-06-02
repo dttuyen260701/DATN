@@ -123,6 +123,12 @@
     <!--DialogShowImage-->
     <string name="numberImageTitle">%d/%d</string>
 
+    <!--DialogChoiceImage-->
+    <string name="choiceImageTitle">Chọn ảnh để upload</string>
+    <string name="choiceImageMessage">Chọn ảnh từ thư viện/ camera để upload.</string>
+    <string name="btnGallery">Thư viện</string>
+    <string name="btnCamera">Máy ảnh</string>
+
     <!--SignOut-->
     <string name="confirmSignOut">Bạn có chắc muốn đăng xuất người dùng?</string>
 

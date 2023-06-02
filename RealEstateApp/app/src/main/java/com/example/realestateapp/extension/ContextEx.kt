@@ -4,8 +4,13 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
 import android.widget.Toast
 import com.example.realestateapp.util.Constants.DefaultValue.MAP_INSTALL_REQUEST
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by tuyen.dang on 5/20/2023.
@@ -40,4 +45,37 @@ internal fun Context.callPhone(phone: String) {
 
 internal fun Context.makeToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.createImageFile(): File {
+    // Create an image file name
+    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+    val imageFileName = "JPEG_" + timeStamp + "_"
+    return File.createTempFile(
+        imageFileName, /* prefix */
+        ".jpg", /* suffix */
+        externalCacheDir      /* directory */
+    )
+}
+
+internal fun Context.getFileFromUri(uri: Uri): File? {
+    val filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+    val file = File(filePath, "IMG_${System.currentTimeMillis()}.jpg")
+    try {
+        contentResolver.openInputStream(uri)?.let { inputStream ->
+            val outputStream = FileOutputStream(file)
+            val buf = ByteArray(1024)
+            while (true) {
+                val len = inputStream.read(buf)
+                if (len == -1) break
+                outputStream.write(buf, 0, len)
+            }
+            outputStream.close()
+            inputStream.close()
+        }
+    } catch (e: Exception) {
+        return null
+    }
+
+    return file
 }

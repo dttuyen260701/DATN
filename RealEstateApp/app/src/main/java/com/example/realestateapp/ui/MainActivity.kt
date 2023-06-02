@@ -15,11 +15,16 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.core.content.FileProvider
+import com.example.realestateapp.BuildConfig
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
+import com.example.realestateapp.extension.createImageFile
+import com.example.realestateapp.extension.getFileFromUri
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -46,12 +51,47 @@ class MainActivity : ComponentActivity() {
                         val imagePicker = rememberLauncherForActivityResult(
                             contract = ActivityResultContracts.GetContent(),
                             onResult = { uri ->
-                                // TODO
+                                uri?.let {
+                                    getFileFromUri(it)?.let { file ->
+                                        uploadImage(file)
+                                    }
+                                }
                             }
                         )
 
-                        setUploadImageAndGetURL { onStart, onDone ->
-//                            showDialog()
+                        val cameraLauncher = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.TakePicture(),
+                            onResult = { hasData ->
+                                if (hasData) {
+                                    uri?.let {
+                                        getFileFromUri(it)?.let { file ->
+                                            uploadImage(file)
+                                        }
+                                    }
+                                }
+                            }
+                        )
+
+                        setUploadImageAndGetURL {
+                            showDialog(
+                                dialog = TypeDialog.ConfirmDialog(
+                                    title = getString(R.string.choiceImageTitle),
+                                    message = getString(R.string.choiceImageMessage),
+                                    negativeBtnText = getString(R.string.btnGallery),
+                                    onBtnNegativeClick = {
+                                        imagePicker.launch("image/*")
+                                    },
+                                    positiveBtnText = getString(R.string.btnCamera),
+                                    onBtnPositiveClick = {
+                                        val file = createImageFile()
+                                        uri = FileProvider.getUriForFile(
+                                            Objects.requireNonNull(this@MainActivity),
+                                            BuildConfig.APPLICATION_ID + ".provider", file
+                                        )
+                                        cameraLauncher.launch(uri)
+                                    }
+                                )
+                            )
                         }
 
                         setRequestPermissionListener { permissions ->
@@ -109,6 +149,8 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.CALL_PHONE -> Constants.PermissionTitle.PHONE
         Manifest.permission.ACCESS_COARSE_LOCATION -> Constants.PermissionTitle.COARSE_LOCATION
         Manifest.permission.ACCESS_FINE_LOCATION -> Constants.PermissionTitle.FINE_LOCATION
+        Manifest.permission.WRITE_EXTERNAL_STORAGE -> Constants.PermissionTitle.WRITE_EXTERNAL
+        Manifest.permission.READ_EXTERNAL_STORAGE -> Constants.PermissionTitle.READ_EXTERNAL
         Manifest.permission.CAMERA -> Constants.PermissionTitle.CAMERA
         else -> ""
     }

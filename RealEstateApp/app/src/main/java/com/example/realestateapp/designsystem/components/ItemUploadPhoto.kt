@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -22,19 +23,20 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
-import com.example.realestateapp.extension.setVisibility
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.IMAGE_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
+import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 
@@ -79,34 +81,38 @@ internal fun ItemUploadPhoto(
             IconButton(
                 onClick = it,
                 modifier = Modifier
-                    .size(IMAGE_SIZE.dp)
                     .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                     .background(
-                        color = RealEstateAppTheme.colors.bgTextField
+                        color =
+                        if (data.size < maxSize) RealEstateAppTheme.colors.bgTextField
+                        else Color.Transparent
                     )
                     .border(
                         BorderStroke(
                             width = (0.5f).dp,
-                            color = RealEstateAppTheme.colors.primary
+                            color =
+                            if (data.size < maxSize) RealEstateAppTheme.colors.primary
+                            else Color.Transparent
                         ),
                         shape = RoundedCornerShape(ROUND_DIALOG.dp)
                     )
                     .constrainAs(btnAdd) {
-                        start.linkTo(tvTitle.start)
+                        start.linkTo(parent.start)
                         linkTo(
                             top = tvTitle.bottom,
                             topMargin = MARGIN_VIEW.dp,
                             bottom = parent.bottom
                         )
-                        visibility = setVisibility(data.size < maxSize)
-                    }
-
+                        width = Dimension.value((if (data.size < maxSize) IMAGE_SIZE else 0).dp)
+                        height = Dimension.value(IMAGE_SIZE.dp)
+                    },
+                enabled = !isUpLoading
             ) {
                 if (isUpLoading) {
                     CircularProgressIndicator(
                         color = RealEstateAppTheme.colors.progressBar,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .size((TOOLBAR_HEIGHT / 2).dp)
                     )
                 } else {
                     BaseIcon(
@@ -124,7 +130,11 @@ internal fun ItemUploadPhoto(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .constrainAs(listItem) {
-                    linkTo(btnAdd.top, btnAdd.bottom)
+                    linkTo(
+                        top = tvTitle.bottom,
+                        topMargin = MARGIN_VIEW.dp,
+                        bottom = parent.bottom
+                    )
                     linkTo(btnAdd.end, parent.end)
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
@@ -169,11 +179,14 @@ internal fun PhotoRadius(
     ) {
         val (img, btnDelete) = createRefs()
         AsyncImage(
-            model = item.url,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(item.url)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             modifier = Modifier
                 .border(
-                    BorderStroke(1.dp, Color.White),
+                    BorderStroke(1.dp, RealEstateAppTheme.colors.primaryVariant),
                     RoundedCornerShape(ROUND_DIALOG.dp)
                 )
                 .padding(1.dp)
@@ -186,6 +199,7 @@ internal fun PhotoRadius(
                     linkTo(parent.start, parent.end)
                 },
             contentScale = ContentScale.Crop,
+            placeholder = painterResource(id = R.drawable.sale_real_estate),
             error = painterResource(R.drawable.sale_real_estate)
         )
         ButtonUnRepeating(onClick = { onItemDelete(item) }) {

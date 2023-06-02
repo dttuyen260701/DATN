@@ -100,7 +100,9 @@ interface APIService {
         @Query("search") filter: String
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 
-    @PUT("/api/Posts/upload-image")
+    @HTTP(method = "PUT", path ="/api/Posts/upload-image", hasBody = true)
+    @Multipart
+    @JvmSuppressWildcards
     suspend fun uploadImage(
         @Part image: MultipartBody.Part
     ): Response<ResponseAPI<String>>

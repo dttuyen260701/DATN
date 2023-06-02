@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui
 
+import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.ui.base.BaseViewModel
@@ -20,4 +21,5 @@ class MainActivityViewModel @Inject constructor(
 ) : BaseViewModel<MainUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(MainUiState.InitView)
 
+    internal var uri: Uri? = null
 }

@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.post.addpost
 
+import android.Manifest
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -484,6 +485,31 @@ internal fun AddPostRoute(
             images = images,
             addImageClick = remember {
                 {
+                    requestPermissionListener(
+                        permission = mutableListOf(
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
+                        )
+                    ) { results ->
+                        if (results.entries.all { it.value }) {
+                            uploadImageAndGetURL(
+                                onStart = {
+                                    isUpLoading = true
+                                }
+                            ) {
+                                isUpLoading = false
+                                if (it.trim().isNotEmpty()) {
+                                    images.add(
+                                        Image(
+                                            id = -1,
+                                            url = it
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             },
             onImageClick = remember {
@@ -571,6 +597,7 @@ internal fun AddPostScreen(
 ) {
     BaseScreen(
         modifier = modifier,
+        bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight,
         verticalArrangement = Arrangement.Top,
         toolbar = {
             ToolbarView(
@@ -646,26 +673,6 @@ internal fun AddPostScreen(
             hint = stringResource(id = R.string.addressHint),
             onClearData = { onClearData(FIELD_ADDRESS) },
             errorText = addressError
-        )
-        Spacing(MARGIN_VIEW)
-        EditTextTrailingIconCustom(
-            onTextChange = onPriceChange,
-            text = price,
-            label = stringResource(
-                id = R.string.mandatoryTitle,
-                stringResource(id = R.string.priceWUnitTitle)
-            ),
-            typeInput = KeyboardType.Number,
-            hint = stringResource(
-                id = R.string.hintTitle,
-                stringResource(id = R.string.priceWUnitTitle)
-            ),
-            errorText = priceError,
-            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Money),
-            textColor = RealEstateAppTheme.colors.primary,
-            backgroundColor = Color.White,
-            isShowErrorStart = true,
-            isLastEditText = true
         )
         Spacing(MARGIN_VIEW)
         BorderLine()
@@ -1037,6 +1044,26 @@ internal fun AddPostScreen(
             onAddImageClick = addImageClick,
             onItemClick = onImageClick,
             onItemDelete = deleteImage
+        )
+        Spacing(MARGIN_VIEW)
+        EditTextTrailingIconCustom(
+            onTextChange = onPriceChange,
+            text = price,
+            label = stringResource(
+                id = R.string.mandatoryTitle,
+                stringResource(id = R.string.priceWUnitTitle)
+            ),
+            typeInput = KeyboardType.Number,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(id = R.string.priceWUnitTitle)
+            ),
+            errorText = priceError,
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Money),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true
         )
         Spacing(MARGIN_VIEW)
         Spacing(MARGIN_DIFFERENT_VIEW)

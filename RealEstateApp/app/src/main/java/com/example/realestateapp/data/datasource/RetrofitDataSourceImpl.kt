@@ -261,7 +261,7 @@ class RetrofitDataSourceImpl @Inject constructor(
         return callApi {
             apiService.uploadImage(
                 image = MultipartBody.Part.createFormData(
-                    "avatar",
+                    "img",
                     image.name,
                     image.asRequestBody("multipart/form-data".toMediaTypeOrNull())
                 )

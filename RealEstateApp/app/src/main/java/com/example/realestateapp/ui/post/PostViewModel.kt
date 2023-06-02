@@ -68,28 +68,7 @@ class PostViewModel @Inject constructor(
     internal var title = mutableStateOf("")
     internal var description = mutableStateOf("")
     internal var isUpLoading = mutableStateOf(false)
-    internal var images = mutableStateListOf<Image>(
-        Image(
-            id = 2,
-            url = "https://media.tinthethao.com.vn/files/news/2013/03/29/9515556ee200bc.jpg"
-        ),
-        Image(
-            id = 3,
-            url = "https://image2.tin247.news/pictures/2022/10/01/vwf1664618226.jpg"
-        ),
-        Image(
-            id = 4,
-            url = "https://static.bongda24h.vn/medias/original/2021/3/22/imgpsh_fullsize_anim.jpg"
-        ),
-        Image(
-            id = 5,
-            url = "https://static.bongda24h.vn/medias/original/2020/3/20/torres.jpg"
-        ),
-        Image(
-            id = 6,
-            url = "https://static.bongda24h.vn/medias/standard/2019/6/21/2.43654436.jpg"
-        )
-    )
+    internal var images = mutableStateListOf<Image>()
 
     internal fun resetData() {
 
