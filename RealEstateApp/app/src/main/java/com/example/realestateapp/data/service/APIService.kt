@@ -2,13 +2,9 @@ package com.example.realestateapp.data.service
 
 import com.example.realestateapp.data.apiresult.ResponseAPI
 import com.example.realestateapp.data.models.*
+import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -103,4 +99,9 @@ interface APIService {
         @Query("pageSize") pageSize: Int,
         @Query("search") filter: String
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
+
+    @PUT("/api/Posts/upload-image")
+    suspend fun uploadImage(
+        @Part image: MultipartBody.Part
+    ): Response<ResponseAPI<String>>
 }

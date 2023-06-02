@@ -6,6 +6,7 @@ import com.example.realestateapp.data.models.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -278,6 +279,17 @@ class AppRepositoryImpl @Inject constructor(
                     pageSize = pageSize,
                     filter = filter
                 )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun uploadImage(
+        image: File,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<String>> {
+        return flow {
+            emit(
+                dataSource.uploadImage(image)
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }

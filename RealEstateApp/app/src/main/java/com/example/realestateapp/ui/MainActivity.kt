@@ -43,6 +43,17 @@ class MainActivity : ComponentActivity() {
                             }
                         )
 
+                        val imagePicker = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.GetContent(),
+                            onResult = { uri ->
+                                // TODO
+                            }
+                        )
+
+                        setUploadImageAndGetURL { onStart, onDone ->
+//                            showDialog()
+                        }
+
                         setRequestPermissionListener { permissions ->
                             val permissionsDeny = permissions.filter {
                                 checkSelfPermission(it) == PackageManager.PERMISSION_DENIED

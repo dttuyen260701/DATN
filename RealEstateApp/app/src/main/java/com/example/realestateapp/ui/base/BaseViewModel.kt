@@ -16,6 +16,7 @@ import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -66,6 +67,9 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
 
         private var grantedPermission: (Map<String, Boolean>) -> Unit = {}
 
+        private var choiceImageAndUploadPhoto:
+                    (onStart: () -> Unit, onDone: (String) -> Unit) -> Unit = { _, _ -> }
+
         private var pagingModel = PagingModel()
     }
 
@@ -100,12 +104,47 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         requestPermission(permission)
     }
 
+    internal fun MainActivityViewModel.setUploadImageAndGetURL(
+        function: (onStart: () -> Unit, onDone: (String) -> Unit) -> Unit
+    ) {
+        this.run {
+            choiceImageAndUploadPhoto = function
+        }
+    }
+
+    internal fun uploadImageAndGetURL(
+        onStart: () -> Unit,
+        onDone: (String) -> Unit
+    ) {
+        choiceImageAndUploadPhoto(onStart, onDone)
+    }
+
+    internal fun uploadImage(image: File, onDone: (String) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.uploadImage(image)
+                ),
+                apiSuccess = {
+                    onDone(it.body)
+                },
+                apiError = {
+                    onDone("")
+                }
+            )
+        }
+    }
+
     internal fun MainActivityViewModel.setRequestPermissionListener(requestPermissionNew: (MutableList<String>) -> Unit) {
-        requestPermission = requestPermissionNew
+        this.run {
+            requestPermission = requestPermissionNew
+        }
     }
 
     internal fun MainActivityViewModel.onGrantedPermission(result: Map<String, Boolean>) {
-        grantedPermission(result)
+        this.run {
+            grantedPermission(result)
+        }
     }
 
     internal fun getUser() = user

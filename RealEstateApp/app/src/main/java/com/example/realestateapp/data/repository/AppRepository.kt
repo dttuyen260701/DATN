@@ -3,6 +3,7 @@ package com.example.realestateapp.data.repository
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.models.*
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -126,4 +127,9 @@ interface AppRepository {
         filter: String,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
+
+    suspend fun uploadImage(
+        image: File,
+        showLoading: Boolean = false
+    ): Flow<ApiResultWrapper<String>>
 }

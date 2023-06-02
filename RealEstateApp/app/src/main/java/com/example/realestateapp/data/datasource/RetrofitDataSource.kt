@@ -2,6 +2,7 @@ package com.example.realestateapp.data.datasource
 
 import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.models.*
+import java.io.File
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -110,4 +111,8 @@ interface RetrofitDataSource {
         pageSize: Int,
         filter: String
     ): ApiResultWrapper<PagingItem<RealEstateList>>
+
+    suspend fun uploadImage(
+        image: File
+    ): ApiResultWrapper<String>
 }

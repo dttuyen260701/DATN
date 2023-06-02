@@ -4,6 +4,10 @@ import com.example.realestateapp.data.apiresult.ApiResultWrapper
 import com.example.realestateapp.data.models.*
 import com.example.realestateapp.data.network.SafeAPI
 import com.example.realestateapp.data.service.APIService
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -247,6 +251,20 @@ class RetrofitDataSourceImpl @Inject constructor(
                 pageIndex = pageIndex,
                 pageSize = pageSize,
                 filter = filter
+            )
+        }
+    }
+
+    override suspend fun uploadImage(
+        image: File
+    ): ApiResultWrapper<String> {
+        return callApi {
+            apiService.uploadImage(
+                image = MultipartBody.Part.createFormData(
+                    "avatar",
+                    image.name,
+                    image.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                )
             )
         }
     }
