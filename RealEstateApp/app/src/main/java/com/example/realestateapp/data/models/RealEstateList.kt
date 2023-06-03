@@ -18,4 +18,5 @@ data class RealEstateList(
     @SerializedName("address") val address: String,
     @SerializedName("views") val views: Int,
     @SerializedName("isSaved") val isSaved: Boolean,
+    @SerializedName("status") val status: Int,
 )

@@ -41,6 +41,7 @@ fun ImageProfile(
             .clip(CircleShape)
             .then(modifier),
         contentScale = ContentScale.Crop,
-        error = painterResource(R.drawable.sale_real_estate)
+        error = painterResource(R.drawable.sale_real_estate),
+        placeholder = painterResource(R.drawable.sale_real_estate)
     )
 }

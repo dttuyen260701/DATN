@@ -28,6 +28,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import com.example.realestateapp.R
+import com.example.realestateapp.data.enums.PostStatus
+import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.designsystem.icon.AppIcon
@@ -36,15 +38,98 @@ import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.extension.formatToMoney
 import com.example.realestateapp.extension.formatToUnit
+import com.example.realestateapp.extension.setVisibility
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
+import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 
 /**
  * Created by tuyen.dang on 5/12/2023.
  */
+
+@Composable
+internal fun ItemChatGuestView(
+    modifier: Modifier = Modifier,
+    item: ItemChatGuest,
+    onItemClick: (String) -> Unit
+) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .then(modifier)
+            .clickable {
+                onItemClick(item.idGuest)
+            }
+    ) {
+        val (imgGuest, tvName, tvLastMessage) = createRefs()
+        val verticalGuideLine = createGuidelineFromTop(0.5f)
+        ImageProfile(
+            size = TOOLBAR_HEIGHT,
+            model = item.imageGuest,
+            modifier = Modifier
+                .constrainAs(imgGuest) {
+                    linkTo(parent.top, parent.bottom)
+                    start.linkTo(parent.start)
+                }
+        )
+        Text(
+            text = item.nameGuest,
+            style = RealEstateTypography.h1.copy(
+                fontSize = 15.sp,
+                color = RealEstateAppTheme.colors.primary,
+                textAlign = TextAlign.Start
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .constrainAs(tvName) {
+                    linkTo(
+                        start = imgGuest.end,
+                        startMargin = PADDING_VIEW.dp,
+                        end = parent.end,
+                        bias = 0f
+                    )
+                    linkTo(
+                        top = parent.top,
+                        bottom = verticalGuideLine,
+                        bias = 1f
+                    )
+                    width = Dimension.fillToConstraints
+                }
+        )
+        val sendTitle = if (!item.isGuestSend) "${stringResource(id = R.string.youTitle)} " else ""
+        Text(
+            text = sendTitle.plus(item.lastMessage),
+            style = RealEstateTypography.h1.copy(
+                fontSize = 13.sp,
+                color = RealEstateAppTheme.colors.primary,
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Start
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .constrainAs(tvLastMessage) {
+                    linkTo(
+                        start = imgGuest.end,
+                        startMargin = PADDING_VIEW.dp,
+                        end = parent.end,
+                        bias = 0f
+                    )
+                    linkTo(
+                        top = verticalGuideLine,
+                        bottom = parent.bottom,
+                        bias = 0f
+                    )
+                    width = Dimension.fillToConstraints
+                }
+        )
+    }
+}
 
 @Composable
 internal fun ItemType(
@@ -111,7 +196,7 @@ internal fun ItemRealEstate(
                     onItemClick(item.id)
                 }
         ) {
-            val (img, tvViews, tvName, tvCreatedDate, tvAddress,
+            val (img, titleStatus, tvViews, tvName, tvCreatedDate, tvAddress,
                 tvSquare, tvFloors, tvBedrooms, tvPrice) = createRefs()
 
             AsyncImage(
@@ -125,6 +210,38 @@ internal fun ItemRealEstate(
                         top.linkTo(parent.top)
                     },
                 placeholder = painterResource(id = R.drawable.sale_real_estate)
+            )
+            Text(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(ROUND_DIALOG.dp))
+                    .background(
+                        when (item.status) {
+                            PostStatus.Pending.id -> RealEstateAppTheme.colors.primary
+                            PostStatus.Accepted.id -> RealEstateAppTheme.colors.progressBar
+                            PostStatus.Reject.id -> RealEstateAppTheme.colors.bgBtnDisable
+                            else -> Color.Transparent
+                        }
+                    )
+                    .constrainAs(titleStatus) {
+                        top.linkTo(parent.top, MARGIN_VIEW.dp)
+                        end.linkTo(parent.end, MARGIN_VIEW.dp)
+                        visibility = setVisibility(item.status != PostStatus.Default.id)
+                    }
+                    .padding(
+                        vertical = PADDING_VIEW.dp,
+                        horizontal = MARGIN_VIEW.dp
+                    ),
+                text = stringResource(
+                    id = when (item.status) {
+                        PostStatus.Pending.id -> R.string.pendingStatus
+                        PostStatus.Accepted.id -> R.string.acceptStatus
+                        PostStatus.Reject.id -> R.string.rejectStatus
+                        else -> R.string.allTitle
+                    }
+                ),
+                style = RealEstateTypography.body1.copy(
+                    color = Color.White,
+                )
             )
             TextIcon(
                 text = views.formatToUnit(),
@@ -172,10 +289,11 @@ internal fun ItemRealEstate(
                         top.linkTo(tvName.bottom)
                         linkTo(
                             start = tvName.start,
-                            end = tvPrice.start,
+                            end = parent.end,
                             endMargin = MARGIN_VIEW.dp,
                             bias = 0f
                         )
+                        width = Dimension.fillToConstraints
                     },
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -325,7 +443,8 @@ private fun PreviewItemRealEstate() {
             address = "15 Lỗ giáng 19",
             views = 1234,
             isSaved = true,
-            createdDate = ""
+            createdDate = "",
+            status = 1
         ),
         onItemClick = {}
     )

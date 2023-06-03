@@ -8,10 +8,12 @@ import com.example.realestateapp.data.enums.Direction
 import com.example.realestateapp.data.enums.Juridical
 import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.RealEstateDetail
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
-import com.example.realestateapp.ui.home.HomeUiState
+import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailUiState
+import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
@@ -36,6 +38,10 @@ sealed class PostUiState : UiState() {
     data class GetTypesSuccess(val data: MutableList<ItemChoose>) : PostUiState()
 
     data class GetSearchDataSuccess(val data: MutableList<RealEstateList>) : PostUiState()
+
+    data class GetPredictPriceSuccess(val data: Float) : PostUiState()
+
+    data class GetRealEstateDetailSuccess(val data: RealEstateDetail) : PostUiState()
 }
 
 @HiltViewModel
@@ -70,6 +76,7 @@ class PostViewModel @Inject constructor(
     internal var images = mutableStateListOf<Image>()
     internal var priceSuggest = mutableStateOf("")
     internal var price = mutableStateOf("")
+    private var cluster = 0
 
     internal fun resetData() {
         firstClick.value = true
@@ -94,8 +101,80 @@ class PostViewModel @Inject constructor(
         price.value = ""
     }
 
+    internal fun isValidateData(): Boolean =
+        detailAddress.value.trim().isNotEmpty()
+                && typeChosen.value != DEFAULT_ITEM_CHOSEN
+                && juridicalChosen.value != DEFAULT_ITEM_CHOSEN
+                && directionChosen.value != DEFAULT_ITEM_CHOSEN
+                && square.value.trim().isNotEmpty()
+                && floor.value.trim().isNotEmpty()
+                && bedroom.value.trim().isNotEmpty()
+                && streetInFront.value.trim().isNotEmpty()
+                && width.value.trim().isNotEmpty()
+                && length.value.trim().isNotEmpty()
+                && PickAddressViewModel.districtChosen.value != DEFAULT_ITEM_CHOSEN
+                && PickAddressViewModel.wardChosen.value != DEFAULT_ITEM_CHOSEN
+                && PickAddressViewModel.streetChosen.value != DEFAULT_ITEM_CHOSEN
+
+    internal fun getRealEstateDetail(
+        realEstateId: Int
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getPostDetailById(
+                        idPost = realEstateId.toString(),
+                        idUser = getUser().value?.id?.toString() ?: ""
+                    )
+                ),
+                apiSuccess = { response ->
+                    uiState.value =
+                        PostUiState.GetRealEstateDetailSuccess(response.body)
+                },
+                apiError = {
+                    uiState.value = RealEstateDetailUiState.Error
+                }
+            )
+        }
+    }
+
+    internal fun getPredictPrice() {
+        uiState.value = PostUiState.Loading
+        viewModelScope.launch {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getPredictPrice(
+                        bedRoom = bedroom.value.toInt(),
+                        width = width.value.toFloat(),
+                        acreage = square.value.toFloat(),
+                        length = square.value.toFloat(),
+                        floorNumber = floor.value.toInt(),
+                        kitchen = if (isHaveKitchenRoom.value) 1 else 0,
+                        diningRoom = if (isHaveDiningRoom.value) 1 else 0,
+                        propertyTypeId = typeChosen.value.id,
+                        legalTypeId = juridicalChosen.value.id,
+                        carParking = isHaveCarParking.value,
+                        directionId = directionChosen.value.id,
+                        rooftop = isHaveRooftop.value,
+                        districtId = PickAddressViewModel.districtChosen.value.id,
+                        wardId = PickAddressViewModel.wardChosen.value.id,
+                        streetId = PickAddressViewModel.streetChosen.value.id,
+                        widthRoad = streetInFront.value.toFloat()
+                    )
+                ),
+                apiSuccess = {
+                    cluster = it.body.cluster
+                    uiState.value = PostUiState.GetPredictPriceSuccess(it.body.result)
+                },
+                apiError = {
+
+                }
+            )
+        }
+    }
+
     internal fun getTypes(onDone: () -> Unit) {
-        uiState.value = HomeUiState.Loading
+        uiState.value = PostUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 funCallApis = mutableListOf(

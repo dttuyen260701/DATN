@@ -32,6 +32,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
@@ -42,6 +43,7 @@ import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_PREDICT_PRICE
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_TYPE
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
@@ -56,6 +58,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
+import com.example.realestateapp.util.Constants.MessageErrorAPI.INVALID_INPUT_ERROR
 
 /**
  * Created by tuyen.dang on 5/28/2023.
@@ -220,7 +223,7 @@ internal fun AddPostRoute(
         if (addressDetailsScr[0].isNotEmpty()) {
             addressDetailDisplay = addressDetailsScr[0]
         }
-        val priceSuggest by remember { priceSuggest }
+        var priceSuggest by remember { priceSuggest }
         var price by remember { price }
         val priceError by remember {
             derivedStateOf {
@@ -232,12 +235,37 @@ internal fun AddPostRoute(
                 else ""
             }
         }
+        val isEnableSubmit by remember {
+            derivedStateOf {
+                (
+                    addressError.trim().isEmpty()
+                    && typeError.trim().isEmpty()
+                    && juridicalError.trim().isEmpty()
+                    && directionError.trim().isEmpty()
+                    && squareError.trim().isEmpty()
+                    && floorError.trim().isEmpty()
+                    && bedroomError.trim().isEmpty()
+                    && streetInFrontError.trim().isEmpty()
+                    && widthError.trim().isEmpty()
+                    && lengthError.trim().isEmpty()
+                    && titleError.trim().isEmpty()
+                    && descriptionError.trim().isEmpty()
+                    && priceError.trim().isEmpty()
+                )
+            }
+        }
 
         when (uiState) {
             is PostUiState.GetTypesSuccess -> {
                 types.run {
                     clear()
                     addAll((uiState as PostUiState.GetTypesSuccess).data)
+                }
+            }
+            is PostUiState.GetPredictPriceSuccess -> {
+                (uiState as PostUiState.GetPredictPriceSuccess).data.toString().let {
+                    priceSuggest = (it.toFloat() * square.toFloat()).toString()
+                    price =  (it.toFloat() * square.toFloat()).toString()
                 }
             }
             else -> {}
@@ -302,9 +330,13 @@ internal fun AddPostRoute(
                                 showDialog(dialog = TypeDialog.Hide)
                             }
                         }
+                        FIELD_PREDICT_PRICE -> {
+                            if (isValidateData()) getPredictPrice()
+                            else context.makeToast(INVALID_INPUT_ERROR)
+                        }
                         else -> {}
                     }
-                    if (key != FIELD_ADDRESS) {
+                    if (key != FIELD_ADDRESS && key != FIELD_PREDICT_PRICE) {
                         showDialog(
                             dialog = TypeDialog.ChoiceDataDialog(
                                 title = title,
@@ -523,7 +555,7 @@ internal fun AddPostRoute(
             onPriceChange = remember {
                 {
                     try {
-                        if (it.toInt() > 0) price = it.trim()
+                        if (it.toFloat() > 0) price = it.trim()
                     } catch (e: Exception) {
                         if (it.isEmpty()) {
                             price = it
@@ -534,6 +566,7 @@ internal fun AddPostRoute(
             priceError = priceError,
             ownerName = user?.fullName ?: "",
             ownerPhone = user?.phoneNumber ?: "",
+            isEnableSubmit = isEnableSubmit,
             onSubmitClick = remember {
                 {
                     firstClick = false
@@ -603,6 +636,7 @@ internal fun AddPostScreen(
     priceError: String,
     ownerName: String,
     ownerPhone: String,
+    isEnableSubmit: Boolean,
     onSubmitClick: () -> Unit
 ) {
     BaseScreen(
@@ -631,6 +665,7 @@ internal fun AddPostScreen(
                 ButtonRadiusGradient(
                     onClick = onSubmitClick,
                     title = stringResource(id = R.string.searchBtnTitle),
+                    enabled = isEnableSubmit,
                     bgColor = RealEstateAppTheme.colors.bgButtonGradient,
                     modifier = Modifier
                         .height(Constants.DefaultValue.TOOLBAR_HEIGHT.dp)
@@ -1062,11 +1097,12 @@ internal fun AddPostScreen(
         )
         Spacing(MARGIN_VIEW)
         ComboBox(
-            onItemClick = { },
+            onItemClick = { onComboBoxClick(FIELD_PREDICT_PRICE) },
             leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Money),
             title = stringResource(id = R.string.priceSuggestTitle),
             value = priceSuggest,
             hint = stringResource(id = R.string.priceSuggestTitle),
+            isAllowClearData = false,
             onClearData = { },
             errorText = typeError
         )
@@ -1122,6 +1158,22 @@ internal fun AddPostScreen(
             modifier = Modifier
                 .fillMaxWidth()
         )
+        Spacing(MARGIN_VIEW)
+        Text(
+            text = stringResource(id = R.string.choiceValueTitle),
+            style = RealEstateTypography.body1.copy(
+                fontSize = 17.sp,
+                color = RealEstateAppTheme.colors.primary,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Start
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        Spacing(MARGIN_VIEW)
+        Row() {
+            
+        }
         Spacing(MARGIN_DIFFERENT_VIEW)
     }
 }

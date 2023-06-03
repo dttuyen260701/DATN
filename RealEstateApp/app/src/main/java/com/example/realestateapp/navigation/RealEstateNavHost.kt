@@ -8,7 +8,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.realestateapp.ui.home.navigation.*
-import com.example.realestateapp.ui.notification.navigation.notificationScreen
+import com.example.realestateapp.ui.notification.navigation.navigateToMessenger
+import com.example.realestateapp.ui.notification.navigation.notificationGraph
 import com.example.realestateapp.ui.pickaddress.navigation.navigateToPickAddress
 import com.example.realestateapp.ui.pickaddress.navigation.pickAddressScreen
 import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
@@ -41,6 +42,16 @@ fun RealEstateNavHost(
             onRealEstateItemClick = {
                 navController.navigateToRealEstateDetail(
                     realEstateId = it
+                )
+            },
+            navigateToEditPost = {
+                navController.navigateToAddPost(
+                    postId = it
+                )
+            },
+            navigateMessengerScreen = {
+                navController.navigateToMessenger(
+                    idGuest = it
                 )
             },
             onBackClick = {
@@ -79,7 +90,13 @@ fun RealEstateNavHost(
                 }
             }
         )
-        notificationScreen()
+        notificationGraph(
+            navigateChatScreen = {
+                navController.navigateToMessenger(
+                    idGuest = it
+                )
+            }
+        )
         settingGraph(
             onEditClick = {
                 navController.navigateToProfile()

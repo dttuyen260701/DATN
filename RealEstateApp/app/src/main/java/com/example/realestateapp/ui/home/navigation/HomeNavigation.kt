@@ -46,6 +46,8 @@ internal fun NavHostController.navigateToSearch(
 internal fun NavGraphBuilder.homeGraph(
     navigateToSearch: (SearchOption) -> Unit,
     onRealEstateItemClick: (Int) -> Unit,
+    navigateToEditPost: (Int) -> Unit,
+    navigateMessengerScreen: (String) -> Unit,
     onBackClick: () -> Unit,
     onClickProfile: () -> Unit,
     navigateToPickAddress: () -> Unit
@@ -61,6 +63,8 @@ internal fun NavGraphBuilder.homeGraph(
         )
         realEstateDetailScreen(
             onRealEstateItemClick = onRealEstateItemClick,
+            navigateToEditPost = navigateToEditPost,
+            navigateMessengerScreen = navigateMessengerScreen,
             onBackClick = onBackClick
         )
         searchScreen(
@@ -87,6 +91,8 @@ internal fun NavGraphBuilder.homeScreen(
 
 internal fun NavGraphBuilder.realEstateDetailScreen(
     onRealEstateItemClick: (Int) -> Unit,
+    navigateToEditPost: (Int) -> Unit,
+    navigateMessengerScreen: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
     composable(
@@ -96,6 +102,8 @@ internal fun NavGraphBuilder.realEstateDetailScreen(
         RealEstateDetailRoute(
             realEstateId = backStackEntry.arguments?.getInt(realEstateIdKey) ?: 0,
             onRealEstateItemClick = onRealEstateItemClick,
+            navigateToEditPost = navigateToEditPost,
+            navigateMessengerScreen = navigateMessengerScreen,
             onBackClick = onBackClick
         )
     }

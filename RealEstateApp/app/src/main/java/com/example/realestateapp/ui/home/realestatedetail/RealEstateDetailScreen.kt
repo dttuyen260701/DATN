@@ -5,16 +5,20 @@ import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateInt
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
+import com.example.realestateapp.data.enums.PostStatus
 import com.example.realestateapp.data.models.RealEstateDetail
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
@@ -37,10 +42,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
-import com.example.realestateapp.extension.callPhone
-import com.example.realestateapp.extension.formatToMoney
-import com.example.realestateapp.extension.makeToast
-import com.example.realestateapp.extension.openMap
+import com.example.realestateapp.extension.*
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
@@ -49,6 +51,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VI
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 import com.example.realestateapp.util.Constants.MessageErrorAPI.AUTHENTICATION_ERROR
@@ -64,6 +67,8 @@ internal fun RealEstateDetailRoute(
     viewModel: RealEstateDetailViewModel = hiltViewModel(),
     realEstateId: Int,
     onRealEstateItemClick: (Int) -> Unit,
+    navigateToEditPost: (Int) -> Unit,
+    navigateMessengerScreen: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -129,6 +134,7 @@ internal fun RealEstateDetailRoute(
                     }
                 }
             },
+            navigateToEditPost = navigateToEditPost,
             onBackClick = remember { onBackClick },
             onDirectClick = remember {
                 { latitude, longitude ->
@@ -157,7 +163,10 @@ internal fun RealEstateDetailRoute(
                     }
                 }
             },
-            onWarningClick = remember { {} }
+            onChatClick = remember { navigateMessengerScreen },
+            onReportClick = remember {
+                {}
+            }
         )
     }
 }
@@ -173,10 +182,12 @@ internal fun RealEstateDetailScreen(
     realEstatesCluster: MutableList<RealEstateList>,
     onRealEstateItemClick: (Int) -> Unit,
     onItemSaveClick: (Int) -> Unit,
+    navigateToEditPost: (Int) -> Unit,
     onBackClick: () -> Unit,
     onDirectClick: (Double, Double) -> Unit,
     onCallClick: () -> Unit,
-    onWarningClick: () -> Unit,
+    onChatClick: (String) -> Unit,
+    onReportClick: (Int) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val transition = updateTransition(scrollState.value, label = "")
@@ -305,7 +316,9 @@ internal fun RealEstateDetailScreen(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight(),
-                        onClick = onWarningClick,
+                        onClick = {
+                            onChatClick(ownerId.toString())
+                        },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color.Transparent,
                             disabledBackgroundColor = Color.Transparent
@@ -316,8 +329,8 @@ internal fun RealEstateDetailScreen(
                         )
                     ) {
                         TextIcon(
-                            text = stringResource(id = R.string.reportTitle),
-                            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Warning),
+                            text = stringResource(id = R.string.chatTitle),
+                            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Chat),
                             size = 14,
                             textColor = RealEstateAppTheme.colors.primary,
                             iconTint = RealEstateAppTheme.colors.primary
@@ -343,7 +356,8 @@ internal fun RealEstateDetailScreen(
                     tvDescription, samePriceList, clusterList
                 ) = createRefs()
                 val (
-                    tvMapTitle, mapView, tvContact, tvNameUser, tvPhoneUser
+                    tvMapTitle, mapView, tvContact, tvNameUser,
+                    tvPhoneUser, tvStatus, btnReport
                 ) = createRefs()
                 Text(
                     text = title
@@ -451,11 +465,50 @@ internal fun RealEstateDetailScreen(
                             )
                         }
                 )
+                Text(
+                    text = stringResource(
+                        id = when (item.status) {
+                            PostStatus.Pending.id -> R.string.pendingStatus
+                            PostStatus.Accepted.id -> R.string.acceptStatus
+                            PostStatus.Reject.id -> R.string.rejectStatus
+                            else -> R.string.allTitle
+                        }
+                    ),
+                    style = RealEstateTypography.body1.copy(
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Start
+                    ),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(ROUND_DIALOG.dp))
+                        .constrainAs(tvStatus) {
+                            top.linkTo(tvPostId.bottom, MARGIN_DIFFERENT_VIEW.dp)
+                            start.linkTo(parent.start, PADDING_HORIZONTAL_SCREEN.dp)
+                            visibility = setVisibility(user?.id == ownerId)
+                        }
+                        .background(
+                            when (item.status) {
+                                PostStatus.Pending.id -> RealEstateAppTheme.colors.primary
+                                PostStatus.Accepted.id -> RealEstateAppTheme.colors.progressBar
+                                PostStatus.Reject.id -> RealEstateAppTheme.colors.bgBtnDisable
+                                else -> Color.Transparent
+                            }
+                        )
+                        .padding(
+                            vertical = PADDING_VIEW.dp,
+                            horizontal = MARGIN_VIEW.dp
+                        )
+                )
                 BorderLine(
                     modifier = Modifier
                         .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
                         .constrainAs(borderTopGrid) {
-                            top.linkTo(tvPostId.bottom, MARGIN_DIFFERENT_VIEW.dp)
+                            top.linkTo(
+                                tvStatus.bottom,
+                                MARGIN_DIFFERENT_VIEW.dp,
+                                MARGIN_DIFFERENT_VIEW.dp
+                            )
                         },
                     height = 0.2f,
                     bgColor = Color.Gray
@@ -608,8 +661,47 @@ internal fun RealEstateDetailScreen(
                             top.linkTo(tvNameUser.bottom, MARGIN_VIEW.dp)
                         }
                 )
+                TextButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .constrainAs(btnReport) {
+                            end.linkTo(parent.end, PADDING_HORIZONTAL_SCREEN.dp)
+                            linkTo(tvContact.top, tvPhoneUser.bottom)
+                            visibility = setVisibility(ownerId != user?.id)
+                        }
+                        .background(
+                            color = if (ownerId != user?.id) RealEstateAppTheme.colors.bgTextField
+                                else Color.Transparent,
+                            shape = RoundedCornerShape(ROUND_DIALOG.dp)
+                        )
+                        .border(
+                            BorderStroke(
+                                width = 1.dp,
+                                color = if (ownerId != user?.id) RealEstateAppTheme.colors.primary
+                                    else Color.Transparent,
+                            ),
+                            shape = RoundedCornerShape(ROUND_DIALOG.dp)
+                        ),
+                    onClick = {
+                        onReportClick(postId)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Transparent,
+                        disabledBackgroundColor = Color.Transparent
+                    ),
+                ) {
+                    TextIcon(
+                        text = stringResource(id = R.string.reportTitle),
+                        icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Warning),
+                        size = 14,
+                        textColor = RealEstateAppTheme.colors.primary,
+                        iconTint = RealEstateAppTheme.colors.primary,
+                        modifier = Modifier
+                            .padding(horizontal = PADDING_VIEW.dp)
+                    )
+                }
                 realEstatesSamePrice.let {
-                    if (it.size > 0) {
+                    if (it.size > 0 && ownerId != user?.id) {
                         ListItemHome(
                             title = stringResource(id = R.string.samePriceTitle),
                             listRealEstate = it,
@@ -624,7 +716,7 @@ internal fun RealEstateDetailScreen(
                     }
                 }
                 realEstatesCluster.let {
-                    if (it.size > 0) {
+                    if (it.size > 0 && ownerId != user?.id) {
                         ListItemHome(
                             title = stringResource(id = R.string.suggestTitle),
                             listRealEstate = it,
@@ -651,10 +743,18 @@ internal fun RealEstateDetailScreen(
             bgColor = bgToolbar,
             leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.LeftArrow),
             onLeadingIconClick = onBackClick,
-            trainingIcon = if (isSaved) AppIcon.DrawableResourceIcon(RealEstateIcon.PostSaved) else
-                AppIcon.DrawableResourceIcon(RealEstateIcon.PostSavedOutline),
+            trainingIcon = if (ownerId == user?.id) {
+                AppIcon.ImageVectorIcon(RealEstateIcon.Edit)
+            } else {
+                if (isSaved) AppIcon.DrawableResourceIcon(RealEstateIcon.PostSaved) else
+                    AppIcon.DrawableResourceIcon(RealEstateIcon.PostSavedOutline)
+            },
             onTrainingIconClick = {
-                onItemSaveClick(postId)
+                if (ownerId == user?.id) {
+                    navigateToEditPost(postId)
+                } else {
+                    onItemSaveClick(postId)
+                }
             },
             bgIcon = bgIcon
         )

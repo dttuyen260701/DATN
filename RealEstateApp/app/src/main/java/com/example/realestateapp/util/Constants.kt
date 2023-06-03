@@ -46,6 +46,7 @@ class Constants {
         const val FIELD_ROOFTOP = "rooftop"
         const val FIELD_DINING_ROOM = "dining_room"
         const val FIELD_KITCHEN_ROOM = "kitchen_room"
+        const val FIELD_PREDICT_PRICE = "predict_price"
     }
 
     object PermissionTitle {
@@ -78,7 +79,7 @@ class Constants {
         const val TRAILING_ICON_SIZE = 20
         const val ICON_ITEM_SIZE = 40
         const val TRAILING_ICON_PADDING = 17
-        const val BORDER_WIDTH = 4
+        const val BORDER_WIDTH = 1
         const val WARNING_TEXT_SIZE = 10
         const val ALPHA_HINT_COLOR = 0.5f
         const val TWEEN_ANIMATION_TIME = 300
@@ -111,7 +112,9 @@ class Constants {
             kitchen = null,
             rooftop = null,
             diningRoom = null,
-            images = mutableListOf()
+            images = mutableListOf(),
+            status = 1,
+            ownerId = 1
         )
     }
 

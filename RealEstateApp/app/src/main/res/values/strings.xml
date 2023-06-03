@@ -4,6 +4,7 @@
     <string name="homeTitle">Trang chủ</string>
     <string name="postTitle">Bài đăng</string>
     <string name="notificationTitle">Thông báo</string>
+    <string name="messengerTitle">Tin nhắn</string>
     <string name="settingTitle">Cài đặt</string>
 
     <!--Setting Screen-->
@@ -57,7 +58,11 @@
     <string name="contactTitle">Liên hệ</string>
     <string name="callTitle">Gọi điện</string>
     <string name="directTitle">Chỉ đường</string>
+    <string name="chatTitle">Chat</string>
     <string name="reportTitle">Báo cáo</string>
+    <string name="pendingStatus">Đang chờ phê duyệt</string>
+    <string name="acceptStatus">Đã được phê duyệt</string>
+    <string name="rejectStatus">Đã bị từ chối</string>
     <string name="locationDes">Vị trí BĐS trong khu vực</string>
     <string name="suggestTitle">Có thể bạn cũng muốn xem</string>
     <string name="samePriceTitle">BĐS ngang giá</string>
@@ -108,6 +113,7 @@
     <string name="detailInfoTitle">Thông tin chi tiết</string>
     <string name="generalInfoTitle">Thông tin chung</string>
     <string name="contactInfoTitle">Thông tin liên hệ</string>
+    <string name="choiceValueTitle">Chọn gói đăng tin</string>
     <string name="title">Tiêu Đề</string>
     <string name="mandatoryTitle">%s *</string>
     <string name="mandatoryError">%s không được để trống</string>
@@ -121,13 +127,16 @@
     <string name="warningTitle">Chú ý</string>
     <string name="messageTitle">Các  thông tin cơ bản và
         thông tin chi tiết sẽ không thể thay đổi khi được Quản trị viên phê duyệt.
-        Bạn nên điều đúng về những thông tin này!!!</string>
+        Bạn nên điều đúng về những thông tin này!</string>
 
     <!--RequireLoginScreen-->
     <string name="messageRequireLogin">Vui lòng đăng nhập để sử dụng tính năng này !!!</string>
 
     <!--RecordScreen-->
     <string name="SearchTitle">Tìm kiếm</string>
+
+    <!--NotificationScreen-->
+    <string name="youTitle">Bạn:</string>
 
     <!--DialogShowImage-->
     <string name="numberImageTitle">%d/%d</string>

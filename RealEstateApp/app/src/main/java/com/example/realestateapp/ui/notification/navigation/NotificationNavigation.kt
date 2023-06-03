@@ -1,23 +1,65 @@
 package com.example.realestateapp.ui.notification.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation.*
 import androidx.navigation.compose.composable
+import com.example.realestateapp.navigation.navigateSingleTopTo
 import com.example.realestateapp.ui.notification.NotificationRoute
+import com.example.realestateapp.ui.notification.messager.MessengerRoute
 
 /**
  * Created by tuyen.dang on 5/3/2023.
  */
 
+const val notificationNavigationGraphRoute = "notification_route_graph"
 const val notificationNavigationRoute = "notification_route"
+const val messengerNavigationRoute = "messenger_route"
+const val idGuestKey = "id_guest"
 
 internal fun NavController.navigateToNotification(navOptions: NavOptions? = null) {
-    this.navigate(notificationNavigationRoute, navOptions)
+    this.navigate(notificationNavigationGraphRoute, navOptions)
 }
 
-internal fun NavGraphBuilder.notificationScreen() {
+internal fun NavHostController.navigateToMessenger(
+    idGuest: String,
+    beforeNavigated: () -> Unit = {}
+) {
+    this.navigateSingleTopTo(
+        route = "$messengerNavigationRoute/$idGuest",
+        beforeNavigated = beforeNavigated
+    )
+}
+
+internal fun NavGraphBuilder.notificationGraph(
+    navigateChatScreen: (String) -> Unit
+) {
+    navigation(
+        route = notificationNavigationGraphRoute,
+        startDestination = notificationNavigationRoute
+    ) {
+        notificationScreen(
+            navigateChatScreen = navigateChatScreen
+        )
+        messengerScreen()
+    }
+}
+
+internal fun NavGraphBuilder.notificationScreen(
+    navigateChatScreen: (String) -> Unit
+) {
     composable(route = notificationNavigationRoute) {
-        NotificationRoute()
+        NotificationRoute(
+            navigateChatScreen = navigateChatScreen
+        )
+    }
+}
+
+internal fun NavGraphBuilder.messengerScreen() {
+    composable(
+        route = "$messengerNavigationRoute/{$idGuestKey}",
+        arguments = listOf(navArgument(idGuestKey) { type = NavType.StringType })
+    ) { backStackEntry ->
+        MessengerRoute(
+            idGuest = backStackEntry.arguments?.getString(idGuestKey, "") ?: "",
+        )
     }
 }

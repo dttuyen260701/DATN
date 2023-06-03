@@ -32,5 +32,7 @@ data class RealEstateDetail(
     @SerializedName("kitchen") val kitchen: Int?,
     @SerializedName("rooftop") val rooftop: Boolean?,
     @SerializedName("diningRoom") val diningRoom: Int?,
-    @SerializedName("images") val images: MutableList<Image>
+    @SerializedName("images") val images: MutableList<Image>,
+    @SerializedName("status") val status: Int,
+    @SerializedName("ownerId") val ownerId: Int
 )
