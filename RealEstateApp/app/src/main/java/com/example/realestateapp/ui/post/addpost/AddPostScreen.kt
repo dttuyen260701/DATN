@@ -39,7 +39,6 @@ import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.ui.post.PostUiState
 import com.example.realestateapp.ui.post.PostViewModel
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
