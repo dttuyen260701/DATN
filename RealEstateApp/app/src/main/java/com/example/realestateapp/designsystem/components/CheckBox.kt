@@ -14,7 +14,7 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
-import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 
 /**
  * Created by tuyen.dang on 5/31/2023.
@@ -37,7 +37,7 @@ internal fun CheckBoxWIconText(
             tint = RealEstateAppTheme.colors.primary,
             contentDescription = null
         )
-        Spacer(modifier = Modifier.width(Constants.DefaultValue.PADDING_VIEW.dp))
+        Spacer(modifier = Modifier.width(PADDING_VIEW.dp))
         Text(
             text = title,
             style = RealEstateTypography.body1,

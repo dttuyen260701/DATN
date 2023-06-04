@@ -36,13 +36,14 @@ import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.extension.setVisibility
 import com.example.realestateapp.ui.base.BaseIcon
-import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
+import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -263,7 +264,7 @@ internal fun DialogChoiceData(
                 IconButton(
                     onClick = it,
                     modifier = Modifier
-                        .size(Constants.DefaultValue.ICON_ITEM_SIZE.dp)
+                        .size(ICON_ITEM_SIZE.dp)
                         .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                         .constrainAs(btnClose) {
                             linkTo(top = tvTitle.top, bottom = tvTitle.bottom)
@@ -273,7 +274,7 @@ internal fun DialogChoiceData(
                     BaseIcon(
                         icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Clear),
                         modifier = Modifier
-                            .size(Constants.DefaultValue.TRAILING_ICON_SIZE.dp),
+                            .size(TRAILING_ICON_SIZE.dp),
                         contentDescription = null,
                         tint = RealEstateAppTheme.colors.primary
                     )
@@ -429,7 +430,7 @@ internal fun DialogShowImage(
                     BaseIcon(
                         icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Clear),
                         modifier = Modifier
-                            .size(Constants.DefaultValue.TRAILING_ICON_SIZE.dp),
+                            .size(TRAILING_ICON_SIZE.dp),
                         contentDescription = null,
                         tint = Color.White
                     )

@@ -50,6 +50,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
+import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MAX_IMAGE_POST
@@ -57,6 +58,8 @@ import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
+import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
+import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
 import com.example.realestateapp.util.Constants.MessageErrorAPI.INVALID_INPUT_ERROR
 
@@ -238,20 +241,20 @@ internal fun AddPostRoute(
         val isEnableSubmit by remember {
             derivedStateOf {
                 (
-                    addressError.trim().isEmpty()
-                    && typeError.trim().isEmpty()
-                    && juridicalError.trim().isEmpty()
-                    && directionError.trim().isEmpty()
-                    && squareError.trim().isEmpty()
-                    && floorError.trim().isEmpty()
-                    && bedroomError.trim().isEmpty()
-                    && streetInFrontError.trim().isEmpty()
-                    && widthError.trim().isEmpty()
-                    && lengthError.trim().isEmpty()
-                    && titleError.trim().isEmpty()
-                    && descriptionError.trim().isEmpty()
-                    && priceError.trim().isEmpty()
-                )
+                        addressError.trim().isEmpty()
+                                && typeError.trim().isEmpty()
+                                && juridicalError.trim().isEmpty()
+                                && directionError.trim().isEmpty()
+                                && squareError.trim().isEmpty()
+                                && floorError.trim().isEmpty()
+                                && bedroomError.trim().isEmpty()
+                                && streetInFrontError.trim().isEmpty()
+                                && widthError.trim().isEmpty()
+                                && lengthError.trim().isEmpty()
+                                && titleError.trim().isEmpty()
+                                && descriptionError.trim().isEmpty()
+                                && priceError.trim().isEmpty()
+                        )
             }
         }
 
@@ -265,7 +268,7 @@ internal fun AddPostRoute(
             is PostUiState.GetPredictPriceSuccess -> {
                 (uiState as PostUiState.GetPredictPriceSuccess).data.toString().let {
                     priceSuggest = (it.toFloat() * square.toFloat()).toString()
-                    price =  (it.toFloat() * square.toFloat()).toString()
+                    price = (it.toFloat() * square.toFloat()).toString()
                 }
             }
             else -> {}
@@ -668,7 +671,7 @@ internal fun AddPostScreen(
                     enabled = isEnableSubmit,
                     bgColor = RealEstateAppTheme.colors.bgButtonGradient,
                     modifier = Modifier
-                        .height(Constants.DefaultValue.TOOLBAR_HEIGHT.dp)
+                        .height(TOOLBAR_HEIGHT.dp)
                         .fillMaxWidth()
                 )
             }
@@ -984,7 +987,7 @@ internal fun AddPostScreen(
                     IconButton(
                         onClick = it,
                         modifier = Modifier
-                            .size(Constants.DefaultValue.ICON_ITEM_SIZE.dp)
+                            .size(ICON_ITEM_SIZE.dp)
                             .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                             .background(
                                 color = Color.Transparent
@@ -993,7 +996,7 @@ internal fun AddPostScreen(
                         BaseIcon(
                             icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Clear),
                             modifier = Modifier
-                                .size(Constants.DefaultValue.TRAILING_ICON_SIZE.dp),
+                                .size(TRAILING_ICON_SIZE.dp),
                             contentDescription = null,
                             tint = RealEstateAppTheme.colors.primary
                         )
@@ -1172,7 +1175,7 @@ internal fun AddPostScreen(
         )
         Spacing(MARGIN_VIEW)
         Row() {
-            
+
         }
         Spacing(MARGIN_DIFFERENT_VIEW)
     }

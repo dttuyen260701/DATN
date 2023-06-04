@@ -137,6 +137,8 @@
 
     <!--NotificationScreen-->
     <string name="youTitle">Bạn:</string>
+    <string name="messageHint">Nhập tin nhắn…</string>
+    <string name="uploadWarning">Ảnh của bạn đang được tải lên, vui lòng chờ để tải ảnh tiếp theo!</string>
 
     <!--DialogShowImage-->
     <string name="numberImageTitle">%d/%d</string>

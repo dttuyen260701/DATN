@@ -95,6 +95,9 @@ fun RealEstateNavHost(
                 navController.navigateToMessenger(
                     idGuest = it
                 )
+            },
+            onBackClick = {
+                navController.popBackStack()
             }
         )
         settingGraph(

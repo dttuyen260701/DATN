@@ -24,13 +24,13 @@ import com.example.realestateapp.extension.handleAddressException
 import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DISTRICT
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_WARD
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.google.android.gms.location.LocationServices
 import java.io.IOException
 import java.util.*
@@ -372,7 +372,7 @@ internal fun PickAddressScreen(
             enabled = enableBtnConfirm,
             bgColor = RealEstateAppTheme.colors.primary,
             modifier = Modifier
-                .height(Constants.DefaultValue.TOOLBAR_HEIGHT.dp)
+                .height(TOOLBAR_HEIGHT.dp)
                 .fillMaxWidth()
         )
         Spacing(MARGIN_DIFFERENT_VIEW)

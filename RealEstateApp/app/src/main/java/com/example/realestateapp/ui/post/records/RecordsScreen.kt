@@ -26,8 +26,10 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.post.PostUiState
 import com.example.realestateapp.ui.post.PostViewModel
-import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
+import com.example.realestateapp.util.Constants.DefaultValue.SEARCH_TIME
 import kotlinx.coroutines.delay
 
 /**
@@ -76,7 +78,7 @@ internal fun RecordsRoute(
             if (isNavigateAnotherScr) {
                 isNavigateAnotherScr = false
             } else {
-                delay(Constants.DefaultValue.SEARCH_TIME)
+                delay(SEARCH_TIME)
                 searchResult.clear()
                 getPosts(
                     isMyRecords = isMyRecords,
@@ -155,7 +157,7 @@ internal fun RecordsScreen(
                         .background(RealEstateAppTheme.colors.bgScreen)
                         .weight(1f),
                     state = rememberLazyListState(),
-                    verticalArrangement = Arrangement.spacedBy(Constants.DefaultValue.MARGIN_VIEW.dp),
+                    verticalArrangement = Arrangement.spacedBy(MARGIN_VIEW.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
                 ) {
@@ -171,9 +173,9 @@ internal fun RecordsScreen(
                         )
                     }
                 }
-                Spacing(Constants.DefaultValue.MARGIN_VIEW)
+                Spacing(MARGIN_VIEW)
             } else {
-                Spacing(Constants.DefaultValue.MARGIN_DIFFERENT_VIEW)
+                Spacing(MARGIN_DIFFERENT_VIEW)
                 if (isLoading) {
                     Box(
                         modifier = Modifier

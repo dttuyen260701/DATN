@@ -25,6 +25,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.SELECT_BOX_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 
@@ -69,7 +70,7 @@ internal fun ComboBox(
                 .height(cbbHeight.dp)
                 .border(
                     BorderStroke(width = 1.dp, color = borderColor),
-                    shape = RoundedCornerShape(Constants.DefaultValue.ROUND_DIALOG.dp)
+                    shape = RoundedCornerShape(ROUND_DIALOG.dp)
                 )
                 .background(Color.Transparent)
                 .clickable {

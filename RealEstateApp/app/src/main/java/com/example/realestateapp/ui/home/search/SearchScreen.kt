@@ -60,6 +60,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.SEARCH_TIME
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
+import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 import kotlinx.coroutines.delay
 
@@ -531,7 +532,7 @@ internal fun SearchScreen(
                         BaseIcon(
                             icon = AppIcon.DrawableResourceIcon(RealEstateIcon.LeftArrow),
                             modifier = Modifier
-                                .size(Constants.DefaultValue.TRAILING_ICON_SIZE.dp),
+                                .size(TRAILING_ICON_SIZE.dp),
                             contentDescription = null,
                             tint = Color.White
                         )

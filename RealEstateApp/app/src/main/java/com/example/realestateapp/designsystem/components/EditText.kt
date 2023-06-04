@@ -55,6 +55,7 @@ internal fun EditTextRadius(
     errorText: String = "",
     textColor: Color = Color.Black,
     backgroundColor: Color = Color.White,
+    singleLine: Boolean = true,
     isLastEditText: Boolean = false
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -103,7 +104,7 @@ internal fun EditTextRadius(
                     }
                 }
             } else null,
-            singleLine = true,
+            singleLine = singleLine,
             colors = TextFieldDefaults.textFieldColors(
                 textColor = textColor,
                 backgroundColor = backgroundColor,

@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,7 +26,8 @@ import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
-import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
@@ -105,7 +107,9 @@ internal fun NotificationScreen(
                         text = stringResource(id = R.string.messengerTitle),
                         style = RealEstateTypography.body1.copy(
                             color = if (!isMessengerScreen) RealEstateAppTheme.colors.bgScrPrimaryLight
-                            else RealEstateAppTheme.colors.primary
+                            else RealEstateAppTheme.colors.primary,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
                         ),
                         modifier = Modifier
                             .padding(horizontal = PADDING_VIEW.dp)
@@ -132,7 +136,9 @@ internal fun NotificationScreen(
                         text = stringResource(id = R.string.notificationTitle),
                         style = RealEstateTypography.body1.copy(
                             color = if (isMessengerScreen) RealEstateAppTheme.colors.bgScrPrimaryLight
-                            else RealEstateAppTheme.colors.primary
+                            else RealEstateAppTheme.colors.primary,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
                         ),
                         modifier = Modifier
                             .padding(horizontal = PADDING_VIEW.dp)
@@ -173,9 +179,9 @@ internal fun NotificationScreen(
                             )
                         }
                     }
-                    Spacing(Constants.DefaultValue.MARGIN_VIEW)
+                    Spacing(MARGIN_VIEW)
                 } else {
-                    Spacing(Constants.DefaultValue.MARGIN_DIFFERENT_VIEW)
+                    Spacing(MARGIN_DIFFERENT_VIEW)
                     if (isLoading) {
                         Box(
                             modifier = Modifier

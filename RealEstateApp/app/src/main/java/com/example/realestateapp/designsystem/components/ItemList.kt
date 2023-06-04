@@ -11,6 +11,7 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,7 @@ import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.PostStatus
 import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.ItemMessenger
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
@@ -50,6 +52,75 @@ import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 /**
  * Created by tuyen.dang on 5/12/2023.
  */
+
+@Composable
+internal fun ItemMessengerView(
+    modifier: Modifier = Modifier,
+    item: ItemMessenger,
+    idUser: Int,
+    onItemClick: (ItemMessenger) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding((if (item.isPhoto) 0 else PADDING_VIEW).dp)
+            .then(modifier)
+            .clickable {
+                onItemClick(item)
+            },
+        horizontalAlignment = if (item.idUserSend == idUser) Alignment.End
+        else Alignment.Start
+    ) {
+        if( item.isSending) {
+            LoadingScreen(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(TOOLBAR_HEIGHT.dp)
+                    .clip(RoundedCornerShape(ROUND_DIALOG.dp))
+            )
+        } else {
+            if (!item.isPhoto) {
+                Text(
+                    text = item.messenger,
+                    style = RealEstateTypography.body1.copy(
+                        fontSize = 14.sp,
+                        color = Color.White,
+                        textAlign = if (item.idUserSend == idUser) TextAlign.End else TextAlign.Start
+                    ),
+                    modifier = Modifier
+                        .widthIn(
+                            min = 0.dp,
+                            max = (LocalConfiguration.current.screenWidthDp * 0.8).dp
+                        )
+                        .background(
+                            color = if (item.idUserSend == idUser) RealEstateAppTheme.colors.primary
+                            else RealEstateAppTheme.colors.progressBar,
+                            shape = RoundedCornerShape(ROUND_DIALOG.dp)
+                        )
+                        .padding(
+                            vertical = PADDING_VIEW.dp,
+                            horizontal = MARGIN_VIEW.dp
+                        )
+                )
+            } else {
+                AsyncImage(
+                    model = item.messenger,
+                    contentDescription = null,
+                    placeholder = painterResource(id = R.drawable.sale_real_estate),
+                    error = painterResource(id = R.drawable.sale_real_estate),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(ROUND_RECTANGLE.dp))
+                        .widthIn(
+                            min = 0.dp,
+                            max = (LocalConfiguration.current.screenWidthDp * 0.8).dp
+                        )
+                        .background(RealEstateAppTheme.colors.bgTextField)
+                )
+            }
+        }
+    }
+}
 
 @Composable
 internal fun ItemChatGuestView(

@@ -29,8 +29,8 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 
 /**
@@ -171,7 +171,7 @@ internal fun SettingScreen(
                     modifier = Modifier
                         .fillMaxHeight(0.5f)
                         .aspectRatio(1f)
-                        .padding(Constants.DefaultValue.PADDING_ICON.dp)
+                        .padding(PADDING_ICON.dp)
                         .constrainAs(btnEdit) {
                             top.linkTo(imgUser.top)
                             bottom.linkTo(imgUser.bottom)

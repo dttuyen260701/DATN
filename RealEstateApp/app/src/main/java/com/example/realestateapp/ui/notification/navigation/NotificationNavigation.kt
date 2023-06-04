@@ -30,7 +30,8 @@ internal fun NavHostController.navigateToMessenger(
 }
 
 internal fun NavGraphBuilder.notificationGraph(
-    navigateChatScreen: (String) -> Unit
+    navigateChatScreen: (String) -> Unit,
+    onBackClick: () -> Unit
 ) {
     navigation(
         route = notificationNavigationGraphRoute,
@@ -39,7 +40,9 @@ internal fun NavGraphBuilder.notificationGraph(
         notificationScreen(
             navigateChatScreen = navigateChatScreen
         )
-        messengerScreen()
+        messengerScreen(
+            onBackClick = onBackClick
+        )
     }
 }
 
@@ -53,12 +56,15 @@ internal fun NavGraphBuilder.notificationScreen(
     }
 }
 
-internal fun NavGraphBuilder.messengerScreen() {
+internal fun NavGraphBuilder.messengerScreen(
+    onBackClick: () -> Unit
+) {
     composable(
         route = "$messengerNavigationRoute/{$idGuestKey}",
         arguments = listOf(navArgument(idGuestKey) { type = NavType.StringType })
     ) { backStackEntry ->
         MessengerRoute(
+            onBackClick = onBackClick,
             idGuest = backStackEntry.arguments?.getString(idGuestKey, "") ?: "",
         )
     }

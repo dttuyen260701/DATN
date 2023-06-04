@@ -20,19 +20,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.*
-import com.example.realestateapp.designsystem.components.ButtonRadius
-import com.example.realestateapp.designsystem.components.EditTextTrailingIconCustom
-import com.example.realestateapp.designsystem.components.TextTitle
-import com.example.realestateapp.designsystem.components.ToolbarView
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -248,10 +245,10 @@ internal fun SignUpScreen(
             enabled = enableBtnSignUp,
             bgColor = RealEstateAppTheme.colors.primary,
             modifier = Modifier
-                .height(Constants.DefaultValue.TOOLBAR_HEIGHT.dp)
+                .height(TOOLBAR_HEIGHT.dp)
                 .fillMaxWidth()
         )
-        Spacing(Constants.DefaultValue.MARGIN_VIEW)
+        Spacing(MARGIN_VIEW)
         Text(text = buildAnnotatedString {
             withStyle(
                 style = SpanStyle(
