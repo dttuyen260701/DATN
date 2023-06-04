@@ -357,7 +357,7 @@ internal fun RealEstateDetailScreen(
                 ) = createRefs()
                 val (
                     tvMapTitle, mapView, tvContact, tvNameUser,
-                    tvPhoneUser, tvStatus, btnReport
+                    tvPhoneUser, tvStatus, btnReport, comboOptionView
                 ) = createRefs()
                 Text(
                     text = title
@@ -671,14 +671,14 @@ internal fun RealEstateDetailScreen(
                         }
                         .background(
                             color = if (ownerId != user?.id) RealEstateAppTheme.colors.bgTextField
-                                else Color.Transparent,
+                            else Color.Transparent,
                             shape = RoundedCornerShape(ROUND_DIALOG.dp)
                         )
                         .border(
                             BorderStroke(
                                 width = 1.dp,
                                 color = if (ownerId != user?.id) RealEstateAppTheme.colors.primary
-                                    else Color.Transparent,
+                                else Color.Transparent,
                             ),
                             shape = RoundedCornerShape(ROUND_DIALOG.dp)
                         ),
@@ -700,37 +700,70 @@ internal fun RealEstateDetailScreen(
                             .padding(horizontal = PADDING_VIEW.dp)
                     )
                 }
-                realEstatesSamePrice.let {
-                    if (it.size > 0 && ownerId != user?.id) {
-                        ListItemHome(
-                            title = stringResource(id = R.string.samePriceTitle),
-                            listRealEstate = it,
-                            onItemClick = { id -> onRealEstateItemClick(id) },
-                            modifier = Modifier
-                                .constrainAs(samePriceList) {
-                                    top.linkTo(
-                                        tvPhoneUser.bottom, MARGIN_DIFFERENT_VIEW.dp
-                                    )
-                                }
+                if (ownerId == user?.id) {
+                    Row(
+                        modifier = Modifier
+                            .constrainAs(comboOptionView) {
+                                top.linkTo(
+                                    tvPhoneUser.bottom, MARGIN_DIFFERENT_VIEW.dp
+                                )
+                            }
+                            .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.comboOptionsName, comboOptionName),
+                            style = RealEstateTypography.body1.copy(
+                                fontSize = 15.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Start
+                            ),
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = stringResource(id = R.string.comboOptionsDate, dueDate),
+                            style = RealEstateTypography.body1.copy(
+                                fontSize = 15.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Start
+                            ),
                         )
                     }
-                }
-                realEstatesCluster.let {
-                    if (it.size > 0 && ownerId != user?.id) {
-                        ListItemHome(
-                            title = stringResource(id = R.string.suggestTitle),
-                            listRealEstate = it,
-                            onItemClick = { id -> onRealEstateItemClick(id) },
-                            modifier = Modifier
-                                .constrainAs(clusterList) {
-                                    top.linkTo(
-                                        (if (realEstatesSamePrice.size > 0) samePriceList else tvPhoneUser).bottom,
-                                        (if (realEstatesSamePrice.size > 0) MARGIN_VIEW else MARGIN_DIFFERENT_VIEW).dp
-                                    )
-                                }
-                        )
+                } else {
+                    realEstatesSamePrice.let {
+                        if (it.size > 0) {
+                            ListItemHome(
+                                title = stringResource(id = R.string.samePriceTitle),
+                                listRealEstate = it,
+                                onItemClick = { id -> onRealEstateItemClick(id) },
+                                modifier = Modifier
+                                    .constrainAs(samePriceList) {
+                                        top.linkTo(
+                                            tvPhoneUser.bottom, MARGIN_DIFFERENT_VIEW.dp
+                                        )
+                                    }
+                            )
+                        }
+                    }
+                    realEstatesCluster.let {
+                        if (it.size > 0) {
+                            ListItemHome(
+                                title = stringResource(id = R.string.suggestTitle),
+                                listRealEstate = it,
+                                onItemClick = { id -> onRealEstateItemClick(id) },
+                                modifier = Modifier
+                                    .constrainAs(clusterList) {
+                                        top.linkTo(
+                                            (if (realEstatesSamePrice.size > 0) samePriceList else tvPhoneUser).bottom,
+                                            (if (realEstatesSamePrice.size > 0) MARGIN_VIEW else MARGIN_DIFFERENT_VIEW).dp
+                                        )
+                                    }
+                            )
+                        }
                     }
                 }
+
             }
         }
 

@@ -63,6 +63,8 @@
     <string name="pendingStatus">Đang chờ phê duyệt</string>
     <string name="acceptStatus">Đã được phê duyệt</string>
     <string name="rejectStatus">Đã bị từ chối</string>
+    <string name="comboOptionsName">Gói %s</string>
+    <string name="comboOptionsDate">Đến %s</string>
     <string name="locationDes">Vị trí BĐS trong khu vực</string>
     <string name="suggestTitle">Có thể bạn cũng muốn xem</string>
     <string name="samePriceTitle">BĐS ngang giá</string>

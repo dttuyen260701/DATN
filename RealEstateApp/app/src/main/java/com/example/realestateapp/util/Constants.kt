@@ -2,6 +2,7 @@ package com.example.realestateapp.util
 
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateDetail
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -114,7 +115,10 @@ class Constants {
             diningRoom = null,
             images = mutableListOf(),
             status = 1,
-            ownerId = 1
+            ownerId = 1,
+            dueDate = "",
+            comboOptionId = 1,
+            comboOptionName = ""
         )
     }
 

@@ -34,5 +34,8 @@ data class RealEstateDetail(
     @SerializedName("diningRoom") val diningRoom: Int?,
     @SerializedName("images") val images: MutableList<Image>,
     @SerializedName("status") val status: Int,
-    @SerializedName("ownerId") val ownerId: Int
+    @SerializedName("ownerId") val ownerId: Int,
+    @SerializedName("dueDate") val dueDate: String,
+    @SerializedName("comboOptionId") val comboOptionId: Int,
+    @SerializedName("comboOptionName") val comboOptionName: String
 )
