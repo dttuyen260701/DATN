@@ -1,6 +1,7 @@
 package com.example.realestateapp.extension
 
 import com.example.realestateapp.util.Constants
+import java.text.DecimalFormat
 import kotlin.math.round
 
 /**
@@ -31,7 +32,8 @@ internal fun Double.formatToMoney(): String {
             price /= 1000
             count += 1
         }
-        "$price ${
+        val df = DecimalFormat("#.##")
+        "${df.format(price)} ${
             when (count) {
                 1 -> Constants.PriceUnit.THOUSAND
                 2 -> Constants.PriceUnit.MILLION

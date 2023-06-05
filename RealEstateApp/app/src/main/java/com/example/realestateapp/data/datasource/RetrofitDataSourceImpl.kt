@@ -234,7 +234,8 @@ class RetrofitDataSourceImpl @Inject constructor(
                 idUser = idUser,
                 pageIndex = pageIndex,
                 pageSize = pageSize,
-                filter = filter
+                filter = filter,
+                createdDate = "desc"
             )
         }
     }
@@ -250,7 +251,8 @@ class RetrofitDataSourceImpl @Inject constructor(
                 idUser = idUser,
                 pageIndex = pageIndex,
                 pageSize = pageSize,
-                filter = filter
+                filter = filter,
+                createdDate = "desc"
             )
         }
     }
@@ -319,14 +321,14 @@ class RetrofitDataSourceImpl @Inject constructor(
         title: String,
         description: String,
         ownerId: Int,
-        price: Float,
-        suggestedPrice: Float,
+        price: Double,
+        suggestedPrice: Double,
         directionId: Int,
-        width: Float,
-        acreage: Float,
+        width: Double,
+        acreage: Double,
         parkingSpace: Boolean,
-        streetInFront: Float,
-        length: Float,
+        streetInFront: Double,
+        length: Double,
         bedroomNumber: Int,
         kitchen: Int,
         rooftop: Boolean,
@@ -339,8 +341,8 @@ class RetrofitDataSourceImpl @Inject constructor(
         districtId: Int,
         wardId: Int,
         streetId: Int,
-        longitude: Float,
-        latitude: Float,
+        longitude: Double,
+        latitude: Double,
         images: MutableList<String>,
         propertyTypeId: Int,
         cluster: Int,
@@ -378,6 +380,64 @@ class RetrofitDataSourceImpl @Inject constructor(
         options["comboOptionId"] = comboOptionId
         return callApi {
             apiService.createPost(options)
+        }
+    }
+
+    override suspend fun updatePost(
+        idPost: Int,
+        title: String,
+        description: String,
+        price: Double,
+        width: Double,
+        acreage: Double,
+        parkingSpace: Boolean,
+        streetInFront: Double,
+        length: Double,
+        bedroomNumber: Int,
+        diningRoom: Int,
+        kitchen: Int,
+        rooftop: Boolean,
+        floorNumber: Int,
+        legalTypeId: Int,
+        detailAddress: String,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        longitude: Double,
+        latitude: Double,
+        listNewImages: MutableList<String>,
+        propertyTypeId: Int,
+        comboOptionId: Int
+    ): ApiResultWrapper<Any?> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["title"] = title
+        options["description"] = description
+        options["price"] = price
+        options["frontal"] = width
+        options["acreage"] = acreage
+        options["parkingSpace"] = parkingSpace
+        options["streetInFront"] = streetInFront
+        options["length"] = length
+        options["bedroomNumber"] = bedroomNumber
+        options["kitchen"] = kitchen
+        options["rooftop"] = rooftop
+        options["floorNumber"] = floorNumber
+        options["diningRoom"] = diningRoom
+        options["legalTypeId"] = legalTypeId
+        options["detailAddress"] = detailAddress
+        options["districtId"] = districtId
+        options["wardId"] = wardId
+        options["streetId"] = streetId
+        options["longitude"] = longitude
+        options["latitude"] = latitude
+        options["listNewImages"] = listNewImages
+        options["propertyTypeId"] = propertyTypeId
+        options["comboOptionId"] = comboOptionId
+        return callApi {
+            apiService.updatePost(
+                idPost = idPost.toString(),
+                options = options
+            )
         }
     }
 }

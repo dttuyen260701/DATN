@@ -60,66 +60,67 @@ internal fun ItemMessengerView(
     idUser: Int,
     onItemClick: (ItemMessenger) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(if (item.isSending) 0.5f else 1f)
-            .padding((if (item.isPhoto) 0 else PADDING_VIEW).dp)
-            .then(modifier),
-        horizontalAlignment = if (item.idUserSend == idUser) Alignment.End
-        else Alignment.Start
-    ) {
-        if (item.isSending) {
-            LoadingScreen(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(TOOLBAR_HEIGHT.dp)
-                    .clip(RoundedCornerShape(ROUND_DIALOG.dp))
-            )
-        } else {
-            if (!item.isPhoto) {
-                Text(
-                    text = item.messenger,
-                    style = RealEstateTypography.body1.copy(
-                        fontSize = 14.sp,
-                        color = Color.White,
-                        textAlign = if (item.idUserSend == idUser) TextAlign.End else TextAlign.Start
-                    ),
+    item.run {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding((if (isPhoto) 0 else PADDING_VIEW).dp)
+                .then(modifier),
+            horizontalAlignment = if (idUserSend == idUser || isSending) Alignment.End
+            else Alignment.Start
+        ) {
+            if (isSending) {
+                LoadingScreen(
                     modifier = Modifier
-                        .widthIn(
-                            min = 0.dp,
-                            max = (LocalConfiguration.current.screenWidthDp * 0.8).dp
-                        )
-                        .background(
-                            color = if (item.idUserSend == idUser) RealEstateAppTheme.colors.primary
-                            else RealEstateAppTheme.colors.progressBar,
-                            shape = RoundedCornerShape(ROUND_DIALOG.dp)
-                        )
-                        .clickable {
-                            onItemClick(item)
-                        }
-                        .padding(
-                            vertical = PADDING_VIEW.dp,
-                            horizontal = MARGIN_VIEW.dp
-                        )
+                        .fillMaxSize(0.5f)
+                        .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                 )
             } else {
-                AsyncImage(
-                    model = item.messenger,
-                    contentDescription = null,
-                    placeholder = painterResource(id = R.drawable.sale_real_estate),
-                    error = painterResource(id = R.drawable.sale_real_estate),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(ROUND_RECTANGLE.dp))
-                        .widthIn(
-                            min = 0.dp,
-                            max = (LocalConfiguration.current.screenWidthDp * 0.8).dp
-                        )
-                        .background(RealEstateAppTheme.colors.bgTextField)
-                        .clickable {
-                            onItemClick(item)
-                        }
-                )
+                if (!isPhoto) {
+                    Text(
+                        text = messenger,
+                        style = RealEstateTypography.body1.copy(
+                            fontSize = 14.sp,
+                            color = Color.White,
+                            textAlign = if (idUserSend == idUser) TextAlign.End else TextAlign.Start
+                        ),
+                        modifier = Modifier
+                            .widthIn(
+                                min = 0.dp,
+                                max = (LocalConfiguration.current.screenWidthDp * 0.8).dp
+                            )
+                            .background(
+                                color = if (idUserSend == idUser) RealEstateAppTheme.colors.primary
+                                else RealEstateAppTheme.colors.progressBar,
+                                shape = RoundedCornerShape(ROUND_DIALOG.dp)
+                            )
+                            .clickable {
+                                onItemClick(item)
+                            }
+                            .padding(
+                                vertical = PADDING_VIEW.dp,
+                                horizontal = MARGIN_VIEW.dp
+                            )
+                    )
+                } else {
+                    AsyncImage(
+                        model = messenger,
+                        contentDescription = null,
+                        placeholder = painterResource(id = R.drawable.sale_real_estate),
+                        error = painterResource(id = R.drawable.sale_real_estate),
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(ROUND_RECTANGLE.dp))
+                            .widthIn(
+                                min = 0.dp,
+                                max = (LocalConfiguration.current.screenWidthDp * 0.8).dp
+                            )
+                            .background(RealEstateAppTheme.colors.bgTextField)
+                            .clickable {
+                                onItemClick(item)
+                            }
+                    )
+                }
             }
         }
     }

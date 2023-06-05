@@ -93,6 +93,11 @@ fun RealEstateNavHost(
                     navController.popBackStack()
                 }
             },
+            navigateToRealEstateDetail = {
+                navController.navigateToRealEstateDetail(
+                    realEstateId = it
+                )
+            },
             navigateSignIn = {
                 navController.navigateToSignIn {
 

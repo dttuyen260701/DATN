@@ -62,6 +62,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.ROUND_RECTANGLE
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
+import com.example.realestateapp.util.Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR
 import com.example.realestateapp.util.Constants.MessageErrorAPI.INVALID_INPUT_ERROR
 
 /**
@@ -76,6 +77,7 @@ internal fun AddPostRoute(
     onBackClick: () -> Unit,
     navigateToPickAddress: () -> Unit,
     navigateToMyRecord: (Boolean) -> Unit,
+    navigateToRealEstateDetail: (Int) -> Unit,
     addressDetails: MutableList<String>
 ) {
     val context = LocalContext.current
@@ -243,7 +245,7 @@ internal fun AddPostRoute(
         var comboOptionChosen by remember { comboOptionChosen }
         val comboOptionError by remember {
             derivedStateOf {
-                if (typeChosen == DEFAULT_ITEM_CHOSEN && !firstClick) {
+                if (comboOptionChosen == DEFAULT_ITEM_CHOSEN && !firstClick) {
                     context.getString(
                         R.string.mandatoryError,
                         context.getString(R.string.choiceOptionTitle)
@@ -339,8 +341,8 @@ internal fun AddPostRoute(
                         titlePost = title ?: ""
                         description = this.description ?: ""
                         images.addAll(this.images)
-                        priceSuggest = (this.suggestedPrice / 1000).showFullNumber()
-                        price = (this.price / 1000).showFullNumber()
+                        priceSuggest = (this.suggestedPrice / 1_000_000).showFullNumber()
+                        price = (this.price / 1_000_000).showFullNumber()
                         comboOptionChosen = ItemChoose(
                             id = comboOptionId,
                             name = comboOptionName
@@ -360,9 +362,29 @@ internal fun AddPostRoute(
                     }
                 }
                 is PostUiState.GetPredictPriceSuccess -> {
-                    (uiState as PostUiState.GetPredictPriceSuccess).data.toString().let {
-                        priceSuggest = (it.toFloat() * square.toFloat()).toString()
-                        price = (it.toFloat() * square.toFloat()).toString()
+                    (uiState as PostUiState.GetPredictPriceSuccess).run {
+                        data.toString().let {
+                            priceSuggest = (it.toFloat() * square.toFloat()).toString()
+                            if (isForSubmit) {
+                                if (postId == DEFAULT_ID_POST) createPost()
+                                else updatePost()
+                            } else price = (it.toFloat() * square.toFloat()).toString()
+                        }
+                    }
+                }
+                is PostUiState.SubmitPostSuccess -> {
+                    if ((uiState as PostUiState.SubmitPostSuccess).data) {
+                        if (postId != DEFAULT_ID_POST) {
+                            onBackClick()
+                            onBackClick()
+                            navigateToRealEstateDetail(postId)
+                        } else navigateToMyRecord(true)
+                    } else {
+                        showDialog(
+                            dialog = TypeDialog.ErrorDialog(
+                                message = INTERNAL_SERVER_ERROR
+                            )
+                        )
                     }
                 }
                 else -> {}
@@ -681,7 +703,7 @@ internal fun AddPostRoute(
                 {
                     firstClick = false
                     if (isEnableSubmit) {
-                        navigateToMyRecord(true)
+                        getPredictPrice(true)
                     }
                 }
             },

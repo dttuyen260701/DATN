@@ -51,6 +51,7 @@ internal fun NavGraphBuilder.postGraph(
     navigateToPickAddress: () -> Unit,
     navigateToAddPost: (Int) -> Unit,
     navigateToMyRecord: (Boolean) -> Unit,
+    navigateToRealEstateDetail: (Int) -> Unit,
     navigateSignIn: () -> Unit
 ) {
     navigation(
@@ -69,7 +70,8 @@ internal fun NavGraphBuilder.postGraph(
         addPostScreen(
             onBackClick = onBackClick,
             navigateToPickAddress = navigateToPickAddress,
-            navigateToMyRecord = navigateToMyRecord
+            navigateToMyRecord = navigateToMyRecord,
+            navigateToRealEstateDetail = navigateToRealEstateDetail
         )
     }
 }
@@ -107,7 +109,8 @@ internal fun NavGraphBuilder.recordsScreen(
 internal fun NavGraphBuilder.addPostScreen(
     onBackClick: () -> Unit,
     navigateToPickAddress: () -> Unit,
-    navigateToMyRecord: (Boolean) -> Unit
+    navigateToMyRecord: (Boolean) -> Unit,
+    navigateToRealEstateDetail: (Int) -> Unit
 ) {
     composable(
         route = "$addPostRoute/{$idPostKey}",
@@ -118,6 +121,7 @@ internal fun NavGraphBuilder.addPostScreen(
             onBackClick = onBackClick,
             navigateToPickAddress = navigateToPickAddress,
             navigateToMyRecord = navigateToMyRecord,
+            navigateToRealEstateDetail = navigateToRealEstateDetail,
             addressDetails = mutableListOf(
                 backStackEntry.getBackEntryData<String>(key = searchAddressKey) ?: ""
             )

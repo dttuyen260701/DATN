@@ -41,11 +41,16 @@ sealed class PostUiState : UiState() {
 
     object GetComboOptionsDone : PostUiState()
 
+    data class SubmitPostSuccess(val data: Boolean) : PostUiState()
+
     data class GetTypesSuccess(val data: MutableList<ItemChoose>) : PostUiState()
 
     data class GetSearchDataSuccess(val data: MutableList<RealEstateList>) : PostUiState()
 
-    data class GetPredictPriceSuccess(val data: Float) : PostUiState()
+    data class GetPredictPriceSuccess(
+        val data: Float,
+        val isForSubmit: Boolean
+    ) : PostUiState()
 
     data class GetRealEstateDetailSuccess(val data: RealEstateDetail) : PostUiState()
 }
@@ -111,6 +116,103 @@ class PostViewModel @Inject constructor(
         images.clear()
         priceSuggest.value = ""
         price.value = ""
+        comboOptionChosen.value = DEFAULT_ITEM_CHOSEN
+    }
+
+    internal fun updatePost() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (postId.value != DEFAULT_ID_POST) {
+                PickAddressViewModel.run {
+                    callAPIOnThread(
+                        funCallApis = mutableListOf(
+                            appRepository.updatePost(
+                                idPost = postId.value,
+                                title = title.value,
+                                description = description.value,
+                                price = price.value.toDouble() * 1_000_000,
+                                width = width.value.toDouble(),
+                                acreage = square.value.toDouble(),
+                                parkingSpace = isHaveCarParking.value,
+                                streetInFront = streetInFront.value.toDouble(),
+                                length = length.value.toDouble(),
+                                bedroomNumber = bedroom.value.toInt(),
+                                kitchen = if (isHaveKitchenRoom.value) 1 else 0,
+                                rooftop = isHaveRooftop.value,
+                                floorNumber = floor.value.toInt(),
+                                diningRoom = if (isHaveDiningRoom.value) 1 else 0,
+                                legalTypeId = juridicalChosen.value.id,
+                                detailAddress = detailStreet.value,
+                                districtId = districtChosen.value.id,
+                                wardId = wardChosen.value.id,
+                                streetId = streetChosen.value.id,
+                                longitude = longitude,
+                                latitude = latitude,
+                                listNewImages = images.map { it.url }.toMutableList(),
+                                propertyTypeId = typeChosen.value.id,
+                                comboOptionId = comboOptionChosen.value.id
+                            )
+                        ),
+                        apiSuccess = {
+                            uiState.value = PostUiState.SubmitPostSuccess(it.isSuccess)
+                        },
+                        apiError = {
+                            uiState.value = PostUiState.SubmitPostSuccess(false)
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    internal fun createPost() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getUser().value?.id?.let {
+                PickAddressViewModel.run {
+
+                    callAPIOnThread(
+                        funCallApis = mutableListOf(
+                            appRepository.createPost(
+                                title = title.value,
+                                description = description.value,
+                                ownerId = it,
+                                price = price.value.toDouble() * 1_000_000,
+                                suggestedPrice = priceSuggest.value.toDouble() * 1_000_000,
+                                directionId = directionChosen.value.id,
+                                width = width.value.toDouble(),
+                                acreage = square.value.toDouble(),
+                                parkingSpace = isHaveCarParking.value,
+                                streetInFront = streetInFront.value.toDouble(),
+                                length = length.value.toDouble(),
+                                bedroomNumber = bedroom.value.toInt(),
+                                kitchen = if (isHaveKitchenRoom.value) 1 else 0,
+                                rooftop = isHaveRooftop.value,
+                                floorNumber = floor.value.toInt(),
+                                diningRoom = if (isHaveDiningRoom.value) 1 else 0,
+                                legalTypeId = juridicalChosen.value.id,
+                                isOwner = true,
+                                detail = detailStreet.value,
+                                provinceId = 1,
+                                districtId = districtChosen.value.id,
+                                wardId = wardChosen.value.id,
+                                streetId = streetChosen.value.id,
+                                longitude = longitude,
+                                latitude = latitude,
+                                images = images.map { it.url }.toMutableList(),
+                                propertyTypeId = typeChosen.value.id,
+                                cluster = cluster,
+                                comboOptionId = comboOptionChosen.value.id
+                            )
+                        ),
+                        apiSuccess = {
+                            uiState.value = PostUiState.SubmitPostSuccess(it.isSuccess)
+                        },
+                        apiError = {
+                            uiState.value = PostUiState.SubmitPostSuccess(false)
+                        }
+                    )
+                }
+            }
+        }
     }
 
     internal fun isValidateData(): Boolean =
@@ -216,7 +318,9 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    internal fun getPredictPrice() {
+    internal fun getPredictPrice(
+        isForSubmit: Boolean = false
+    ) {
         uiState.value = PostUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
@@ -242,7 +346,7 @@ class PostViewModel @Inject constructor(
                 ),
                 apiSuccess = {
                     cluster = it.body.cluster
-                    uiState.value = PostUiState.GetPredictPriceSuccess(it.body.result)
+                    uiState.value = PostUiState.GetPredictPriceSuccess(it.body.result, isForSubmit)
                 },
                 apiError = {
 

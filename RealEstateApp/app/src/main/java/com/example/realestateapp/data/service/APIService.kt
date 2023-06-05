@@ -88,7 +88,8 @@ interface APIService {
         @Query("userId") idUser: Int,
         @Query("pageIndex") pageIndex: Int,
         @Query("pageSize") pageSize: Int,
-        @Query("search") filter: String
+        @Query("search") filter: String,
+        @Query("createdDate") createdDate: String
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 
     @GET("/api/Posts/created-by-user")
@@ -97,7 +98,8 @@ interface APIService {
         @Query("userId") idUser: Int,
         @Query("pageIndex") pageIndex: Int,
         @Query("pageSize") pageSize: Int,
-        @Query("search") filter: String
+        @Query("search") filter: String,
+        @Query("createdDate") createdDate: String
     ): Response<ResponseAPI<PagingItem<RealEstateList>>>
 
     @PUT("/api/Posts/upload-image")
@@ -121,4 +123,11 @@ interface APIService {
     @POST("/api/Posts")
     @JvmSuppressWildcards
     suspend fun createPost(@Body options: Map<String, Any>): Response<ResponseAPI<Any?>>
+
+    @PUT("/api/Posts/update-post/{idPost}")
+    @JvmSuppressWildcards
+    suspend fun updatePost(
+        @Path("idPost") idPost: String,
+        @Body options: Map<String, Any>
+    ): Response<ResponseAPI<Any?>>
 }
