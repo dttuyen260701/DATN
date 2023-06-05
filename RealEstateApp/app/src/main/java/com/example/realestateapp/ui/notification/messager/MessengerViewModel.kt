@@ -26,28 +26,28 @@ class MessengerViewModel @Inject constructor(
     internal var chats = mutableStateListOf<ItemMessenger>(
         ItemMessenger(
             timeMilliseconds = 1234667,
-            idUserSend = 4,
+            idUserSend = 1,
             messenger = "Test Mest"
         ),
         ItemMessenger(
             timeMilliseconds = 11245,
-            idUserSend = 4,
+            idUserSend = 3,
             messenger = "Test Mest 21312312"
         ),
         ItemMessenger(
             timeMilliseconds = 123123123,
-            idUserSend = 1,
+            idUserSend = 3,
             messenger = "Test Mest 123 12312312312 3 1ádsad ád qưe qưeqư eqưeqưe qưeqư eqư eqư eqưe qưe qưe qưe qưe qưe qưe qư"
         ),
         ItemMessenger(
             timeMilliseconds = 22,
-            idUserSend = 1,
+            idUserSend = 3,
             messenger = "https://icdn.dantri.com.vn/thumb_w/680/2022/12/19/gettyimages-1450107740-1671453343158.jpg",
             isPhoto = true
         ),
         ItemMessenger(
             timeMilliseconds = 1234,
-            idUserSend = 4,
+            idUserSend = 3,
             messenger = "Test Mest"
         ),
         ItemMessenger(
@@ -83,13 +83,13 @@ class MessengerViewModel @Inject constructor(
         ),
         ItemMessenger(
             timeMilliseconds = 5,
-            idUserSend = 1,
+            idUserSend = 3,
             messenger = "https://icdn.dantri.com.vn/thumb_w/680/2022/12/19/gettyimages-1450107740-1671453343158.jpg",
             isPhoto = true
         ),
         ItemMessenger(
             timeMilliseconds = 4,
-            idUserSend = 4,
+            idUserSend = 3,
             messenger = "Test Mest"
         ),
         ItemMessenger(

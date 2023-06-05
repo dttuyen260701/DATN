@@ -1,7 +1,6 @@
 package com.example.realestateapp.ui.post.addpost
 
 import android.Manifest
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
+import com.example.realestateapp.data.enums.PostStatus
 import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.designsystem.components.*
@@ -32,7 +32,9 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.extension.formatToUnit
 import com.example.realestateapp.extension.makeToast
+import com.example.realestateapp.extension.showFullNumber
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
@@ -73,6 +75,7 @@ internal fun AddPostRoute(
     idPost: Int,
     onBackClick: () -> Unit,
     navigateToPickAddress: () -> Unit,
+    navigateToMyRecord: (Boolean) -> Unit,
     addressDetails: MutableList<String>
 ) {
     val context = LocalContext.current
@@ -237,6 +240,20 @@ internal fun AddPostRoute(
                 else ""
             }
         }
+        var comboOptionChosen by remember { comboOptionChosen }
+        val comboOptionError by remember {
+            derivedStateOf {
+                if (typeChosen == DEFAULT_ITEM_CHOSEN && !firstClick) {
+                    context.getString(
+                        R.string.mandatoryError,
+                        context.getString(R.string.choiceOptionTitle)
+                    )
+                } else ""
+            }
+        }
+        val comboOptionsBronze = remember { comboOptionsBronze }
+        val comboOptionsSilver = remember { comboOptionsSilver }
+        val comboOptionsGold = remember { comboOptionsGold }
         val isEnableSubmit by remember {
             derivedStateOf {
                 (
@@ -253,32 +270,108 @@ internal fun AddPostRoute(
                                 && titleError.trim().isEmpty()
                                 && descriptionError.trim().isEmpty()
                                 && priceError.trim().isEmpty()
+                                && comboOptionError.trim().isEmpty()
                         )
             }
         }
+        var postId by remember { postId }
+        var postStatus by remember { postStatus }
 
-        when (uiState) {
-            is PostUiState.GetTypesSuccess -> {
-                types.run {
-                    clear()
-                    addAll((uiState as PostUiState.GetTypesSuccess).data)
-                }
-            }
-            is PostUiState.GetPredictPriceSuccess -> {
-                (uiState as PostUiState.GetPredictPriceSuccess).data.toString().let {
-                    priceSuggest = (it.toFloat() * square.toFloat()).toString()
-                    price = (it.toFloat() * square.toFloat()).toString()
-                }
-            }
-            else -> {}
-        }
+        if (postId != idPost) postId = idPost
 
-        if (idPost != DEFAULT_ID_POST) {
-            Log.e("TTT", "AddPostRoute: $idPost")
+        LaunchedEffect(key1 = uiState) {
+            when (uiState) {
+                is PostUiState.InitView -> {
+                    if (postId != DEFAULT_ID_POST) {
+                        getRealEstateDetail(postId)
+                    } else {
+                        comboOptionsBronze.clear()
+                        comboOptionsSilver.clear()
+                        comboOptionsGold.clear()
+                        getComboOptions()
+                    }
+                }
+                is PostUiState.GetComboOptionsDone -> {
+
+                }
+                is PostUiState.GetRealEstateDetailSuccess -> {
+                    (uiState as PostUiState.GetRealEstateDetailSuccess).data.run {
+                        typeChosen = ItemChoose(
+                            id = propertyTypeId,
+                            name = propertyTypeName
+                        )
+                        addressDetailDisplay = address
+                        PickAddressViewModel.let {
+                            it.districtChosen.value = ItemChoose(
+                                id = districtId,
+                                name = districtName
+                            )
+                            it.wardChosen.value = ItemChoose(
+                                id = wardId,
+                                name = wardName
+                            )
+                            it.streetChosen.value = ItemChoose(
+                                id = streetId,
+                                name = streetName
+                            )
+                            it.latitude = this.latitude
+                            it.longitude = this.longitude
+                            it.detailStreet.value = this.address.split(",")[0]
+                        }
+                        juridicalChosen = ItemChoose(
+                            id = legalId,
+                            name = legalName
+                        )
+                        directionChosen = ItemChoose(
+                            id = directionId,
+                            name = districtName
+                        )
+                        square = this.square.toString()
+                        this.floors?.let { floor = it.toString() }
+                        this.bedrooms?.let { bedroom = it.toString() }
+                        this.streetInFront?.let { streetInFront = it.toString() }
+                        width = this.width.toString()
+                        length = this.length.toString()
+                        isHaveCarParking = (carParking == true)
+                        isHaveRooftop = (rooftop == true)
+                        isHaveDiningRoom = (diningRoom == 1)
+                        isHaveKitchenRoom = (kitchen == 1)
+                        titlePost = title ?: ""
+                        description = this.description ?: ""
+                        images.addAll(this.images)
+                        priceSuggest = (this.suggestedPrice / 1000).showFullNumber()
+                        price = (this.price / 1000).showFullNumber()
+                        comboOptionChosen = ItemChoose(
+                            id = comboOptionId,
+                            name = comboOptionName
+                        )
+                        postStatus = status
+                    }
+
+                    comboOptionsBronze.clear()
+                    comboOptionsSilver.clear()
+                    comboOptionsGold.clear()
+                    getComboOptions()
+                }
+                is PostUiState.GetTypesSuccess -> {
+                    types.run {
+                        clear()
+                        addAll((uiState as PostUiState.GetTypesSuccess).data)
+                    }
+                }
+                is PostUiState.GetPredictPriceSuccess -> {
+                    (uiState as PostUiState.GetPredictPriceSuccess).data.toString().let {
+                        priceSuggest = (it.toFloat() * square.toFloat()).toString()
+                        price = (it.toFloat() * square.toFloat()).toString()
+                    }
+                }
+                else -> {}
+            }
         }
 
         AddPostScreen(
             modifier = modifier,
+            postStatus = postStatus,
             onResetData = remember { ::resetData },
             onBackClick = onBackClick,
             addressDetail = addressDetailDisplay,
@@ -512,8 +605,6 @@ internal fun AddPostRoute(
                 {
                     requestPermissionListener(
                         permission = mutableListOf(
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.CAMERA
                         )
                     ) { results ->
@@ -568,10 +659,30 @@ internal fun AddPostRoute(
             priceError = priceError,
             ownerName = user?.fullName ?: "",
             ownerPhone = user?.phoneNumber ?: "",
+            comboOptionChosen = comboOptionChosen,
+            comboOptionError = comboOptionError,
+            comboOptionsBronze = comboOptionsBronze,
+            comboOptionsSilver = comboOptionsSilver,
+            comboOptionsGold = comboOptionsGold,
+            onComboOptionItemClick = remember {
+                {
+                    if (it != comboOptionChosen) {
+                        comboOptionChosen = it
+                        onComboOptionChoice(it)
+                    }
+                }
+            },
+            btnSubmitTitle = stringResource(
+                id = if (postId != DEFAULT_ID_POST) R.string.btnUpdateTitle
+                else R.string.btnSubmitTitle
+            ),
             isEnableSubmit = isEnableSubmit,
             onSubmitClick = remember {
                 {
                     firstClick = false
+                    if (isEnableSubmit) {
+                        navigateToMyRecord(true)
+                    }
                 }
             },
         )
@@ -581,6 +692,7 @@ internal fun AddPostRoute(
 @Composable
 internal fun AddPostScreen(
     modifier: Modifier,
+    postStatus: Int,
     onResetData: () -> Unit,
     onBackClick: () -> Unit,
     addressDetail: String,
@@ -638,9 +750,17 @@ internal fun AddPostScreen(
     priceError: String,
     ownerName: String,
     ownerPhone: String,
+    comboOptionChosen: ItemChoose,
+    comboOptionError: String,
+    comboOptionsBronze: MutableList<ItemChoose>,
+    comboOptionsSilver: MutableList<ItemChoose>,
+    comboOptionsGold: MutableList<ItemChoose>,
+    onComboOptionItemClick: (ItemChoose) -> Unit,
+    btnSubmitTitle: String,
     isEnableSubmit: Boolean,
     onSubmitClick: () -> Unit
 ) {
+    val isReadOnlyInformation = (postStatus == PostStatus.Accepted.id)
     BaseScreen(
         modifier = modifier,
         bgColor = RealEstateAppTheme.colors.bgScrPrimaryLight,
@@ -649,7 +769,7 @@ internal fun AddPostScreen(
             ToolbarView(
                 title = stringResource(id = R.string.addPostTitle),
                 rightIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Reset),
-                onRightIconClick = onResetData,
+                onRightIconClick = if (isReadOnlyInformation) { -> } else onResetData,
                 leftIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.BackArrow),
                 onLeftIconClick = onBackClick
             )
@@ -666,7 +786,7 @@ internal fun AddPostScreen(
             ) {
                 ButtonRadiusGradient(
                     onClick = onSubmitClick,
-                    title = stringResource(id = R.string.searchBtnTitle),
+                    title = btnSubmitTitle,
                     enabled = isEnableSubmit,
                     bgColor = RealEstateAppTheme.colors.bgButtonGradient,
                     modifier = Modifier
@@ -709,7 +829,8 @@ internal fun AddPostScreen(
                 stringResource(id = R.string.typesTitle)
             ),
             onClearData = { onClearData(FIELD_TYPE) },
-            errorText = typeError
+            errorText = typeError,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         ComboBox(
@@ -724,7 +845,8 @@ internal fun AddPostScreen(
             value = addressDetail,
             hint = stringResource(id = R.string.addressHint),
             onClearData = { onClearData(FIELD_ADDRESS) },
-            errorText = addressError
+            errorText = addressError,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         BorderLine()
@@ -751,7 +873,8 @@ internal fun AddPostScreen(
                 stringResource(id = R.string.juridicalTitle)
             ),
             onClearData = { onClearData(FIELD_JURIDICAL) },
-            errorText = juridicalError
+            errorText = juridicalError,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         ComboBox(
@@ -764,7 +887,8 @@ internal fun AddPostScreen(
                 stringResource(id = R.string.directionTitle)
             ),
             onClearData = { onClearData(FIELD_DIRECTION) },
-            errorText = directionError
+            errorText = directionError,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
@@ -784,7 +908,8 @@ internal fun AddPostScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isShowErrorStart = true,
-            isLastEditText = true
+            isLastEditText = true,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
@@ -804,7 +929,8 @@ internal fun AddPostScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isShowErrorStart = true,
-            isLastEditText = true
+            isLastEditText = true,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
@@ -824,7 +950,8 @@ internal fun AddPostScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isShowErrorStart = true,
-            isLastEditText = true
+            isLastEditText = true,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
@@ -850,7 +977,8 @@ internal fun AddPostScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isShowErrorStart = true,
-            isLastEditText = true
+            isLastEditText = true,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
@@ -876,7 +1004,8 @@ internal fun AddPostScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isShowErrorStart = true,
-            isLastEditText = true
+            isLastEditText = true,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         EditTextTrailingIconCustom(
@@ -902,7 +1031,8 @@ internal fun AddPostScreen(
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = Color.White,
             isShowErrorStart = true,
-            isLastEditText = true
+            isLastEditText = true,
+            readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)
         Row(
@@ -915,12 +1045,15 @@ internal fun AddPostScreen(
                 title = stringResource(id = R.string.carParkingTitle),
                 isChecked = isHaveCarParking,
                 onCheckedChange = onHaveCarChange,
+                readOnly = isReadOnlyInformation
             )
+            Spacer(modifier = Modifier.weight(1f))
             CheckBoxWIconText(
                 icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Rooftop),
                 title = stringResource(id = R.string.rooftopTitle),
                 isChecked = isHaveRooftop,
                 onCheckedChange = onHaveRooftopChange,
+                readOnly = isReadOnlyInformation
             )
         }
         Spacing(MARGIN_VIEW)
@@ -934,12 +1067,15 @@ internal fun AddPostScreen(
                 title = stringResource(id = R.string.diningRoomTitle),
                 isChecked = isHaveDiningRoom,
                 onCheckedChange = onHaveDiningRoomChange,
+                readOnly = isReadOnlyInformation
             )
+            Spacer(modifier = Modifier.weight(1f))
             CheckBoxWIconText(
                 icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Kitchen),
                 title = stringResource(id = R.string.kitchenTitle),
                 isChecked = isHaveKitchenRoom,
                 onCheckedChange = onHaveKitchenChange,
+                readOnly = isReadOnlyInformation
             )
         }
         Spacing(MARGIN_VIEW)
@@ -1161,6 +1297,8 @@ internal fun AddPostScreen(
                 .fillMaxWidth()
         )
         Spacing(MARGIN_VIEW)
+        BorderLine()
+        Spacing(MARGIN_VIEW)
         Text(
             text = stringResource(id = R.string.choiceValueTitle),
             style = RealEstateTypography.body1.copy(
@@ -1173,9 +1311,101 @@ internal fun AddPostScreen(
                 .fillMaxWidth()
         )
         Spacing(MARGIN_VIEW)
-        Row() {
-
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = modifier.width(MARGIN_VIEW.dp))
+                Text(
+                    text = stringResource(id = R.string.bronzeOptionTitle),
+                    style = RealEstateTypography.body1.copy(
+                        fontSize = 15.sp,
+                        color = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+                        textAlign = TextAlign.Start
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+                SwitchButton(
+                    data = comboOptionsBronze,
+                    onItemClick = onComboOptionItemClick
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = modifier.width(MARGIN_VIEW.dp))
+                Text(
+                    text = stringResource(id = R.string.silverOptionTitle),
+                    style = RealEstateTypography.body1.copy(
+                        fontSize = 15.sp,
+                        color = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+                        textAlign = TextAlign.Start
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+                SwitchButton(
+                    data = comboOptionsSilver,
+                    onItemClick = onComboOptionItemClick
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = modifier.width(MARGIN_VIEW.dp))
+                Text(
+                    text = stringResource(id = R.string.goldOptionTitle),
+                    style = RealEstateTypography.body1.copy(
+                        fontSize = 15.sp,
+                        color = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+                        textAlign = TextAlign.Start
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+                SwitchButton(
+                    data = comboOptionsGold,
+                    onItemClick = onComboOptionItemClick
+                )
+            }
+            Spacing(MARGIN_VIEW)
+            Text(
+                text = stringResource(
+                    id = R.string.feeTitle,
+                    comboOptionChosen.score.formatToUnit()
+                ),
+                style = RealEstateTypography.body1.copy(
+                    fontSize = 15.sp,
+                    color = RealEstateAppTheme.colors.primary.copy(ALPHA_TITLE),
+                    textAlign = TextAlign.End,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+            )
+            Spacing(PADDING_VIEW)
+            Text(
+                text = comboOptionError,
+                style = RealEstateTypography.caption.copy(
+                    color = Color.Red,
+                    fontSize = WARNING_TEXT_SIZE.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(horizontal = MARGIN_VIEW.dp)
+            )
         }
+        Spacing(MARGIN_VIEW)
+        BorderLine()
         Spacing(MARGIN_DIFFERENT_VIEW)
     }
 }

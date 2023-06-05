@@ -152,4 +152,41 @@ interface AppRepository {
         widthRoad: Float,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<PredictResult>>
+
+    suspend fun getComboOptions(
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<MutableList<ComboOption>>>
+
+    suspend fun createPost(
+        title: String,
+        description: String,
+        ownerId: Int,
+        price: Float,
+        suggestedPrice: Float,
+        directionId: Int,
+        width: Float,
+        acreage: Float,
+        parkingSpace: Boolean,
+        streetInFront: Float,
+        length: Float,
+        bedroomNumber: Int,
+        kitchen: Int,
+        rooftop: Boolean,
+        floorNumber: Int,
+        diningRoom: Int,
+        legalTypeId: Int,
+        isOwner: Boolean = true,
+        detail: String = "",
+        provinceId: Int = 1,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        longitude: Float,
+        latitude: Float,
+        images: MutableList<String>,
+        propertyTypeId: Int,
+        cluster: Int,
+        comboOptionId: Int,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<Any?>>
 }

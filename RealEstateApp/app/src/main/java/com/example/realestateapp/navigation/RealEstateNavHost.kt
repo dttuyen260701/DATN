@@ -82,7 +82,16 @@ fun RealEstateNavHost(
                 navController.navigateToPickAddress()
             },
             navigateToAddPost = {
-                navController.navigateToAddPost(postId = it)
+                navController.navigateToAddPost(
+                    postId = it
+                )
+            },
+            navigateToMyRecord = {
+                navController.navigateToRecords(
+                    isMyRecord = it
+                ) {
+                    navController.popBackStack()
+                }
             },
             navigateSignIn = {
                 navController.navigateToSignIn {

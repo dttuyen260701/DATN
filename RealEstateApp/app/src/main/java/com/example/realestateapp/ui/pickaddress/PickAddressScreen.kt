@@ -2,6 +2,7 @@ package com.example.realestateapp.ui.pickaddress
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import androidx.compose.foundation.layout.Arrangement
@@ -10,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
@@ -32,6 +35,9 @@ import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VI
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.*
 
@@ -57,6 +63,8 @@ internal fun PickAddressRoute(
         var wardChosen by remember { PickAddressViewModel.wardChosen }
         var streetChosen by remember { PickAddressViewModel.streetChosen }
         var uiState by remember { uiState }
+        val coroutineScope = rememberCoroutineScope()
+        var detailStreet by remember { PickAddressViewModel.detailStreet }
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -109,6 +117,10 @@ internal fun PickAddressRoute(
                             fusedLocationClient.lastLocation
                                 .addOnSuccessListener { location: Location? ->
                                     location?.run {
+                                        PickAddressViewModel.let {
+                                            it.longitude = longitude
+                                            it.latitude = latitude
+                                        }
                                         val coder = Geocoder(context, Locale.getDefault())
                                         var addressLine = ""
                                         try {
@@ -235,9 +247,37 @@ internal fun PickAddressRoute(
                         if (streetChosen != DEFAULT_ITEM_CHOSEN) "${streetChosen.name}, " else ""
                     val wardName =
                         if (wardChosen != DEFAULT_ITEM_CHOSEN) "${wardChosen.name}, " else ""
-                    onPickAddressSuccess(
-                        "$streetName$wardName${districtChosen.name}"
-                    )
+                    coroutineScope.launch(Dispatchers.IO) {
+                        getIsLoading().value = true
+                        val coder = Geocoder(context, Locale.getDefault())
+                        val address: ArrayList<Address>?
+
+                        try {
+                            address =
+                                coder.getFromLocationName(
+                                    "$detailStreet $streetName$wardName${districtChosen.name}",
+                                    1
+                                ) as ArrayList<Address>?
+                            address?.firstOrNull()?.run {
+                                PickAddressViewModel.let {
+                                    it.longitude = this.longitude
+                                    it.latitude = this.latitude
+                                }
+                            }
+                        } catch (ex: IOException) {
+                            PickAddressViewModel.let {
+                                it.longitude = 0.0
+                                it.latitude = 0.0
+                            }
+                        }
+                        getIsLoading().value = false
+
+                        withContext(Dispatchers.Main) {
+                            onPickAddressSuccess(
+                                "$detailStreet $streetName$wardName${districtChosen.name}"
+                            )
+                        }
+                    }
                 }
             },
             onClearData = remember {
@@ -247,6 +287,7 @@ internal fun PickAddressRoute(
                             districtChosen = DEFAULT_ITEM_CHOSEN
                             wardChosen = DEFAULT_ITEM_CHOSEN
                             streetChosen = DEFAULT_ITEM_CHOSEN
+                            detailStreet = ""
                         }
                         FIELD_WARD -> {
                             wardChosen = DEFAULT_ITEM_CHOSEN
@@ -254,6 +295,7 @@ internal fun PickAddressRoute(
                         }
                         FIELD_STREET -> {
                             streetChosen = DEFAULT_ITEM_CHOSEN
+                            detailStreet = ""
                         }
                         else -> {}
                     }
@@ -261,7 +303,13 @@ internal fun PickAddressRoute(
             },
             districtChosen = districtChosen,
             wardChosen = wardChosen,
-            streetChosen = streetChosen
+            streetChosen = streetChosen,
+            detailStreet = detailStreet,
+            onDetailStreetChange = remember {
+                {
+                    detailStreet = it
+                }
+            }
         )
     }
 }
@@ -285,7 +333,9 @@ internal fun PickAddressScreen(
     onClearData: (String) -> Unit,
     districtChosen: ItemChoose,
     wardChosen: ItemChoose,
-    streetChosen: ItemChoose
+    streetChosen: ItemChoose,
+    detailStreet: String,
+    onDetailStreetChange: (String) -> Unit
 ) {
     BaseScreen(
         modifier = modifier,
@@ -364,6 +414,24 @@ internal fun PickAddressScreen(
             onClearData = {
                 onClearData(FIELD_STREET)
             }
+        )
+        Spacing(PADDING_HORIZONTAL_SCREEN)
+        EditTextTrailingIconCustom(
+            onTextChange = onDetailStreetChange,
+            text = detailStreet,
+            label = stringResource(id = R.string.detailTitle),
+            typeInput = KeyboardType.Text,
+            hint = stringResource(
+                id = R.string.hintTitle,
+                stringResource(id = R.string.detailTitle)
+            ),
+            errorText = "",
+            trailingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Title),
+            textColor = RealEstateAppTheme.colors.primary,
+            backgroundColor = Color.White,
+            isShowErrorStart = true,
+            isLastEditText = true,
+            readOnly = (districtChosen == DEFAULT_ITEM_CHOSEN)
         )
         Spacer(modifier = Modifier.weight(1f))
         ButtonRadius(

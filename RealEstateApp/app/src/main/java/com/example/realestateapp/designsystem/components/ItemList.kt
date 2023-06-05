@@ -62,16 +62,13 @@ internal fun ItemMessengerView(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(if (item.isSending) 0.5f else 1f)
             .padding((if (item.isPhoto) 0 else PADDING_VIEW).dp)
-            .then(modifier)
-            .clickable {
-                onItemClick(item)
-            },
+            .then(modifier),
         horizontalAlignment = if (item.idUserSend == idUser) Alignment.End
         else Alignment.Start
     ) {
-        if( item.isSending) {
+        if (item.isSending) {
             LoadingScreen(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
@@ -97,6 +94,9 @@ internal fun ItemMessengerView(
                             else RealEstateAppTheme.colors.progressBar,
                             shape = RoundedCornerShape(ROUND_DIALOG.dp)
                         )
+                        .clickable {
+                            onItemClick(item)
+                        }
                         .padding(
                             vertical = PADDING_VIEW.dp,
                             horizontal = MARGIN_VIEW.dp
@@ -116,6 +116,9 @@ internal fun ItemMessengerView(
                             max = (LocalConfiguration.current.screenWidthDp * 0.8).dp
                         )
                         .background(RealEstateAppTheme.colors.bgTextField)
+                        .clickable {
+                            onItemClick(item)
+                        }
                 )
             }
         }

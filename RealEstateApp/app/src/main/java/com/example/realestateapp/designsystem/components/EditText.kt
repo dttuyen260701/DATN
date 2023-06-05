@@ -161,6 +161,7 @@ internal fun EditTextTrailingIconCustom(
     trailingIcon: AppIcon,
     textColor: Color = Color.Black,
     backgroundColor: Color = Color.White,
+    readOnly: Boolean = false,
     isLastEditText: Boolean = false,
     isShowErrorStart: Boolean = false
 ) {
@@ -197,6 +198,7 @@ internal fun EditTextTrailingIconCustom(
                 { Text(text = label) }
             } else null,
             onValueChange = { onTextChange(it) },
+            readOnly = readOnly,
             value = text,
             placeholder = {
                 Text(

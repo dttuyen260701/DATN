@@ -43,11 +43,16 @@ class PickAddressViewModel @Inject constructor(
             private set
         internal var streetChosen: MutableState<ItemChoose> = mutableStateOf(DEFAULT_ITEM_CHOSEN)
             private set
+        internal var longitude: Double = 0.0
+        internal var latitude: Double = 0.0
+        internal var detailStreet = mutableStateOf("")
 
         internal fun clearDataChosen() {
             districtChosen.value = DEFAULT_ITEM_CHOSEN
             wardChosen.value = DEFAULT_ITEM_CHOSEN
             streetChosen.value = DEFAULT_ITEM_CHOSEN
+            longitude = 0.0
+            latitude = 0.0
         }
     }
 
@@ -63,8 +68,10 @@ class PickAddressViewModel @Inject constructor(
                 funCallApis = mutableListOf(
                     appRepository.getDistricts(),
                 ), apiSuccess = {
-                    if (it.body.indexOf(districtChosen.value) != -1) {
-                        it.body[it.body.indexOf(districtChosen.value)].isSelected = true
+                    val indexSelected =
+                        it.body.indexOfFirst { item -> item.id == districtChosen.value.id }
+                    if (indexSelected != -1) {
+                        it.body[indexSelected].isSelected = true
                     }
                     uiState.value = PickAddressUiState.GetDistrictSuccess(it.body)
                 }, apiError = {
@@ -91,8 +98,10 @@ class PickAddressViewModel @Inject constructor(
                     ),
                 ), apiSuccess = {
                     onApiSuccess(it.body)
-                    if (it.body.indexOf(wardChosen.value) != -1) {
-                        it.body[it.body.indexOf(wardChosen.value)].isSelected = true
+                    val indexSelected =
+                        it.body.indexOfFirst { item -> item.id == wardChosen.value.id }
+                    if (indexSelected != -1) {
+                        it.body[indexSelected].isSelected = true
                     }
                     uiState.value = PickAddressUiState.GetWardSuccess(it.body)
                 }, apiError = {
@@ -121,8 +130,10 @@ class PickAddressViewModel @Inject constructor(
                     ),
                 ), apiSuccess = {
                     onApiSuccess(it.body)
-                    if (it.body.indexOf(streetChosen.value) != -1) {
-                        it.body[it.body.indexOf(streetChosen.value)].isSelected = true
+                    val indexSelected =
+                        it.body.indexOfFirst { item -> item.id == districtChosen.value.id }
+                    if (indexSelected != -1) {
+                        it.body[indexSelected].isSelected = true
                     }
                     uiState.value = PickAddressUiState.GetStreetSuccess(it.body)
                 }, apiError = {
@@ -199,6 +210,7 @@ class PickAddressViewModel @Inject constructor(
             }
             Constants.DefaultField.FIELD_STREET -> {
                 streetChosen.value = itemChoose.copy(isSelected = false)
+                detailStreet.value = ""
             }
             else -> {}
         }

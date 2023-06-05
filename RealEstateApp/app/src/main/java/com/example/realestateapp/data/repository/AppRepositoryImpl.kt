@@ -336,4 +336,83 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun getComboOptions(
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<MutableList<ComboOption>>> {
+        return flow {
+            emit(
+                dataSource.getComboOptions()
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun createPost(
+        title: String,
+        description: String,
+        ownerId: Int,
+        price: Float,
+        suggestedPrice: Float,
+        directionId: Int,
+        width: Float,
+        acreage: Float,
+        parkingSpace: Boolean,
+        streetInFront: Float,
+        length: Float,
+        bedroomNumber: Int,
+        kitchen: Int,
+        rooftop: Boolean,
+        floorNumber: Int,
+        diningRoom: Int,
+        legalTypeId: Int,
+        isOwner: Boolean,
+        detail: String,
+        provinceId: Int,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        longitude: Float,
+        latitude: Float,
+        images: MutableList<String>,
+        propertyTypeId: Int,
+        cluster: Int,
+        comboOptionId: Int,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<Any?>> {
+        return flow {
+            emit(
+                dataSource.createPost(
+                    title = title,
+                    description = description,
+                    ownerId = ownerId,
+                    price = price,
+                    suggestedPrice = suggestedPrice,
+                    directionId = directionId,
+                    width = width,
+                    acreage = acreage,
+                    parkingSpace = parkingSpace,
+                    streetInFront = streetInFront,
+                    length = length,
+                    bedroomNumber = bedroomNumber,
+                    kitchen = kitchen,
+                    rooftop = rooftop,
+                    floorNumber = floorNumber,
+                    diningRoom = diningRoom,
+                    legalTypeId = legalTypeId,
+                    isOwner = isOwner,
+                    detail = detail,
+                    provinceId = provinceId,
+                    districtId = districtId,
+                    wardId = wardId,
+                    streetId = streetId,
+                    longitude = longitude,
+                    latitude = latitude,
+                    images = images,
+                    propertyTypeId = propertyTypeId,
+                    cluster = cluster,
+                    comboOptionId = comboOptionId
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

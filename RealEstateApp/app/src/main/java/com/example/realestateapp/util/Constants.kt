@@ -2,7 +2,6 @@ package com.example.realestateapp.util
 
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateDetail
-import com.google.gson.annotations.SerializedName
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -118,8 +117,24 @@ class Constants {
             ownerId = 1,
             dueDate = "",
             comboOptionId = 1,
-            comboOptionName = ""
+            comboOptionName = "",
+            propertyTypeId = 0,
+            legalId = 0,
+            districtId = 0,
+            districtName = "",
+            wardId = 0,
+            wardName = "",
+            streetId = 0,
+            streetName = "",
+            directionId = 0,
+            suggestedPrice = 0.0
         )
+    }
+
+    object ComboOptions {
+        const val BRONZE = 3
+        const val SILVER = 2
+        const val GOLD = 1
     }
 
     object PriceUnit {

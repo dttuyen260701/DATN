@@ -26,7 +26,8 @@ internal fun CheckBoxWIconText(
     icon: AppIcon,
     title: String,
     isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    readOnly: Boolean = false
 ) {
     Row(
         modifier = modifier,
@@ -45,7 +46,7 @@ internal fun CheckBoxWIconText(
         )
         Checkbox(
             checked = isChecked,
-            onCheckedChange = onCheckedChange,
+            onCheckedChange = if (!readOnly) onCheckedChange else null,
             colors = CheckboxDefaults.colors(
                 checkedColor = RealEstateAppTheme.colors.primary,
                 uncheckedColor = RealEstateAppTheme.colors.primary,

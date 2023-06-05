@@ -6,7 +6,23 @@ import kotlin.math.round
 /**
  * Created by tuyen.dang on 5/14/2023.
  */
- 
+
+fun Double?.showFullNumber(): String {
+    return this?.let {
+        return try {
+            val numberPathValue = (it.toBigDecimal()).toString().replace(",", ".").split('.')
+            if (numberPathValue.size > 1) {
+                if (numberPathValue[1].toInt() != 0) it.toBigDecimal().toString()
+                else numberPathValue[0]
+            } else {
+                numberPathValue[0]
+            }
+        } catch (e: Exception) {
+            "0"
+        }
+    } ?: "0"
+}
+
 internal fun Double.formatToMoney(): String {
     return try {
         var price = this

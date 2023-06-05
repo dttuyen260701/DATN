@@ -96,8 +96,6 @@ internal fun MessengerRoute(
                     } else {
                         requestPermissionListener(
                             permission = mutableListOf(
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.CAMERA
                             )
                         ) { results ->

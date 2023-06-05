@@ -308,4 +308,76 @@ class RetrofitDataSourceImpl @Inject constructor(
             apiService.getPredictPrice(options)
         }
     }
+
+    override suspend fun getComboOptions(): ApiResultWrapper<MutableList<ComboOption>> {
+        return callApi {
+            apiService.getComboOptions()
+        }
+    }
+
+    override suspend fun createPost(
+        title: String,
+        description: String,
+        ownerId: Int,
+        price: Float,
+        suggestedPrice: Float,
+        directionId: Int,
+        width: Float,
+        acreage: Float,
+        parkingSpace: Boolean,
+        streetInFront: Float,
+        length: Float,
+        bedroomNumber: Int,
+        kitchen: Int,
+        rooftop: Boolean,
+        floorNumber: Int,
+        diningRoom: Int,
+        legalTypeId: Int,
+        isOwner: Boolean,
+        detail: String,
+        provinceId: Int,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        longitude: Float,
+        latitude: Float,
+        images: MutableList<String>,
+        propertyTypeId: Int,
+        cluster: Int,
+        comboOptionId: Int
+    ): ApiResultWrapper<Any?> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["title"] = title
+        options["description"] = description
+        options["ownerId"] = ownerId
+        options["price"] = price
+        options["suggestedPrice"] = suggestedPrice
+        options["directionId"] = directionId
+        options["frontal"] = width
+        options["acreage"] = acreage
+        options["parkingSpace"] = parkingSpace
+        options["streetInFront"] = streetInFront
+        options["length"] = length
+        options["bedroomNumber"] = bedroomNumber
+        options["kitchen"] = kitchen
+        options["rooftop"] = rooftop
+        options["floorNumber"] = floorNumber
+        options["diningRoom"] = diningRoom
+        options["legalTypeId"] = legalTypeId
+        options["isOwner"] = isOwner
+        options["detail"] = detail
+        options["provinceId"] = provinceId
+        options["districtId"] = districtId
+        options["wardId"] = wardId
+        options["streetId"] = streetId
+        options["longitude"] = longitude
+        options["latitude"] = latitude
+        options["images"] = images
+        options["propertyTypeId"] = propertyTypeId
+        options["cluster"] = cluster
+        options["comboOptionId"] = comboOptionId
+        return callApi {
+            apiService.createPost(options)
+        }
+    }
 }

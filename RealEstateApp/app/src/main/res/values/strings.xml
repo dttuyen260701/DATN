@@ -77,6 +77,7 @@
     <string name="addressHint">Đà Nẵng</string>
     <string name="searchBtnTitle">Tìm kiếm</string>
     <string name="typesTitle">Loại bất động sản</string>
+    <string name="comboOptionTitle">Loại gói tin</string>
     <string name="highestPriceSortTitle">Giá cao nhất</string>
     <string name="chooseHint">Chọn %s</string>
     <string name="priceTitle">Mức giá</string>
@@ -104,6 +105,7 @@
     <string name="streetTitle">Đường</string>
     <string name="pleaseChoiceHint">Vui lòng chọn %s</string>
     <string name="confirmTitle">Xác nhận</string>
+    <string name="detailTitle">Chi tiết (Số nhà, hẻm, …)</string>
     <string name="emptyTitle">Không tìm thấy dữ liệu.</string>
 
     <!--AddPostScreen-->
@@ -116,6 +118,11 @@
     <string name="generalInfoTitle">Thông tin chung</string>
     <string name="contactInfoTitle">Thông tin liên hệ</string>
     <string name="choiceValueTitle">Chọn gói đăng tin</string>
+    <string name="choiceOptionTitle">Gói đăng tin</string>
+    <string name="bronzeOptionTitle">Gói đồng</string>
+    <string name="silverOptionTitle">Gói bạc</string>
+    <string name="goldOptionTitle">Gói vàng</string>
+    <string name="feeTitle">Tổng phí: %s đ</string>
     <string name="title">Tiêu Đề</string>
     <string name="mandatoryTitle">%s *</string>
     <string name="mandatoryError">%s không được để trống</string>
@@ -130,6 +137,8 @@
     <string name="messageTitle">Các  thông tin cơ bản và
         thông tin chi tiết sẽ không thể thay đổi khi được Quản trị viên phê duyệt.
         Bạn nên điều đúng về những thông tin này!</string>
+    <string name="btnSubmitTitle">Đăng bài</string>
+    <string name="btnUpdateTitle">Cập nhật</string>
 
     <!--RequireLoginScreen-->
     <string name="messageRequireLogin">Vui lòng đăng nhập để sử dụng tính năng này !!!</string>

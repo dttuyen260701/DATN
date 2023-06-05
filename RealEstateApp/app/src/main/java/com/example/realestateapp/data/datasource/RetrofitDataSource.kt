@@ -134,4 +134,39 @@ interface RetrofitDataSource {
         streetId: Int,
         widthRoad: Float
     ): ApiResultWrapper<PredictResult>
+
+    suspend fun getComboOptions()
+            : ApiResultWrapper<MutableList<ComboOption>>
+
+    suspend fun createPost(
+        title: String,
+        description: String,
+        ownerId: Int,
+        price: Float,
+        suggestedPrice: Float,
+        directionId: Int,
+        width: Float,
+        acreage: Float,
+        parkingSpace: Boolean,
+        streetInFront: Float,
+        length: Float,
+        bedroomNumber: Int,
+        kitchen: Int,
+        rooftop: Boolean,
+        floorNumber: Int,
+        diningRoom: Int,
+        legalTypeId: Int,
+        isOwner: Boolean,
+        detail: String,
+        provinceId: Int,
+        districtId: Int,
+        wardId: Int,
+        streetId: Int,
+        longitude: Float,
+        latitude: Float,
+        images: MutableList<String>,
+        propertyTypeId: Int,
+        cluster: Int,
+        comboOptionId: Int
+    ): ApiResultWrapper<Any?>
 }

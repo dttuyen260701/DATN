@@ -200,7 +200,7 @@ internal fun ButtonUnRepeating(
 @Composable
 internal fun SwitchButton(
     modifier: Modifier = Modifier,
-    types: MutableList<ItemChoose>,
+    data: MutableList<ItemChoose>,
     onItemClick: (ItemChoose) -> Unit,
     bgColor: Color = RealEstateAppTheme.colors.bgTextField,
     bgColorSelected: Color = RealEstateAppTheme.colors.primary,
@@ -219,26 +219,26 @@ internal fun SwitchButton(
             .height(cbbHeight.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        for (i in types.indices) {
+        for (i in data.indices) {
             TextButton(
                 onClick = {
-                    val oldIndex = types.indexOfFirst { it.isSelected }
+                    val oldIndex = data.indexOfFirst { it.isSelected }
                     if (oldIndex != i) {
                         if (oldIndex != -1)
-                            types[oldIndex] =
-                                types[oldIndex].copy(isSelected = false)
-                        types[i] = types[i].copy(isSelected = true)
+                            data[oldIndex] =
+                                data[oldIndex].copy(isSelected = false)
+                        data[i] = data[i].copy(isSelected = true)
                     }
-                    onItemClick(types[i])
+                    onItemClick(data[i])
                 },
                 modifier = Modifier
                     .background(
-                        color = if (types[i].isSelected) bgColorSelected else bgColor,
+                        color = if (data[i].isSelected) bgColorSelected else bgColor,
                         shape = RoundedCornerShape(
                             topStart = (if (i == 0) ROUND_DIALOG else 0).dp,
                             bottomStart = (if (i == 0) ROUND_DIALOG else 0).dp,
-                            topEnd = (if (i == types.lastIndex) ROUND_DIALOG else 0).dp,
-                            bottomEnd = (if (i == types.lastIndex) ROUND_DIALOG else 0).dp,
+                            topEnd = (if (i == data.lastIndex) ROUND_DIALOG else 0).dp,
+                            bottomEnd = (if (i == data.lastIndex) ROUND_DIALOG else 0).dp,
                         )
                     )
                     .border(
@@ -248,8 +248,8 @@ internal fun SwitchButton(
                         ), shape = RoundedCornerShape(
                             topStart = (if (i == 0) ROUND_DIALOG else 0).dp,
                             bottomStart = (if (i == 0) ROUND_DIALOG else 0).dp,
-                            topEnd = (if (i == types.lastIndex) ROUND_DIALOG else 0).dp,
-                            bottomEnd = (if (i == types.lastIndex) ROUND_DIALOG else 0).dp,
+                            topEnd = (if (i == data.lastIndex) ROUND_DIALOG else 0).dp,
+                            bottomEnd = (if (i == data.lastIndex) ROUND_DIALOG else 0).dp,
                         )
 
                     )
@@ -261,9 +261,9 @@ internal fun SwitchButton(
                 elevation = null
             ) {
                 Text(
-                    text = types[i].name,
+                    text = data[i].name,
                     style = RealEstateTypography.body1.copy(
-                        color = if (types[i].isSelected) bgColor else bgColorSelected
+                        color = if (data[i].isSelected) bgColor else bgColorSelected
                     ),
                     modifier = Modifier
                         .padding(horizontal = PADDING_VIEW.dp)

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.ItemChatGuest
+import com.example.realestateapp.designsystem.components.BorderLine
 import com.example.realestateapp.designsystem.components.ItemChatGuestView
 import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
@@ -145,6 +146,7 @@ internal fun NotificationScreen(
                     )
                 }
             }
+            BorderLine()
         },
         contentNonScroll = {
             Box(

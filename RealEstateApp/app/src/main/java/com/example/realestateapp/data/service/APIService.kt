@@ -112,4 +112,13 @@ interface APIService {
     suspend fun getPredictPrice(
         @Body options: Map<String, Any>
     ): Response<ResponseAPI<PredictResult>>
+
+    @GET("/api/ComboOptions")
+    @JvmSuppressWildcards
+    suspend fun getComboOptions()
+            : Response<ResponseAPI<MutableList<ComboOption>>>
+
+    @POST("/api/Posts")
+    @JvmSuppressWildcards
+    suspend fun createPost(@Body options: Map<String, Any>): Response<ResponseAPI<Any?>>
 }

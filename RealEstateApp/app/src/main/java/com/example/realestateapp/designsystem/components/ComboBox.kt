@@ -44,6 +44,7 @@ internal fun ComboBox(
     textColor: Color = RealEstateAppTheme.colors.primary,
     hint: String = "",
     borderColor: Color = RealEstateAppTheme.colors.primary,
+    readOnly: Boolean = false,
     isAllowClearData: Boolean = true,
     onClearData: () -> Unit = {},
     leadingIcon: AppIcon? = null,
@@ -73,7 +74,7 @@ internal fun ComboBox(
                     shape = RoundedCornerShape(ROUND_DIALOG.dp)
                 )
                 .background(Color.Transparent)
-                .clickable {
+                .clickable(!readOnly) {
                     onItemClick()
                 },
             verticalAlignment = Alignment.CenterVertically
@@ -100,25 +101,27 @@ internal fun ComboBox(
                 modifier = Modifier
                     .weight(1f)
             )
-            IconButton(
-                onClick = if (isAllowClearData && value.trim().isNotEmpty())
-                    onClearData
-                else onItemClick,
-            ) {
-                BaseIcon(
-                    icon =
-                    if (isAllowClearData && value.trim().isNotEmpty())
-                        AppIcon.DrawableResourceIcon(RealEstateIcon.Clear)
-                    else
-                        AppIcon.DrawableResourceIcon(RealEstateIcon.DropDown),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(TRAILING_ICON_SIZE.dp),
-                    tint = textColor
-                )
+            if (!readOnly) {
+                IconButton(
+                    onClick = if (isAllowClearData && value.trim().isNotEmpty())
+                        onClearData
+                    else onItemClick,
+                ) {
+                    BaseIcon(
+                        icon =
+                        if (isAllowClearData && value.trim().isNotEmpty())
+                            AppIcon.DrawableResourceIcon(RealEstateIcon.Clear)
+                        else
+                            AppIcon.DrawableResourceIcon(RealEstateIcon.DropDown),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(TRAILING_ICON_SIZE.dp),
+                        tint = textColor
+                    )
+                }
             }
         }
-        if(!errorText.isNullOrEmpty()) {
+        if (!errorText.isNullOrEmpty()) {
             Spacing(PADDING_VIEW)
             Text(
                 text = errorText,

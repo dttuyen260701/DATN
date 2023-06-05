@@ -14,8 +14,12 @@ import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailUiState
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
+import com.example.realestateapp.util.Constants.ComboOptions.BRONZE
+import com.example.realestateapp.util.Constants.ComboOptions.GOLD
+import com.example.realestateapp.util.Constants.ComboOptions.SILVER
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +38,8 @@ sealed class PostUiState : UiState() {
     object Error : PostUiState()
 
     object Done : PostUiState()
+
+    object GetComboOptionsDone : PostUiState()
 
     data class GetTypesSuccess(val data: MutableList<ItemChoose>) : PostUiState()
 
@@ -76,6 +82,12 @@ class PostViewModel @Inject constructor(
     internal var images = mutableStateListOf<Image>()
     internal var priceSuggest = mutableStateOf("")
     internal var price = mutableStateOf("")
+    internal var comboOptionChosen = mutableStateOf(DEFAULT_ITEM_CHOSEN)
+    internal var comboOptionsBronze = mutableStateListOf<ItemChoose>()
+    internal var comboOptionsSilver = mutableStateListOf<ItemChoose>()
+    internal var comboOptionsGold = mutableStateListOf<ItemChoose>()
+    internal var postId = mutableStateOf(DEFAULT_ID_POST)
+    internal var postStatus = mutableStateOf(0)
     private var cluster = 0
 
     internal fun resetData() {
@@ -115,6 +127,72 @@ class PostViewModel @Inject constructor(
                 && PickAddressViewModel.districtChosen.value != DEFAULT_ITEM_CHOSEN
                 && PickAddressViewModel.wardChosen.value != DEFAULT_ITEM_CHOSEN
                 && PickAddressViewModel.streetChosen.value != DEFAULT_ITEM_CHOSEN
+
+    internal fun onComboOptionChoice(comboOption: ItemChoose) {
+        var oldIndex = comboOptionsBronze.indexOfFirst { it.isSelected }
+        if (oldIndex != -1) {
+            comboOptionsBronze[oldIndex] = comboOptionsBronze[oldIndex].copy(isSelected = false)
+        }
+        oldIndex = comboOptionsSilver.indexOfFirst { it.isSelected }
+        if (oldIndex != -1) {
+            comboOptionsSilver[oldIndex] = comboOptionsSilver[oldIndex].copy(isSelected = false)
+        }
+        oldIndex = comboOptionsGold.indexOfFirst { it.isSelected }
+        if (oldIndex != -1) {
+            comboOptionsGold[oldIndex] = comboOptionsGold[oldIndex].copy(isSelected = false)
+        }
+
+        var newIndex = comboOptionsBronze.indexOfFirst { it.id == comboOption.id }
+        if (newIndex == -1) {
+            newIndex = comboOptionsSilver.indexOfFirst { it.id == comboOption.id }
+            if (newIndex == -1) {
+                newIndex = comboOptionsGold.indexOfFirst { it.id == comboOption.id }
+                comboOptionsGold[newIndex] = comboOptionsGold[newIndex].copy(isSelected = true)
+            } else {
+                comboOptionsSilver[newIndex] = comboOptionsSilver[newIndex].copy(isSelected = true)
+            }
+        } else comboOptionsBronze[newIndex] = comboOptionsBronze[newIndex].copy(isSelected = true)
+    }
+
+    internal fun getComboOptions(showLoading: Boolean = false) {
+        viewModelScope.launch(Dispatchers.IO) {
+            callAPIOnThread(
+                funCallApis = mutableListOf(
+                    appRepository.getComboOptions(
+                        showLoading = showLoading
+                    )
+                ),
+                apiSuccess = { result ->
+                    result.body.map {
+                        val item = ItemChoose(
+                            id = it.id,
+                            name = it.dayNumber.toString(),
+                            score = it.amount.toInt(),
+                            isSelected = (it.id == comboOptionChosen.value.id)
+                        )
+                        if (it.id == comboOptionChosen.value.id)
+                            comboOptionChosen.value = item
+                        when (it.comboOptionTypeId) {
+                            BRONZE -> {
+                                comboOptionsBronze.add(item)
+                            }
+                            SILVER -> {
+                                comboOptionsSilver.add(item)
+                            }
+                            GOLD -> {
+                                comboOptionsGold.add(item)
+                            }
+                            else -> {}
+                        }
+                    }
+                    uiState.value = PostUiState.GetComboOptionsDone
+                },
+                apiError = {
+
+                }
+            )
+        }
+    }
 
     internal fun getRealEstateDetail(
         realEstateId: Int
@@ -180,8 +258,10 @@ class PostViewModel @Inject constructor(
                 funCallApis = mutableListOf(
                     appRepository.getTypes(showLoading = false),
                 ), apiSuccess = {
-                    if (it.body.indexOf(typeChosen.value) != -1) {
-                        it.body[it.body.indexOf(typeChosen.value)].isSelected = true
+                    val indexSelected =
+                        it.body.indexOfFirst { item -> item.id == typeChosen.value.id }
+                    if (indexSelected != -1) {
+                        it.body[indexSelected].isSelected = true
                     }
                     uiState.value = PostUiState.GetTypesSuccess(it.body)
                 }, apiError = {
@@ -234,7 +314,8 @@ class PostViewModel @Inject constructor(
                     clear()
                     addAll(
                         Juridical.values().map { juridical ->
-                            juridical.value.isSelected = (juridical.value == juridicalChosen.value)
+                            juridical.value.isSelected =
+                                (juridical.value.id == juridicalChosen.value.id)
                             juridical.value
                         }.toMutableList()
                     )
@@ -245,7 +326,8 @@ class PostViewModel @Inject constructor(
                     clear()
                     addAll(
                         Direction.values().map { direction ->
-                            direction.value.isSelected = (direction.value == directionChosen.value)
+                            direction.value.isSelected =
+                                (direction.value.id == directionChosen.value.id)
                             direction.value
                         }.toMutableList()
                     )
