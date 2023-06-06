@@ -196,4 +196,10 @@ interface RetrofitDataSource {
         propertyTypeId: Int,
         comboOptionId: Int
     ): ApiResultWrapper<Any?>
+
+    suspend fun changePassWord(
+        idUser: Int,
+        oldPassword: String,
+        newPassword: String
+    ): ApiResultWrapper<Any?>
 }

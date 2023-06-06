@@ -474,4 +474,21 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun changePassWord(
+        idUser: Int,
+        oldPassword: String,
+        newPassword: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<Any?>> {
+        return flow {
+            emit(
+                dataSource.changePassWord(
+                    idUser = idUser,
+                    oldPassword = oldPassword,
+                    newPassword = newPassword
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

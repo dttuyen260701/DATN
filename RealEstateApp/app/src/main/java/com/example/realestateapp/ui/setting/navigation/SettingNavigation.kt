@@ -87,7 +87,9 @@ internal fun NavGraphBuilder.settingGraph(
             onBackClick = onBackClick
         )
         profileScreen()
-        changePassScreen()
+        changePassScreen(
+            onBackClick = onBackClick
+        )
     }
 }
 
@@ -147,8 +149,12 @@ internal fun NavGraphBuilder.profileScreen() {
     }
 }
 
-internal fun NavGraphBuilder.changePassScreen() {
+internal fun NavGraphBuilder.changePassScreen(
+    onBackClick: () -> Unit
+) {
     composable(changePassNavigationRoute) {
-        ChangePassRoute()
+        ChangePassRoute(
+            onBackClick = onBackClick
+        )
     }
 }

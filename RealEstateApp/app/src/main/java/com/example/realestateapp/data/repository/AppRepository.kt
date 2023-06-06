@@ -217,4 +217,11 @@ interface AppRepository {
         comboOptionId: Int,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<Any?>>
+
+    suspend fun changePassWord(
+        idUser: Int,
+        oldPassword: String,
+        newPassword: String,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<Any?>>
 }

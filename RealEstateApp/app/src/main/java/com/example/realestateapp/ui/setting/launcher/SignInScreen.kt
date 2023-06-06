@@ -50,7 +50,7 @@ internal fun SignInRoute(
         }
         val passwordError by remember {
             derivedStateOf {
-                validPassWord(password)
+                ""
             }
         }
         val enableBtnSignIn = remember {
@@ -70,7 +70,6 @@ internal fun SignInRoute(
             onPassChange = {
                 password = it
             },
-            passwordError = passwordError,
             enableBtnSignIn = enableBtnSignIn.value,
             onSignUpClick = onSignUpClick,
             onBtnSignInClick = remember {
@@ -94,7 +93,6 @@ internal fun SignInScreen(
     emailError: String,
     password: String,
     onPassChange: (String) -> Unit,
-    passwordError: String,
     enableBtnSignIn: Boolean,
     onSignUpClick: () -> Unit,
     onBtnSignInClick: () -> Unit,
@@ -133,7 +131,6 @@ internal fun SignInScreen(
             text = password,
             label = stringResource(id = R.string.passwordTitle),
             typeInput = KeyboardType.Password,
-            errorText = passwordError,
             textColor = RealEstateAppTheme.colors.primary,
             backgroundColor = RealEstateAppTheme.colors.bgTextField,
             isLastEditText = true

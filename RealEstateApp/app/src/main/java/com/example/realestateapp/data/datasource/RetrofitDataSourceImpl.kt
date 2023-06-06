@@ -440,4 +440,20 @@ class RetrofitDataSourceImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun changePassWord(
+        idUser: Int,
+        oldPassword: String,
+        newPassword: String
+    ): ApiResultWrapper<Any?> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["userId"] = idUser
+        options["oldPassword"] = oldPassword
+        options["newPassword"] = newPassword
+        return callApi {
+            apiService.changePassWord(
+                options = options
+            )
+        }
+    }
 }

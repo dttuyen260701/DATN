@@ -130,4 +130,10 @@ interface APIService {
         @Path("idPost") idPost: String,
         @Body options: Map<String, Any>
     ): Response<ResponseAPI<Any?>>
+
+    @PUT("/api/Accounts/change-password")
+    @JvmSuppressWildcards
+    suspend fun changePassWord(
+        @Body options: Map<String, Any>
+    ): Response<ResponseAPI<Any?>>
 }

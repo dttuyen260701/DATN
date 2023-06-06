@@ -1,10 +1,16 @@
 package com.example.realestateapp.ui.setting.changepass
 
+import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
+import com.example.realestateapp.R
+import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -13,11 +19,40 @@ import javax.inject.Inject
 
 sealed class ChangePassUiState : UiState() {
     object InitView : ChangePassUiState()
+
+    data class ChangePassSuccess(val data: Boolean) : ChangePassUiState()
 }
 
 @HiltViewModel
 class ChangePassViewModel @Inject constructor(
-
+    private val application: Application
 ) : BaseViewModel<ChangePassUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(ChangePassUiState.InitView)
+
+    internal val oldPass = mutableStateOf("")
+    internal val newPass = mutableStateOf("")
+    internal val newPassRepeat = mutableStateOf("")
+    internal var firstClick = mutableStateOf(true)
+
+    internal fun changePassword() {
+        getUser().value?.id?.let {
+            viewModelScope.launch(Dispatchers.IO) {
+                callAPIOnThread(
+                    funCallApis = mutableListOf(
+                        appRepository.changePassWord(
+                            idUser = it,
+                            oldPassword = oldPass.value,
+                            newPassword = newPass.value
+                        )
+                    ),
+                    apiSuccess = {
+                        uiState.value = ChangePassUiState.ChangePassSuccess(it.isSuccess)
+                    }
+                )
+            }
+        }
+    }
+
+    internal fun validPassWord(pass: String): String =
+        if (PASSWORD.matches(pass) || firstClick.value) "" else application.getString(R.string.passwordError)
 }
