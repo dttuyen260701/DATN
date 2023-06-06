@@ -61,11 +61,11 @@ internal fun NavGraphBuilder.messengerScreen(
 ) {
     composable(
         route = "$messengerNavigationRoute/{$idGuestKey}",
-        arguments = listOf(navArgument(idGuestKey) { type = NavType.StringType })
+        arguments = listOf(navArgument(idGuestKey) { type = NavType.IntType })
     ) { backStackEntry ->
         MessengerRoute(
             onBackClick = onBackClick,
-            idGuest = backStackEntry.arguments?.getString(idGuestKey, "") ?: "",
+            idGuest = backStackEntry.arguments?.getInt(idGuestKey, -1) ?: -1,
         )
     }
 }

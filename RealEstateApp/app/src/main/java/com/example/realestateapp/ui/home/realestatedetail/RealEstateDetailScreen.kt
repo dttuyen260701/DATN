@@ -45,6 +45,7 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.extension.*
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
+import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.BOTTOM_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
@@ -284,57 +285,59 @@ internal fun RealEstateDetailScreen(
                             .fillMaxHeight()
                             .background(RealEstateAppTheme.colors.primary)
                     )
-                    TextButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        onClick = onCallClick,
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent,
-                            disabledBackgroundColor = Color.Transparent
-                        ),
-                        contentPadding = PaddingValues(
-                            vertical = 0.dp,
-                            horizontal = MARGIN_VIEW.dp
+                    if (user != null && ownerId != user.id) {
+                        TextButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            onClick = onCallClick,
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color.Transparent,
+                                disabledBackgroundColor = Color.Transparent
+                            ),
+                            contentPadding = PaddingValues(
+                                vertical = 0.dp,
+                                horizontal = MARGIN_VIEW.dp
+                            )
+                        ) {
+                            TextIcon(
+                                text = stringResource(id = R.string.callTitle),
+                                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Phone),
+                                size = 14,
+                                textColor = RealEstateAppTheme.colors.primary,
+                                iconTint = RealEstateAppTheme.colors.primary
+                            )
+                        }
+                        Spacer(
+                            modifier = Modifier
+                                .width(0.2f.dp)
+                                .fillMaxHeight()
+                                .background(RealEstateAppTheme.colors.primary)
                         )
-                    ) {
-                        TextIcon(
-                            text = stringResource(id = R.string.callTitle),
-                            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Phone),
-                            size = 14,
-                            textColor = RealEstateAppTheme.colors.primary,
-                            iconTint = RealEstateAppTheme.colors.primary
-                        )
-                    }
-                    Spacer(
-                        modifier = Modifier
-                            .width(0.2f.dp)
-                            .fillMaxHeight()
-                            .background(RealEstateAppTheme.colors.primary)
-                    )
-                    TextButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        onClick = {
-                            onChatClick(ownerId.toString())
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent,
-                            disabledBackgroundColor = Color.Transparent
-                        ),
-                        contentPadding = PaddingValues(
-                            vertical = 0.dp,
-                            horizontal = MARGIN_VIEW.dp
-                        )
-                    ) {
-                        TextIcon(
-                            text = stringResource(id = R.string.chatTitle),
-                            icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Chat),
-                            size = 14,
-                            textColor = RealEstateAppTheme.colors.primary,
-                            iconTint = RealEstateAppTheme.colors.primary
-                        )
+                        TextButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            onClick = {
+                                onChatClick(user.id.toString())
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color.Transparent,
+                                disabledBackgroundColor = Color.Transparent
+                            ),
+                            contentPadding = PaddingValues(
+                                vertical = 0.dp,
+                                horizontal = MARGIN_VIEW.dp
+                            )
+                        ) {
+                            TextIcon(
+                                text = stringResource(id = R.string.chatTitle),
+                                icon = AppIcon.DrawableResourceIcon(RealEstateIcon.Chat),
+                                size = 14,
+                                textColor = RealEstateAppTheme.colors.primary,
+                                iconTint = RealEstateAppTheme.colors.primary
+                            )
+                        }
                     }
                 }
             }

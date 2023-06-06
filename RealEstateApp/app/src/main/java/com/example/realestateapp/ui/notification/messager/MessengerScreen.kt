@@ -36,6 +36,7 @@ import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
+import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.ICON_ITEM_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -56,22 +57,27 @@ internal fun MessengerRoute(
     modifier: Modifier = Modifier,
     viewModel: MessengerViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    idGuest: String
+    idGuest: Int
 ) {
     val context = LocalContext.current
     viewModel.run {
         val user by remember { getUser() }
         val uiState by remember { uiState }
         var message by remember { message }
+        var idChannel by remember { idChannel }
         val chats = remember { chats }
         var isUpLoading by remember { isUpLoading }
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
 
+        if (Constants.getIdChannel(user?.id ?: 0, idGuest) != idChannel) {
+            idChannel = Constants.getIdChannel(user?.id ?: 0, idGuest)
+        }
+
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is MessengerUiState.InitView -> {
-
+                    getFBDataBase()
                 }
                 else -> {}
             }

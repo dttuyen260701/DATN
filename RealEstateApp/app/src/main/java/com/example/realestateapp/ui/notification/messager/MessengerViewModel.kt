@@ -22,6 +22,7 @@ class MessengerViewModel @Inject constructor(
 ) : BaseViewModel<MessengerUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(MessengerUiState.InitView)
     internal var message = mutableStateOf("")
+    internal var idChannel = mutableStateOf("")
     internal var isUpLoading = mutableStateOf(false)
     internal var chats = mutableStateListOf<ItemMessenger>(
         ItemMessenger(
@@ -42,69 +43,6 @@ class MessengerViewModel @Inject constructor(
         ItemMessenger(
             timeMilliseconds = 22,
             idUserSend = 3,
-            messenger = "https://icdn.dantri.com.vn/thumb_w/680/2022/12/19/gettyimages-1450107740-1671453343158.jpg",
-            isPhoto = true
-        ),
-        ItemMessenger(
-            timeMilliseconds = 1234,
-            idUserSend = 3,
-            messenger = "Test Mest"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 123,
-            idUserSend = 4,
-            messenger = "Test Mest 21312312"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 12,
-            idUserSend = 1,
-            messenger = "Test Mest 123 12312312312 3 1ádsad ád qưe qưeqư eqưeqưe qưeqư eqư eqư eqưe qưe qưe qưe qưe qưe qưe qư"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 11,
-            idUserSend = 1,
-            messenger = "https://icdn.dantri.com.vn/thumb_w/680/2022/12/19/gettyimages-1450107740-1671453343158.jpg",
-            isPhoto = true
-        ),
-        ItemMessenger(
-            timeMilliseconds = 9,
-            idUserSend = 4,
-            messenger = "Test Mest"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 7,
-            idUserSend = 4,
-            messenger = "Test Mest 21312312"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 6,
-            idUserSend = 1,
-            messenger = "Test Mest 123 12312312312 3 1ádsad ád qưe qưeqư eqưeqưe qưeqư eqư eqư eqưe qưe qưe qưe qưe qưe qưe qư"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 5,
-            idUserSend = 3,
-            messenger = "https://icdn.dantri.com.vn/thumb_w/680/2022/12/19/gettyimages-1450107740-1671453343158.jpg",
-            isPhoto = true
-        ),
-        ItemMessenger(
-            timeMilliseconds = 4,
-            idUserSend = 3,
-            messenger = "Test Mest"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 3,
-            idUserSend = 4,
-            messenger = "Test Mest 21312312"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 2,
-            idUserSend = 1,
-            messenger = "Test Mest 123 12312312312 3 1ádsad ád qưe qưeqư eqưeqưe qưeqư eqư eqư eqưe qưe qưe qưe qưe qưe qưe qư"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 1,
-            idUserSend = 1,
             messenger = "https://icdn.dantri.com.vn/thumb_w/680/2022/12/19/gettyimages-1450107740-1671453343158.jpg",
             isPhoto = true
         ),

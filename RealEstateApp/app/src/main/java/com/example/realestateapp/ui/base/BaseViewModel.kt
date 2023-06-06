@@ -14,6 +14,9 @@ import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import java.io.File
@@ -74,6 +77,9 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         private var onDoneUpload: (String) -> Unit = {}
 
         private var pagingModel = PagingModel()
+
+        private var database: DatabaseReference =
+            Firebase.database.reference.database.getReference("data")
     }
 
     abstract var uiState: MutableState<UiState>
@@ -82,6 +88,8 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     lateinit var appRepository: AppRepository
 
     internal fun getPagingModel() = pagingModel
+
+    internal fun getDataChild(key: String) = database.child(key)
 
     internal fun updatePagingModel(
         totalRecordsNew: Int = 0,

@@ -9,6 +9,17 @@ import com.example.realestateapp.data.models.RealEstateDetail
 
 class Constants {
 
+    companion object{
+        internal fun getIdChannel(idUser: Int, idGuest: Int): String =
+            if (idUser < idGuest) "$idUser-$idGuest"
+            else "$idGuest-$idUser"
+    }
+
+    object FireBaseRef {
+        const val CHANNEL_GUEST = "guest"
+        const val CHANNEL_CHAT = " channel_chat"
+    }
+
     object HeaderRequest {
         const val CONTENT_TYPE = "Content-Type"
         const val CONTENT_TYPE_VALUE = "application/json"
