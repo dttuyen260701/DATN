@@ -52,7 +52,6 @@ import com.example.realestateapp.util.Constants.MessageDefault.TYPE_PHOTO
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -89,11 +88,11 @@ internal fun MessengerRoute(
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dataSnapshot.getValue(ItemMessenger::class.java)?.let { messItem ->
                     if (chats.none { messItem == it }) {
-                        chats.add(messItem)
+                        chats.add(0, messItem)
                     }
                     coroutineScope.launch {
                         if (chats.isNotEmpty())
-                            lazyListState.animateScrollToItem(chats.lastIndex)
+                            lazyListState.animateScrollToItem(0)
                     }
                 }
             }
@@ -129,9 +128,10 @@ internal fun MessengerRoute(
                                         add(it)
                                     }
                                 }
+                                reverse()
                                 coroutineScope.launch {
                                     if (isNotEmpty())
-                                        lazyListState.animateScrollToItem(lastIndex)
+                                        lazyListState.animateScrollToItem(0)
                                 }
                             }
                             getIsLoading().value = false
@@ -169,6 +169,7 @@ internal fun MessengerRoute(
                                         onStart = {
                                             isUpLoading = true
                                             chats.add(
+                                                index = 0,
                                                 ItemMessenger(
                                                     timeMilliseconds = DEFAULT_ID_POST.toLong(),
                                                     idUserSend = user.id,
@@ -178,7 +179,7 @@ internal fun MessengerRoute(
                                                 )
                                             )
                                             coroutineScope.launch {
-                                                lazyListState.scrollToItem(chats.lastIndex)
+                                                lazyListState.scrollToItem(0)
                                             }
                                         },
                                         onDone = { imgUrl ->
@@ -195,7 +196,7 @@ internal fun MessengerRoute(
 
                                             }
                                             coroutineScope.launch {
-                                                lazyListState.scrollToItem(chats.lastIndex)
+                                                lazyListState.scrollToItem(0)
                                             }
                                             isUpLoading = false
                                         }
@@ -214,7 +215,7 @@ internal fun MessengerRoute(
                             idGuest = idGuest,
                             nameGuest = nameGuest,
                             imgGuest = imageGuest,
-                            message = message,
+                            message = message.trim(),
                             idChannelSend = idChannelSend
                         ) {
                             message = ""
@@ -223,7 +224,6 @@ internal fun MessengerRoute(
                 }
             },
             lazyListState = lazyListState,
-            coroutineScope = coroutineScope,
             chats = chats,
             onItemMessengerClick = remember {
                 {
@@ -258,16 +258,9 @@ internal fun MessengerScreen(
     onUploadPhotoClick: () -> Unit,
     onSendClick: () -> Unit,
     lazyListState: LazyListState,
-    coroutineScope: CoroutineScope,
     chats: MutableList<ItemMessenger>,
     onItemMessengerClick: (ItemMessenger) -> Unit
 ) {
-    SideEffect {
-        coroutineScope.launch {
-            if (chats.isNotEmpty())
-                lazyListState.animateScrollToItem(chats.lastIndex)
-        }
-    }
     BaseScreen(
         modifier = modifier,
         toolbar = {
@@ -329,6 +322,7 @@ internal fun MessengerScreen(
                         .fillMaxWidth()
                         .weight(1f)
                         .background(Color.Transparent),
+                    reverseLayout = true,
                     state = lazyListState,
                     verticalArrangement = Arrangement.spacedBy(PADDING_VIEW.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,

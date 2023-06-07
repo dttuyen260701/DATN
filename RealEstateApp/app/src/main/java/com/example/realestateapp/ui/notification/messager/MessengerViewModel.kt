@@ -68,7 +68,8 @@ class MessengerViewModel @Inject constructor(
                         nameGuest = nameGuest,
                         imageGuest = imgGuest,
                         lastMessage = if (typeMessenger == TYPE_PHOTO) SEND_IMAGE else message,
-                        idUserSend = idGuest.toString()
+                        idUserSend = idGuest.toString(),
+                        read = "Done"
                     )
                 )
             getDataChild(Constants.FireBaseRef.CHANNEL_CHAT).child(idChannelSend)

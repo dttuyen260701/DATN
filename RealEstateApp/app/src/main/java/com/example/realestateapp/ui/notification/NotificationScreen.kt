@@ -119,6 +119,9 @@ internal fun NotificationRoute(
             itemChatGuests = itemChatGuests,
             navigateChatScreen = remember {
                 {
+                    getDataChild(Constants.FireBaseRef.CHANNEL_GUEST)
+                        .child(getUser().value?.id?.toString() ?: "")
+                        .child(it).child("read").setValue("Done")
                     navigateChatScreen(it)
                 }
             }

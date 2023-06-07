@@ -82,7 +82,7 @@ internal fun ItemMessengerView(
                     Text(
                         text = messenger,
                         style = RealEstateTypography.body1.copy(
-                            fontSize = 14.sp,
+                            fontSize = 15.sp,
                             color = Color.White,
                             textAlign = if (idUserSend == idUser) TextAlign.End else TextAlign.Start
                         ),
@@ -147,7 +147,7 @@ internal fun ItemChatGuestView(
                     onItemClick(idGuest)
                 }
         ) {
-            val (imgGuest, tvName, tvLastMessage, icSeen) = createRefs()
+            val (imgGuest, tvName, tvLastMessage) = createRefs()
             val verticalGuideLine = createGuidelineFromTop(0.5f)
             ImageProfile(
                 size = TOOLBAR_HEIGHT,
@@ -161,34 +161,9 @@ internal fun ItemChatGuestView(
             Text(
                 text = nameGuest,
                 style = RealEstateTypography.h1.copy(
-                    fontSize = 15.sp,
-                    color = RealEstateAppTheme.colors.primary,
-                    textAlign = TextAlign.Start,
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .constrainAs(tvName) {
-                        linkTo(
-                            start = imgGuest.end,
-                            startMargin = PADDING_VIEW.dp,
-                            end = icSeen.end,
-                            bias = 0f
-                        )
-                        linkTo(
-                            top = parent.top,
-                            bottom = verticalGuideLine,
-                            bias = 1f
-                        )
-                        width = Dimension.wrapContent
-                    }
-                    .background(Color.Red)
-            )
-            Text(
-                text = nameGuest,
-                style = RealEstateTypography.h1.copy(
-                    fontSize = 15.sp,
-                    color = RealEstateAppTheme.colors.primary,
+                    fontSize = (if (read.isEmpty()) 17 else 15).sp,
+                    color = if (read.isEmpty()) RealEstateAppTheme.colors.progressBar
+                    else RealEstateAppTheme.colors.primary,
                     textAlign = TextAlign.Start,
                 ),
                 maxLines = 1,
@@ -206,18 +181,18 @@ internal fun ItemChatGuestView(
                             bottom = verticalGuideLine,
                             bias = 1f
                         )
-                        width = Dimension.wrapContent
+                        width = Dimension.fillToConstraints
                     }
-                    .background(Color.Red)
             )
             val sendTitle =
                 if (idUserSend == idGuest) "${stringResource(id = R.string.youTitle)} " else ""
             Text(
                 text = sendTitle.plus(lastMessage),
                 style = RealEstateTypography.h1.copy(
-                    fontSize = 13.sp,
-                    color = RealEstateAppTheme.colors.primary,
-                    fontWeight = FontWeight.Light,
+                    fontSize = (if (read.isEmpty()) 17 else 13).sp,
+                    color = if (read.isEmpty()) RealEstateAppTheme.colors.progressBar
+                    else RealEstateAppTheme.colors.primary,
+                    fontWeight = if (read.isEmpty()) FontWeight.Bold else FontWeight.Light,
                     textAlign = TextAlign.Start
                 ),
                 maxLines = 1,
