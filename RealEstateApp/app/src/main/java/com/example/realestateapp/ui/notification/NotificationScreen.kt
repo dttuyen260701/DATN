@@ -28,6 +28,7 @@ import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.DataStore.KEY_PASSWORD
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
@@ -121,7 +122,7 @@ internal fun NotificationRoute(
                 {
                     getDataChild(Constants.FireBaseRef.CHANNEL_GUEST)
                         .child(getUser().value?.id?.toString() ?: "")
-                        .child(it).child("read").setValue("Done")
+                        .child(it).child("read").setValue(KEY_PASSWORD)
                     navigateChatScreen(it)
                 }
             }

@@ -13,12 +13,16 @@ import javax.inject.Inject
 
 sealed class ProfileUiState : UiState() {
     object InitView : ProfileUiState()
+
+    object Loading : ProfileUiState()
 }
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
 ) : BaseViewModel<ProfileUiState>() {
     override var uiState: MutableState<UiState> = mutableStateOf(ProfileUiState.InitView)
-
+    internal var firstClick = mutableStateOf(true)
+    internal var imgUrl = mutableStateOf("")
+    internal var name = mutableStateOf("")
 
 }

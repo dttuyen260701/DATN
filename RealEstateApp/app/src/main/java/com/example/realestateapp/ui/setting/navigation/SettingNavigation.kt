@@ -86,7 +86,9 @@ internal fun NavGraphBuilder.settingGraph(
             onSignUpSuccess = onSignUpSuccess,
             onBackClick = onBackClick
         )
-        profileScreen()
+        profileScreen(
+            onBackClick = onBackClick
+        )
         changePassScreen(
             onBackClick = onBackClick
         )
@@ -143,9 +145,13 @@ internal fun NavGraphBuilder.singUpScreen(
     }
 }
 
-internal fun NavGraphBuilder.profileScreen() {
+internal fun NavGraphBuilder.profileScreen(
+    onBackClick: () -> Unit
+) {
     composable(profileNavigationRoute) {
-        ProfileRoute()
+        ProfileRoute(
+            onBackClick = onBackClick
+        )
     }
 }
 

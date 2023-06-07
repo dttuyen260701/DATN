@@ -16,6 +16,7 @@
     <string name="settingPolicyTitle">Điều khoản dịch vụ</string>
     <string name="settingAboutUsTitle">Về chúng tôi</string>
     <string name="settingSignOutTitle">Đăng Xuất</string>
+    <string name="updateTitle">Cập nhật</string>
     <string name="changePassSuccessTitle">Thay đổi mật khẩu thành công!</string>
 
     <!--SignIn SignUp Screen-->

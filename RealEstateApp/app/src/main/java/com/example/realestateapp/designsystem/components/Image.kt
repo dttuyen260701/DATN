@@ -8,12 +8,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.realestateapp.R
+import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.util.Constants.DefaultValue.BORDER_WIDTH
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 
@@ -34,7 +34,7 @@ fun ImageProfile(
         modifier = Modifier
             .size(size.dp)
             .border(
-                BorderStroke(BORDER_WIDTH.dp, Color.White),
+                BorderStroke(BORDER_WIDTH.dp, RealEstateAppTheme.colors.primary),
                 CircleShape
             )
             .padding(BORDER_WIDTH.dp)
