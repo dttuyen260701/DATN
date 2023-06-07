@@ -3,9 +3,15 @@ package com.example.realestateapp.ui.notification.messager
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemMessenger
+import com.example.realestateapp.data.models.User
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.MessageDefault.SEND_IMAGE
+import com.example.realestateapp.util.Constants.MessageDefault.TYPE_MESSAGE
+import com.example.realestateapp.util.Constants.MessageDefault.TYPE_PHOTO
 import javax.inject.Inject
 
 /**
@@ -20,32 +26,63 @@ sealed class MessengerUiState : UiState() {
 
 class MessengerViewModel @Inject constructor(
 ) : BaseViewModel<MessengerUiState>() {
+    companion object {
+        internal var nameGuest = mutableStateOf("")
+        internal var imageGuest = mutableStateOf("")
+    }
+
     override var uiState: MutableState<UiState> = mutableStateOf(MessengerUiState.InitView)
     internal var message = mutableStateOf("")
     internal var idChannel = mutableStateOf("")
     internal var isUpLoading = mutableStateOf(false)
-    internal var chats = mutableStateListOf<ItemMessenger>(
-        ItemMessenger(
-            timeMilliseconds = 1234667,
-            idUserSend = 1,
-            messenger = "Test Mest"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 11245,
-            idUserSend = 3,
-            messenger = "Test Mest 21312312"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 123123123,
-            idUserSend = 3,
-            messenger = "Test Mest 123 12312312312 3 1ádsad ád qưe qưeqư eqưeqưe qưeqư eqư eqư eqưe qưe qưe qưe qưe qưe qưe qư"
-        ),
-        ItemMessenger(
-            timeMilliseconds = 22,
-            idUserSend = 3,
-            messenger = "https://icdn.dantri.com.vn/thumb_w/680/2022/12/19/gettyimages-1450107740-1671453343158.jpg",
-            isPhoto = true
-        ),
-    )
+    internal val chats = mutableStateListOf<ItemMessenger>()
 
+    internal fun sendMessage(
+        user: User,
+        idGuest: Int,
+        nameGuest: String,
+        imgGuest: String,
+        message: String,
+        typeMessenger: Int = TYPE_MESSAGE,
+        idChannelSend: String,
+        onSendSuccess: () -> Unit
+    ) {
+        user.run {
+            val currentTime = System.currentTimeMillis()
+            getDataChild(Constants.FireBaseRef.CHANNEL_GUEST).child(idGuest.toString())
+                .child(id.toString()).setValue(
+                    ItemChatGuest(
+                        idChannel = idChannelSend,
+                        idGuest = id.toString(),
+                        nameGuest = fullName,
+                        imageGuest = imgUrl ?: "",
+                        lastMessage = if (typeMessenger == TYPE_PHOTO) SEND_IMAGE else message,
+                        idUserSend = idGuest.toString()
+                    )
+                )
+            getDataChild(Constants.FireBaseRef.CHANNEL_GUEST).child(id.toString())
+                .child(idGuest.toString()).setValue(
+                    ItemChatGuest(
+                        idChannel = idChannelSend,
+                        idGuest = idGuest.toString(),
+                        nameGuest = nameGuest,
+                        imageGuest = imgGuest,
+                        lastMessage = if (typeMessenger == TYPE_PHOTO) SEND_IMAGE else message,
+                        idUserSend = idGuest.toString()
+                    )
+                )
+            getDataChild(Constants.FireBaseRef.CHANNEL_CHAT).child(idChannelSend)
+                .child(currentTime.toString())
+                .setValue(
+                    ItemMessenger(
+                        timeMilliseconds = currentTime,
+                        idUserSend = id,
+                        messenger = message,
+                        typeMessage = typeMessenger
+                    )
+                ) { _, _ ->
+                    onSendSuccess()
+                }
+        }
+    }
 }

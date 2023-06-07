@@ -45,7 +45,7 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.extension.*
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
-import com.example.realestateapp.util.Constants
+import com.example.realestateapp.ui.notification.messager.MessengerViewModel
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.BOTTOM_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
@@ -84,6 +84,7 @@ internal fun RealEstateDetailRoute(
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is RealEstateDetailUiState.InitView -> {
+                    getIsLoading().value = true
                     getRealEstateDetail(realEstateId)
                 }
                 is RealEstateDetailUiState.GetRealEstateDetailSuccess -> {
@@ -319,7 +320,11 @@ internal fun RealEstateDetailScreen(
                                 .weight(1f)
                                 .fillMaxHeight(),
                             onClick = {
-                                onChatClick(user.id.toString())
+                                MessengerViewModel.run {
+                                    nameGuest.value = ownerName ?: ""
+                                    imageGuest.value = imageOwner
+                                }
+                                onChatClick(ownerId.toString())
                             },
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color.Transparent,

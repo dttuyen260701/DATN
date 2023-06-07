@@ -27,11 +27,15 @@ import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 
 /**
  * Created by tuyen.dang on 5/3/2023.
@@ -44,12 +48,60 @@ internal fun NotificationRoute(
     navigateChatScreen: (String) -> Unit
 ) {
     viewModel.run {
-        val uiState by remember { uiState }
+        var uiState by remember { uiState }
         var isMessengerScreen by remember { isMessengerScreen }
         val itemChatGuests = remember { itemChatGuests }
         val isLoading by remember {
             derivedStateOf {
                 uiState is NotificationUiState.Loading
+            }
+        }
+
+        val childChannelListEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                dataSnapshot.getValue(ItemChatGuest::class.java)?.let {
+                    itemChatGuests.add(0, it)
+                }
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                dataSnapshot.getValue(ItemChatGuest::class.java)?.let { item ->
+                    val index = itemChatGuests.indexOfFirst { it.idGuest == item.idGuest }
+                    itemChatGuests.removeAt(index)
+                    itemChatGuests.add(0, item)
+                }
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        }
+
+        LaunchedEffect(key1 = uiState) {
+            when (uiState) {
+                is NotificationUiState.InitView -> {
+                    uiState = NotificationUiState.Loading
+                    getUser().value?.run {
+                        getDataChild(Constants.FireBaseRef.CHANNEL_GUEST).child(id.toString())
+                            .addChildEventListener(childChannelListEventListener)
+                        getDataChild(Constants.FireBaseRef.CHANNEL_GUEST).child(id.toString()).get()
+                            .addOnSuccessListener { result ->
+                                itemChatGuests.run {
+                                    clear()
+                                    for (item in result.children) {
+                                        item.getValue(ItemChatGuest::class.java)?.let {
+                                            add(it)
+                                        }
+                                    }
+                                    reverse()
+                                }
+                                uiState = NotificationUiState.Done
+                            }.addOnFailureListener { uiState = NotificationUiState.Error }
+                    }
+                }
+                else -> {}
             }
         }
 
@@ -65,7 +117,11 @@ internal fun NotificationRoute(
                 }
             },
             itemChatGuests = itemChatGuests,
-            navigateChatScreen = remember { navigateChatScreen }
+            navigateChatScreen = remember {
+                {
+                    navigateChatScreen(it)
+                }
+            }
         )
     }
 }

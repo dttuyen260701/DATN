@@ -1,6 +1,7 @@
 package com.example.realestateapp.util
 
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.models.ItemMessenger
 import com.example.realestateapp.data.models.RealEstateDetail
 
 /**
@@ -9,10 +10,12 @@ import com.example.realestateapp.data.models.RealEstateDetail
 
 class Constants {
 
-    companion object{
+    companion object {
         internal fun getIdChannel(idUser: Int, idGuest: Int): String =
             if (idUser < idGuest) "$idUser-$idGuest"
             else "$idGuest-$idUser"
+
+        internal fun ItemMessenger.isPhoto() = typeMessage == MessageDefault.TYPE_PHOTO
     }
 
     object FireBaseRef {
@@ -36,6 +39,12 @@ class Constants {
         const val NAME = "real_estate"
         const val KEY_EMAIL = "email"
         const val KEY_PASSWORD = "password"
+    }
+
+    object MessageDefault {
+        const val SEND_IMAGE = "Đã gửi 1 ảnh!"
+        const val TYPE_MESSAGE = 0
+        const val TYPE_PHOTO = 1
     }
 
     object DefaultField {
@@ -138,7 +147,8 @@ class Constants {
             streetId = 0,
             streetName = "",
             directionId = 0,
-            suggestedPrice = 0.0
+            suggestedPrice = 0.0,
+            imageOwner = ""
         )
     }
 

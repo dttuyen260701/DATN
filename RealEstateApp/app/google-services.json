@@ -82,12 +82,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:994850458913:android:c3d784b496d0951c6f0260",
+        "mobilesdk_app_id": "1:994850458913:android:443e1748603277476f0260",
         "android_client_info": {
           "package_name": "com.example.realestateapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "994850458913-4ra3g161prfimnd70j5ikn1n5cn4sdqt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.realestateapp",
+            "certificate_hash": "8d705b2044d31b087182d7501b1d6fdbdb6064f0"
+          }
+        },
         {
           "client_id": "994850458913-bnril5hnrikqtqfmb8jgmn0rfeqgt7eq.apps.googleusercontent.com",
           "client_type": 3

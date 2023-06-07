@@ -5,10 +5,11 @@ package com.example.realestateapp.data.models
  */
 
 data class ItemChatGuest(
-    val idChanel: String,
-    val idGuest: String,
-    val nameGuest: String,
-    val imageGuest: String,
-    val lastMessage: String,
-    val isGuestSend: Boolean
+    val idChannel: String = "",
+    val idGuest: String = "",
+    val nameGuest: String = "",
+    val imageGuest: String = "",
+    val lastMessage: String = "",
+    val idUserSend: String = "",
+    val isRead: String = "",
 )

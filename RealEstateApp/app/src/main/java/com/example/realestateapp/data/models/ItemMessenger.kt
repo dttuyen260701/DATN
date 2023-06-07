@@ -5,9 +5,9 @@ package com.example.realestateapp.data.models
  */
 
 data class ItemMessenger(
-    val timeMilliseconds: Long,
-    val idUserSend: Int,
-    val messenger: String,
-    val isPhoto: Boolean = false,
+    val timeMilliseconds: Long = 0,
+    val idUserSend: Int = -1,
+    val messenger: String = "",
+    val typeMessage: Int = 0,
     val isSending: Boolean = false
 )

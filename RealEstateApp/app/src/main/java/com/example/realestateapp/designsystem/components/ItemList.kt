@@ -41,6 +41,8 @@ import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.extension.formatToMoney
 import com.example.realestateapp.extension.formatToUnit
 import com.example.realestateapp.extension.setVisibility
+import com.example.realestateapp.ui.notification.messager.MessengerViewModel
+import com.example.realestateapp.util.Constants.Companion.isPhoto
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -64,7 +66,7 @@ internal fun ItemMessengerView(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding((if (isPhoto) 0 else PADDING_VIEW).dp)
+                .padding((if (isPhoto()) 0 else PADDING_VIEW).dp)
                 .then(modifier),
             horizontalAlignment = if (idUserSend == idUser || isSending) Alignment.End
             else Alignment.Start
@@ -76,7 +78,7 @@ internal fun ItemMessengerView(
                         .clip(RoundedCornerShape(ROUND_DIALOG.dp))
                 )
             } else {
-                if (!isPhoto) {
+                if (!isPhoto()) {
                     Text(
                         text = messenger,
                         style = RealEstateTypography.body1.copy(
@@ -132,77 +134,111 @@ internal fun ItemChatGuestView(
     item: ItemChatGuest,
     onItemClick: (String) -> Unit
 ) {
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifier)
-            .clickable {
-                onItemClick(item.idGuest)
-            }
-    ) {
-        val (imgGuest, tvName, tvLastMessage) = createRefs()
-        val verticalGuideLine = createGuidelineFromTop(0.5f)
-        ImageProfile(
-            size = TOOLBAR_HEIGHT,
-            model = item.imageGuest,
+    item.run {
+        ConstraintLayout(
             modifier = Modifier
-                .constrainAs(imgGuest) {
-                    linkTo(parent.top, parent.bottom)
-                    start.linkTo(parent.start)
+                .fillMaxSize()
+                .then(modifier)
+                .clickable {
+                    MessengerViewModel.let {
+                        it.nameGuest.value = nameGuest
+                        it.imageGuest.value = imageGuest
+                    }
+                    onItemClick(idGuest)
                 }
-        )
-        Text(
-            text = item.nameGuest,
-            style = RealEstateTypography.h1.copy(
-                fontSize = 15.sp,
-                color = RealEstateAppTheme.colors.primary,
-                textAlign = TextAlign.Start
-            ),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .constrainAs(tvName) {
-                    linkTo(
-                        start = imgGuest.end,
-                        startMargin = PADDING_VIEW.dp,
-                        end = parent.end,
-                        bias = 0f
-                    )
-                    linkTo(
-                        top = parent.top,
-                        bottom = verticalGuideLine,
-                        bias = 1f
-                    )
-                    width = Dimension.fillToConstraints
-                }
-        )
-        val sendTitle = if (!item.isGuestSend) "${stringResource(id = R.string.youTitle)} " else ""
-        Text(
-            text = sendTitle.plus(item.lastMessage),
-            style = RealEstateTypography.h1.copy(
-                fontSize = 13.sp,
-                color = RealEstateAppTheme.colors.primary,
-                fontWeight = FontWeight.Light,
-                textAlign = TextAlign.Start
-            ),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .constrainAs(tvLastMessage) {
-                    linkTo(
-                        start = imgGuest.end,
-                        startMargin = PADDING_VIEW.dp,
-                        end = parent.end,
-                        bias = 0f
-                    )
-                    linkTo(
-                        top = verticalGuideLine,
-                        bottom = parent.bottom,
-                        bias = 0f
-                    )
-                    width = Dimension.fillToConstraints
-                }
-        )
+        ) {
+            val (imgGuest, tvName, tvLastMessage, icSeen) = createRefs()
+            val verticalGuideLine = createGuidelineFromTop(0.5f)
+            ImageProfile(
+                size = TOOLBAR_HEIGHT,
+                model = imageGuest,
+                modifier = Modifier
+                    .constrainAs(imgGuest) {
+                        linkTo(parent.top, parent.bottom)
+                        start.linkTo(parent.start)
+                    }
+            )
+            Text(
+                text = nameGuest,
+                style = RealEstateTypography.h1.copy(
+                    fontSize = 15.sp,
+                    color = RealEstateAppTheme.colors.primary,
+                    textAlign = TextAlign.Start,
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .constrainAs(tvName) {
+                        linkTo(
+                            start = imgGuest.end,
+                            startMargin = PADDING_VIEW.dp,
+                            end = icSeen.end,
+                            bias = 0f
+                        )
+                        linkTo(
+                            top = parent.top,
+                            bottom = verticalGuideLine,
+                            bias = 1f
+                        )
+                        width = Dimension.wrapContent
+                    }
+                    .background(Color.Red)
+            )
+            Text(
+                text = nameGuest,
+                style = RealEstateTypography.h1.copy(
+                    fontSize = 15.sp,
+                    color = RealEstateAppTheme.colors.primary,
+                    textAlign = TextAlign.Start,
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .constrainAs(tvName) {
+                        linkTo(
+                            start = imgGuest.end,
+                            startMargin = PADDING_VIEW.dp,
+                            end = parent.end,
+                            bias = 0f
+                        )
+                        linkTo(
+                            top = parent.top,
+                            bottom = verticalGuideLine,
+                            bias = 1f
+                        )
+                        width = Dimension.wrapContent
+                    }
+                    .background(Color.Red)
+            )
+            val sendTitle =
+                if (idUserSend == idGuest) "${stringResource(id = R.string.youTitle)} " else ""
+            Text(
+                text = sendTitle.plus(lastMessage),
+                style = RealEstateTypography.h1.copy(
+                    fontSize = 13.sp,
+                    color = RealEstateAppTheme.colors.primary,
+                    fontWeight = FontWeight.Light,
+                    textAlign = TextAlign.Start
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .constrainAs(tvLastMessage) {
+                        linkTo(
+                            start = imgGuest.end,
+                            startMargin = PADDING_VIEW.dp,
+                            end = parent.end,
+                            bias = 0f
+                        )
+                        linkTo(
+                            top = verticalGuideLine,
+                            bottom = parent.bottom,
+                            bias = 0f
+                        )
+                        width = Dimension.fillToConstraints
+                    }
+            )
+        }
     }
 }
 
