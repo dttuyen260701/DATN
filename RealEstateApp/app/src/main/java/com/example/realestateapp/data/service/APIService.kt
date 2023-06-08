@@ -148,5 +148,9 @@ interface APIService {
     suspend fun updateUser(
         @Path("idUser") idUser: Int,
         @Body options: Map<String, Any>
-    ): Response<ResponseAPI<Any?>>
+    ): Response<ResponseAPI<User?>>
+
+    @POST("/api/Feedbacks/report-post")
+    @JvmSuppressWildcards
+    suspend fun createReport(@Body options: Map<String, Any>): Response<ResponseAPI<Any?>>
 }

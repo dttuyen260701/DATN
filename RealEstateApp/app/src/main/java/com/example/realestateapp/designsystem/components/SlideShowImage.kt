@@ -23,8 +23,8 @@ import coil.compose.AsyncImage
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
+import com.example.realestateapp.util.Constants.DefaultValue.TWEEN_ANIMATION_TIME
 
 /**
  * Created by tuyen.dang on 5/17/2023.
@@ -106,7 +106,7 @@ internal fun DotsIndicator(
             val bgIndicator by transition.animateColor(
                 transitionSpec = {
                     spring(
-                        stiffness = Constants.DefaultValue.TWEEN_ANIMATION_TIME.toFloat()
+                        stiffness = TWEEN_ANIMATION_TIME.toFloat()
                     )
                 },
                 label = ""

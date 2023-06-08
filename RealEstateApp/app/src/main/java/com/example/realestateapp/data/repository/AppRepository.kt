@@ -238,6 +238,14 @@ interface AppRepository {
         addressDetail: String,
         wardId: Int,
         districtId: Int,
+        newImage: String,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<User?>>
+
+    suspend fun createReport(
+        postId: Int,
+        reporterId: Int,
+        description: String,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<Any?>>
 }

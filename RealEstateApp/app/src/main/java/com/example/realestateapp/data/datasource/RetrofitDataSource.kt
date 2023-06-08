@@ -214,6 +214,13 @@ interface RetrofitDataSource {
         gender: Int,
         addressDetail: String,
         wardId: Int,
-        districtId: Int
+        districtId: Int,
+        newImage: String
+    ): ApiResultWrapper<User?>
+
+    suspend fun createReport(
+        postId: Int,
+        reporterId: Int,
+        description: String
     ): ApiResultWrapper<Any?>
 }

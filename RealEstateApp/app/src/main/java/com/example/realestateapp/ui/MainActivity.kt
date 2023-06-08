@@ -17,6 +17,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.FileProvider
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.navOptions
 import com.example.realestateapp.BuildConfig
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.ItemChatGuest
@@ -293,8 +295,22 @@ class MainActivity : ComponentActivity() {
             viewModel.run {
                 when (result) {
                     MESSAGE_NOTIFICATION -> {
-                        if (getUser().value != null)
-                            navController.navigateToNotification()
+                        if (getUser().value != null) {
+                            val topLevelNavOptions = navOptions {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as users select items
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+                            }
+                            navController.navigateToNotification(topLevelNavOptions)
+                        }
                     }
                     POST_NOTIFICATION -> {
                         if (getUser().value != null)

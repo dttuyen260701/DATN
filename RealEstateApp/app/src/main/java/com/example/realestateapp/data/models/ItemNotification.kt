@@ -5,7 +5,6 @@ package com.example.realestateapp.data.models
  */
 
 data class ItemNotification(
-    val timeMilliseconds: Long = 0,
     val idPost: Int = -1,
     val image: String = "",
     val messenger: String = "",

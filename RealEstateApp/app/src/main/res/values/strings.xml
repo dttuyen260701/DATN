@@ -114,6 +114,7 @@
     <!--AddPostScreen-->
     <string name="managePostTitle">Quản lí bài đăng</string>
     <string name="yourPostTitle">Bài đăng của bạn</string>
+    <string name="postNotificationTitle">Bài đăng #%d</string>
     <string name="savePostTitle">Bài đăng đã lưu</string>
     <string name="addPostTitle">Đăng tin bán BĐS</string>
     <string name="basicInfoTitle">Thông tin cơ bản</string>
@@ -152,6 +153,12 @@
     <!--ProfileScreen-->
     <string name="birthDayTitle">Ngày sinh</string>
     <string name="genderTitle">Giới tính</string>
+    <string name="updateSuccess">Cập nhật thành công!!</string>
+
+    <!--ReportScreen-->
+    <string name="reportPostTitle">Báo cáo bài đăng #%d</string>
+    <string name="reportPostHint">Nhập lí do…</string>
+    <string name="reportPostSuccessTitle">Báo cáo thành công, cảm ơn bạn cho chúng tôi biết thêm thông tin!</string>
 
     <!--NotificationScreen-->
     <string name="youTitle">Bạn:</string>

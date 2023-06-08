@@ -12,6 +12,7 @@ import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -60,7 +61,7 @@ internal fun ItemNotification(
 ) {
     item.run {
         Row(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(
                     color =
@@ -71,7 +72,8 @@ internal fun ItemNotification(
                     onItemClick(item)
                 }
                 .padding(PADDING_VIEW.dp)
-                .then(modifier)
+                .then(modifier),
+            verticalAlignment = CenterVertically
         ) {
             ImageProfile(
                 size = TOOLBAR_HEIGHT,
@@ -81,7 +83,7 @@ internal fun ItemNotification(
             )
             Spacer(modifier = Modifier.width(MARGIN_VIEW.dp))
             Text(
-                text = messenger,
+                text = "${stringResource(id = R.string.postNotificationTitle, idPost)}: $messenger",
                 style = RealEstateTypography.body1.copy(
                     color =
                     if (read) RealEstateAppTheme.colors.primary

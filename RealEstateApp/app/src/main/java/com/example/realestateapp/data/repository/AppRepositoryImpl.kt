@@ -511,8 +511,9 @@ class AppRepositoryImpl @Inject constructor(
         addressDetail: String,
         wardId: Int,
         districtId: Int,
+        newImage: String,
         showLoading: Boolean
-    ): Flow<ApiResultWrapper<Any?>> {
+    ): Flow<ApiResultWrapper<User?>> {
         return flow {
             emit(
                 dataSource.updateUser(
@@ -522,7 +523,25 @@ class AppRepositoryImpl @Inject constructor(
                     gender = gender,
                     addressDetail = addressDetail,
                     wardId = wardId,
-                    districtId = districtId
+                    districtId = districtId,
+                    newImage = newImage
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun createReport(
+        postId: Int,
+        reporterId: Int,
+        description: String,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<Any?>> {
+        return flow {
+            emit(
+                dataSource.createReport(
+                    postId = postId,
+                    reporterId = reporterId,
+                    description = description
                 )
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }

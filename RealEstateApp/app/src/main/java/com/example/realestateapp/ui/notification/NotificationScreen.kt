@@ -30,12 +30,13 @@ import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.RequireLoginScreen
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
+import com.example.realestateapp.util.Constants.FireBaseRef.CHANNEL_GUEST
+import com.example.realestateapp.util.Constants.FireBaseRef.CHANNEL_POST
 import com.example.realestateapp.util.Constants.FireBaseRef.PROPERTY_READ
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -87,26 +88,69 @@ internal fun NotificationRoute(
             override fun onCancelled(databaseError: DatabaseError) {}
         }
 
+        val childPostEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                dataSnapshot.getValue(ItemNotification::class.java)?.let {
+                    itemNotifications.add(0, it)
+                }
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                dataSnapshot.getValue(ItemNotification::class.java)?.let { item ->
+                    val index =
+                        itemNotifications.indexOfFirst { it.idPost == item.idPost }
+                    itemNotifications.removeAt(index)
+                    itemNotifications.add(0, item)
+                }
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        }
+
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is NotificationUiState.InitView -> {
                     uiState = NotificationUiState.Loading
                     getUser().value?.run {
-                        getDataChild(Constants.FireBaseRef.CHANNEL_GUEST).child(id.toString())
-                            .addChildEventListener(childChannelListEventListener)
-                        getDataChild(Constants.FireBaseRef.CHANNEL_GUEST).child(id.toString()).get()
-                            .addOnSuccessListener { result ->
-                                itemChatGuests.run {
-                                    clear()
-                                    for (item in result.children) {
-                                        item.getValue(ItemChatGuest::class.java)?.let {
-                                            add(it)
+                        if (isMessengerScreen) {
+                            getDataChild(CHANNEL_GUEST).child(id.toString())
+                                .addChildEventListener(childChannelListEventListener)
+                            getDataChild(CHANNEL_GUEST).child(id.toString())
+                                .get()
+                                .addOnSuccessListener { result ->
+                                    itemChatGuests.run {
+                                        clear()
+                                        for (item in result.children) {
+                                            item.getValue(ItemChatGuest::class.java)?.let {
+                                                add(it)
+                                            }
                                         }
+                                        reverse()
                                     }
-                                    reverse()
-                                }
-                                uiState = NotificationUiState.Done
-                            }.addOnFailureListener { uiState = NotificationUiState.Error }
+                                    uiState = NotificationUiState.Done
+                                }.addOnFailureListener { uiState = NotificationUiState.Error }
+                        } else {
+                            getDataChild(CHANNEL_POST).child(id.toString())
+                                .addChildEventListener(childPostEventListener)
+                            getDataChild(CHANNEL_POST).child(id.toString())
+                                .get()
+                                .addOnSuccessListener { result ->
+                                    itemNotifications.run {
+                                        clear()
+                                        for (item in result.children) {
+                                            item.getValue(ItemNotification::class.java)?.let {
+                                                add(it)
+                                            }
+                                        }
+                                        reverse()
+                                    }
+                                    uiState = NotificationUiState.Done
+                                }.addOnFailureListener { uiState = NotificationUiState.Error }
+                        }
                     }
                 }
                 else -> {}
@@ -127,6 +171,7 @@ internal fun NotificationRoute(
                     {
                         if (isMessengerScreen != it) {
                             isMessengerScreen = it
+                            uiState = NotificationUiState.InitView
                         }
                     }
                 },
@@ -134,16 +179,16 @@ internal fun NotificationRoute(
                 itemNotifications = itemNotifications,
                 onItemNotificationClick = remember {
                     {
-                        getDataChild(Constants.FireBaseRef.CHANNEL_POST)
+                        getDataChild(CHANNEL_POST)
                             .child(getUser().value?.id?.toString() ?: "")
-                            .child(it.timeMilliseconds.toString())
+                            .child(it.idPost.toString())
                             .child(PROPERTY_READ).setValue(true)
                         navigateToRealEstateDetail(it.idPost)
                     }
                 },
                 navigateChatScreen = remember {
                     {
-                        getDataChild(Constants.FireBaseRef.CHANNEL_GUEST)
+                        getDataChild(CHANNEL_GUEST)
                             .child(getUser().value?.id?.toString() ?: "")
                             .child(it).child(PROPERTY_READ).setValue(true)
                         navigateChatScreen(it)

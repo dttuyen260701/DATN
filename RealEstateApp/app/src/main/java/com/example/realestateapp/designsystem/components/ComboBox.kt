@@ -20,7 +20,6 @@ import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseIcon
-import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_HINT_COLOR
 import com.example.realestateapp.util.Constants.DefaultValue.ALPHA_TITLE
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -28,6 +27,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.ROUND_DIALOG
 import com.example.realestateapp.util.Constants.DefaultValue.SELECT_BOX_HEIGHT
 import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
+import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
 
 /**
  * Created by tuyen.dang on 5/22/2023.
@@ -127,7 +127,7 @@ internal fun ComboBox(
                 text = errorText,
                 style = RealEstateTypography.caption.copy(
                     color = Color.Red,
-                    fontSize = Constants.DefaultValue.WARNING_TEXT_SIZE.sp
+                    fontSize = WARNING_TEXT_SIZE.sp
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

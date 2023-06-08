@@ -27,6 +27,10 @@ sealed class ProfileUiState : UiState() {
 
     object Loading : ProfileUiState()
 
+    object Error : ProfileUiState()
+
+    object Done : ProfileUiState()
+
     data class GetInformationUserSuccess(val data: User) : ProfileUiState()
 
     data class UpdateInformationUserSuccess(val data: User) : ProfileUiState()
@@ -57,14 +61,14 @@ class ProfileViewModel @Inject constructor(
                                 gender = genderChosen.value.id,
                                 addressDetail = detailStreet.value,
                                 wardId = wardChosen.value.id,
-                                districtId = districtChosen.value.id
+                                districtId = districtChosen.value.id,
+                                newImage = imgUrl.value
                             )
                         ),
                         apiSuccess = {
-                            getUser().value?.let {
-                                uiState.value =
+                            uiState.value = it.body?.let {
                                     ProfileUiState.UpdateInformationUserSuccess(it)
-                            }
+                            } ?: ProfileUiState.Error
                         },
                         apiError = {
 

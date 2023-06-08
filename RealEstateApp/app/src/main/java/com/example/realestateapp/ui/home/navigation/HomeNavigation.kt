@@ -7,6 +7,7 @@ import com.example.realestateapp.navigation.getBackEntryData
 import com.example.realestateapp.navigation.navigateSingleTopTo
 import com.example.realestateapp.ui.home.HomeRoute
 import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailRoute
+import com.example.realestateapp.ui.home.realestatedetail.ReportRoute
 import com.example.realestateapp.ui.home.search.SearchRoute
 import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
 
@@ -17,6 +18,7 @@ import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
 const val homeNavigationGraphRoute = "home_route_graph"
 const val homeNavigationRoute = "home_route"
 const val realEstateDetailNavigationRoute = "post_detail"
+const val reportNavigationRoute = "report_route"
 const val realEstateIdKey = "realEstateId"
 const val searchNavigationRoute = "search"
 const val searchOptionKey = "option"
@@ -30,6 +32,14 @@ internal fun NavHostController.navigateToRealEstateDetail(
 ) {
     this.navigate(
         route = "$realEstateDetailNavigationRoute/$realEstateId"
+    )
+}
+
+internal fun NavHostController.navigateToReport(
+    realEstateId: Int
+) {
+    this.navigate(
+        route = "$reportNavigationRoute/$realEstateId"
     )
 }
 
@@ -47,6 +57,7 @@ internal fun NavGraphBuilder.homeGraph(
     navigateToSearch: (SearchOption) -> Unit,
     onRealEstateItemClick: (Int) -> Unit,
     navigateToEditPost: (Int) -> Unit,
+    navigateToReport: (Int) -> Unit,
     navigateMessengerScreen: (String) -> Unit,
     onBackClick: () -> Unit,
     onClickProfile: () -> Unit,
@@ -64,7 +75,11 @@ internal fun NavGraphBuilder.homeGraph(
         realEstateDetailScreen(
             onRealEstateItemClick = onRealEstateItemClick,
             navigateToEditPost = navigateToEditPost,
+            navigateToReport = navigateToReport,
             navigateMessengerScreen = navigateMessengerScreen,
+            onBackClick = onBackClick
+        )
+        reportScreen(
             onBackClick = onBackClick
         )
         searchScreen(
@@ -92,6 +107,7 @@ internal fun NavGraphBuilder.homeScreen(
 internal fun NavGraphBuilder.realEstateDetailScreen(
     onRealEstateItemClick: (Int) -> Unit,
     navigateToEditPost: (Int) -> Unit,
+    navigateToReport: (Int) -> Unit,
     navigateMessengerScreen: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -103,7 +119,23 @@ internal fun NavGraphBuilder.realEstateDetailScreen(
             realEstateId = backStackEntry.arguments?.getInt(realEstateIdKey) ?: 0,
             onRealEstateItemClick = onRealEstateItemClick,
             navigateToEditPost = navigateToEditPost,
+            navigateToReport = navigateToReport,
             navigateMessengerScreen = navigateMessengerScreen,
+            onBackClick = onBackClick
+        )
+    }
+}
+
+
+internal fun NavGraphBuilder.reportScreen(
+    onBackClick: () -> Unit
+) {
+    composable(
+        route = "$reportNavigationRoute/{$realEstateIdKey}",
+        arguments = listOf(navArgument(realEstateIdKey) { type = NavType.IntType })
+    ) { backStackEntry ->
+        ReportRoute(
+            idPost = backStackEntry.arguments?.getInt(realEstateIdKey) ?: 0,
             onBackClick = onBackClick
         )
     }

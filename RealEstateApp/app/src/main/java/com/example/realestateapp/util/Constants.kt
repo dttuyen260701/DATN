@@ -32,10 +32,10 @@ class Constants {
 
     object FireBaseRef {
         const val ROOT_DATA = "data"
-        const val CHANNEL_GUEST = "guest"
-        const val CHANNEL_CHAT = " channel_chat"
-        const val CHANNEL_POST = " channel_post"
-        const val PROPERTY_READ = " read"
+        const val CHANNEL_GUEST = "channel_guest"
+        const val CHANNEL_CHAT = "channel_chat"
+        const val CHANNEL_POST = "channel_post"
+        const val PROPERTY_READ = "read"
     }
 
     object HeaderRequest {

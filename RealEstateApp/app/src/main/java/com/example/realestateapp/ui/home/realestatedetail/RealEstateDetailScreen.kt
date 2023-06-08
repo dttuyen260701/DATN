@@ -69,6 +69,7 @@ internal fun RealEstateDetailRoute(
     realEstateId: Int,
     onRealEstateItemClick: (Int) -> Unit,
     navigateToEditPost: (Int) -> Unit,
+    navigateToReport: (Int) -> Unit,
     navigateMessengerScreen: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -166,9 +167,7 @@ internal fun RealEstateDetailRoute(
                 }
             },
             onChatClick = remember { navigateMessengerScreen },
-            onReportClick = remember {
-                {}
-            }
+            onReportClick = remember { navigateToReport }
         )
     }
 }
@@ -675,7 +674,7 @@ internal fun RealEstateDetailScreen(
                         .constrainAs(btnReport) {
                             end.linkTo(parent.end, PADDING_HORIZONTAL_SCREEN.dp)
                             linkTo(tvContact.top, tvPhoneUser.bottom)
-                            visibility = setVisibility(ownerId != user?.id)
+                            visibility = setVisibility(ownerId != user?.id && user != null)
                         }
                         .background(
                             color = if (ownerId != user?.id) RealEstateAppTheme.colors.bgTextField

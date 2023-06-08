@@ -472,8 +472,9 @@ class RetrofitDataSourceImpl @Inject constructor(
         gender: Int,
         addressDetail: String,
         wardId: Int,
-        districtId: Int
-    ): ApiResultWrapper<Any?> {
+        districtId: Int,
+        newImage: String
+    ): ApiResultWrapper<User?> {
         val options: MutableMap<String, Any> = HashMap()
         options["userId"] = userId
         options["fullName"] = fullName
@@ -482,9 +483,26 @@ class RetrofitDataSourceImpl @Inject constructor(
         options["addressDetail"] = addressDetail
         options["wardId"] = wardId
         options["districtId"] = districtId
+        options["newImage"] = newImage
         return callApi {
             apiService.updateUser(
                 idUser = userId,
+                options = options
+            )
+        }
+    }
+
+    override suspend fun createReport(
+        postId: Int,
+        reporterId: Int,
+        description: String
+    ): ApiResultWrapper<Any?> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["PostId"] = postId
+        options["ReporterId"] = reporterId
+        options["Description"] = description
+        return callApi {
+            apiService.createReport(
                 options = options
             )
         }

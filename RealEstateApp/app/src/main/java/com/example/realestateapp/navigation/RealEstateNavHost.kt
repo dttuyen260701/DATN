@@ -49,6 +49,9 @@ fun RealEstateNavHost(
                     postId = it
                 )
             },
+            navigateToReport = {
+                navController.navigateToReport(it)
+            },
             navigateMessengerScreen = {
                 navController.navigateToMessenger(
                     idGuest = it

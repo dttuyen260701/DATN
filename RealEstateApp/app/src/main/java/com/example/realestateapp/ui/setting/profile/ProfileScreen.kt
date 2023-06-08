@@ -32,6 +32,8 @@ import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
+import com.example.realestateapp.extension.getDayMonthDisplay
+import com.example.realestateapp.extension.makeToast
 import com.example.realestateapp.extension.setVisibility
 import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
@@ -63,7 +65,7 @@ internal fun ProfileRoute(
 
     viewModel.run {
         var user by remember { getUser() }
-        val uiState by remember { uiState }
+        var uiState by remember { uiState }
         var firstClick by remember { firstClick }
         var addressDetailDisplay by remember { detailAddress }
         val addressDetailsScr = remember { addressDetails }
@@ -134,11 +136,35 @@ internal fun ProfileRoute(
                                 id = u.wardId?.toInt() ?: -1,
                                 name = u.wardName ?: ""
                             )
+                            detailStreet.value = u.addressDetail ?: ""
                         }
                     }
+                    uiState = ProfileUiState.Done
                 }
                 is ProfileUiState.UpdateInformationUserSuccess -> {
-                    onBackClick()
+                    context.run {
+                        makeToast(getString(R.string.updateSuccess))
+                    }
+                    user = (uiState as ProfileUiState.UpdateInformationUserSuccess).data
+                    user?.let { u ->
+                        imgUrl = u.imgUrl ?: ""
+                        name = u.fullName
+                        dateChosen = u.dateOfBirth
+                        addressDetailDisplay = u.addressDetail ?: ""
+                        genderChosen =
+                            if (u.gender == "1") GenderOption.FEMALE.value else GenderOption.MALE.value
+                        PickAddressViewModel.run {
+                            districtChosen.value = ItemChoose(
+                                id = u.districtId?.toInt() ?: -1,
+                                name = u.districtName ?: ""
+                            )
+                            wardChosen.value = ItemChoose(
+                                id = u.wardId?.toInt() ?: -1,
+                                name = u.wardName ?: ""
+                            )
+                        }
+                    }
+                    uiState = ProfileUiState.Done
                 }
                 else -> {}
             }
@@ -205,7 +231,8 @@ internal fun ProfileRoute(
                                 val mDatePickerDialog = DatePickerDialog(
                                     context,
                                     { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-                                        dateChosen = "$mDayOfMonth/${mMonth + 1}/$mYear"
+                                        dateChosen =
+                                            "${mDayOfMonth.getDayMonthDisplay()}/${(mMonth + 1).getDayMonthDisplay()}/$mYear"
                                     },
                                     if (isValid) dateCurrent[2] else 2023,
                                     if (isValid) dateCurrent[1] else 7,

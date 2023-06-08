@@ -50,7 +50,7 @@ internal fun Context.sendNotification(
         intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    builder.setSmallIcon(R.mipmap.ic_launcher)
+    builder.setSmallIcon(R.drawable.ic_launcher_foreground)
     val bitmap = BitmapFactory.decodeResource(resources, drawable)
     builder.setLargeIcon(bitmap)
     builder.setContentTitle(title)
