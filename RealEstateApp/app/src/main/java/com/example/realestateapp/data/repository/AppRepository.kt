@@ -224,4 +224,20 @@ interface AppRepository {
         newPassword: String,
         showLoading: Boolean = true
     ): Flow<ApiResultWrapper<Any?>>
+
+    suspend fun getInformationUser(
+        idUser: Int,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<User>>
+
+    suspend fun updateUser(
+        userId: Int,
+        fullName: String,
+        dateOfBirth: String,
+        gender: Int,
+        addressDetail: String,
+        wardId: Int,
+        districtId: Int,
+        showLoading: Boolean = true
+    ): Flow<ApiResultWrapper<Any?>>
 }

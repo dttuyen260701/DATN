@@ -491,4 +491,40 @@ class AppRepositoryImpl @Inject constructor(
             )
         }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
     }
+
+    override suspend fun getInformationUser(
+        idUser: Int,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<User>> {
+        return flow {
+            emit(
+                dataSource.getInformationUser(idUser)
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
+
+    override suspend fun updateUser(
+        userId: Int,
+        fullName: String,
+        dateOfBirth: String,
+        gender: Int,
+        addressDetail: String,
+        wardId: Int,
+        districtId: Int,
+        showLoading: Boolean
+    ): Flow<ApiResultWrapper<Any?>> {
+        return flow {
+            emit(
+                dataSource.updateUser(
+                    userId = userId,
+                    fullName = fullName,
+                    dateOfBirth = dateOfBirth,
+                    gender = gender,
+                    addressDetail = addressDetail,
+                    wardId = wardId,
+                    districtId = districtId
+                )
+            )
+        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+    }
 }

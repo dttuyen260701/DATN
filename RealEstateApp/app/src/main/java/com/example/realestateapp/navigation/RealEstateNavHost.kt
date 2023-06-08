@@ -150,6 +150,9 @@ fun RealEstateNavHost(
                 navController.clearBackStack()
                 navController.navigateToHome()
             },
+            navigateToPickAddress = {
+                navController.navigateToPickAddress()
+            },
             onBackClick = {
                 navController.popBackStack()
             }

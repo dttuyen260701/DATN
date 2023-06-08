@@ -456,4 +456,37 @@ class RetrofitDataSourceImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getInformationUser(
+        idUser: Int
+    ): ApiResultWrapper<User> {
+        return callApi {
+            apiService.getInformationUser(idUser)
+        }
+    }
+
+    override suspend fun updateUser(
+        userId: Int,
+        fullName: String,
+        dateOfBirth: String,
+        gender: Int,
+        addressDetail: String,
+        wardId: Int,
+        districtId: Int
+    ): ApiResultWrapper<Any?> {
+        val options: MutableMap<String, Any> = HashMap()
+        options["userId"] = userId
+        options["fullName"] = fullName
+        options["dateOfBirth"] = dateOfBirth
+        options["gender"] = gender
+        options["addressDetail"] = addressDetail
+        options["wardId"] = wardId
+        options["districtId"] = districtId
+        return callApi {
+            apiService.updateUser(
+                idUser = userId,
+                options = options
+            )
+        }
+    }
 }

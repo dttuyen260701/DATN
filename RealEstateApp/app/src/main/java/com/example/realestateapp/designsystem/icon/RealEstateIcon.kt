@@ -72,6 +72,7 @@ object RealEstateIcon {
     const val Chat = R.drawable.ic_chat
     const val Camera = R.drawable.ic_camera
     const val Send = R.drawable.ic_send
+    const val Calender = R.drawable.ic_calender
 }
 
 /**

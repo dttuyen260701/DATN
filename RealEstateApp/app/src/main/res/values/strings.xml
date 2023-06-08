@@ -149,6 +149,10 @@
     <!--RecordScreen-->
     <string name="SearchTitle">Tìm kiếm</string>
 
+    <!--ProfileScreen-->
+    <string name="birthDayTitle">Ngày sinh</string>
+    <string name="genderTitle">Giới tính</string>
+
     <!--NotificationScreen-->
     <string name="youTitle">Bạn:</string>
     <string name="messageHint">Nhập tin nhắn…</string>

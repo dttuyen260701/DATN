@@ -2,7 +2,9 @@ package com.example.realestateapp.ui.setting.navigation
 
 import androidx.navigation.*
 import androidx.navigation.compose.composable
+import com.example.realestateapp.navigation.getBackEntryData
 import com.example.realestateapp.navigation.navigateSingleTopTo
+import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
 import com.example.realestateapp.ui.setting.SettingRoute
 import com.example.realestateapp.ui.setting.changepass.ChangePassRoute
 import com.example.realestateapp.ui.setting.launcher.SignInRoute
@@ -60,6 +62,7 @@ internal fun NavGraphBuilder.settingGraph(
     onSignUpSuccess: () -> Unit,
     onSignInSuccess: () -> Unit,
     onSignOutSuccess: () -> Unit,
+    navigateToPickAddress: () -> Unit,
     onBackClick: () -> Unit
 ) {
     navigation(
@@ -75,7 +78,7 @@ internal fun NavGraphBuilder.settingGraph(
             onChangePassClick = onChangePassClick,
             onSignOutSuccess = onSignOutSuccess,
 
-        )
+            )
         singInScreen(
             onSignUpClick = onSignUpClick,
             onSignInSuccess = onSignInSuccess,
@@ -87,7 +90,8 @@ internal fun NavGraphBuilder.settingGraph(
             onBackClick = onBackClick
         )
         profileScreen(
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            navigateToPickAddress = navigateToPickAddress
         )
         changePassScreen(
             onBackClick = onBackClick
@@ -146,11 +150,18 @@ internal fun NavGraphBuilder.singUpScreen(
 }
 
 internal fun NavGraphBuilder.profileScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    navigateToPickAddress: () -> Unit,
 ) {
-    composable(profileNavigationRoute) {
+    composable(
+        profileNavigationRoute
+    ) { backStackEntry ->
         ProfileRoute(
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            navigateToPickAddress = navigateToPickAddress,
+            addressDetails = mutableListOf(
+                backStackEntry.getBackEntryData<String>(key = searchAddressKey) ?: ""
+            )
         )
     }
 }

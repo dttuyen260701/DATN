@@ -202,4 +202,18 @@ interface RetrofitDataSource {
         oldPassword: String,
         newPassword: String
     ): ApiResultWrapper<Any?>
+
+    suspend fun getInformationUser(
+        idUser: Int
+    ): ApiResultWrapper<User>
+
+    suspend fun updateUser(
+        userId: Int,
+        fullName: String,
+        dateOfBirth: String,
+        gender: Int,
+        addressDetail: String,
+        wardId: Int,
+        districtId: Int
+    ): ApiResultWrapper<Any?>
 }

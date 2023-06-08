@@ -67,6 +67,8 @@ class Constants {
         const val FIELD_DINING_ROOM = "dining_room"
         const val FIELD_KITCHEN_ROOM = "kitchen_room"
         const val FIELD_PREDICT_PRICE = "predict_price"
+        const val FIELD_DATE = "date"
+        const val FIELD_GENDER = "gender"
     }
 
     object PermissionTitle {

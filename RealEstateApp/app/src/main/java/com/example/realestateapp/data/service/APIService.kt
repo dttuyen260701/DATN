@@ -136,4 +136,17 @@ interface APIService {
     suspend fun changePassWord(
         @Body options: Map<String, Any>
     ): Response<ResponseAPI<Any?>>
+
+    @GET("/api/Accounts/profile/{idUser}")
+    @JvmSuppressWildcards
+    suspend fun getInformationUser(
+        @Path("idUser") idUser: Int
+    ): Response<ResponseAPI<User>>
+
+    @PUT("/api/Accounts/update-profile/{idUser}")
+    @JvmSuppressWildcards
+    suspend fun updateUser(
+        @Path("idUser") idUser: Int,
+        @Body options: Map<String, Any>
+    ): Response<ResponseAPI<Any?>>
 }
