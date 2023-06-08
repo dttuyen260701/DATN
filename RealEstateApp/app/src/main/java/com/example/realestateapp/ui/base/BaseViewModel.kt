@@ -14,6 +14,7 @@ import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.FireBaseRef.ROOT_DATA
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -79,7 +80,9 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         private var pagingModel = PagingModel()
 
         private var database: DatabaseReference =
-            Firebase.database.reference.database.getReference("data")
+            Firebase.database.reference.database.getReference(ROOT_DATA)
+
+        private var listenNotification: (idUser: Int) -> Unit = { _ -> }
     }
 
     abstract var uiState: MutableState<UiState>
@@ -90,6 +93,16 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     internal fun getPagingModel() = pagingModel
 
     internal fun getDataChild(key: String) = database.child(key)
+
+    internal fun listenNotificationInvoke(idUser: Int) {
+        listenNotification(idUser)
+    }
+
+    internal fun MainActivityViewModel.setListenNotification(func: (Int) -> Unit) {
+        this.run {
+            listenNotification = func
+        }
+    }
 
     internal fun updatePagingModel(
         totalRecordsNew: Int = 0,

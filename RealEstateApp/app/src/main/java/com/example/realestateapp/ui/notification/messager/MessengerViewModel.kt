@@ -9,7 +9,6 @@ import com.example.realestateapp.data.models.User
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.Constants
-import com.example.realestateapp.util.Constants.DataStore.KEY_PASSWORD
 import com.example.realestateapp.util.Constants.MessageDefault.SEND_IMAGE
 import com.example.realestateapp.util.Constants.MessageDefault.TYPE_MESSAGE
 import com.example.realestateapp.util.Constants.MessageDefault.TYPE_PHOTO
@@ -70,7 +69,7 @@ class MessengerViewModel @Inject constructor(
                         imageGuest = imgGuest,
                         lastMessage = if (typeMessenger == TYPE_PHOTO) SEND_IMAGE else message,
                         idUserSend = idGuest.toString(),
-                        read = KEY_PASSWORD
+                        read = true
                     )
                 )
             getDataChild(Constants.FireBaseRef.CHANNEL_CHAT).child(idChannelSend)

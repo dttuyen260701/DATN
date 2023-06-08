@@ -21,19 +21,22 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.ItemChatGuest
+import com.example.realestateapp.data.models.ItemNotification
 import com.example.realestateapp.designsystem.components.BorderLine
 import com.example.realestateapp.designsystem.components.ItemChatGuestView
+import com.example.realestateapp.designsystem.components.ItemNotification
 import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.ui.base.RequireLoginScreen
 import com.example.realestateapp.util.Constants
-import com.example.realestateapp.util.Constants.DataStore.KEY_PASSWORD
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
+import com.example.realestateapp.util.Constants.FireBaseRef.PROPERTY_READ
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -46,12 +49,16 @@ import com.google.firebase.database.DatabaseError
 internal fun NotificationRoute(
     modifier: Modifier = Modifier,
     viewModel: NotificationViewModel = hiltViewModel(),
-    navigateChatScreen: (String) -> Unit
+    navigateSignIn: () -> Unit,
+    navigateChatScreen: (String) -> Unit,
+    navigateToRealEstateDetail: (Int) -> Unit
 ) {
     viewModel.run {
+        val user by remember { getUser() }
         var uiState by remember { uiState }
         var isMessengerScreen by remember { isMessengerScreen }
         val itemChatGuests = remember { itemChatGuests }
+        val itemNotifications = remember { itemNotifications }
         val isLoading by remember {
             derivedStateOf {
                 uiState is NotificationUiState.Loading
@@ -106,27 +113,44 @@ internal fun NotificationRoute(
             }
         }
 
-        NotificationScreen(
-            modifier = modifier,
-            isLoading = isLoading,
-            isMessengerScreen = isMessengerScreen,
-            setIsMessengerScreen = remember {
-                {
-                    if (isMessengerScreen != it) {
-                        isMessengerScreen = it
+        if (user == null) {
+            RequireLoginScreen(
+                message = stringResource(id = R.string.messageRequireLogin),
+                navigateSignIn = navigateSignIn
+            )
+        } else {
+            NotificationScreen(
+                modifier = modifier,
+                isLoading = isLoading,
+                isMessengerScreen = isMessengerScreen,
+                setIsMessengerScreen = remember {
+                    {
+                        if (isMessengerScreen != it) {
+                            isMessengerScreen = it
+                        }
+                    }
+                },
+                itemChatGuests = itemChatGuests,
+                itemNotifications = itemNotifications,
+                onItemNotificationClick = remember {
+                    {
+                        getDataChild(Constants.FireBaseRef.CHANNEL_POST)
+                            .child(getUser().value?.id?.toString() ?: "")
+                            .child(it.timeMilliseconds.toString())
+                            .child(PROPERTY_READ).setValue(true)
+                        navigateToRealEstateDetail(it.idPost)
+                    }
+                },
+                navigateChatScreen = remember {
+                    {
+                        getDataChild(Constants.FireBaseRef.CHANNEL_GUEST)
+                            .child(getUser().value?.id?.toString() ?: "")
+                            .child(it).child(PROPERTY_READ).setValue(true)
+                        navigateChatScreen(it)
                     }
                 }
-            },
-            itemChatGuests = itemChatGuests,
-            navigateChatScreen = remember {
-                {
-                    getDataChild(Constants.FireBaseRef.CHANNEL_GUEST)
-                        .child(getUser().value?.id?.toString() ?: "")
-                        .child(it).child("read").setValue(KEY_PASSWORD)
-                    navigateChatScreen(it)
-                }
-            }
-        )
+            )
+        }
     }
 }
 
@@ -137,6 +161,8 @@ internal fun NotificationScreen(
     isMessengerScreen: Boolean,
     setIsMessengerScreen: (Boolean) -> Unit,
     itemChatGuests: MutableList<ItemChatGuest>,
+    itemNotifications: MutableList<ItemNotification>,
+    onItemNotificationClick: (ItemNotification) -> Unit,
     navigateChatScreen: (String) -> Unit
 ) {
     BaseScreen(
@@ -215,58 +241,83 @@ internal fun NotificationScreen(
                     .background(RealEstateAppTheme.colors.bgScrPrimaryLight),
                 contentAlignment = Alignment.Center
             ) {
-                if (
-                    (itemChatGuests.isNotEmpty()
-                            && isMessengerScreen)
-                ) {
-                    LazyColumn(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .matchParentSize()
-                            .background(Color.Transparent),
-                        state = rememberLazyListState(),
-                        verticalArrangement = Arrangement.spacedBy(PADDING_VIEW.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
-                    ) {
-                        items(
-                            items = itemChatGuests,
-                            key = { item ->
-                                item.toString()
-                            },
-                        ) { item ->
-                            ItemChatGuestView(
-                                item = item,
-                                onItemClick = navigateChatScreen
-                            )
-                        }
-                    }
-                    Spacing(MARGIN_VIEW)
-                } else {
-                    Spacing(MARGIN_DIFFERENT_VIEW)
-                    if (isLoading) {
-                        Box(
-                            modifier = Modifier
+                when {
+                    itemChatGuests.isNotEmpty() && isMessengerScreen -> {
+                        LazyColumn(
+                            modifier = modifier
                                 .fillMaxWidth()
+                                .matchParentSize()
                                 .background(Color.Transparent),
-                            contentAlignment = Alignment.Center
+                            state = rememberLazyListState(),
+                            verticalArrangement = Arrangement.spacedBy(PADDING_VIEW.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
                         ) {
-                            CircularProgressIndicator(
-                                color = RealEstateAppTheme.colors.progressBar
+                            items(
+                                items = itemChatGuests,
+                                key = { item ->
+                                    item.toString()
+                                },
+                            ) { item ->
+                                ItemChatGuestView(
+                                    item = item,
+                                    onItemClick = navigateChatScreen
+                                )
+                            }
+                        }
+                        Spacing(MARGIN_VIEW)
+                    }
+                    itemNotifications.isNotEmpty() && !isMessengerScreen -> {
+                        LazyColumn(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .matchParentSize()
+                                .background(Color.Transparent),
+                            state = rememberLazyListState(),
+                            verticalArrangement = Arrangement.spacedBy(PADDING_VIEW.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            contentPadding = PaddingValues(PADDING_HORIZONTAL_SCREEN.dp),
+                        ) {
+                            items(
+                                items = itemNotifications,
+                                key = { item ->
+                                    item.toString()
+                                },
+                            ) { item ->
+                                ItemNotification(
+                                    item = item,
+                                    onItemClick = onItemNotificationClick
+                                )
+                            }
+                        }
+                        Spacing(MARGIN_VIEW)
+                    }
+                    else -> {
+                        Spacing(MARGIN_DIFFERENT_VIEW)
+                        if (isLoading) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.Transparent),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    color = RealEstateAppTheme.colors.progressBar
+                                )
+                            }
+                        } else {
+                            Text(
+                                text = stringResource(id = R.string.emptyTitle),
+                                style = RealEstateTypography.body1.copy(
+                                    color = RealEstateAppTheme.colors.primary,
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 14.sp
+                                ),
+                                modifier = Modifier
+                                    .background(Color.Transparent)
+                                    .fillMaxWidth()
                             )
                         }
-                    } else {
-                        Text(
-                            text = stringResource(id = R.string.emptyTitle),
-                            style = RealEstateTypography.body1.copy(
-                                color = RealEstateAppTheme.colors.primary,
-                                textAlign = TextAlign.Center,
-                                fontSize = 14.sp
-                            ),
-                            modifier = Modifier
-                                .background(Color.Transparent)
-                                .fillMaxWidth()
-                        )
                     }
                 }
             }

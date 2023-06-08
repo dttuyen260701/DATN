@@ -210,15 +210,17 @@ internal fun MessengerRoute(
             onSendClick = remember {
                 {
                     getUser().value?.let {
-                        sendMessage(
-                            user = it,
-                            idGuest = idGuest,
-                            nameGuest = nameGuest,
-                            imgGuest = imageGuest,
-                            message = message.trim(),
-                            idChannelSend = idChannelSend
-                        ) {
-                            message = ""
+                        if (message.trim().isNotEmpty()) {
+                            sendMessage(
+                                user = it,
+                                idGuest = idGuest,
+                                nameGuest = nameGuest,
+                                imgGuest = imageGuest,
+                                message = message.trim(),
+                                idChannelSend = idChannelSend
+                            ) {
+                                message = ""
+                            }
                         }
                     }
                 }

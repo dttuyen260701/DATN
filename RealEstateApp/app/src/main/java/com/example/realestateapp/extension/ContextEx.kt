@@ -1,12 +1,22 @@
 package com.example.realestateapp.extension
 
+import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.example.realestateapp.R
+import com.example.realestateapp.ui.MainActivity
+import com.example.realestateapp.util.Constants.DefaultValue.CHANNEL_ID
 import com.example.realestateapp.util.Constants.DefaultValue.MAP_INSTALL_REQUEST
+import com.example.realestateapp.util.Constants.NotificationChannel.DEFAULT_CHANNEL
+import com.example.realestateapp.util.Constants.RequestNotification.DEFAULT_NOTIFICATION
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -15,6 +25,44 @@ import java.util.*
 /**
  * Created by tuyen.dang on 5/20/2023.
  */
+
+@SuppressLint("MissingPermission")
+internal fun Context.sendNotification(
+    title: String,
+    content: String,
+    drawable: Int,
+    responseCode: Int = DEFAULT_NOTIFICATION,
+    forNewChannel: Int = DEFAULT_CHANNEL
+) {
+    val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, CHANNEL_ID)
+
+    val intent = Intent(
+        this,
+        MainActivity::class.java
+    )
+
+    intent.action = Intent.ACTION_MAIN
+    intent.addCategory(Intent.CATEGORY_LAUNCHER)
+    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    intent.putExtra("KEY_SETTING_FRAG", responseCode)
+    val pendingIntent = PendingIntent.getActivity(
+        this, 1,
+        intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    builder.setSmallIcon(R.mipmap.ic_launcher)
+    val bitmap = BitmapFactory.decodeResource(resources, drawable)
+    builder.setLargeIcon(bitmap)
+    builder.setContentTitle(title)
+    builder.setAutoCancel(true)
+    builder.setContentText(content)
+    builder.setContentIntent(pendingIntent)
+    NotificationManagerCompat.from(this).notify(
+        if (forNewChannel == DEFAULT_CHANNEL)
+            Calendar.getInstance().timeInMillis.toInt() else
+            forNewChannel, builder.build()
+    )
+}
 
 internal fun Context.openMap(latitude: Double, longitude: Double) {
     //String uri = "http://maps.google.com/maps/dir/?api=1&destination=" + latitude + "%2C-" + longitude + " (" + "Your partner is here" + ")";

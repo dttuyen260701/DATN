@@ -18,9 +18,24 @@ class Constants {
         internal fun ItemMessenger.isPhoto() = typeMessage == MessageDefault.TYPE_PHOTO
     }
 
+    object RequestNotification {
+        const val DEFAULT_NOTIFICATION = 0
+        const val MESSAGE_NOTIFICATION = 1
+        const val POST_NOTIFICATION = 2
+    }
+
+    object NotificationChannel {
+        const val DEFAULT_CHANNEL = 0
+        const val MESSAGE_CHANNEL = 1
+        const val POST_CHANNEL = 2
+    }
+
     object FireBaseRef {
+        const val ROOT_DATA = "data"
         const val CHANNEL_GUEST = "guest"
         const val CHANNEL_CHAT = " channel_chat"
+        const val CHANNEL_POST = " channel_post"
+        const val PROPERTY_READ = " read"
     }
 
     object HeaderRequest {
@@ -78,9 +93,11 @@ class Constants {
         const val CAMERA = "Sử dụng Camera"
         const val WRITE_EXTERNAL = "Ghi bộ nhớ ngoài"
         const val READ_EXTERNAL = "Đoc bộ nhớ ngoài"
+        const val POST_NOTIFICATIONS = "Tạo thông báo"
     }
 
     object DefaultValue {
+        const val CHANNEL_ID = "CHANNEL"
         val DEFAULT_ITEM_CHOSEN = ItemChoose(0, "", 0)
         const val MAX_IMAGE_POST = 10
         const val DEFAULT_ID_POST = -1

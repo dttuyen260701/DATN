@@ -11,5 +11,5 @@ data class ItemChatGuest(
     val imageGuest: String = "",
     val lastMessage: String = "",
     val idUserSend: String = "",
-    val read: String = "",
+    val read: Boolean = false,
 )

@@ -1,6 +1,7 @@
 package com.example.realestateapp.ui
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,11 +19,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.content.FileProvider
 import com.example.realestateapp.BuildConfig
 import com.example.realestateapp.R
+import com.example.realestateapp.data.models.ItemChatGuest
+import com.example.realestateapp.data.models.ItemNotification
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.extension.createImageFile
 import com.example.realestateapp.extension.getFileFromUri
+import com.example.realestateapp.extension.sendNotification
 import com.example.realestateapp.ui.base.TypeDialog
+import com.example.realestateapp.ui.notification.navigation.navigateToNotification
+import com.example.realestateapp.ui.post.navigation.navigateToRecords
 import com.example.realestateapp.util.Constants
+import com.example.realestateapp.util.Constants.NotificationChannel.MESSAGE_CHANNEL
+import com.example.realestateapp.util.Constants.NotificationChannel.POST_CHANNEL
+import com.example.realestateapp.util.Constants.RequestNotification.MESSAGE_NOTIFICATION
+import com.example.realestateapp.util.Constants.RequestNotification.POST_NOTIFICATION
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -30,6 +43,7 @@ import java.util.*
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
+    private var appState: RealEstateAppState? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +53,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = Color.Transparent
                 ) {
+                    appState = rememberRealEstateAppState()
+
                     viewModel.run {
 
                         val launcherActivity = rememberLauncherForActivityResult(
@@ -71,6 +87,114 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         )
+
+                        setListenNotification {
+                            val childPostListEventListener = object : ChildEventListener {
+                                override fun onChildAdded(
+                                    dataSnapshot: DataSnapshot,
+                                    previousChildName: String?
+                                ) {
+                                    dataSnapshot.getValue(ItemNotification::class.java)?.run {
+                                        if (!read)
+                                            sendNotification(
+                                                title = getString(
+                                                    R.string.notificationPostTitle,
+                                                    idPost.toString()
+                                                ),
+                                                content = messenger,
+                                                drawable = R.drawable.story_notification,
+                                                responseCode = POST_NOTIFICATION,
+                                                forNewChannel = POST_CHANNEL
+                                            )
+                                    }
+                                }
+
+                                override fun onChildChanged(
+                                    dataSnapshot: DataSnapshot,
+                                    previousChildName: String?
+                                ) {
+                                    dataSnapshot.getValue(ItemNotification::class.java)?.run {
+                                        if (!read)
+                                            sendNotification(
+                                                title = getString(
+                                                    R.string.notificationPostTitle,
+                                                    idPost.toString()
+                                                ),
+                                                content = messenger,
+                                                drawable = R.drawable.story_notification,
+                                                responseCode = POST_NOTIFICATION,
+                                                forNewChannel = POST_CHANNEL
+                                            )
+                                    }
+                                }
+
+                                override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+
+                                override fun onChildMoved(
+                                    dataSnapshot: DataSnapshot,
+                                    previousChildName: String?
+                                ) {
+                                }
+
+                                override fun onCancelled(databaseError: DatabaseError) {}
+                            }
+
+                            val childChannelListEventListener = object : ChildEventListener {
+                                override fun onChildAdded(
+                                    dataSnapshot: DataSnapshot,
+                                    previousChildName: String?
+                                ) {
+                                    dataSnapshot.getValue(ItemChatGuest::class.java)?.run {
+                                        if (!read)
+                                            sendNotification(
+                                                title = getString(
+                                                    R.string.messageNotificationTitle,
+                                                    nameGuest
+                                                ),
+                                                content = lastMessage,
+                                                drawable = R.drawable.ic_message,
+                                                responseCode = MESSAGE_NOTIFICATION,
+                                                forNewChannel = MESSAGE_CHANNEL
+                                            )
+                                    }
+                                }
+
+                                override fun onChildChanged(
+                                    dataSnapshot: DataSnapshot,
+                                    previousChildName: String?
+                                ) {
+                                    dataSnapshot.getValue(ItemChatGuest::class.java)?.run {
+                                        if (!read)
+                                            sendNotification(
+                                                title = getString(
+                                                    R.string.messageNotificationTitle,
+                                                    nameGuest
+                                                ),
+                                                content = lastMessage,
+                                                drawable = R.drawable.ic_message,
+                                                responseCode = MESSAGE_NOTIFICATION,
+                                                forNewChannel = MESSAGE_CHANNEL
+                                            )
+                                    }
+                                }
+
+                                override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+
+                                override fun onChildMoved(
+                                    dataSnapshot: DataSnapshot,
+                                    previousChildName: String?
+                                ) {
+                                }
+
+                                override fun onCancelled(databaseError: DatabaseError) {}
+                            }
+
+                            getDataChild(Constants.FireBaseRef.CHANNEL_GUEST).child(it.toString())
+                                .addChildEventListener(childChannelListEventListener)
+
+                            getDataChild(Constants.FireBaseRef.CHANNEL_POST).child(it.toString())
+                                .addChildEventListener(childPostListEventListener)
+                        }
 
                         setUploadImageAndGetURL {
                             showDialog(
@@ -137,7 +261,12 @@ class MainActivity : ComponentActivity() {
                         )
 
                         CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
-                            RealEstateApp(viewModel = this)
+                            appState?.let {
+                                RealEstateApp(
+                                    appState = it,
+                                    viewModel = this
+                                )
+                            }
                         }
                     }
                 }
@@ -151,8 +280,30 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.ACCESS_FINE_LOCATION -> Constants.PermissionTitle.FINE_LOCATION
         Manifest.permission.WRITE_EXTERNAL_STORAGE -> Constants.PermissionTitle.WRITE_EXTERNAL
         Manifest.permission.READ_EXTERNAL_STORAGE -> Constants.PermissionTitle.READ_EXTERNAL
+        Manifest.permission.POST_NOTIFICATIONS -> Constants.PermissionTitle.POST_NOTIFICATIONS
         Manifest.permission.CAMERA -> Constants.PermissionTitle.CAMERA
         else -> ""
+    }
+
+    @Override
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val result = intent.getIntExtra("KEY_SETTING_FRAG", 0)
+        appState?.run {
+            viewModel.run {
+                when (result) {
+                    MESSAGE_NOTIFICATION -> {
+                        if (getUser().value != null)
+                            navController.navigateToNotification()
+                    }
+                    POST_NOTIFICATION -> {
+                        if (getUser().value != null)
+                            navController.navigateToRecords(true)
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 
     @Deprecated("Deprecated in Java")

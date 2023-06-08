@@ -1,6 +1,9 @@
 package com.example.realestateapp.ui.home
 
+import android.Manifest
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +56,7 @@ class HomeViewModel @Inject constructor(
     internal var realEstatesHighestPrice = mutableStateListOf<RealEstateList>()
     internal var realEstatesLowestPrice = mutableStateListOf<RealEstateList>()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     internal fun backgroundSignIn() {
         uiState.value = HomeUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
@@ -66,6 +70,19 @@ class HomeViewModel @Inject constructor(
                         ), apiSuccess = {
                             getUser().value = it.body
                             AuthenticationObject.token = it.body?.token ?: ""
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                requestPermissionListener(
+                                    permission = mutableListOf(
+                                        Manifest.permission.POST_NOTIFICATIONS
+                                    )
+                                ) { results ->
+                                    if (results.entries.all { item -> item.value }) {
+                                        listenNotificationInvoke(getUser().value?.id ?: -1)
+                                    }
+                                }
+                            } else {
+                                listenNotificationInvoke(getUser().value?.id ?: -1)
+                            }
                         }, onDoneCallApi = {
                             uiState.value = HomeUiState.DoneSignInBackground
                         }, showDialog = false

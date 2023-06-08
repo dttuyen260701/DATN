@@ -25,7 +25,7 @@ import com.example.realestateapp.ui.base.TypeDialog
 
 @Composable
 fun RealEstateApp(
-    appState: RealEstateAppState = rememberRealEstateAppState(),
+    appState: RealEstateAppState,
     viewModel: MainActivityViewModel
 ) {
     val isLoading = remember {

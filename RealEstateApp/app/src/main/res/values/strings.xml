@@ -157,6 +157,8 @@
     <string name="youTitle">Bạn:</string>
     <string name="messageHint">Nhập tin nhắn…</string>
     <string name="uploadWarning">Ảnh của bạn đang được tải lên, vui lòng chờ để tải ảnh tiếp theo!</string>
+    <string name="messageNotificationTitle">Bạn có tin nhắn mới từ %s!</string>
+    <string name="notificationPostTitle">Bạn có thông báo mới từ bài đăng số %s!</string>
 
     <!--DialogShowImage-->
     <string name="numberImageTitle">%d/%d</string>

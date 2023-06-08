@@ -30,10 +30,7 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.PostStatus
-import com.example.realestateapp.data.models.ItemChatGuest
-import com.example.realestateapp.data.models.ItemChoose
-import com.example.realestateapp.data.models.ItemMessenger
-import com.example.realestateapp.data.models.RealEstateList
+import com.example.realestateapp.data.models.*
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
@@ -54,6 +51,55 @@ import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 /**
  * Created by tuyen.dang on 5/12/2023.
  */
+
+@Composable
+internal fun ItemNotification(
+    modifier: Modifier = Modifier,
+    item: ItemNotification,
+    onItemClick: (ItemNotification) -> Unit
+) {
+    item.run {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color =
+                    if (!read) Color.White else RealEstateAppTheme.colors.bgScrPrimaryLight,
+                    shape = RoundedCornerShape(ROUND_DIALOG.dp)
+                )
+                .clickable {
+                    onItemClick(item)
+                }
+                .padding(PADDING_VIEW.dp)
+                .then(modifier)
+        ) {
+            ImageProfile(
+                size = TOOLBAR_HEIGHT,
+                model = image,
+                modifier = Modifier
+                    .size((TOOLBAR_HEIGHT * 2).dp)
+            )
+            Spacer(modifier = Modifier.width(MARGIN_VIEW.dp))
+            Text(
+                text = messenger,
+                style = RealEstateTypography.body1.copy(
+                    color =
+                    if (read) RealEstateAppTheme.colors.primary
+                    else RealEstateAppTheme.colors.progressBar,
+                    fontSize = (if (!read) 17 else 13).sp
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .heightIn(
+                        min = 0.dp,
+                        max = (TOOLBAR_HEIGHT * 2).dp
+                    ),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
 
 @Composable
 internal fun ItemMessengerView(
@@ -161,8 +207,8 @@ internal fun ItemChatGuestView(
             Text(
                 text = nameGuest,
                 style = RealEstateTypography.h1.copy(
-                    fontSize = (if (read.isEmpty()) 17 else 15).sp,
-                    color = if (read.isEmpty()) RealEstateAppTheme.colors.progressBar
+                    fontSize = (if (!read) 17 else 15).sp,
+                    color = if (!read) RealEstateAppTheme.colors.progressBar
                     else RealEstateAppTheme.colors.primary,
                     textAlign = TextAlign.Start,
                 ),
@@ -189,10 +235,10 @@ internal fun ItemChatGuestView(
             Text(
                 text = sendTitle.plus(lastMessage),
                 style = RealEstateTypography.h1.copy(
-                    fontSize = (if (read.isEmpty()) 17 else 13).sp,
-                    color = if (read.isEmpty()) RealEstateAppTheme.colors.progressBar
+                    fontSize = (if (!read) 17 else 13).sp,
+                    color = if (!read) RealEstateAppTheme.colors.progressBar
                     else RealEstateAppTheme.colors.primary,
-                    fontWeight = if (read.isEmpty()) FontWeight.Bold else FontWeight.Light,
+                    fontWeight = if (!read) FontWeight.Bold else FontWeight.Light,
                     textAlign = TextAlign.Start
                 ),
                 maxLines = 1,

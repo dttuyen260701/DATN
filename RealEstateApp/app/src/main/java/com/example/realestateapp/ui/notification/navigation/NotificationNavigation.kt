@@ -31,14 +31,18 @@ internal fun NavHostController.navigateToMessenger(
 
 internal fun NavGraphBuilder.notificationGraph(
     navigateChatScreen: (String) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    navigateToRealEstateDetail: (Int) -> Unit,
+    navigateSignIn: () -> Unit
 ) {
     navigation(
         route = notificationNavigationGraphRoute,
         startDestination = notificationNavigationRoute
     ) {
         notificationScreen(
-            navigateChatScreen = navigateChatScreen
+            navigateChatScreen = navigateChatScreen,
+            navigateSignIn = navigateSignIn,
+            navigateToRealEstateDetail = navigateToRealEstateDetail
         )
         messengerScreen(
             onBackClick = onBackClick
@@ -47,11 +51,15 @@ internal fun NavGraphBuilder.notificationGraph(
 }
 
 internal fun NavGraphBuilder.notificationScreen(
-    navigateChatScreen: (String) -> Unit
+    navigateChatScreen: (String) -> Unit,
+    navigateToRealEstateDetail: (Int) -> Unit,
+    navigateSignIn: () -> Unit
 ) {
     composable(route = notificationNavigationRoute) {
         NotificationRoute(
-            navigateChatScreen = navigateChatScreen
+            navigateChatScreen = navigateChatScreen,
+            navigateSignIn = navigateSignIn,
+            navigateToRealEstateDetail = navigateToRealEstateDetail
         )
     }
 }
