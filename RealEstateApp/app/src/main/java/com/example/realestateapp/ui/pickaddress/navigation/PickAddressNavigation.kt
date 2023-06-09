@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.realestateapp.navigation.navigateSingleTopTo
+import com.example.realestateapp.ui.pickaddress.PickAddressMapRoute
 import com.example.realestateapp.ui.pickaddress.PickAddressRoute
 
 /**
@@ -11,6 +12,7 @@ import com.example.realestateapp.ui.pickaddress.PickAddressRoute
  */
 
 const val pickAddressNavigationRoute = "pick_address_route"
+const val pickAddressMapNavigationRoute = "pick_address_map_route"
 const val searchAddressKey = "search_address"
 
 internal fun NavHostController.navigateToPickAddress(
@@ -18,6 +20,15 @@ internal fun NavHostController.navigateToPickAddress(
 ) {
     this.navigateSingleTopTo(
         route = pickAddressNavigationRoute,
+        beforeNavigated = beforeNavigated
+    )
+}
+
+internal fun NavHostController.navigateToPickAddressMap(
+    beforeNavigated: () -> Unit = {}
+) {
+    this.navigateSingleTopTo(
+        route = pickAddressMapNavigationRoute,
         beforeNavigated = beforeNavigated
     )
 }
@@ -30,6 +41,20 @@ internal fun NavGraphBuilder.pickAddressScreen(
         route = pickAddressNavigationRoute,
     ) {
         PickAddressRoute(
+            onPickAddressSuccess = onPickAddressSuccess,
+            onBackClick = onBackClick
+        )
+    }
+}
+
+internal fun NavGraphBuilder.pickAddressMapScreen(
+    onPickAddressSuccess: (String) -> Unit,
+    onBackClick: () -> Unit
+) {
+    composable(
+        route = pickAddressMapNavigationRoute,
+    ) {
+        PickAddressMapRoute(
             onPickAddressSuccess = onPickAddressSuccess,
             onBackClick = onBackClick
         )

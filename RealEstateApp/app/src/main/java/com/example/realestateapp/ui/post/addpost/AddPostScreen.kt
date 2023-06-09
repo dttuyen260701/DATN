@@ -42,6 +42,7 @@ import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.ui.post.PostUiState
 import com.example.realestateapp.ui.post.PostViewModel
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
+import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS_MAP
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_DIRECTION
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_JURIDICAL
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_PREDICT_PRICE
@@ -64,6 +65,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.TRAILING_ICON_SIZE
 import com.example.realestateapp.util.Constants.DefaultValue.WARNING_TEXT_SIZE
 import com.example.realestateapp.util.Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR
 import com.example.realestateapp.util.Constants.MessageErrorAPI.INVALID_INPUT_ERROR
+import com.google.android.gms.maps.model.LatLng
 
 /**
  * Created by tuyen.dang on 5/28/2023.
@@ -76,6 +78,7 @@ internal fun AddPostRoute(
     idPost: Int,
     onBackClick: () -> Unit,
     navigateToPickAddress: () -> Unit,
+    navigateToPickAddressMap: () -> Unit,
     navigateToMyRecord: (Boolean) -> Unit,
     navigateToRealEstateDetail: (Int) -> Unit,
     addressDetails: MutableList<String>
@@ -405,6 +408,9 @@ internal fun AddPostRoute(
                     var loadData: (String, () -> Unit) -> Unit = { _, _ -> }
                     var onItemClick: (ItemChoose) -> Unit = { _ -> }
                     when (key) {
+                        FIELD_ADDRESS_MAP -> {
+                            navigateToPickAddressMap()
+                        }
                         FIELD_ADDRESS -> {
                             if (addressDetailDisplay.isBlank() || addressDetailDisplay.isEmpty()) {
                                 PickAddressViewModel.clearDataChosen()
@@ -453,7 +459,7 @@ internal fun AddPostRoute(
                         }
                         else -> {}
                     }
-                    if (key != FIELD_ADDRESS && key != FIELD_PREDICT_PRICE) {
+                    if (key != FIELD_ADDRESS && key != FIELD_PREDICT_PRICE && key != FIELD_ADDRESS_MAP) {
                         showDialog(
                             dialog = TypeDialog.ChoiceDataDialog(
                                 title = title,
@@ -868,6 +874,39 @@ internal fun AddPostScreen(
             hint = stringResource(id = R.string.addressHint),
             onClearData = { onClearData(FIELD_ADDRESS) },
             errorText = addressError,
+            readOnly = isReadOnlyInformation
+        )
+        PickAddressViewModel.run {
+            if (latitude != 0.0 && longitude != 0.0) {
+                Spacing(MARGIN_VIEW)
+                Text(
+                    text = stringResource(id = R.string.mapTitle),
+                    style = RealEstateTypography.body1.copy(
+                        fontSize = 18.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Start
+                    ),
+                    modifier = Modifier
+                        .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp)
+                )
+                MapviewShowMarker(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(2f)
+                        .padding(horizontal = PADDING_HORIZONTAL_SCREEN.dp),
+                    location = LatLng(latitude, longitude)
+                )
+            }
+        }
+        ComboBox(
+            onItemClick = { onComboBoxClick(FIELD_ADDRESS_MAP) },
+            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Location),
+            title = "",
+            value = addressDetail,
+            hint = stringResource(id = R.string.addressMapTitle),
+            onClearData = { onClearData(FIELD_ADDRESS_MAP) },
+            errorText = "",
             readOnly = isReadOnlyInformation
         )
         Spacing(MARGIN_VIEW)

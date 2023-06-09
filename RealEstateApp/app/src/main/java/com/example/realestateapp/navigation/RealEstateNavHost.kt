@@ -10,9 +10,7 @@ import androidx.navigation.compose.NavHost
 import com.example.realestateapp.ui.home.navigation.*
 import com.example.realestateapp.ui.notification.navigation.navigateToMessenger
 import com.example.realestateapp.ui.notification.navigation.notificationGraph
-import com.example.realestateapp.ui.pickaddress.navigation.navigateToPickAddress
-import com.example.realestateapp.ui.pickaddress.navigation.pickAddressScreen
-import com.example.realestateapp.ui.pickaddress.navigation.searchAddressKey
+import com.example.realestateapp.ui.pickaddress.navigation.*
 import com.example.realestateapp.ui.post.navigation.navigateToAddPost
 import com.example.realestateapp.ui.post.navigation.navigateToRecords
 import com.example.realestateapp.ui.post.navigation.postGraph
@@ -84,6 +82,9 @@ fun RealEstateNavHost(
             navigateToPickAddress = {
                 navController.navigateToPickAddress()
             },
+            navigateToPickAddressMap = {
+                navController.navigateToPickAddressMap()
+            },
             navigateToAddPost = {
                 navController.navigateToAddPost(
                     postId = it
@@ -122,9 +123,7 @@ fun RealEstateNavHost(
                 )
             },
             navigateSignIn = {
-                navController.navigateToSignIn {
-
-                }
+                navController.navigateToSignIn {}
             }
         )
         settingGraph(
@@ -171,6 +170,17 @@ fun RealEstateNavHost(
             }
         )
         pickAddressScreen(
+            onPickAddressSuccess = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(searchAddressKey, it)
+                navController.popBackStack()
+            },
+            onBackClick = {
+                navController.popBackStack()
+            }
+        )
+        pickAddressMapScreen(
             onPickAddressSuccess = {
                 navController.previousBackStackEntry
                     ?.savedStateHandle

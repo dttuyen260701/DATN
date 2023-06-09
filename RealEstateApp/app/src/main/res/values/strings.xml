@@ -77,6 +77,7 @@
     <string name="latestSortTitle">Ngày đăng</string>
     <string name="viewSortTitle">Lượt xem</string>
     <string name="addressTitle">Địa chỉ</string>
+    <string name="addressMapTitle">Chọn địa chỉ trên bản đồ</string>
     <string name="addressHint">Đà Nẵng</string>
     <string name="searchBtnTitle">Tìm kiếm</string>
     <string name="typesTitle">Loại bất động sản</string>

@@ -49,6 +49,7 @@ internal fun NavGraphBuilder.postGraph(
     onBackClick: () -> Unit,
     onRealEstateItemClick: (Int) -> Unit,
     navigateToPickAddress: () -> Unit,
+    navigateToPickAddressMap: () -> Unit,
     navigateToAddPost: (Int) -> Unit,
     navigateToMyRecord: (Boolean) -> Unit,
     navigateToRealEstateDetail: (Int) -> Unit,
@@ -70,6 +71,7 @@ internal fun NavGraphBuilder.postGraph(
         addPostScreen(
             onBackClick = onBackClick,
             navigateToPickAddress = navigateToPickAddress,
+            navigateToPickAddressMap = navigateToPickAddressMap,
             navigateToMyRecord = navigateToMyRecord,
             navigateToRealEstateDetail = navigateToRealEstateDetail
         )
@@ -109,6 +111,7 @@ internal fun NavGraphBuilder.recordsScreen(
 internal fun NavGraphBuilder.addPostScreen(
     onBackClick: () -> Unit,
     navigateToPickAddress: () -> Unit,
+    navigateToPickAddressMap: () -> Unit,
     navigateToMyRecord: (Boolean) -> Unit,
     navigateToRealEstateDetail: (Int) -> Unit
 ) {
@@ -120,6 +123,7 @@ internal fun NavGraphBuilder.addPostScreen(
             idPost = backStackEntry.arguments?.getInt(idPostKey, -1) ?: -1,
             onBackClick = onBackClick,
             navigateToPickAddress = navigateToPickAddress,
+            navigateToPickAddressMap = navigateToPickAddressMap,
             navigateToMyRecord = navigateToMyRecord,
             navigateToRealEstateDetail = navigateToRealEstateDetail,
             addressDetails = mutableListOf(

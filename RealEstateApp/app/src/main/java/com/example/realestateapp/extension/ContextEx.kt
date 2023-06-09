@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.realestateapp.extension
 
 import android.annotation.SuppressLint
@@ -6,6 +8,8 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
@@ -13,18 +17,62 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.realestateapp.R
 import com.example.realestateapp.ui.MainActivity
+import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants.DefaultValue.CHANNEL_ID
+import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import com.example.realestateapp.util.Constants.DefaultValue.MAP_INSTALL_REQUEST
 import com.example.realestateapp.util.Constants.NotificationChannel.DEFAULT_CHANNEL
 import com.example.realestateapp.util.Constants.RequestNotification.DEFAULT_NOTIFICATION
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Created by tuyen.dang on 5/20/2023.
  */
+
+internal fun Context.getFullAddress(
+    coroutineScope: CoroutineScope,
+    onStart: () -> Unit,
+    onSuccess: (String) -> Unit
+) {
+    PickAddressViewModel.run {
+        val streetName =
+            if (streetChosen.value != DEFAULT_ITEM_CHOSEN) "${streetChosen.value.name}, " else ""
+        val wardName =
+            if (wardChosen.value != DEFAULT_ITEM_CHOSEN) "${wardChosen.value.name}, " else ""
+        coroutineScope.launch(Dispatchers.IO) {
+            onStart()
+            val coder = Geocoder(this@getFullAddress, Locale.getDefault())
+            val address: ArrayList<Address>?
+
+            try {
+                address =
+                    coder.getFromLocationName(
+                        "$detailStreet $streetName$wardName${districtChosen.value.name}",
+                        1
+                    ) as ArrayList<Address>?
+                address?.firstOrNull()?.run {
+                    PickAddressViewModel.let {
+                        it.longitude = this.longitude
+                        it.latitude = this.latitude
+                    }
+                }
+            } catch (ex: IOException) {
+                PickAddressViewModel.let {
+                    it.longitude = 0.0
+                    it.latitude = 0.0
+                }
+            }
+            onSuccess("${detailStreet.value} $streetName$wardName${districtChosen.value.name}")
+        }
+    }
+}
 
 @SuppressLint("MissingPermission")
 internal fun Context.sendNotification(
