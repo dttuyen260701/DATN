@@ -899,16 +899,16 @@ internal fun AddPostScreen(
                 )
             }
         }
-        ComboBox(
-            onItemClick = { onComboBoxClick(FIELD_ADDRESS_MAP) },
-            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Location),
-            title = "",
-            value = addressDetail,
-            hint = stringResource(id = R.string.addressMapTitle),
-            onClearData = { onClearData(FIELD_ADDRESS_MAP) },
-            errorText = "",
-            readOnly = isReadOnlyInformation
-        )
+//        ComboBox(
+//            onItemClick = { onComboBoxClick(FIELD_ADDRESS_MAP) },
+//            leadingIcon = AppIcon.DrawableResourceIcon(RealEstateIcon.Location),
+//            title = "",
+//            value = addressDetail,
+//            hint = stringResource(id = R.string.addressMapTitle),
+//            onClearData = { onClearData(FIELD_ADDRESS_MAP) },
+//            errorText = "",
+//            readOnly = isReadOnlyInformation
+//        )
         Spacing(MARGIN_VIEW)
         BorderLine()
         Spacing(MARGIN_VIEW)
