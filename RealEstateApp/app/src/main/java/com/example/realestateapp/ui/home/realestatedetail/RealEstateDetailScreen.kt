@@ -130,10 +130,15 @@ internal fun RealEstateDetailRoute(
             onRealEstateItemClick = remember { onRealEstateItemClick },
             onItemSaveClick = remember {
                 { idPost ->
-                    updateSavedPost(idPost = idPost) { idResult ->
-                        if (idResult == realEstateItem.postId) {
-                            realEstateItem = realEstateItem.copy(isSaved = !realEstateItem.isSaved)
+                    if (user != null) {
+                        updateSavedPost(idPost = idPost) { idResult ->
+                            if (idResult == realEstateItem.postId) {
+                                realEstateItem =
+                                    realEstateItem.copy(isSaved = !realEstateItem.isSaved)
+                            }
                         }
+                    } else {
+                        context.makeToast(AUTHENTICATION_ERROR)
                     }
                 }
             },
@@ -167,7 +172,15 @@ internal fun RealEstateDetailRoute(
                 }
             },
             onChatClick = remember { navigateMessengerScreen },
-            onReportClick = remember { navigateToReport }
+            onReportClick = remember {
+                {
+                    if (user != null) {
+                        navigateToReport(it)
+                    } else {
+                        context.makeToast(AUTHENTICATION_ERROR)
+                    }
+                }
+            }
         )
     }
 }
@@ -674,7 +687,6 @@ internal fun RealEstateDetailScreen(
                         .constrainAs(btnReport) {
                             end.linkTo(parent.end, PADDING_HORIZONTAL_SCREEN.dp)
                             linkTo(tvContact.top, tvPhoneUser.bottom)
-                            visibility = setVisibility(ownerId != user?.id && user != null)
                         }
                         .background(
                             color = if (ownerId != user?.id) RealEstateAppTheme.colors.bgTextField
