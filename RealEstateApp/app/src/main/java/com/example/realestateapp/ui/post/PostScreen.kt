@@ -21,6 +21,7 @@ import com.example.realestateapp.designsystem.components.Spacing
 import com.example.realestateapp.designsystem.components.ToolbarView
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.ui.base.RequireLoginScreen
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -41,18 +42,18 @@ internal fun PostRoute(
     viewModel.run {
         val user by remember { getUser() }
 
-//        if (user == null) {
-//            RequireLoginScreen(
-//                message = stringResource(id = R.string.messageRequireLogin),
-//                navigateSignIn = navigateSignIn
-//            )
-//        } else {
-        PostScreen(
-            modifier = modifier,
-            navigateToRecord = navigateToRecord,
-            navigateToAddPost = navigateToAddPost
-        )
-//        }
+        if (user == null) {
+            RequireLoginScreen(
+                message = stringResource(id = R.string.messageRequireLogin),
+                navigateSignIn = navigateSignIn
+            )
+        } else {
+            PostScreen(
+                modifier = modifier,
+                navigateToRecord = navigateToRecord,
+                navigateToAddPost = navigateToAddPost
+            )
+        }
     }
 }
 
