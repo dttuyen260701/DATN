@@ -422,7 +422,8 @@ internal fun ItemRealEstate(
                     .constrainAs(tvAddress) {
                         top.linkTo(tvName.bottom)
                         linkTo(
-                            start = tvName.start,
+                            start = parent.start,
+                            startMargin = MARGIN_VIEW.dp,
                             end = parent.end,
                             endMargin = MARGIN_VIEW.dp,
                             bias = 0f
