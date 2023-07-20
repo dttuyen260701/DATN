@@ -18,8 +18,10 @@ import com.example.realestateapp.util.Constants.FireBaseRef.ROOT_DATA
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -149,7 +151,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             onStartUpload()
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.uploadImage(image)
                 ),
                 apiSuccess = {
@@ -184,60 +186,60 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         dialogType.value = dialog
     }
 
-    open fun <T> callAPIOnThread(
-        funCallApis: MutableList<Flow<ApiResultWrapper<T>>>,
+    open suspend fun <T> callAPIOnThread(
+        response: MutableList<Flow<ApiResultWrapper<T>>>,
         apiSuccess: (ResponseAPI<out T>) -> Unit,
         apiError: () -> Unit = {},
         onDoneCallApi: () -> Unit = {},
         showDialog: Boolean = true
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val listAsync = mutableListOf<Deferred<Flow<ApiResultWrapper<T>>>>()
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val listAsync = mutableListOf<Deferred<Flow<ApiResultWrapper<T>>>>()
+//
+//            funCallApis.forEach { funCallApi ->
+//                listAsync.add(async { funCallApi })
+//            }
+//
+//            val response = awaitAll(*listAsync.toTypedArray())
 
-            funCallApis.forEach { funCallApi ->
-                listAsync.add(async { funCallApi })
-            }
-
-            val response = awaitAll(*listAsync.toTypedArray())
-
-            response.forEach {
-                it.collect { result ->
-                    when (result) {
-                        is ApiResultWrapper.Loading -> {
-                            isLoading.value = true
+        response.forEach {
+            it.collect { result ->
+                when (result) {
+                    is ApiResultWrapper.Loading -> {
+                        isLoading.value = true
+                    }
+                    is ApiResultWrapper.Success -> {
+                        isLoading.value = false
+                        withContext(Dispatchers.Main) {
+                            apiSuccess(result.value)
                         }
-                        is ApiResultWrapper.Success -> {
-                            isLoading.value = false
-                            withContext(Dispatchers.Main) {
-                                apiSuccess(result.value)
-                            }
-                        }
-                        is ApiResultWrapper.ResponseCodeError -> {
-                            isLoading.value = false
-                            apiError()
-                            if (showDialog) showDialog(
-                                dialog = TypeDialog.ErrorDialog(result.error)
-                            )
-                        }
-                        is ApiResultWrapper.NetworkError -> {
-                            isLoading.value = false
-                            apiError()
-                            if (showDialog) showDialog(
-                                dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.NOT_FOUND_INTERNET)
-                            )
-                        }
-                        else -> {
-                            isLoading.value = false
-                            apiError()
-                            if (showDialog) showDialog(
-                                dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR)
-                            )
-                        }
+                    }
+                    is ApiResultWrapper.ResponseCodeError -> {
+                        isLoading.value = false
+                        apiError()
+                        if (showDialog) showDialog(
+                            dialog = TypeDialog.ErrorDialog(result.error)
+                        )
+                    }
+                    is ApiResultWrapper.NetworkError -> {
+                        isLoading.value = false
+                        apiError()
+                        if (showDialog) showDialog(
+                            dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.NOT_FOUND_INTERNET)
+                        )
+                    }
+                    else -> {
+                        isLoading.value = false
+                        apiError()
+                        if (showDialog) showDialog(
+                            dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR)
+                        )
                     }
                 }
             }
-
-            onDoneCallApi()
         }
+
+        onDoneCallApi()
+//        }
     }
 }

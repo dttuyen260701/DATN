@@ -57,7 +57,7 @@ class RealEstateDetailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             getUser().value?.id?.let {
                 callAPIOnThread(
-                    funCallApis = mutableListOf(
+                    response = mutableListOf(
                         appRepository.createReport(
                             postId = idPost,
                             reporterId = it,
@@ -81,7 +81,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.updateSavePost(
                         idPost = idPost,
                         idUser = getUser().value?.id ?: 0
@@ -99,7 +99,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getPostDetailById(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""
@@ -258,7 +258,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getPostSamePrice(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""
@@ -280,7 +280,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getPostSameCluster(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""

@@ -39,7 +39,7 @@ class LauncherViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.signIn(
                         email = email.value,
                         password = password.value
@@ -67,7 +67,7 @@ class LauncherViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.signUp(
                         name = name,
                         phone = phone,

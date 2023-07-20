@@ -127,7 +127,7 @@ class SearchViewModel @Inject constructor(
     internal fun getTypes() {
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getTypes(showLoading = false),
                 ), apiSuccess = {
                     uiState.value = SearchUiState.GetTypesSuccess(it.body)
@@ -150,7 +150,7 @@ class SearchViewModel @Inject constructor(
         uiState.value = SearchUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.searchPostWithOptions(
                         idUser = getUser().value?.id?.toString() ?: "",
                         minPrice = priceChosen.value.id,

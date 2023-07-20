@@ -63,7 +63,7 @@ class HomeViewModel @Inject constructor(
             application.baseContext.readStoreLauncher(onReadSuccess = { email, pass ->
                 viewModelScope.launch {
                     callAPIOnThread(
-                        funCallApis = mutableListOf(
+                        response = mutableListOf(
                             appRepository.signIn(
                                 email = email, password = pass, showLoading = false
                             )
@@ -99,7 +99,7 @@ class HomeViewModel @Inject constructor(
     internal fun getTypes() {
         uiState.value = HomeUiState.Loading
         viewModelScope.launch {
-            callAPIOnThread(funCallApis = mutableListOf(
+            callAPIOnThread(response = mutableListOf(
                 appRepository.getTypes(showLoading = false),
             ), apiSuccess = {
                 uiState.value = HomeUiState.GetTypesSuccess(it.body)
@@ -120,35 +120,36 @@ class HomeViewModel @Inject constructor(
         uiState.value = HomeUiState.Loading
         viewModelScope.launch {
             val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
-            callAPIOnThread(funCallApis = mutableListOf(
-                appRepository.getPostsWOptions(
-                    pageIndex = 1,
-                    pageSize = 10,
-                    isMostView = isMostView,
-                    typePropertyIds = typePropertyIds.toMutableList(),
-                    isHighestPrice = isHighestPrice,
-                    isLowestPrice = isLowestPrice,
-                    isLatest = isLatest,
-                    userId = getUser().value?.id ?: 0,
-                    showLoading = showLoading
-                )
-            ), apiSuccess = {
-                uiState.value = when {
-                    isLatest -> HomeUiState.GetLatestSuccess(it.body.items ?: mutableListOf())
-                    isMostView -> HomeUiState.GetMostViewSuccess(
-                        it.body.items ?: mutableListOf()
+            callAPIOnThread(
+                response = mutableListOf(
+                    appRepository.getPostsWOptions(
+                        pageIndex = 1,
+                        pageSize = 10,
+                        isMostView = isMostView,
+                        typePropertyIds = typePropertyIds.toMutableList(),
+                        isHighestPrice = isHighestPrice,
+                        isLowestPrice = isLowestPrice,
+                        isLatest = isLatest,
+                        userId = getUser().value?.id ?: 0,
+                        showLoading = showLoading
                     )
-                    isHighestPrice -> HomeUiState.GetHighestPriceSuccess(
-                        it.body.items ?: mutableListOf()
-                    )
-                    isLowestPrice -> HomeUiState.GetLowestPriceSuccess(
-                        it.body.items ?: mutableListOf()
-                    )
-                    else -> HomeUiState.Error
-                }
-            }, apiError = {
-                uiState.value = HomeUiState.Error
-            }, showDialog = false
+                ), apiSuccess = {
+                    uiState.value = when {
+                        isLatest -> HomeUiState.GetLatestSuccess(it.body.items ?: mutableListOf())
+                        isMostView -> HomeUiState.GetMostViewSuccess(
+                            it.body.items ?: mutableListOf()
+                        )
+                        isHighestPrice -> HomeUiState.GetHighestPriceSuccess(
+                            it.body.items ?: mutableListOf()
+                        )
+                        isLowestPrice -> HomeUiState.GetLowestPriceSuccess(
+                            it.body.items ?: mutableListOf()
+                        )
+                        else -> HomeUiState.Error
+                    }
+                }, apiError = {
+                    uiState.value = HomeUiState.Error
+                }, showDialog = false
             )
         }
     }

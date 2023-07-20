@@ -65,7 +65,7 @@ class PickAddressViewModel @Inject constructor(
         uiState.value = PickAddressUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getDistricts(),
                 ), apiSuccess = {
                     val indexSelected =
@@ -91,7 +91,7 @@ class PickAddressViewModel @Inject constructor(
         uiState.value = PickAddressUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getWards(
                         districtId = districtChosen.value.id.toString(),
                         showLoading = showLoading
@@ -122,7 +122,7 @@ class PickAddressViewModel @Inject constructor(
         uiState.value = PickAddressUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getStreets(
                         districtId = districtChosen.value.id.toString(),
                         filter = filter,

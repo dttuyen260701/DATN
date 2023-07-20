@@ -53,7 +53,7 @@ class ProfileViewModel @Inject constructor(
             getUser().value?.id?.let { id ->
                 PickAddressViewModel.run {
                     callAPIOnThread(
-                        funCallApis = mutableListOf(
+                        response = mutableListOf(
                             appRepository.updateUser(
                                 userId = id,
                                 fullName = name.value,
@@ -83,7 +83,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             getUser().value?.id.let { id ->
                 callAPIOnThread(
-                    funCallApis = mutableListOf(
+                    response = mutableListOf(
                         appRepository.getInformationUser(id ?: DEFAULT_ID_POST)
                     ),
                     apiSuccess = {

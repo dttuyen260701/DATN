@@ -124,7 +124,7 @@ class PostViewModel @Inject constructor(
             if (postId.value != DEFAULT_ID_POST) {
                 PickAddressViewModel.run {
                     callAPIOnThread(
-                        funCallApis = mutableListOf(
+                        response = mutableListOf(
                             appRepository.updatePost(
                                 idPost = postId.value,
                                 title = title.value,
@@ -170,7 +170,7 @@ class PostViewModel @Inject constructor(
                 PickAddressViewModel.run {
 
                     callAPIOnThread(
-                        funCallApis = mutableListOf(
+                        response = mutableListOf(
                             appRepository.createPost(
                                 title = title.value,
                                 description = description.value,
@@ -259,7 +259,7 @@ class PostViewModel @Inject constructor(
     internal fun getComboOptions(showLoading: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getComboOptions(
                         showLoading = showLoading
                     )
@@ -301,7 +301,7 @@ class PostViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getPostDetailById(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""
@@ -324,7 +324,7 @@ class PostViewModel @Inject constructor(
         uiState.value = PostUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getPredictPrice(
                         bedRoom = bedroom.value.toInt(),
                         width = width.value.toFloat(),
@@ -359,7 +359,7 @@ class PostViewModel @Inject constructor(
         uiState.value = PostUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     appRepository.getTypes(showLoading = false),
                 ), apiSuccess = {
                     val indexSelected =
@@ -382,7 +382,7 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             uiState.value = PostUiState.Loading
             callAPIOnThread(
-                funCallApis = mutableListOf(
+                response = mutableListOf(
                     if (isMyRecords) {
                         appRepository.getPostCreatedByUser(
                             idUser = getUser().value?.id ?: 0,
