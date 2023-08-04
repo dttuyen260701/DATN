@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.designsystem.components.*
@@ -45,7 +46,7 @@ internal fun RecordsRoute(
     onRealEstateItemClick: (Int) -> Unit
 ) {
     viewModel.run {
-        var uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
         var filter by remember { filter }
         var isNavigateAnotherScr by remember { isNavigateAnotherScr }
         val searchResult = remember { searchResult }
@@ -68,7 +69,6 @@ internal fun RecordsRoute(
                         clear()
                         addAll((uiState as PostUiState.GetSearchDataSuccess).data)
                     }
-                    uiState = PostUiState.Done
                 }
                 else -> {}
             }

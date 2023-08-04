@@ -1,6 +1,5 @@
 package com.example.realestateapp.ui.notification.messager
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.data.models.ItemChatGuest
@@ -12,6 +11,9 @@ import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.MessageDefault.SEND_IMAGE
 import com.example.realestateapp.util.Constants.MessageDefault.TYPE_MESSAGE
 import com.example.realestateapp.util.Constants.MessageDefault.TYPE_PHOTO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 /**
@@ -31,7 +33,8 @@ class MessengerViewModel @Inject constructor(
         internal var imageGuest = mutableStateOf("")
     }
 
-    override var uiState: MutableState<UiState> = mutableStateOf(MessengerUiState.InitView)
+    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(MessengerUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var message = mutableStateOf("")
     internal var idChannel = mutableStateOf("")
     internal var isUpLoading = mutableStateOf(false)

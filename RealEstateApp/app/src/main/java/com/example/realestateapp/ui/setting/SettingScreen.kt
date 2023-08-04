@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.models.view.SettingButton
@@ -49,38 +51,61 @@ internal fun SettingRoute(
     onChangePassClick: () -> Unit,
     onSignOutSuccess: () -> Unit
 ) {
-    val user = remember {
-        viewModel.getUser()
-    }
     val context = LocalContext.current
-    SettingScreen(
-        modifier = modifier,
-        listSettingButton = if (user.value == null) ViewDataRepository.getListSettingSignOut()
-        else ViewDataRepository.getListSettingSignIn(),
-        user = user.value,
-        onEditClick = onEditClick,
-        onSignInClick = onSignInClick,
-        onSignUpClick = onSignUpClick,
-        onPolicyClick = onPolicyClick,
-        onAboutUsClick = onAboutUsClick,
-        onChangePassClick = onChangePassClick,
-        onSignOutListener = {
-            viewModel.run {
-                showDialog(
-                    dialog = TypeDialog.ConfirmDialog(
-                        message = context.getString(R.string.confirmSignOut),
-                        negativeBtnText = context.getString(R.string.dialogBackBtn),
-                        onBtnNegativeClick = {},
-                        positiveBtnText = context.getString(R.string.settingSignOutTitle),
-                        onBtnPositiveClick = {
-                            signOut()
-                            onSignOutSuccess()
-                        }
-                    )
-                )
+    viewModel.run {
+        val user = remember {
+            getUser()
+        }
+        val uiState by uiState.collectAsStateWithLifecycle()
+
+        when(uiState) {
+            is SettingUiState.SignOutSuccess -> {
+                onSignOutSuccess()
             }
         }
-    )
+        SettingScreen(
+            modifier = modifier,
+            listSettingButton = remember {
+                if (user.value == null) {
+                    ViewDataRepository.getListSettingSignOut()
+                } else {
+                    ViewDataRepository.getListSettingSignIn()
+                }
+            },
+            user = user.value,
+            onEditClick = remember {
+                onEditClick
+            },
+            onSignInClick = remember {
+                onSignInClick
+            },
+            onSignUpClick = remember {
+                onSignUpClick
+            },
+            onPolicyClick = remember {
+                onPolicyClick
+            },
+            onAboutUsClick = remember {
+                onAboutUsClick
+            },
+            onChangePassClick = remember {
+                onChangePassClick
+            },
+            onSignOutListener = remember {
+                {
+                    showDialog(
+                        dialog = TypeDialog.ConfirmDialog(
+                            message = context.getString(R.string.confirmSignOut),
+                            negativeBtnText = context.getString(R.string.dialogBackBtn),
+                            onBtnNegativeClick = {},
+                            positiveBtnText = context.getString(R.string.settingSignOutTitle),
+                            onBtnPositiveClick = ::signOut
+                        )
+                    )
+                }
+            }
+        )
+    }
 }
 
 @Composable

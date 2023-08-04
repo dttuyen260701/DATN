@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.icon.AppIcon
@@ -39,7 +40,7 @@ internal fun ChangePassRoute(
 ) {
     val context = LocalContext.current
     viewModel.run {
-        val uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
         var firstClick by remember { firstClick }
         var oldPass by remember { oldPass }
         val oldPassWordError by remember {

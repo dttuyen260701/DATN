@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemNotification
@@ -56,7 +57,7 @@ internal fun NotificationRoute(
 ) {
     viewModel.run {
         val user by remember { getUser() }
-        var uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
         var isMessengerScreen by remember { isMessengerScreen }
         val itemChatGuests = remember { itemChatGuests }
         val itemNotifications = remember { itemNotifications }
@@ -114,7 +115,6 @@ internal fun NotificationRoute(
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
                 is NotificationUiState.InitView -> {
-                    uiState = NotificationUiState.Loading
                     getUser().value?.run {
                         if (isMessengerScreen) {
                             getDataChild(CHANNEL_GUEST).child(id.toString())
@@ -131,8 +131,7 @@ internal fun NotificationRoute(
                                         }
                                         reverse()
                                     }
-                                    uiState = NotificationUiState.Done
-                                }.addOnFailureListener { uiState = NotificationUiState.Error }
+                                }.addOnFailureListener {  }
                         } else {
                             getDataChild(CHANNEL_POST).child(id.toString())
                                 .addChildEventListener(childPostEventListener)
@@ -148,8 +147,7 @@ internal fun NotificationRoute(
                                         }
                                         reverse()
                                     }
-                                    uiState = NotificationUiState.Done
-                                }.addOnFailureListener { uiState = NotificationUiState.Error }
+                                }.addOnFailureListener {  }
                         }
                     }
                 }
@@ -171,7 +169,7 @@ internal fun NotificationRoute(
                     {
                         if (isMessengerScreen != it) {
                             isMessengerScreen = it
-                            uiState = NotificationUiState.InitView
+//                            uiState = NotificationUiState.InitView
                         }
                     }
                 },

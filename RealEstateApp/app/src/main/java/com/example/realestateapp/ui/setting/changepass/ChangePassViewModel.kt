@@ -1,7 +1,6 @@
 package com.example.realestateapp.ui.setting.changepass
 
 import android.app.Application
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
@@ -10,6 +9,9 @@ import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +29,8 @@ sealed class ChangePassUiState : UiState() {
 class ChangePassViewModel @Inject constructor(
     private val application: Application
 ) : BaseViewModel<ChangePassUiState>() {
-    override var uiState: MutableState<UiState> = mutableStateOf(ChangePassUiState.InitView)
+    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(ChangePassUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
 
     internal val oldPass = mutableStateOf("")
     internal val newPass = mutableStateOf("")
@@ -46,7 +49,7 @@ class ChangePassViewModel @Inject constructor(
                         )
                     ),
                     apiSuccess = {
-                        uiState.value = ChangePassUiState.ChangePassSuccess(it.isSuccess)
+                        uiStateValue.value = ChangePassUiState.ChangePassSuccess(it.isSuccess)
                     }
                 )
             }

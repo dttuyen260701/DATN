@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.icon.AppIcon
@@ -44,6 +45,7 @@ internal fun SignUpRoute(
     onBackClick: () -> Unit
 ) {
     viewModel.run {
+        val uiState by uiState.collectAsStateWithLifecycle()
         val context = LocalContext.current
         var firstClick by remember { firstClick }
         var name by remember { mutableStateOf("") }
@@ -91,6 +93,22 @@ internal fun SignUpRoute(
             }
         }
 
+        when (uiState) {
+            is LauncherUiState.SignUpSuccess -> {
+                showDialog(
+                    dialog = TypeDialog.ConfirmDialog(
+                        message = context.getString(R.string.signUpSuccess),
+                        negativeBtnText = context.getString(R.string.dialogBackBtn),
+                        onBtnNegativeClick = {},
+                        positiveBtnText = context.getString(R.string.dialogYesBtn),
+                        onBtnPositiveClick = onSignUpSuccess
+                    )
+                )
+            }
+            else -> {
+            }
+        }
+
         SignUpScreen(
             modifier = modifier,
             name = name,
@@ -123,22 +141,7 @@ internal fun SignUpRoute(
             onBtnSignUpClick = remember {
                 {
                     firstClick = false
-                    if (enableBtnSignUp) signUpUser(
-                        name = name,
-                        phone = phone
-                    ) {
-                        showDialog(
-                            dialog = TypeDialog.ConfirmDialog(
-                                message = context.getString(R.string.signUpSuccess),
-                                negativeBtnText = context.getString(R.string.dialogBackBtn),
-                                onBtnNegativeClick = {},
-                                positiveBtnText = context.getString(R.string.dialogYesBtn),
-                                onBtnPositiveClick = {
-                                    onSignUpSuccess()
-                                }
-                            )
-                        )
-                    }
+                    if (enableBtnSignUp) signUpUser(name = name, phone = phone)
                 }
             },
             onBackClick = onBackClick

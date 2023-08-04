@@ -1,5 +1,7 @@
 package com.example.realestateapp.ui.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.SearchOption
 import com.example.realestateapp.data.models.ItemChoose
@@ -34,6 +37,7 @@ import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_
  * Created by tuyen.dang on 5/3/2023.
  */
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 internal fun HomeRoute(
     modifier: Modifier = Modifier,
@@ -49,7 +53,7 @@ internal fun HomeRoute(
         val realEstatesMostView = remember { realEstatesMostView }
         val realEstatesHighestPrice = remember { realEstatesHighestPrice }
         val realEstatesLowestPrice = remember { realEstatesLowestPrice }
-        var uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -92,7 +96,6 @@ internal fun HomeRoute(
                         clear()
                         addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
                     }
-                    uiState = HomeUiState.Done
                 }
                 else -> {}
             }

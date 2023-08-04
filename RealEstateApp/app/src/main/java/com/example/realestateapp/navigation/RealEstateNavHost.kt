@@ -195,7 +195,7 @@ fun RealEstateNavHost(
 }
 
 fun NavHostController.clearBackStack() {
-    for (i in 1..this.backQueue.size) {
+    for (i in 1..currentBackStack.value.size) {
         this.popBackStack()
     }
 }

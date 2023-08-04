@@ -1,7 +1,6 @@
 package com.example.realestateapp.ui.home.search
 
 import android.app.Application
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -27,6 +26,9 @@ import com.example.realestateapp.util.Constants.DefaultField.FIELD_STREET_OF_FRO
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_WIDTH
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,9 +52,10 @@ sealed class SearchUiState : UiState() {
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val application: Application
+    application: Application
 ) : BaseViewModel<SearchUiState>() {
-    override var uiState: MutableState<UiState> = mutableStateOf(SearchUiState.InitView)
+    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(SearchUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var searchResult = mutableStateListOf<RealEstateList>()
     internal var isShowSearchOption = mutableStateOf(true)
     internal var isShowSearchHighOption = mutableStateOf(false)
@@ -130,9 +133,9 @@ class SearchViewModel @Inject constructor(
                 response = mutableListOf(
                     appRepository.getTypes(showLoading = false),
                 ), apiSuccess = {
-                    uiState.value = SearchUiState.GetTypesSuccess(it.body)
+                    uiStateValue.value = SearchUiState.GetTypesSuccess(it.body)
                 }, apiError = {
-                    uiState.value = SearchUiState.Error
+                    uiStateValue.value = SearchUiState.Error
                 }, showDialog = false
             )
         }
@@ -147,7 +150,7 @@ class SearchViewModel @Inject constructor(
             searchResult.clear()
         }
         val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
-        uiState.value = SearchUiState.Loading
+        uiStateValue.value = SearchUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
@@ -187,7 +190,7 @@ class SearchViewModel @Inject constructor(
                 ), apiSuccess = {
                     if (key == filter.value) {
                         it.body.run {
-                            uiState.value =
+                            uiStateValue.value =
                                 SearchUiState.GetSearchDataSuccess(items ?: mutableListOf())
                             updatePagingModel(
                                 totalPageNew = pageCount,
@@ -196,7 +199,7 @@ class SearchViewModel @Inject constructor(
                         }
                     }
                 }, apiError = {
-                    uiState.value = SearchUiState.Error
+                    uiStateValue.value = SearchUiState.Error
                 }
             )
         }

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.*
 import com.example.realestateapp.designsystem.icon.AppIcon
@@ -50,7 +51,7 @@ internal fun ReportRoute(
     val context = LocalContext.current
 
     viewModel.run {
-        val uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
 
         var firstClick by remember { firstClick }
         var description by remember { description }

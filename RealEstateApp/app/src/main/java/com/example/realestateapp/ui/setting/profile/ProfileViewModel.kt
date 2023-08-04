@@ -1,6 +1,5 @@
 package com.example.realestateapp.ui.setting.profile
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -15,6 +14,9 @@ import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,7 +41,8 @@ sealed class ProfileUiState : UiState() {
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
 ) : BaseViewModel<ProfileUiState>() {
-    override var uiState: MutableState<UiState> = mutableStateOf(ProfileUiState.InitView)
+    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(ProfileUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var firstClick = mutableStateOf(true)
     internal var imgUrl = mutableStateOf("")
     internal var name = mutableStateOf("")
@@ -66,8 +69,8 @@ class ProfileViewModel @Inject constructor(
                             )
                         ),
                         apiSuccess = {
-                            uiState.value = it.body?.let {
-                                    ProfileUiState.UpdateInformationUserSuccess(it)
+                            uiStateValue.value = it.body?.let {
+                                ProfileUiState.UpdateInformationUserSuccess(it)
                             } ?: ProfileUiState.Error
                         },
                         apiError = {
@@ -87,7 +90,7 @@ class ProfileViewModel @Inject constructor(
                         appRepository.getInformationUser(id ?: DEFAULT_ID_POST)
                     ),
                     apiSuccess = {
-                        uiState.value =
+                        uiStateValue.value =
                             ProfileUiState.GetInformationUserSuccess(it.body)
                     },
                     apiError = {

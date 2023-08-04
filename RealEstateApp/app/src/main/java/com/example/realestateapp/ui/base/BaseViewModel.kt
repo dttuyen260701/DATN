@@ -20,6 +20,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -87,7 +89,8 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
         private var listenNotification: (idUser: Int) -> Unit = { _ -> }
     }
 
-    abstract var uiState: MutableState<UiState>
+    protected abstract val uiStateValue: MutableStateFlow<UiState>
+    internal abstract val uiState: StateFlow<UiState>
 
     @Inject
     lateinit var appRepository: AppRepository

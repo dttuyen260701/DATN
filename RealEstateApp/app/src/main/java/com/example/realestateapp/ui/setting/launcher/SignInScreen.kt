@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.*
@@ -40,6 +41,7 @@ internal fun SignInRoute(
     onBackClick: () -> Unit
 ) {
     viewModel.run {
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         var email by remember { email }
         var password by remember { password }
         var firstClick by remember { firstClick }
@@ -59,6 +61,14 @@ internal fun SignInRoute(
             }
         }
 
+        when(uiState) {
+            is LauncherUiState.SignInSuccess -> {
+                onSignInSuccess()
+            }
+            else -> {
+            }
+        }
+
         SignInScreen(
             modifier = modifier,
             email = email,
@@ -75,12 +85,12 @@ internal fun SignInRoute(
             onBtnSignInClick = remember {
                 {
                     firstClick = false
-                    if (enableBtnSignIn.value) signInUser(
-                        onSignInSuccess = onSignInSuccess
-                    )
+                    if (enableBtnSignIn.value) signInUser()
                 }
             },
-            onBackClick = remember { onBackClick }
+            onBackClick = remember {
+                onBackClick
+            }
         )
     }
 }

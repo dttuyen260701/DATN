@@ -1,11 +1,12 @@
 package com.example.realestateapp.ui
 
 import android.net.Uri
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 /**
@@ -19,7 +20,8 @@ sealed class MainUiState : UiState() {
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
 ) : BaseViewModel<MainUiState>() {
-    override var uiState: MutableState<UiState> = mutableStateOf(MainUiState.InitView)
+    override val uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(MainUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
 
     internal var uri: Uri? = null
 }

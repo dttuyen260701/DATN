@@ -1,7 +1,6 @@
 package com.example.realestateapp.ui.setting.launcher
 
 import android.app.Application
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
@@ -13,6 +12,7 @@ import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,21 +22,31 @@ import javax.inject.Inject
 
 sealed class LauncherUiState : UiState() {
     object InitView : LauncherUiState()
+
+    object Error : LauncherUiState()
+
+    object SignInSuccess : LauncherUiState()
+
+    object SignUpSuccess : LauncherUiState()
 }
 
 @HiltViewModel
 class LauncherViewModel @Inject constructor(
     private val application: Application
 ) : BaseViewModel<LauncherUiState>() {
-    override var uiState: MutableState<UiState> = mutableStateOf(LauncherUiState.InitView)
+    override val uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(LauncherUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000L),
+            LauncherUiState.InitView
+        )
 
     internal var email = mutableStateOf("")
     internal var password = mutableStateOf("")
     internal var firstClick = mutableStateOf(true)
 
-    internal fun signInUser(
-        onSignInSuccess: () -> Unit
-    ) {
+    internal fun signInUser() {
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
@@ -48,13 +58,16 @@ class LauncherViewModel @Inject constructor(
                 apiSuccess = {
                     getUser().value = it.body
                     AuthenticationObject.token = it.body?.token ?: ""
-                    onSignInSuccess()
                     viewModelScope.launch(Dispatchers.IO) {
                         application.baseContext.writeStoreLauncher(
                             email = email.value,
                             password = password.value
                         )
                     }
+                    uiStateValue.value = LauncherUiState.SignInSuccess
+                },
+                apiError = {
+                    uiStateValue.value = LauncherUiState.Error
                 }
             )
         }
@@ -63,7 +76,6 @@ class LauncherViewModel @Inject constructor(
     internal fun signUpUser(
         name: String,
         phone: String,
-        onSignUpSuccess: () -> Unit
     ) {
         viewModelScope.launch {
             callAPIOnThread(
@@ -76,7 +88,10 @@ class LauncherViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = {
-                    onSignUpSuccess()
+                    uiStateValue.value = LauncherUiState.SignUpSuccess
+                },
+                apiError = {
+                    uiStateValue.value = LauncherUiState.Error
                 }
             )
         }

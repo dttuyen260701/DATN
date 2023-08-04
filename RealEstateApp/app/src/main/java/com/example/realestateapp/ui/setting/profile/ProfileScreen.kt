@@ -23,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.GenderOption
 import com.example.realestateapp.data.models.ItemChoose
@@ -65,7 +66,7 @@ internal fun ProfileRoute(
 
     viewModel.run {
         var user by remember { getUser() }
-        var uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
         var firstClick by remember { firstClick }
         var addressDetailDisplay by remember { detailAddress }
         val addressDetailsScr = remember { addressDetails }
@@ -139,7 +140,6 @@ internal fun ProfileRoute(
                             detailStreet.value = u.addressDetail ?: ""
                         }
                     }
-                    uiState = ProfileUiState.Done
                 }
                 is ProfileUiState.UpdateInformationUserSuccess -> {
                     context.run {
@@ -164,7 +164,6 @@ internal fun ProfileRoute(
                             )
                         }
                     }
-                    uiState = ProfileUiState.Done
                 }
                 else -> {}
             }

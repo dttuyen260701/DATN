@@ -4,9 +4,7 @@ import android.Manifest
 import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
@@ -16,6 +14,9 @@ import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,7 +50,8 @@ sealed class HomeUiState : UiState() {
 class HomeViewModel @Inject constructor(
     private val application: Application
 ) : BaseViewModel<HomeUiState>() {
-    override var uiState: MutableState<UiState> = mutableStateOf(HomeUiState.InitView)
+    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(HomeUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var typesData = mutableStateListOf<ItemChoose>()
     internal var realEstatesLatest = mutableStateListOf<RealEstateList>()
     internal var realEstatesMostView = mutableStateListOf<RealEstateList>()
@@ -58,7 +60,7 @@ class HomeViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     internal fun backgroundSignIn() {
-        uiState.value = HomeUiState.Loading
+        uiStateValue.value = HomeUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             application.baseContext.readStoreLauncher(onReadSuccess = { email, pass ->
                 viewModelScope.launch {
@@ -84,27 +86,27 @@ class HomeViewModel @Inject constructor(
                                 listenNotificationInvoke(getUser().value?.id ?: -1)
                             }
                         }, onDoneCallApi = {
-                            uiState.value = HomeUiState.DoneSignInBackground
+                            uiStateValue.value = HomeUiState.DoneSignInBackground
                         }, showDialog = false
                     )
                 }
             }, onErrorAction = {
                 viewModelScope.launch {
-                    uiState.value = HomeUiState.DoneSignInBackground
+                    uiStateValue.value = HomeUiState.DoneSignInBackground
                 }
             })
         }
     }
 
     internal fun getTypes() {
-        uiState.value = HomeUiState.Loading
+        uiStateValue.value = HomeUiState.Loading
         viewModelScope.launch {
             callAPIOnThread(response = mutableListOf(
                 appRepository.getTypes(showLoading = false),
             ), apiSuccess = {
-                uiState.value = HomeUiState.GetTypesSuccess(it.body)
+                uiStateValue.value = HomeUiState.GetTypesSuccess(it.body)
             }, apiError = {
-                uiState.value = HomeUiState.Error
+                uiStateValue.value = HomeUiState.Error
             }, showDialog = false
             )
         }
@@ -117,7 +119,7 @@ class HomeViewModel @Inject constructor(
         isLowestPrice: Boolean = false,
         showLoading: Boolean = false
     ) {
-        uiState.value = HomeUiState.Loading
+        uiStateValue.value = HomeUiState.Loading
         viewModelScope.launch {
             val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
             callAPIOnThread(
@@ -134,7 +136,7 @@ class HomeViewModel @Inject constructor(
                         showLoading = showLoading
                     )
                 ), apiSuccess = {
-                    uiState.value = when {
+                    uiStateValue.value = when {
                         isLatest -> HomeUiState.GetLatestSuccess(it.body.items ?: mutableListOf())
                         isMostView -> HomeUiState.GetMostViewSuccess(
                             it.body.items ?: mutableListOf()
@@ -148,7 +150,7 @@ class HomeViewModel @Inject constructor(
                         else -> HomeUiState.Error
                     }
                 }, apiError = {
-                    uiState.value = HomeUiState.Error
+                    uiStateValue.value = HomeUiState.Error
                 }, showDialog = false
             )
         }

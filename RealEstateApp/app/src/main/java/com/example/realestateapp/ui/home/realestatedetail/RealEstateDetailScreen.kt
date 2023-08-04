@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.PostStatus
 import com.example.realestateapp.data.models.RealEstateDetail
@@ -80,7 +81,7 @@ internal fun RealEstateDetailRoute(
         val realEstateProperty = remember { realEstateProperty }
         val realEstatesSamePrice = remember { realEstatesSamePrice }
         val realEstatesCluster = remember { realEstatesCluster }
-        var uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
@@ -105,7 +106,6 @@ internal fun RealEstateDetailRoute(
                         clear()
                         addAll((uiState as RealEstateDetailUiState.GetClusterSuccess).data)
                     }
-                    uiState = RealEstateDetailUiState.Done
                 }
                 else -> {}
             }

@@ -16,6 +16,9 @@ import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.Constants.DefaultValue.REAL_ESTATE_DEFAULT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,7 +47,8 @@ sealed class RealEstateDetailUiState : UiState() {
 class RealEstateDetailViewModel @Inject constructor(
     private val application: Application
 ) : BaseViewModel<RealEstateDetailUiState>() {
-    override var uiState: MutableState<UiState> = mutableStateOf(RealEstateDetailUiState.InitView)
+    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(RealEstateDetailUiState.InitView)
+    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var realEstateItem: MutableState<RealEstateDetail> =
         mutableStateOf(REAL_ESTATE_DEFAULT)
     internal val realEstateProperty = mutableStateListOf<RealEstateProperty>()
@@ -65,10 +69,10 @@ class RealEstateDetailViewModel @Inject constructor(
                         )
                     ),
                     apiSuccess = {
-                        uiState.value = RealEstateDetailUiState.Done
+                        uiStateValue.value = RealEstateDetailUiState.Done
                     },
                     apiError = {
-                        uiState.value = RealEstateDetailUiState.Error
+                        uiStateValue.value = RealEstateDetailUiState.Error
                     }
                 )
             }
@@ -106,7 +110,7 @@ class RealEstateDetailViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = { response ->
-                    uiState.value =
+                    uiStateValue.value =
                         RealEstateDetailUiState.GetRealEstateDetailSuccess(response.body)
 
                     response.body.run {
@@ -247,7 +251,7 @@ class RealEstateDetailViewModel @Inject constructor(
                     }
                 },
                 apiError = {
-                    uiState.value = RealEstateDetailUiState.Error
+                    uiStateValue.value = RealEstateDetailUiState.Error
                 }
             )
         }
@@ -265,11 +269,11 @@ class RealEstateDetailViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = {
-                    uiState.value =
+                    uiStateValue.value =
                         RealEstateDetailUiState.GetSamePriceSuccess(it.body)
                 },
                 apiError = {
-                    uiState.value = RealEstateDetailUiState.Error
+                    uiStateValue.value = RealEstateDetailUiState.Error
                 }
             )
         }
@@ -287,11 +291,11 @@ class RealEstateDetailViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = {
-                    uiState.value =
+                    uiStateValue.value =
                         RealEstateDetailUiState.GetClusterSuccess(it.body)
                 },
                 apiError = {
-                    uiState.value = RealEstateDetailUiState.Error
+                    uiStateValue.value = RealEstateDetailUiState.Error
                 }
             )
         }

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.designsystem.components.*
@@ -62,7 +63,7 @@ internal fun PickAddressRoute(
         var districtChosen by remember { PickAddressViewModel.districtChosen }
         var wardChosen by remember { PickAddressViewModel.wardChosen }
         var streetChosen by remember { PickAddressViewModel.streetChosen }
-        var uiState by remember { uiState }
+        val uiState by uiState.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
         var detailStreet by remember { PickAddressViewModel.detailStreet }
 
@@ -79,21 +80,21 @@ internal fun PickAddressRoute(
                         clear()
                         addAll((uiState as PickAddressUiState.GetDistrictSuccess).data)
                     }
-                    uiState = PickAddressUiState.Done
+//                    uiState = PickAddressUiState.Done
                 }
                 is PickAddressUiState.GetWardSuccess -> {
                     wards.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetWardSuccess).data)
                     }
-                    uiState = PickAddressUiState.Done
+//                    uiState = PickAddressUiState.Done
                 }
                 is PickAddressUiState.GetStreetSuccess -> {
                     streets.run {
                         clear()
                         addAll((uiState as PickAddressUiState.GetStreetSuccess).data)
                     }
-                    uiState = PickAddressUiState.Done
+//                    uiState = PickAddressUiState.Done
                 }
                 else -> {}
             }
