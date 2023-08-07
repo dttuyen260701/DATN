@@ -131,7 +131,9 @@ internal fun NotificationRoute(
                                         }
                                         reverse()
                                     }
-                                }.addOnFailureListener {  }
+                                }.addOnFailureListener {
+                                    updateUiStateDone()
+                                }
                         } else {
                             getDataChild(CHANNEL_POST).child(id.toString())
                                 .addChildEventListener(childPostEventListener)
@@ -147,7 +149,9 @@ internal fun NotificationRoute(
                                         }
                                         reverse()
                                     }
-                                }.addOnFailureListener {  }
+                                }.addOnFailureListener {
+                                    updateUiStateDone()
+                                }
                         }
                     }
                 }

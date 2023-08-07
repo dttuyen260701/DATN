@@ -69,6 +69,7 @@ internal fun RecordsRoute(
                         clear()
                         addAll((uiState as PostUiState.GetSearchDataSuccess).data)
                     }
+                    updateUiStateDone()
                 }
                 else -> {}
             }

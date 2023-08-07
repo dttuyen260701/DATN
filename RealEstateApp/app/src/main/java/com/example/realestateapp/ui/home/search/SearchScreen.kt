@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.home.search
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
@@ -148,6 +149,7 @@ internal fun SearchRoute(
                         isShowSearchOption = false
                     }
                     searchResultListState.animateScrollToItem(0)
+                    updateUiStateDone()
                 }
                 else -> {}
             }
@@ -502,6 +504,7 @@ internal fun SearchScreen(
 ) {
     var isShowSearchHighOption by remember { isShowSearchHighOptionVM }
 
+    Log.e("TTT", "SearchScreen: $isShowSearchHighOption - $isShowSearchOption", )
     BaseScreen(
         toolbar = {
             ConstraintLayout(
@@ -579,9 +582,11 @@ internal fun SearchScreen(
                                 isShowSearchOption && !isShowSearchHighOption -> {
                                     Dimension.wrapContent
                                 }
+
                                 isShowSearchOption && isShowSearchHighOption -> {
                                     Dimension.fillToConstraints
                                 }
+
                                 else -> {
                                     Dimension.value(0.dp)
                                 }

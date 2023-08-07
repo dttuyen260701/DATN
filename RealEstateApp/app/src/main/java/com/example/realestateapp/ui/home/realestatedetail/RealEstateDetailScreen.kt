@@ -8,14 +8,28 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,12 +52,22 @@ import com.example.realestateapp.data.models.RealEstateDetail
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.models.view.RealEstateProperty
-import com.example.realestateapp.designsystem.components.*
+import com.example.realestateapp.designsystem.components.BorderLine
+import com.example.realestateapp.designsystem.components.ListItemHome
+import com.example.realestateapp.designsystem.components.MapviewShowMarker
+import com.example.realestateapp.designsystem.components.SlideShowImage
+import com.example.realestateapp.designsystem.components.TextIcon
+import com.example.realestateapp.designsystem.components.TextIconVertical
+import com.example.realestateapp.designsystem.components.ToolbarWAnimation
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
-import com.example.realestateapp.extension.*
+import com.example.realestateapp.extension.callPhone
+import com.example.realestateapp.extension.formatToMoney
+import com.example.realestateapp.extension.makeToast
+import com.example.realestateapp.extension.openMap
+import com.example.realestateapp.extension.setVisibility
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.notification.messager.MessengerViewModel
@@ -89,11 +113,13 @@ internal fun RealEstateDetailRoute(
                     getIsLoading().value = true
                     getRealEstateDetail(realEstateId)
                 }
+
                 is RealEstateDetailUiState.GetRealEstateDetailSuccess -> {
                     realEstateItem =
                         (uiState as RealEstateDetailUiState.GetRealEstateDetailSuccess).data
                     getRealEstatesSamePrice(realEstateId)
                 }
+
                 is RealEstateDetailUiState.GetSamePriceSuccess -> {
                     realEstatesSamePrice.run {
                         clear()
@@ -101,12 +127,15 @@ internal fun RealEstateDetailRoute(
                     }
                     getRealEstatesCluster(realEstateId)
                 }
+
                 is RealEstateDetailUiState.GetClusterSuccess -> {
                     realEstatesCluster.run {
                         clear()
                         addAll((uiState as RealEstateDetailUiState.GetClusterSuccess).data)
                     }
+                    updateUiStateDone()
                 }
+
                 else -> {}
             }
         }

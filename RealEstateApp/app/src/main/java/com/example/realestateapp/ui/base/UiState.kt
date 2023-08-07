@@ -5,3 +5,5 @@ package com.example.realestateapp.ui.base
  */
 
 abstract class UiState
+
+object Done : UiState()

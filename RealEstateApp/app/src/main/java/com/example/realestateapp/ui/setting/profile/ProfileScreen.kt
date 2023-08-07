@@ -140,6 +140,7 @@ internal fun ProfileRoute(
                             detailStreet.value = u.addressDetail ?: ""
                         }
                     }
+                    updateUiStateDone()
                 }
                 is ProfileUiState.UpdateInformationUserSuccess -> {
                     context.run {
@@ -164,6 +165,7 @@ internal fun ProfileRoute(
                             )
                         }
                     }
+                    updateUiStateDone()
                 }
                 else -> {}
             }

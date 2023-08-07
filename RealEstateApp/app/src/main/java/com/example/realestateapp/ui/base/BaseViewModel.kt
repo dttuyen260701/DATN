@@ -92,6 +92,10 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     protected abstract val uiStateValue: MutableStateFlow<UiState>
     internal abstract val uiState: StateFlow<UiState>
 
+    internal fun updateUiStateDone() {
+        uiStateValue.value = Done
+    }
+
     @Inject
     lateinit var appRepository: AppRepository
 
@@ -211,12 +215,14 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
                     is ApiResultWrapper.Loading -> {
                         isLoading.value = true
                     }
+
                     is ApiResultWrapper.Success -> {
                         isLoading.value = false
                         withContext(Dispatchers.Main) {
                             apiSuccess(result.value)
                         }
                     }
+
                     is ApiResultWrapper.ResponseCodeError -> {
                         isLoading.value = false
                         apiError()
@@ -224,6 +230,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
                             dialog = TypeDialog.ErrorDialog(result.error)
                         )
                     }
+
                     is ApiResultWrapper.NetworkError -> {
                         isLoading.value = false
                         apiError()
@@ -231,6 +238,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
                             dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.NOT_FOUND_INTERNET)
                         )
                     }
+
                     else -> {
                         isLoading.value = false
                         apiError()
