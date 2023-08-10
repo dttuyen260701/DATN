@@ -38,11 +38,21 @@ import com.example.realestateapp.util.Constants.RequestNotification.POST_NOTIFIC
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        private var database: DatabaseReference =
+            Firebase.database.reference.database.getReference(Constants.FireBaseRef.ROOT_DATA)
+
+        internal fun getDataChild(key: String) = database.child(key)
+    }
 
     private val viewModel: MainActivityViewModel by viewModels()
     private var appState: RealEstateAppState? = null

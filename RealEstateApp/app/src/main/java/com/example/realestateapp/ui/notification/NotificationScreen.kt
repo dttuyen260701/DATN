@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.realestateapp.R
+import com.example.realestateapp.ui.MainActivity.Companion.getDataChild
 import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemNotification
 import com.example.realestateapp.designsystem.components.BorderLine

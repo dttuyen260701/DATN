@@ -2,6 +2,7 @@ package com.example.realestateapp.ui.notification.messager
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import com.example.realestateapp.ui.MainActivity.Companion.getDataChild
 import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemMessenger
 import com.example.realestateapp.data.models.User
