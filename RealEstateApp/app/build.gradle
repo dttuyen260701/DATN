@@ -80,6 +80,7 @@ dependencies {
     def androidXTestExtKotlinRunnerVersion = "1.1.5"
     def androidXTestCoreVersion = "1.5.0"
     def robolectricVersion = "4.10.3"
+    def hilt = "2.47"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
@@ -125,8 +126,8 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-    implementation("com.google.dagger:hilt-android:2.47")
-    kapt("com.google.dagger:hilt-android-compiler:2.47")
+    implementation("com.google.dagger:hilt-android:$hilt")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt")
 }
 
 kapt {
