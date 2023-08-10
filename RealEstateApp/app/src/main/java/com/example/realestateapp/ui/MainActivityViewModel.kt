@@ -1,6 +1,7 @@
 package com.example.realestateapp.ui
 
 import android.net.Uri
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ sealed class MainUiState : UiState() {
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-) : BaseViewModel<MainUiState>() {
+    appRepository: AppRepository
+) : BaseViewModel<MainUiState>(appRepository) {
     override val uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(MainUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
 

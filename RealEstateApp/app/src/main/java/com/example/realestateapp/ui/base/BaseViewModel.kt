@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import javax.inject.Inject
 
 /**
  * Created by tuyen.dang on 4/30/2023.
@@ -59,7 +58,9 @@ sealed interface TypeDialog {
     ) : TypeDialog
 }
 
-abstract class BaseViewModel<US : UiState> : ViewModel() {
+abstract class BaseViewModel<US : UiState>(
+    protected var appRepository: AppRepository
+) : ViewModel() {
     companion object {
         private val user = mutableStateOf<User?>(null)
 
@@ -88,9 +89,6 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
     internal fun updateUiStateDone() {
         uiStateValue.value = Done
     }
-
-    @Inject
-    lateinit var appRepository: AppRepository
 
     internal fun getPagingModel() = pagingModel
 
@@ -209,7 +207,7 @@ abstract class BaseViewModel<US : UiState> : ViewModel() {
 
                     is ApiResultWrapper.Success -> {
                         isLoading.value = false
-                        withContext(Dispatchers.Main) {
+                        withContext(Dispatchers.Default) {
                             apiSuccess(result.value)
                         }
                     }

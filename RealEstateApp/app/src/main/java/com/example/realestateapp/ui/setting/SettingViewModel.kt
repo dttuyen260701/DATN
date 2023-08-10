@@ -2,6 +2,7 @@ package com.example.realestateapp.ui.setting
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.writeStoreLauncher
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
@@ -26,8 +27,8 @@ sealed class SettingUiState : UiState() {
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val application: Application
-) : BaseViewModel<SettingUiState>() {
+    private val application: Application, appRepository: AppRepository
+) : BaseViewModel<SettingUiState>(appRepository) {
     override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(SettingUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
 

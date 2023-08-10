@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemNotification
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,8 @@ sealed class NotificationUiState : UiState() {
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-) : BaseViewModel<NotificationUiState>() {
+    appRepository: AppRepository
+) : BaseViewModel<NotificationUiState>(appRepository) {
     override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(NotificationUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var isMessengerScreen = mutableStateOf(true)

@@ -82,6 +82,7 @@ dependencies {
     def androidXTestCoreVersion = "1.5.0"
     def robolectricVersion = "4.10.3"
     def hilt = "2.47"
+    def coroutines_version = "1.6"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
@@ -142,6 +143,7 @@ dependencies {
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt"
     // ...with Java.
     androidTestAnnotationProcessor "com.google.dagger:hilt-android-compiler:$hilt"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 }
 
 kapt {

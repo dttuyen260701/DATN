@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.models.ItemChoose
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.Constants
@@ -38,7 +39,8 @@ sealed class PickAddressUiState : UiState() {
 
 @HiltViewModel
 class PickAddressViewModel @Inject constructor(
-) : BaseViewModel<PickAddressUiState>() {
+    appRepository: AppRepository
+) : BaseViewModel<PickAddressUiState>(appRepository) {
     companion object {
         internal var districtChosen: MutableState<ItemChoose> = mutableStateOf(DEFAULT_ITEM_CHOSEN)
             private set

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.enums.GenderOption
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
@@ -40,7 +41,8 @@ sealed class ProfileUiState : UiState() {
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-) : BaseViewModel<ProfileUiState>() {
+    appRepository: AppRepository
+) : BaseViewModel<ProfileUiState>(appRepository) {
     override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(ProfileUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var firstClick = mutableStateOf(true)

@@ -8,6 +8,7 @@ import com.example.realestateapp.R
 import com.example.realestateapp.data.enums.*
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
@@ -52,8 +53,8 @@ sealed class SearchUiState : UiState() {
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    application: Application
-) : BaseViewModel<SearchUiState>() {
+    application: Application, appRepository: AppRepository
+) : BaseViewModel<SearchUiState>(appRepository) {
     override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(SearchUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var searchResult = mutableStateListOf<RealEstateList>()

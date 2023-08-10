@@ -6,6 +6,7 @@ import com.example.realestateapp.ui.MainActivity.Companion.getDataChild
 import com.example.realestateapp.data.models.ItemChatGuest
 import com.example.realestateapp.data.models.ItemMessenger
 import com.example.realestateapp.data.models.User
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.util.Constants
@@ -28,7 +29,8 @@ sealed class MessengerUiState : UiState() {
 }
 
 class MessengerViewModel @Inject constructor(
-) : BaseViewModel<MessengerUiState>() {
+    appRepository: AppRepository
+) : BaseViewModel<MessengerUiState>(appRepository) {
     companion object {
         internal var nameGuest = mutableStateOf("")
         internal var imageGuest = mutableStateOf("")

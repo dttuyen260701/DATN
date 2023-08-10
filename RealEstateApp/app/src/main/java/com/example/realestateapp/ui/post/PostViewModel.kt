@@ -9,6 +9,7 @@ import com.example.realestateapp.data.models.Image
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateDetail
 import com.example.realestateapp.data.models.RealEstateList
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
 import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailUiState
@@ -59,8 +60,8 @@ sealed class PostUiState : UiState() {
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
-
-) : BaseViewModel<PostUiState>() {
+    appRepository: AppRepository
+) : BaseViewModel<PostUiState>(appRepository) {
     override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(PostUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
     internal var firstClick = mutableStateOf(true)

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.R
+import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
@@ -27,8 +28,8 @@ sealed class ChangePassUiState : UiState() {
 
 @HiltViewModel
 class ChangePassViewModel @Inject constructor(
-    private val application: Application
-) : BaseViewModel<ChangePassUiState>() {
+    private val application: Application, appRepository: AppRepository
+) : BaseViewModel<ChangePassUiState>(appRepository) {
     override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(ChangePassUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
 
