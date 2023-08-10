@@ -59,7 +59,7 @@ class LauncherViewModel @Inject constructor(
                 apiSuccess = {
                     getUser().value = it.body
                     AuthenticationObject.token = it.body?.token ?: ""
-                    viewModelScope.launch(Dispatchers.IO) {
+                    viewModelScope.launch(Dispatchers.Default) {
                         application.baseContext.writeStoreLauncher(
                             email = email.value,
                             password = password.value

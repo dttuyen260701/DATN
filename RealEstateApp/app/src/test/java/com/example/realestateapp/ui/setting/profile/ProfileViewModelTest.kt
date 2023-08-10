@@ -30,37 +30,41 @@ class ProfileViewModelTest {
 
     @Test
     fun `updateInformationUser$app_debug`() = runTest {
-        profileViewModel.getInformationUser()
-        val result = launch(UnconfinedTestDispatcher()) {
-            profileViewModel.uiState.collect {
-                if (it is ProfileUiState.UpdateInformationUserSuccess) {
-                    assertEquals(
-                        User(
-                            id = 1,
-                            fullName = "Testing Edit",
-                            dateOfBirth = "07/07/07"
-                        ),
-                        (it as? ProfileUiState.UpdateInformationUserSuccess)?.data
-                    )
+        profileViewModel.run {
+            getInformationUser()
+            val result = launch(UnconfinedTestDispatcher()) {
+                uiState.collect {
+                    if (it is ProfileUiState.UpdateInformationUserSuccess) {
+                        assertEquals(
+                            User(
+                                id = 1,
+                                fullName = "Testing Edit",
+                                dateOfBirth = "07/07/07"
+                            ),
+                            (it as? ProfileUiState.UpdateInformationUserSuccess)?.data
+                        )
+                    }
                 }
             }
+            result.cancel()
         }
-        result.cancel()
     }
 
     @Test
     fun `getInformationUser$app_debug`() = runTest {
-        profileViewModel.getInformationUser()
-        val result = launch(UnconfinedTestDispatcher()) {
-            profileViewModel.uiState.collect {
-                if (it is ProfileUiState.GetInformationUserSuccess) {
-                    assertEquals(
-                        User(),
-                        (it as? ProfileUiState.GetInformationUserSuccess)?.data
-                    )
+        profileViewModel.run {
+            getInformationUser()
+            val result = launch(UnconfinedTestDispatcher()) {
+                uiState.collect {
+                    if (it is ProfileUiState.GetInformationUserSuccess) {
+                        assertEquals(
+                            User(),
+                            (it as? ProfileUiState.GetInformationUserSuccess)?.data
+                        )
+                    }
                 }
             }
+            result.cancel()
         }
-        result.cancel()
     }
 }

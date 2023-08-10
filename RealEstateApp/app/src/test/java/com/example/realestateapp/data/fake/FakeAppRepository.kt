@@ -10,6 +10,7 @@ import com.example.realestateapp.data.models.RealEstateDetail
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.repository.AppRepository
+import com.example.realestateapp.util.ConstantTest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
@@ -20,9 +21,30 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         email: String,
         password: String,
         showLoading: Boolean
-    ): Flow<ApiResultWrapper<User?>> {
-        TODO("Not yet implemented")
+    ): Flow<ApiResultWrapper<User?>> = flow {
+        emit(
+            if (email == ConstantTest.DefaultTestLaunchValue.email && password == ConstantTest.DefaultTestLaunchValue.password) {
+                ApiResultWrapper.Success(
+                    value = ResponseAPI(
+                        isSuccess = true,
+                        errorMessage = null,
+                        body = User(
+                            email = email
+                        )
+                    )
+                )
+            } else {
+                ApiResultWrapper.Success(
+                    value = ResponseAPI(
+                        isSuccess = false,
+                        errorMessage = ConstantTest.DefaultTestLaunchValue.messageErrorLogin,
+                        body = null
+                    )
+                )
+            }
+        )
     }
+
 
     override suspend fun signUp(
         name: String,
