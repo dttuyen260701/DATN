@@ -207,7 +207,7 @@ abstract class BaseViewModel<US : UiState>(
 
                     is ApiResultWrapper.Success -> {
                         isLoading.value = false
-                        withContext(Dispatchers.Default) {
+                        withContext(Dispatchers.Main) {
                             apiSuccess(result.value)
                         }
                     }

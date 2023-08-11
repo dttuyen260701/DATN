@@ -1,15 +1,13 @@
 package com.example.realestateapp.ui.setting.changepass
 
-import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.example.realestateapp.R
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.ui.base.BaseViewModel
 import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,9 +26,10 @@ sealed class ChangePassUiState : UiState() {
 
 @HiltViewModel
 class ChangePassViewModel @Inject constructor(
-    private val application: Application, appRepository: AppRepository
+    appRepository: AppRepository
 ) : BaseViewModel<ChangePassUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(ChangePassUiState.InitView)
+    override var uiStateValue: MutableStateFlow<UiState> =
+        MutableStateFlow(ChangePassUiState.InitView)
     override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
 
     internal val oldPass = mutableStateOf("")
@@ -40,7 +39,7 @@ class ChangePassViewModel @Inject constructor(
 
     internal fun changePassword() {
         getUser().value?.id?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 callAPIOnThread(
                     response = mutableListOf(
                         appRepository.changePassWord(
@@ -58,5 +57,5 @@ class ChangePassViewModel @Inject constructor(
     }
 
     internal fun validPassWord(pass: String): String =
-        if (PASSWORD.matches(pass) || firstClick.value) "" else application.getString(R.string.passwordError)
+        if (PASSWORD.matches(pass) || firstClick.value) "" else Constants.ValidData.INVALID_PASSWORD
 }

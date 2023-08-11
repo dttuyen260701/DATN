@@ -196,6 +196,11 @@ class Constants {
         const val NOT_FOUND_INTERNET = "Vui lòng kiểm tra lại mạng !"
     }
 
+    object ValidData {
+        const val INVALID_EMAIL = "Sai định dạng email"
+        const val INVALID_PASSWORD = "Sai định dạng mật khẩu"
+    }
+
     object DefaultConfig {
         //retrofit
         const val NETWORK_TIMEOUT = 30L

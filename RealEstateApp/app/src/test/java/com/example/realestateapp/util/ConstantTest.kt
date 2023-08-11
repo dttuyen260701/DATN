@@ -11,5 +11,7 @@ class ConstantTest {
         const val wrongEmail = "testgmail.com"
         const val wrongPassword = "Test@1234"
         const val messageErrorLogin = "Wrong information"
+        const val messageValidEmail = "Sai định dạng email"
+
     }
 }

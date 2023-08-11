@@ -23,7 +23,9 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         showLoading: Boolean
     ): Flow<ApiResultWrapper<User?>> = flow {
         emit(
-            if (email == ConstantTest.DefaultTestLaunchValue.email && password == ConstantTest.DefaultTestLaunchValue.password) {
+            if (email == ConstantTest.DefaultTestLaunchValue.email
+                && password == ConstantTest.DefaultTestLaunchValue.password
+            ) {
                 ApiResultWrapper.Success(
                     value = ResponseAPI(
                         isSuccess = true,
@@ -34,12 +36,8 @@ class FakeAppRepository @Inject constructor() : AppRepository {
                     )
                 )
             } else {
-                ApiResultWrapper.Success(
-                    value = ResponseAPI(
-                        isSuccess = false,
-                        errorMessage = ConstantTest.DefaultTestLaunchValue.messageErrorLogin,
-                        body = null
-                    )
+                ApiResultWrapper.ResponseCodeError(
+                    ConstantTest.DefaultTestLaunchValue.messageErrorLogin
                 )
             }
         )
@@ -51,8 +49,25 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         phone: String,
         email: String,
         password: String
-    ): Flow<ApiResultWrapper<Boolean>> {
-        TODO("Not yet implemented")
+    ): Flow<ApiResultWrapper<Boolean>> = flow {
+        val result = name.isNotBlank() && phone.isNotBlank()
+                && email == ConstantTest.DefaultTestLaunchValue.email
+                && password == ConstantTest.DefaultTestLaunchValue.password
+        emit(
+            if (result) {
+                ApiResultWrapper.Success(
+                    value = ResponseAPI(
+                        isSuccess = true,
+                        errorMessage = "",
+                        body = true
+                    )
+                )
+            } else {
+                ApiResultWrapper.ResponseCodeError(
+                    ConstantTest.DefaultTestLaunchValue.messageErrorLogin
+                )
+            }
+        )
     }
 
     override suspend fun getTypes(showLoading: Boolean): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
@@ -281,8 +296,16 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         oldPassword: String,
         newPassword: String,
         showLoading: Boolean
-    ): Flow<ApiResultWrapper<Any?>> {
-        TODO("Not yet implemented")
+    ): Flow<ApiResultWrapper<Any?>> = flow {
+        emit(
+            ApiResultWrapper.Success(
+                value = ResponseAPI(
+                    isSuccess = (idUser != -1 && oldPassword != newPassword),
+                    errorMessage = "",
+                    body = null
+                )
+            )
+        )
     }
 
     override suspend fun getInformationUser(

@@ -1,9 +1,8 @@
-package com.example.realestateapp.ui.setting.profile
+package com.example.realestateapp.ui.setting.changepass
 
 import com.example.realestateapp.MainDispatcherRule
 import com.example.realestateapp.data.fake.FakeAppRepository
 import com.example.realestateapp.data.models.User
-import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -12,52 +11,54 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Rule
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-@HiltAndroidTest
 @OptIn(ExperimentalCoroutinesApi::class)
-class ProfileViewModelTest {
+class ChangePassViewModelTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private var fakeAppRepository: FakeAppRepository = FakeAppRepository()
 
-    private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var changePassViewModel: ChangePassViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        profileViewModel = ProfileViewModel(fakeAppRepository)
+        changePassViewModel = ChangePassViewModel(fakeAppRepository)
+    }
+
+    @AfterEach
+    fun tearDown() {
+
     }
 
     @Test
-    fun `updateInformationUser$app_debug`() = runTest {
-        profileViewModel.run {
+    fun `changePassword$app_debug`() = runTest {
+        changePassViewModel.run {
             getUser().value = User(id = 1)
-            updateInformationUser()
+            oldPass.value = "Test@123"
+            newPass.value = "Test@1234"
+            changePassword()
             val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(
-                User(
-                    id = 1,
-                    fullName = "Testing Edit",
-                    dateOfBirth = "07/07/07"
-                ),
-                (uiState.value as? ProfileUiState.UpdateInformationUserSuccess)?.data
-            )
+            assertEquals(true, (uiState.value as? ChangePassUiState.ChangePassSuccess)?.data)
             result.cancel()
         }
     }
 
     @Test
-    fun `getInformationUser$app_debug`() = runTest {
-        profileViewModel.run {
+    fun `changePasswordFail$app_debug`() = runTest {
+        changePassViewModel.run {
             getUser().value = User(id = 1)
-            getInformationUser()
+            oldPass.value = "Test@123"
+            newPass.value = "Test@123"
+            changePassword()
             val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(User(), (uiState.value as? ProfileUiState.GetInformationUserSuccess)?.data)
+            assertEquals(false, (uiState.value as? ChangePassUiState.ChangePassSuccess)?.data)
             result.cancel()
         }
     }

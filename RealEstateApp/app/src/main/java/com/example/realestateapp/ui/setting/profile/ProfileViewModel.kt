@@ -14,7 +14,6 @@ import com.example.realestateapp.util.Constants.DefaultField.FIELD_GENDER
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,7 +53,7 @@ class ProfileViewModel @Inject constructor(
     internal var detailAddress = mutableStateOf("")
 
     internal fun updateInformationUser() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             getUser().value?.id?.let { id ->
                 PickAddressViewModel.run {
                     callAPIOnThread(
@@ -85,7 +84,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     internal fun getInformationUser() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             getUser().value?.id.let { id ->
                 callAPIOnThread(
                     response = mutableListOf(

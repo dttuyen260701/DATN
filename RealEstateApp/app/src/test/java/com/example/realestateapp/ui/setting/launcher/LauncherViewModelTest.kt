@@ -4,16 +4,19 @@ import com.example.realestateapp.MainDispatcherRule
 import com.example.realestateapp.data.fake.FakeAppRepository
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.util.ConstantTest
+import com.example.realestateapp.util.Constants
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Rule
-import org.junit.jupiter.api.Assertions.*
-
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -24,6 +27,7 @@ import org.junit.jupiter.api.Test
 @HiltAndroidTest
 @OptIn(ExperimentalCoroutinesApi::class)
 class LauncherViewModelTest {
+
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -32,6 +36,7 @@ class LauncherViewModelTest {
 
     @BeforeEach
     fun setUp() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         launcherViewModel = LauncherViewModel(HiltTestApplication(), fakeAppRepository)
     }
 
@@ -45,25 +50,69 @@ class LauncherViewModelTest {
             email.value = ConstantTest.DefaultTestLaunchValue.email
             password.value = ConstantTest.DefaultTestLaunchValue.password
             signInUser()
-            val result = launch(UnconfinedTestDispatcher()) {
-                uiState.collect {
-                    assertEquals(it, LauncherUiState.SignInSuccess)
-                    assertEquals(getUser().value, User(email = ConstantTest.DefaultTestLaunchValue.email))
-                }
-            }
+            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
+            assertEquals(LauncherUiState.SignInSuccess, uiState.value)
+            assertEquals(getUser().value, User(email = ConstantTest.DefaultTestLaunchValue.email))
             result.cancel()
         }
     }
 
     @Test
-    fun `signUpUser$app_debug`() {
+    fun `signInUserFail$app_debug`() = runTest {
+        launcherViewModel.run {
+            email.value = ConstantTest.DefaultTestLaunchValue.wrongEmail
+            password.value = ConstantTest.DefaultTestLaunchValue.password
+            signInUser()
+            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
+            assertEquals(LauncherUiState.Error, uiState.value)
+            assertNull(getUser().value)
+            result.cancel()
+        }
+    }
+
+    @Test
+    fun `signUpUser$app_debug`() = runTest {
+        launcherViewModel.run {
+            email.value = ConstantTest.DefaultTestLaunchValue.email
+            password.value = ConstantTest.DefaultTestLaunchValue.password
+            signUpUser("Test", "0123456789")
+            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
+            assertEquals(LauncherUiState.SignUpSuccess, uiState.value)
+            result.cancel()
+        }
+    }
+
+    @Test
+    fun `signUpUserFail$app_debug`() = runTest {
+        launcherViewModel.run {
+            email.value = ConstantTest.DefaultTestLaunchValue.email
+            password.value = ConstantTest.DefaultTestLaunchValue.password
+            signUpUser("    ", "0123456789")
+            val resultFail = launch(UnconfinedTestDispatcher()) { uiState.collect() }
+            assertEquals(LauncherUiState.Error, uiState.value)
+            resultFail.cancel()
+        }
     }
 
     @Test
     fun `validEmail$app_debug`() {
+        launcherViewModel.run {
+            assertEquals(validEmail("tuyen.dang@team.enouvo.com"), "")
+            assertEquals(validEmail("tuyen.dang@gmail.com"), "")
+            assertEquals(validEmail("tuyen.dang "), "")
+            firstClick.value = false
+            assertEquals(validEmail("tuyen.dang "), Constants.ValidData.INVALID_EMAIL)
+        }
     }
 
     @Test
     fun `validPassWord$app_debug`() {
+        launcherViewModel.run {
+            assertEquals(validPassWord("Test@123"), "")
+            assertEquals(validPassWord("TTTTT123"), "")
+            firstClick.value = false
+            assertEquals(validPassWord("TTTTT123"), Constants.ValidData.INVALID_PASSWORD)
+            assertEquals(validPassWord("test123"), Constants.ValidData.INVALID_PASSWORD)
+        }
     }
 }
