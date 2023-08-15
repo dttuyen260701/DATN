@@ -7,9 +7,12 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.*
@@ -40,7 +43,12 @@ internal fun SlideShowImage(
     onPositionChange: (Int) -> Unit = {},
     onItemClick: (Int) -> Unit = { _ -> }
 ) {
-    val pageState = rememberPagerState()
+    val pageState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) {
+        photos.size
+    }
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,21 +62,32 @@ internal fun SlideShowImage(
                 .constrainAs(viewPager) {
                     top.linkTo(parent.top)
                 },
-            pageCount = photos.size,
-            state = pageState
-        ) { page ->
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        onItemClick(page)
-                    },
-                model = photos[page].url,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                error = painterResource(R.drawable.ic_user)
-            )
-        }
+            state = pageState,
+            pageSpacing = 0.dp,
+            userScrollEnabled = true,
+            reverseLayout = false,
+            contentPadding = PaddingValues(0.dp),
+            beyondBoundsPageCount = 0,
+            pageSize = PageSize.Fill,
+            flingBehavior = PagerDefaults.flingBehavior(state = pageState),
+            key = null,
+            pageNestedScrollConnection = PagerDefaults.pageNestedScrollConnection(
+                Orientation.Horizontal
+            ),
+            pageContent = { page ->
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            onItemClick(page)
+                        },
+                    model = photos[page].url,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(R.drawable.ic_user)
+                )
+            }
+        )
         if (isShowIndicator) {
             DotsIndicator(
                 modifier = Modifier
