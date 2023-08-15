@@ -3,12 +3,19 @@ package com.example.realestateapp.designsystem.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import javax.inject.Singleton
 
-private val DarkColorRealState = RealEstateColors(
+private val darkColorRealState = RealEstateColors(
     primary = MidnightGreen,
     primaryVariant = AntiFlashWhite,
     secondary = GhostWhite,
@@ -24,7 +31,7 @@ private val DarkColorRealState = RealEstateColors(
     bgButtonGradient = listOf(KellyGreen, MidnightGreen)
 )
 
-private val LightColorRealState = RealEstateColors(
+private val lightColorRealState = RealEstateColors(
     primary = MidnightGreen,
     primaryVariant = AntiFlashWhite,
     secondary = GhostWhite,
@@ -54,7 +61,7 @@ private val LightColorRealState = RealEstateColors(
 object RealEstateAppTheme {
     val colors: RealEstateColors
         @Composable
-        get() = LocalRealEstateColors.current
+        get() = localRealEstateColors.current
 }
 
 @Composable
@@ -63,9 +70,9 @@ fun RealEstateAppTheme(
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {
-        DarkColorRealState
+        darkColorRealState
     } else {
-        LightColorRealState
+        lightColorRealState
     }
     val systemUiController = rememberSystemUiController()
     if (darkTheme) {
@@ -107,8 +114,7 @@ class RealEstateColors(
         private set
     var primaryVariant by mutableStateOf(primaryVariant)
         private set
-    var secondary by mutableStateOf(secondary)
-        private set
+    private var secondary by mutableStateOf(secondary)
     var selectedBottomNavigate by mutableStateOf(selectedBottomNavigate)
         private set
     var textSettingButton by mutableStateOf(textSettingButton)
@@ -172,11 +178,11 @@ fun ProvideRealEstateColors(
         colors.copy()
     }
     colorPalette.update(colors)
-    CompositionLocalProvider(LocalRealEstateColors provides colorPalette, content = content)
+    CompositionLocalProvider(localRealEstateColors provides colorPalette, content = content)
 }
 
-private val LocalRealEstateColors = staticCompositionLocalOf<RealEstateColors> {
-    error("No LocalPostColors provided")
+private val localRealEstateColors = staticCompositionLocalOf {
+    lightColorRealState
 }
 
 fun debugColors(

@@ -186,7 +186,7 @@ internal fun ButtonUnRepeating(
     content: @Composable (() -> Unit) -> Unit
 ) {
     var latest by remember {
-        mutableStateOf(0L)
+        mutableLongStateOf(0L)
     }
     content {
         val now = System.currentTimeMillis()
