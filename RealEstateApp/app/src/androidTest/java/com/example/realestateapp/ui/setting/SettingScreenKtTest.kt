@@ -1,12 +1,11 @@
 package com.example.realestateapp.ui.setting
 
 import androidx.activity.compose.setContent
-import androidx.annotation.StringRes
-import androidx.compose.ui.test.hasClickAction
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToLog
 import com.example.realestateapp.R
+import com.example.realestateapp.findElementByStringRes
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.repository.ViewDataRepository
 import com.example.realestateapp.ui.MainActivity
@@ -26,12 +25,6 @@ class SettingScreenKtTest {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    private fun buttonSetting(@StringRes title: Int) = composeTestRule.run {
-        onNode(hasText(activity.getString(title)) and hasClickAction()).apply {
-            performClick()
-        }
-    }
-
     @Test
     fun settingScreenSignOuted_Test() {
         var testResult = R.string.settingSignInTitle
@@ -50,13 +43,15 @@ class SettingScreenKtTest {
                 )
             }
 
-            buttonSetting(R.string.settingSignInTitle).assertExists()
+            composeTestRule.onRoot().printToLog("TTT")
+
+            findElementByStringRes(R.string.settingSignInTitle).assertExists()
             assert(testResult == 1)
-            buttonSetting(R.string.settingSignUpTitle).assertExists()
+            findElementByStringRes(R.string.settingSignUpTitle).assertExists()
             assert(testResult == 2)
-            buttonSetting(R.string.settingPolicyTitle).assertExists()
+            findElementByStringRes(R.string.settingPolicyTitle).assertExists()
             assert(testResult == 3)
-            buttonSetting(R.string.settingAboutUsTitle).assertExists()
+            findElementByStringRes(R.string.settingAboutUsTitle).assertExists()
             assert(testResult == 4)
         }
     }
@@ -84,17 +79,19 @@ class SettingScreenKtTest {
                 }
             }
 
-            buttonSetting(R.string.typesTitle).assertExists()
+            composeTestRule.onRoot().printToLog("TTT")
+
+            findElementByStringRes(R.string.typesTitle).assertExists()
             assertEquals(0, testResult)
-            buttonSetting(R.string.settingChangePassTitle).assertExists()
+            findElementByStringRes(R.string.settingChangePassTitle).assertExists()
             assertEquals(5, testResult)
-            buttonSetting(R.string.btnSubmitTitle).assertExists()
+            findElementByStringRes(R.string.btnSubmitTitle).assertExists()
             assertEquals(0, testResult)
-            buttonSetting(R.string.settingPolicyTitle).assertExists()
+            findElementByStringRes(R.string.settingPolicyTitle).assertExists()
             assertEquals(3, testResult)
-            buttonSetting(R.string.settingAboutUsTitle).assertExists()
+            findElementByStringRes(R.string.settingAboutUsTitle).assertExists()
             assertEquals(4, testResult)
-            buttonSetting(R.string.settingSignOutTitle).assertExists()
+            findElementByStringRes(R.string.settingSignOutTitle).assertExists()
             assertEquals(6, testResult)
         }
     }

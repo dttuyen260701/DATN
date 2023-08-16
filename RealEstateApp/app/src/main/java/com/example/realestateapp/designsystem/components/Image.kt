@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.realestateapp.R
@@ -43,5 +44,13 @@ fun ImageProfile(
         contentScale = ContentScale.Crop,
         error = painterResource(R.drawable.sale_real_estate),
         placeholder = painterResource(R.drawable.sale_real_estate)
+    )
+}
+
+@Composable
+@Preview
+fun ImagePreview() {
+    ImageProfile(
+        model = "https://binhminhdigital.com/StoreData/PageData/2372/nhung-loi-co-ban-khi-chup-anh-phong-canh%20(5).jpg"
     )
 }
