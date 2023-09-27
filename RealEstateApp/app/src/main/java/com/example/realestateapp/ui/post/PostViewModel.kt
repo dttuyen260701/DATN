@@ -11,8 +11,8 @@ import com.example.realestateapp.data.models.RealEstateDetail
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
-import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailUiState
+import com.example.realestateapp.ui.base.UiEffect
+import com.example.realestateapp.ui.home.realestatedetail.RealEstateDetailUiEffect
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants.ComboOptions.BRONZE
 import com.example.realestateapp.util.Constants.ComboOptions.GOLD
@@ -33,37 +33,37 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/4/2023.
  */
 
-sealed class PostUiState : UiState() {
-    object InitView : PostUiState()
+sealed class PostUiEffect : UiEffect() {
+    object InitView : PostUiEffect()
 
-    object Loading : PostUiState()
+    object Loading : PostUiEffect()
 
-    object Error : PostUiState()
+    object Error : PostUiEffect()
 
-    object Done : PostUiState()
+    object Done : PostUiEffect()
 
-    object GetComboOptionsDone : PostUiState()
+    object GetComboOptionsDone : PostUiEffect()
 
-    data class SubmitPostSuccess(val data: Boolean) : PostUiState()
+    data class SubmitPostSuccess(val data: Boolean) : PostUiEffect()
 
-    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : PostUiState()
+    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : PostUiEffect()
 
-    data class GetSearchDataSuccess(val data: MutableList<RealEstateList>) : PostUiState()
+    data class GetSearchDataSuccess(val data: MutableList<RealEstateList>) : PostUiEffect()
 
     data class GetPredictPriceSuccess(
         val data: Float,
         val isForSubmit: Boolean
-    ) : PostUiState()
+    ) : PostUiEffect()
 
-    data class GetRealEstateDetailSuccess(val data: RealEstateDetail) : PostUiState()
+    data class GetRealEstateDetailSuccess(val data: RealEstateDetail) : PostUiEffect()
 }
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
     appRepository: AppRepository
-) : BaseViewModel<PostUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(PostUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<PostUiEffect>(appRepository) {
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(PostUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var firstClick = mutableStateOf(true)
     internal var filter = mutableStateOf("")
     internal var isNavigateAnotherScr = mutableStateOf(true)
@@ -140,10 +140,10 @@ class PostViewModel @Inject constructor(
                                 streetInFront = streetInFront.value.toDouble(),
                                 length = length.value.toDouble(),
                                 bedroomNumber = bedroom.value.toInt(),
+                                diningRoom = if (isHaveDiningRoom.value) 1 else 0,
                                 kitchen = if (isHaveKitchenRoom.value) 1 else 0,
                                 rooftop = isHaveRooftop.value,
                                 floorNumber = floor.value.toInt(),
-                                diningRoom = if (isHaveDiningRoom.value) 1 else 0,
                                 legalTypeId = juridicalChosen.value.id,
                                 detailAddress = detailStreet.value,
                                 districtId = districtChosen.value.id,
@@ -157,10 +157,10 @@ class PostViewModel @Inject constructor(
                             )
                         ),
                         apiSuccess = {
-                            uiStateValue.value = PostUiState.SubmitPostSuccess(it.isSuccess)
+                            uiEffectValue.value = PostUiEffect.SubmitPostSuccess(it.isSuccess)
                         },
                         apiError = {
-                            uiStateValue.value = PostUiState.SubmitPostSuccess(false)
+                            uiEffectValue.value = PostUiEffect.SubmitPostSuccess(false)
                         }
                     )
                 }
@@ -208,10 +208,10 @@ class PostViewModel @Inject constructor(
                             )
                         ),
                         apiSuccess = {
-                            uiStateValue.value = PostUiState.SubmitPostSuccess(it.isSuccess)
+                            uiEffectValue.value = PostUiEffect.SubmitPostSuccess(it.isSuccess)
                         },
                         apiError = {
-                            uiStateValue.value = PostUiState.SubmitPostSuccess(false)
+                            uiEffectValue.value = PostUiEffect.SubmitPostSuccess(false)
                         }
                     )
                 }
@@ -264,9 +264,7 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
                 response = mutableListOf(
-                    appRepository.getComboOptions(
-                        showLoading = showLoading
-                    )
+                    appRepository.getComboOptions()
                 ),
                 apiSuccess = { result ->
                     result.body.map {
@@ -291,7 +289,7 @@ class PostViewModel @Inject constructor(
                             else -> {}
                         }
                     }
-                    uiStateValue.value = PostUiState.GetComboOptionsDone
+                    uiEffectValue.value = PostUiEffect.GetComboOptionsDone
                 },
                 apiError = {
 
@@ -312,11 +310,11 @@ class PostViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = { response ->
-                    uiStateValue.value =
-                        PostUiState.GetRealEstateDetailSuccess(response.body)
+                    uiEffectValue.value =
+                        PostUiEffect.GetRealEstateDetailSuccess(response.body)
                 },
                 apiError = {
-                    uiStateValue.value = RealEstateDetailUiState.Error
+                    uiEffectValue.value = RealEstateDetailUiEffect.Error
                 }
             )
         }
@@ -325,7 +323,7 @@ class PostViewModel @Inject constructor(
     internal fun getPredictPrice(
         isForSubmit: Boolean = false
     ) {
-        uiStateValue.value = PostUiState.Loading
+        uiEffectValue.value = PostUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
@@ -350,7 +348,7 @@ class PostViewModel @Inject constructor(
                 ),
                 apiSuccess = {
                     cluster = it.body.cluster
-                    uiStateValue.value = PostUiState.GetPredictPriceSuccess(it.body.result, isForSubmit)
+                    uiEffectValue.value = PostUiEffect.GetPredictPriceSuccess(it.body.result, isForSubmit)
                 },
                 apiError = {
 
@@ -360,20 +358,20 @@ class PostViewModel @Inject constructor(
     }
 
     internal fun getTypes(onDone: () -> Unit) {
-        uiStateValue.value = PostUiState.Loading
+        uiEffectValue.value = PostUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
-                    appRepository.getTypes(showLoading = false),
+                    appRepository.getTypes(),
                 ), apiSuccess = {
                     val indexSelected =
                         it.body.indexOfFirst { item -> item.id == typeChosen.value.id }
                     if (indexSelected != -1) {
                         it.body[indexSelected].isSelected = true
                     }
-                    uiStateValue.value = PostUiState.GetTypesSuccess(it.body)
+                    uiEffectValue.value = PostUiEffect.GetTypesSuccess(it.body)
                 }, apiError = {
-                    uiStateValue.value = PostUiState.Error
+                    uiEffectValue.value = PostUiEffect.Error
                 }, onDoneCallApi = onDone, showDialog = false
             )
         }
@@ -384,7 +382,7 @@ class PostViewModel @Inject constructor(
         filter: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            uiStateValue.value = PostUiState.Loading
+            uiEffectValue.value = PostUiEffect.Loading
             callAPIOnThread(
                 response = mutableListOf(
                     if (isMyRecords) {
@@ -392,23 +390,21 @@ class PostViewModel @Inject constructor(
                             idUser = getUser().value?.id ?: 0,
                             pageIndex = 1,
                             pageSize = 200,
-                            filter = filter,
-                            showLoading = false
+                            filter = filter
                         )
                     } else {
                         appRepository.getPostSaved(
                             idUser = getUser().value?.id ?: 0,
                             pageIndex = 1,
                             pageSize = 200,
-                            filter = filter,
-                            showLoading = false
+                            filter = filter
                         )
                     }
                 ), apiSuccess = {
-                    uiStateValue.value =
-                        PostUiState.GetSearchDataSuccess(it.body.items ?: mutableListOf())
+                    uiEffectValue.value =
+                        PostUiEffect.GetSearchDataSuccess(it.body.items ?: mutableListOf())
                 }, apiError = {
-                    uiStateValue.value = PostUiState.Error
+                    uiEffectValue.value = PostUiEffect.Error
                 }
             )
         }

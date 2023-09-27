@@ -44,8 +44,8 @@ class ChangePassViewModelTest {
             oldPass.value = "Test@123"
             newPass.value = "Test@1234"
             changePassword()
-            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(true, (uiState.value as? ChangePassUiState.ChangePassSuccess)?.data)
+            val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
+            assertEquals(true, (uiEffect.value as? ChangePassUiEffect.ChangePassSuccess)?.data)
             result.cancel()
         }
     }
@@ -57,8 +57,8 @@ class ChangePassViewModelTest {
             oldPass.value = "Test@123"
             newPass.value = "Test@123"
             changePassword()
-            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(false, (uiState.value as? ChangePassUiState.ChangePassSuccess)?.data)
+            val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
+            assertEquals(false, (uiEffect.value as? ChangePassUiEffect.ChangePassSuccess)?.data)
             result.cancel()
         }
     }

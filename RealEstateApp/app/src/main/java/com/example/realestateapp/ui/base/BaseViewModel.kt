@@ -1,5 +1,6 @@
 package com.example.realestateapp.ui.base
 
+import android.util.*
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
@@ -14,12 +15,10 @@ import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.MainActivityViewModel
 import com.example.realestateapp.util.Constants
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
@@ -58,7 +57,7 @@ sealed interface TypeDialog {
     ) : TypeDialog
 }
 
-abstract class BaseViewModel<US : UiState>(
+abstract class BaseViewModel<US : UiEffect>(
     protected var appRepository: AppRepository
 ) : ViewModel() {
     companion object {
@@ -83,11 +82,11 @@ abstract class BaseViewModel<US : UiState>(
         private var listenNotification: (idUser: Int) -> Unit = { _ -> }
     }
 
-    protected abstract val uiStateValue: MutableStateFlow<UiState>
-    internal abstract val uiState: StateFlow<UiState>
+    protected abstract val uiEffectValue: MutableStateFlow<UiEffect>
+    internal abstract val uiEffect: StateFlow<UiEffect>
 
     internal fun updateUiStateDone() {
-        uiStateValue.value = Done
+        uiEffectValue.value = Done
     }
 
     internal fun getPagingModel() = pagingModel
@@ -187,59 +186,54 @@ abstract class BaseViewModel<US : UiState>(
         apiSuccess: (ResponseAPI<out T>) -> Unit,
         apiError: () -> Unit = {},
         onDoneCallApi: () -> Unit = {},
+        isShowLoading: Boolean = true,
+        isFinishLoading: Boolean = true,
         showDialog: Boolean = true
     ) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val listAsync = mutableListOf<Deferred<Flow<ApiResultWrapper<T>>>>()
-//
-//            funCallApis.forEach { funCallApi ->
-//                listAsync.add(async { funCallApi })
-//            }
-//
-//            val response = awaitAll(*listAsync.toTypedArray())
+        viewModelScope.launch {
+            isLoading.value = isShowLoading
+            response.map {
+                async {
+                    it.collect { result ->
+                        Log.e("TTT", "callAPIOnThread: $result", )
+                        when (result) {
+                            is ApiResultWrapper.Success -> {
+                                apiSuccess(result.value)
+                            }
 
-        response.forEach {
-            it.collect { result ->
-                when (result) {
-                    is ApiResultWrapper.Loading -> {
-                        isLoading.value = true
-                    }
+                            is ApiResultWrapper.ResponseCodeError -> {
+                                apiError()
+                                if (showDialog) {
+                                    showDialog(
+                                        dialog = TypeDialog.ErrorDialog(result.error)
+                                    )
+                                }
+                            }
 
-                    is ApiResultWrapper.Success -> {
-                        isLoading.value = false
-                        withContext(Dispatchers.Main) {
-                            apiSuccess(result.value)
+                            is ApiResultWrapper.NetworkError -> {
+                                apiError()
+                                if (showDialog) {
+                                    showDialog(
+                                        dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.NOT_FOUND_INTERNET)
+                                    )
+                                }
+                            }
+
+                            else -> {
+                                apiError()
+                                if (showDialog) {
+                                    showDialog(
+                                        dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR)
+                                    )
+                                }
+                            }
                         }
                     }
-
-                    is ApiResultWrapper.ResponseCodeError -> {
-                        isLoading.value = false
-                        apiError()
-                        if (showDialog) showDialog(
-                            dialog = TypeDialog.ErrorDialog(result.error)
-                        )
-                    }
-
-                    is ApiResultWrapper.NetworkError -> {
-                        isLoading.value = false
-                        apiError()
-                        if (showDialog) showDialog(
-                            dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.NOT_FOUND_INTERNET)
-                        )
-                    }
-
-                    else -> {
-                        isLoading.value = false
-                        apiError()
-                        if (showDialog) showDialog(
-                            dialog = TypeDialog.ErrorDialog(Constants.MessageErrorAPI.INTERNAL_SERVER_ERROR)
-                        )
-                    }
                 }
-            }
-        }
+            }.awaitAll()
 
-        onDoneCallApi()
-//        }
+            if (isFinishLoading) isLoading.value = false
+            onDoneCallApi()
+        }
     }
 }

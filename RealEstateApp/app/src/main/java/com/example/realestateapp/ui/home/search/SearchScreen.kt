@@ -88,7 +88,7 @@ internal fun SearchRoute(
         val sortOptions = remember { sortOptions }
         val types = remember { typesData }
         var isShowSearchOption by remember { isShowSearchOption }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var addressDetailDisplay by remember { detailAddress }
         var priceChosen by remember { priceChosen }
         val priceOptions = remember { priceOptions }
@@ -120,7 +120,7 @@ internal fun SearchRoute(
         var isFirstComposing by remember { isFirstComposing }
         val isLoading by remember {
             derivedStateOf {
-                uiState is SearchUiState.Loading
+                uiState is SearchUiEffect.Loading
             }
         }
         var isNavigateAnotherScr by remember { isNavigateAnotherScr }
@@ -131,18 +131,18 @@ internal fun SearchRoute(
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is SearchUiState.InitView -> {
+                is SearchUiEffect.InitView -> {
                     onChoiceSortType(searchOption, false)
                     getTypes()
                 }
-                is SearchUiState.GetTypesSuccess -> {
+                is SearchUiEffect.GetTypesSuccess -> {
                     types.run {
                         clear()
-                        addAll((uiState as SearchUiState.GetTypesSuccess).data)
+                        addAll((uiState as SearchUiEffect.GetTypesSuccess).data)
                     }
                 }
-                is SearchUiState.GetSearchDataSuccess -> {
-                    searchResult.addAll((uiState as SearchUiState.GetSearchDataSuccess).data)
+                is SearchUiEffect.GetSearchDataSuccess -> {
+                    searchResult.addAll((uiState as SearchUiEffect.GetSearchDataSuccess).data)
                     if (isFirstComposing) {
                         isFirstComposing = false
                     } else {

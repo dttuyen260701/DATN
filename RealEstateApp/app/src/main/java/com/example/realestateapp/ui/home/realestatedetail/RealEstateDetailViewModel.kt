@@ -13,7 +13,7 @@ import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.designsystem.icon.AppIcon
 import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.util.Constants.DefaultValue.REAL_ESTATE_DEFAULT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,29 +27,29 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/16/2023.
  */
 
-sealed class RealEstateDetailUiState : UiState() {
-    object InitView : RealEstateDetailUiState()
+sealed class RealEstateDetailUiEffect : UiEffect() {
+    object InitView : RealEstateDetailUiEffect()
 
-    object Error : RealEstateDetailUiState()
+    object Error : RealEstateDetailUiEffect()
 
-    object Done : RealEstateDetailUiState()
+    object Done : RealEstateDetailUiEffect()
 
     data class GetRealEstateDetailSuccess(val data: RealEstateDetail) :
-        RealEstateDetailUiState()
+        RealEstateDetailUiEffect()
 
     data class GetSamePriceSuccess(val data: MutableList<RealEstateList>) :
-        RealEstateDetailUiState()
+        RealEstateDetailUiEffect()
 
     data class GetClusterSuccess(val data: MutableList<RealEstateList>) :
-        RealEstateDetailUiState()
+        RealEstateDetailUiEffect()
 }
 
 @HiltViewModel
 class RealEstateDetailViewModel @Inject constructor(
     private val application: Application, appRepository: AppRepository
-) : BaseViewModel<RealEstateDetailUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(RealEstateDetailUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<RealEstateDetailUiEffect>(appRepository) {
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(RealEstateDetailUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var realEstateItem: MutableState<RealEstateDetail> =
         mutableStateOf(REAL_ESTATE_DEFAULT)
     internal val realEstateProperty = mutableStateListOf<RealEstateProperty>()
@@ -70,10 +70,10 @@ class RealEstateDetailViewModel @Inject constructor(
                         )
                     ),
                     apiSuccess = {
-                        uiStateValue.value = RealEstateDetailUiState.Done
+                        uiEffectValue.value = RealEstateDetailUiEffect.Done
                     },
                     apiError = {
-                        uiStateValue.value = RealEstateDetailUiState.Error
+                        uiEffectValue.value = RealEstateDetailUiEffect.Error
                     }
                 )
             }
@@ -111,8 +111,8 @@ class RealEstateDetailViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = { response ->
-                    uiStateValue.value =
-                        RealEstateDetailUiState.GetRealEstateDetailSuccess(response.body)
+                    uiEffectValue.value =
+                        RealEstateDetailUiEffect.GetRealEstateDetailSuccess(response.body)
 
                     response.body.run {
                         realEstateProperty.run {
@@ -252,7 +252,7 @@ class RealEstateDetailViewModel @Inject constructor(
                     }
                 },
                 apiError = {
-                    uiStateValue.value = RealEstateDetailUiState.Error
+                    uiEffectValue.value = RealEstateDetailUiEffect.Error
                 }
             )
         }
@@ -270,11 +270,11 @@ class RealEstateDetailViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = {
-                    uiStateValue.value =
-                        RealEstateDetailUiState.GetSamePriceSuccess(it.body)
+                    uiEffectValue.value =
+                        RealEstateDetailUiEffect.GetSamePriceSuccess(it.body)
                 },
                 apiError = {
-                    uiStateValue.value = RealEstateDetailUiState.Error
+                    uiEffectValue.value = RealEstateDetailUiEffect.Error
                 }
             )
         }
@@ -292,11 +292,11 @@ class RealEstateDetailViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = {
-                    uiStateValue.value =
-                        RealEstateDetailUiState.GetClusterSuccess(it.body)
+                    uiEffectValue.value =
+                        RealEstateDetailUiEffect.GetClusterSuccess(it.body)
                 },
                 apiError = {
-                    uiStateValue.value = RealEstateDetailUiState.Error
+                    uiEffectValue.value = RealEstateDetailUiEffect.Error
                 }
             )
         }

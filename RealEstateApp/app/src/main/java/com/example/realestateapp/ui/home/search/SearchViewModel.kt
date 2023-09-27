@@ -10,7 +10,7 @@ import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_BED_ROOM
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_CAR_PARKING
@@ -37,26 +37,26 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/19/2023.
  */
 
-sealed class SearchUiState : UiState() {
-    object InitView : SearchUiState()
+sealed class SearchUiEffect : UiEffect() {
+    object InitView : SearchUiEffect()
 
-    object Loading : SearchUiState()
+    object Loading : SearchUiEffect()
 
-    object Error : SearchUiState()
+    object Error : SearchUiEffect()
 
-    object Done : SearchUiState()
+    object Done : SearchUiEffect()
 
-    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : SearchUiState()
+    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : SearchUiEffect()
 
-    data class GetSearchDataSuccess(val data: MutableList<RealEstateList>) : SearchUiState()
+    data class GetSearchDataSuccess(val data: MutableList<RealEstateList>) : SearchUiEffect()
 }
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     application: Application, appRepository: AppRepository
-) : BaseViewModel<SearchUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(SearchUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<SearchUiEffect>(appRepository) {
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(SearchUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var searchResult = mutableStateListOf<RealEstateList>()
     internal var isShowSearchOption = mutableStateOf(true)
     internal var isShowSearchHighOption = mutableStateOf(false)
@@ -132,11 +132,11 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
-                    appRepository.getTypes(showLoading = false),
+                    appRepository.getTypes(),
                 ), apiSuccess = {
-                    uiStateValue.value = SearchUiState.GetTypesSuccess(it.body)
+                    uiEffectValue.value = SearchUiEffect.GetTypesSuccess(it.body)
                 }, apiError = {
-                    uiStateValue.value = SearchUiState.Error
+                    uiEffectValue.value = SearchUiEffect.Error
                 }, showDialog = false
             )
         }
@@ -151,7 +151,7 @@ class SearchViewModel @Inject constructor(
             searchResult.clear()
         }
         val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
-        uiStateValue.value = SearchUiState.Loading
+        uiEffectValue.value = SearchUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
@@ -185,14 +185,13 @@ class SearchViewModel @Inject constructor(
                         pageSize = getPagingModel().pageSize,
                         search = key,
                         optionSort = (sortOptions.firstOrNull { it.isSelected }
-                            ?: DEFAULT_ITEM_CHOSEN).id,
-                        showLoading = false
+                            ?: DEFAULT_ITEM_CHOSEN).id
                     )
                 ), apiSuccess = {
                     if (key == filter.value) {
                         it.body.run {
-                            uiStateValue.value =
-                                SearchUiState.GetSearchDataSuccess(items ?: mutableListOf())
+                            uiEffectValue.value =
+                                SearchUiEffect.GetSearchDataSuccess(items ?: mutableListOf())
                             updatePagingModel(
                                 totalPageNew = pageCount,
                                 totalRecordsNew = totalRecords
@@ -200,7 +199,7 @@ class SearchViewModel @Inject constructor(
                         }
                     }
                 }, apiError = {
-                    uiStateValue.value = SearchUiState.Error
+                    uiEffectValue.value = SearchUiEffect.Error
                 }
             )
         }

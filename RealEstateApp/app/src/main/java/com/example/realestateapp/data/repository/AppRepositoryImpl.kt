@@ -18,8 +18,7 @@ class AppRepositoryImpl @Inject constructor(
 ) : AppRepository {
     override suspend fun signIn(
         email: String,
-        password: String,
-        showLoading: Boolean
+        password: String
     ): Flow<ApiResultWrapper<User?>> {
         return flow {
             emit(
@@ -28,7 +27,7 @@ class AppRepositoryImpl @Inject constructor(
                     password = password
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun signUp(
@@ -50,10 +49,10 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     //home follow
-    override suspend fun getTypes(showLoading: Boolean): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
+    override suspend fun getTypes(): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         return flow {
             emit(dataSource.getTypes())
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getPostsWOptions(
@@ -64,8 +63,7 @@ class AppRepositoryImpl @Inject constructor(
         isLatest: Boolean,
         isHighestPrice: Boolean,
         isLowestPrice: Boolean,
-        userId: Int,
-        showLoading: Boolean
+        userId: Int
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         return flow {
             emit(
@@ -80,13 +78,12 @@ class AppRepositoryImpl @Inject constructor(
                     userId = userId
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getPostDetailById(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean
+        idUser: String
     ): Flow<ApiResultWrapper<RealEstateDetail>> {
         return flow {
             emit(
@@ -95,13 +92,12 @@ class AppRepositoryImpl @Inject constructor(
                     idUser = idUser
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getPostSamePrice(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean
+        idUser: String
     ): Flow<ApiResultWrapper<MutableList<RealEstateList>>> {
         return flow {
             emit(
@@ -110,13 +106,12 @@ class AppRepositoryImpl @Inject constructor(
                     idUser = idUser
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getPostSameCluster(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean
+        idUser: String
     ): Flow<ApiResultWrapper<MutableList<RealEstateList>>> {
         return flow {
             emit(
@@ -125,41 +120,38 @@ class AppRepositoryImpl @Inject constructor(
                     idUser = idUser
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getDistricts(
-        provinceId: String,
-        showLoading: Boolean
+        provinceId: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         return flow {
             emit(
                 dataSource.getDistricts(provinceId)
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getWards(
-        districtId: String,
-        showLoading: Boolean
+        districtId: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         return flow {
             emit(
                 dataSource.getWards(districtId)
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getStreets(
         districtId: String,
-        filter: String,
-        showLoading: Boolean
+        filter: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         return flow {
             emit(
                 dataSource.getStreets(districtId, filter)
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun searchPostWithOptions(
@@ -191,8 +183,7 @@ class AppRepositoryImpl @Inject constructor(
         pageIndex: Int,
         pageSize: Int,
         search: String,
-        optionSort: Int,
-        showLoading: Boolean
+        optionSort: Int
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         return flow {
             emit(
@@ -228,7 +219,7 @@ class AppRepositoryImpl @Inject constructor(
                     optionSort = optionSort
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun updateSavePost(
@@ -249,8 +240,7 @@ class AppRepositoryImpl @Inject constructor(
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
-        filter: String,
-        showLoading: Boolean
+        filter: String
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         return flow {
             emit(
@@ -261,15 +251,14 @@ class AppRepositoryImpl @Inject constructor(
                     filter = filter
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getPostCreatedByUser(
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
-        filter: String,
-        showLoading: Boolean
+        filter: String
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         return flow {
             emit(
@@ -280,18 +269,17 @@ class AppRepositoryImpl @Inject constructor(
                     filter = filter
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun uploadImage(
-        image: File,
-        showLoading: Boolean
+        image: File
     ): Flow<ApiResultWrapper<String>> {
         return flow {
             emit(
                 dataSource.uploadImage(image)
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getPredictPrice(
@@ -310,8 +298,7 @@ class AppRepositoryImpl @Inject constructor(
         districtId: Int,
         wardId: Int,
         streetId: Int,
-        widthRoad: Float,
-        showLoading: Boolean
+        widthRoad: Float
     ): Flow<ApiResultWrapper<PredictResult>> {
         return flow {
             emit(
@@ -334,17 +321,15 @@ class AppRepositoryImpl @Inject constructor(
                     widthRoad = widthRoad
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
-    override suspend fun getComboOptions(
-        showLoading: Boolean
-    ): Flow<ApiResultWrapper<MutableList<ComboOption>>> {
+    override suspend fun getComboOptions(): Flow<ApiResultWrapper<MutableList<ComboOption>>> {
         return flow {
             emit(
                 dataSource.getComboOptions()
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun createPost(
@@ -376,8 +361,7 @@ class AppRepositoryImpl @Inject constructor(
         images: MutableList<String>,
         propertyTypeId: Int,
         cluster: Int,
-        comboOptionId: Int,
-        showLoading: Boolean
+        comboOptionId: Int
     ): Flow<ApiResultWrapper<Any?>> {
         return flow {
             emit(
@@ -413,7 +397,7 @@ class AppRepositoryImpl @Inject constructor(
                     comboOptionId = comboOptionId
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun updatePost(
@@ -440,8 +424,7 @@ class AppRepositoryImpl @Inject constructor(
         latitude: Double,
         listNewImages: MutableList<String>,
         propertyTypeId: Int,
-        comboOptionId: Int,
-        showLoading: Boolean
+        comboOptionId: Int
     ): Flow<ApiResultWrapper<Any?>> {
         return flow {
             emit(
@@ -472,14 +455,13 @@ class AppRepositoryImpl @Inject constructor(
                     comboOptionId = comboOptionId
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun changePassWord(
         idUser: Int,
         oldPassword: String,
-        newPassword: String,
-        showLoading: Boolean
+        newPassword: String
     ): Flow<ApiResultWrapper<Any?>> {
         return flow {
             emit(
@@ -489,18 +471,17 @@ class AppRepositoryImpl @Inject constructor(
                     newPassword = newPassword
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun getInformationUser(
-        idUser: Int,
-        showLoading: Boolean
+        idUser: Int
     ): Flow<ApiResultWrapper<User>> {
         return flow {
             emit(
                 dataSource.getInformationUser(idUser)
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun updateUser(
@@ -511,8 +492,7 @@ class AppRepositoryImpl @Inject constructor(
         addressDetail: String,
         wardId: Int,
         districtId: Int,
-        newImage: String,
-        showLoading: Boolean
+        newImage: String
     ): Flow<ApiResultWrapper<User?>> {
         return flow {
             emit(
@@ -527,14 +507,13 @@ class AppRepositoryImpl @Inject constructor(
                     newImage = newImage
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 
     override suspend fun createReport(
         postId: Int,
         reporterId: Int,
-        description: String,
-        showLoading: Boolean
+        description: String
     ): Flow<ApiResultWrapper<Any?>> {
         return flow {
             emit(
@@ -544,6 +523,6 @@ class AppRepositoryImpl @Inject constructor(
                     description = description
                 )
             )
-        }.onStart { if (showLoading) emit(ApiResultWrapper.Loading) }
+        }
     }
 }

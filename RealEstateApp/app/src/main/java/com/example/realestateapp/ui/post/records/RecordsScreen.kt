@@ -25,7 +25,7 @@ import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
-import com.example.realestateapp.ui.post.PostUiState
+import com.example.realestateapp.ui.post.PostUiEffect
 import com.example.realestateapp.ui.post.PostViewModel
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -46,28 +46,28 @@ internal fun RecordsRoute(
     onRealEstateItemClick: (Int) -> Unit
 ) {
     viewModel.run {
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var filter by remember { filter }
         var isNavigateAnotherScr by remember { isNavigateAnotherScr }
         val searchResult = remember { searchResult }
         val isLoading by remember {
             derivedStateOf {
-                uiState is PostUiState.Loading
+                uiState is PostUiEffect.Loading
             }
         }
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is PostUiState.InitView -> {
+                is PostUiEffect.InitView -> {
                     getPosts(
                         isMyRecords = isMyRecords,
                         filter = filter
                     )
                 }
-                is PostUiState.GetSearchDataSuccess -> {
+                is PostUiEffect.GetSearchDataSuccess -> {
                     searchResult.run {
                         clear()
-                        addAll((uiState as PostUiState.GetSearchDataSuccess).data)
+                        addAll((uiState as PostUiEffect.GetSearchDataSuccess).data)
                     }
                     updateUiStateDone()
                 }

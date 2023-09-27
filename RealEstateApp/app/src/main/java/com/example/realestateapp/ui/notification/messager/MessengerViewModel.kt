@@ -8,7 +8,7 @@ import com.example.realestateapp.data.models.ItemMessenger
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.MessageDefault.SEND_IMAGE
 import com.example.realestateapp.util.Constants.MessageDefault.TYPE_MESSAGE
@@ -22,22 +22,22 @@ import javax.inject.Inject
  * Created by tuyen.dang on 6/3/2023.
  */
 
-sealed class MessengerUiState : UiState() {
-    object InitView : MessengerUiState()
+sealed class MessengerUiEffect : UiEffect() {
+    object InitView : MessengerUiEffect()
 
-    object Loading : MessengerUiState()
+    object Loading : MessengerUiEffect()
 }
 
 class MessengerViewModel @Inject constructor(
     appRepository: AppRepository
-) : BaseViewModel<MessengerUiState>(appRepository) {
+) : BaseViewModel<MessengerUiEffect>(appRepository) {
     companion object {
         internal var nameGuest = mutableStateOf("")
         internal var imageGuest = mutableStateOf("")
     }
 
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(MessengerUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(MessengerUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var message = mutableStateOf("")
     internal var idChannel = mutableStateOf("")
     internal var isUpLoading = mutableStateOf(false)

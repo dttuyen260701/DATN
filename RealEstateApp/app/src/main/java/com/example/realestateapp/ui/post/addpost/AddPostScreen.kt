@@ -40,7 +40,7 @@ import com.example.realestateapp.ui.base.BaseIcon
 import com.example.realestateapp.ui.base.BaseScreen
 import com.example.realestateapp.ui.base.TypeDialog
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
-import com.example.realestateapp.ui.post.PostUiState
+import com.example.realestateapp.ui.post.PostUiEffect
 import com.example.realestateapp.ui.post.PostViewModel
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_ADDRESS_MAP
@@ -88,7 +88,7 @@ internal fun AddPostRoute(
 
     viewModel.run {
         val user by remember { getUser() }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var firstClick by remember { firstClick }
         var addressDetailDisplay by remember { detailAddress }
         val addressDetailsScr = remember { addressDetails }
@@ -287,7 +287,7 @@ internal fun AddPostRoute(
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is PostUiState.InitView -> {
+                is PostUiEffect.InitView -> {
                     if (postId != DEFAULT_ID_POST) {
                         getRealEstateDetail(postId)
                     } else {
@@ -297,11 +297,11 @@ internal fun AddPostRoute(
                         getComboOptions()
                     }
                 }
-                is PostUiState.GetComboOptionsDone -> {
+                is PostUiEffect.GetComboOptionsDone -> {
 
                 }
-                is PostUiState.GetRealEstateDetailSuccess -> {
-                    (uiState as PostUiState.GetRealEstateDetailSuccess).data.run {
+                is PostUiEffect.GetRealEstateDetailSuccess -> {
+                    (uiState as PostUiEffect.GetRealEstateDetailSuccess).data.run {
                         typeChosen = ItemChoose(
                             id = propertyTypeId,
                             name = propertyTypeName
@@ -359,14 +359,14 @@ internal fun AddPostRoute(
                     comboOptionsGold.clear()
                     getComboOptions()
                 }
-                is PostUiState.GetTypesSuccess -> {
+                is PostUiEffect.GetTypesSuccess -> {
                     types.run {
                         clear()
-                        addAll((uiState as PostUiState.GetTypesSuccess).data)
+                        addAll((uiState as PostUiEffect.GetTypesSuccess).data)
                     }
                 }
-                is PostUiState.GetPredictPriceSuccess -> {
-                    (uiState as PostUiState.GetPredictPriceSuccess).run {
+                is PostUiEffect.GetPredictPriceSuccess -> {
+                    (uiState as PostUiEffect.GetPredictPriceSuccess).run {
                         data.toString().let {
                             priceSuggest = (it.toFloat() * square.toFloat()).toString()
                             if (isForSubmit) {
@@ -376,8 +376,8 @@ internal fun AddPostRoute(
                         }
                     }
                 }
-                is PostUiState.SubmitPostSuccess -> {
-                    if ((uiState as PostUiState.SubmitPostSuccess).data) {
+                is PostUiEffect.SubmitPostSuccess -> {
+                    if ((uiState as PostUiEffect.SubmitPostSuccess).data) {
                         if (postId != DEFAULT_ID_POST) {
                             onBackClick()
                             onBackClick()

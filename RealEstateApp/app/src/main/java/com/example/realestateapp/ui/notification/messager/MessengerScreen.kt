@@ -70,7 +70,7 @@ internal fun MessengerRoute(
     val context = LocalContext.current
     viewModel.run {
         val user by remember { getUser() }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var message by remember { message }
         var idChannel by remember { idChannel }
         val chats = remember { chats }
@@ -117,7 +117,7 @@ internal fun MessengerRoute(
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is MessengerUiState.InitView -> {
+                is MessengerUiEffect.InitView -> {
                     getIsLoading().value = true
                     getDataChild(CHANNEL_CHAT).child(idChannelSend)
                         .addChildEventListener(childMessageListEventListener)

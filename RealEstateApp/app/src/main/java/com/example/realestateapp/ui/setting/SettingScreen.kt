@@ -1,36 +1,26 @@
 package com.example.realestateapp.ui.setting
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import androidx.constraintlayout.compose.*
+import androidx.hilt.navigation.compose.*
+import androidx.lifecycle.compose.*
 import com.example.realestateapp.R
-import com.example.realestateapp.data.models.User
-import com.example.realestateapp.data.models.view.SettingButton
-import com.example.realestateapp.data.repository.ViewDataRepository
-import com.example.realestateapp.designsystem.components.ImageProfile
-import com.example.realestateapp.designsystem.components.SettingButton
-import com.example.realestateapp.designsystem.components.Spacing
-import com.example.realestateapp.designsystem.components.ToolbarView
-import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealEstateIcon
-import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
-import com.example.realestateapp.designsystem.theme.RealEstateTypography
-import com.example.realestateapp.ui.base.BaseIcon
-import com.example.realestateapp.ui.base.BaseScreen
-import com.example.realestateapp.ui.base.TypeDialog
+import com.example.realestateapp.data.models.*
+import com.example.realestateapp.data.models.view.*
+import com.example.realestateapp.data.repository.*
+import com.example.realestateapp.designsystem.components.*
+import com.example.realestateapp.designsystem.icon.*
+import com.example.realestateapp.designsystem.theme.*
+import com.example.realestateapp.ui.base.*
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_ICON
 import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
@@ -43,8 +33,8 @@ import com.example.realestateapp.util.Constants.DefaultValue.TOOLBAR_HEIGHT
 internal fun SettingRoute(
     modifier: Modifier = Modifier,
     viewModel: SettingViewModel = hiltViewModel(),
-    onEditClick: () -> Unit,
     onSignInClick: () -> Unit,
+    onEditClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onPolicyClick: () -> Unit,
     onAboutUsClick: () -> Unit,
@@ -56,10 +46,10 @@ internal fun SettingRoute(
         val user = remember {
             getUser()
         }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
 
-        when(uiState) {
-            is SettingUiState.SignOutSuccess -> {
+        when (uiState) {
+            is SettingUiEffect.SignOutSuccess -> {
                 onSignOutSuccess()
             }
         }
@@ -73,36 +63,18 @@ internal fun SettingRoute(
                 }
             },
             user = user.value,
-            onEditClick = remember {
-                onEditClick
-            },
-            onSignInClick = remember {
-                onSignInClick
-            },
-            onSignUpClick = remember {
-                onSignUpClick
-            },
-            onPolicyClick = remember {
-                onPolicyClick
-            },
-            onAboutUsClick = remember {
-                onAboutUsClick
-            },
-            onChangePassClick = remember {
-                onChangePassClick
-            },
-            onSignOutListener = remember {
-                {
-                    showDialog(
-                        dialog = TypeDialog.ConfirmDialog(
-                            message = context.getString(R.string.confirmSignOut),
-                            negativeBtnText = context.getString(R.string.dialogBackBtn),
-                            onBtnNegativeClick = {},
-                            positiveBtnText = context.getString(R.string.settingSignOutTitle),
-                            onBtnPositiveClick = ::signOut
-                        )
-                    )
-                }
+            onEditClick = onEditClick,
+            onSignInClick = onSignInClick,
+            onSignUpClick = onSignUpClick,
+            onPolicyClick = onPolicyClick,
+            onAboutUsClick = onAboutUsClick,
+            onChangePassClick = onChangePassClick,
+            onSignOutListener = {
+                showSignOutDialog(
+                    message = context.getString(R.string.confirmSignOut),
+                    negativeBtnText = context.getString(R.string.dialogBackBtn),
+                    positiveBtnText = context.getString(R.string.settingSignOutTitle),
+                )
             }
         )
     }
@@ -217,18 +189,23 @@ internal fun SettingScreen(
                     R.string.settingSignInTitle -> {
                         onSignInClick
                     }
+
                     R.string.settingSignUpTitle -> {
                         onSignUpClick
                     }
+
                     R.string.settingPolicyTitle -> {
                         onPolicyClick
                     }
+
                     R.string.settingAboutUsTitle -> {
                         onAboutUsClick
                     }
+
                     R.string.settingChangePassTitle -> {
                         onChangePassClick
                     }
+
                     else -> {
                         onSignOutListener
                     }

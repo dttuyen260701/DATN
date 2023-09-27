@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,19 +18,19 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/11/2023.
  */
 
-sealed class ChangePassUiState : UiState() {
-    object InitView : ChangePassUiState()
+sealed class ChangePassUiEffect : UiEffect() {
+    object InitView : ChangePassUiEffect()
 
-    data class ChangePassSuccess(val data: Boolean) : ChangePassUiState()
+    data class ChangePassSuccess(val data: Boolean) : ChangePassUiEffect()
 }
 
 @HiltViewModel
 class ChangePassViewModel @Inject constructor(
     appRepository: AppRepository
-) : BaseViewModel<ChangePassUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> =
-        MutableStateFlow(ChangePassUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<ChangePassUiEffect>(appRepository) {
+    override var uiEffectValue: MutableStateFlow<UiEffect> =
+        MutableStateFlow(ChangePassUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
 
     internal val oldPass = mutableStateOf("")
     internal val newPass = mutableStateOf("")
@@ -49,7 +49,7 @@ class ChangePassViewModel @Inject constructor(
                         )
                     ),
                     apiSuccess = {
-                        uiStateValue.value = ChangePassUiState.ChangePassSuccess(it.isSuccess)
+                        uiEffectValue.value = ChangePassUiEffect.ChangePassSuccess(it.isSuccess)
                     }
                 )
             }

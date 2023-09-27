@@ -11,7 +11,7 @@ import com.example.realestateapp.data.models.RealEstateList
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.readStoreLauncher
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,34 +25,34 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/4/2023.
  */
 
-sealed class HomeUiState : UiState() {
-    object InitView : HomeUiState()
+sealed class HomeUiEffect : UiEffect() {
+    object InitView : HomeUiEffect()
 
-    object Loading : HomeUiState()
+    object Loading : HomeUiEffect()
 
-    object Error : HomeUiState()
+    object Error : HomeUiEffect()
 
-    object Done : HomeUiState()
+    object Done : HomeUiEffect()
 
-    object DoneSignInBackground : HomeUiState()
+    object DoneSignInBackground : HomeUiEffect()
 
-    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : HomeUiState()
+    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : HomeUiEffect()
 
-    data class GetLatestSuccess(val data: MutableList<RealEstateList>) : HomeUiState()
+    data class GetLatestSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
 
-    data class GetMostViewSuccess(val data: MutableList<RealEstateList>) : HomeUiState()
+    data class GetMostViewSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
 
-    data class GetHighestPriceSuccess(val data: MutableList<RealEstateList>) : HomeUiState()
+    data class GetHighestPriceSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
 
-    data class GetLowestPriceSuccess(val data: MutableList<RealEstateList>) : HomeUiState()
+    data class GetLowestPriceSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
 }
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val application: Application, appRepository: AppRepository
-) : BaseViewModel<HomeUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(HomeUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<HomeUiEffect>(appRepository) {
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(HomeUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var typesData = mutableStateListOf<ItemChoose>()
     internal var realEstatesLatest = mutableStateListOf<RealEstateList>()
     internal var realEstatesMostView = mutableStateListOf<RealEstateList>()
@@ -61,14 +61,14 @@ class HomeViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     internal fun backgroundSignIn() {
-        uiStateValue.value = HomeUiState.Loading
+        uiEffectValue.value = HomeUiEffect.Loading
         viewModelScope.launch(Dispatchers.IO) {
             application.baseContext.readStoreLauncher(onReadSuccess = { email, pass ->
                 viewModelScope.launch {
                     callAPIOnThread(
                         response = mutableListOf(
                             appRepository.signIn(
-                                email = email, password = pass, showLoading = false
+                                email = email, password = pass
                             )
                         ), apiSuccess = {
                             getUser().value = it.body
@@ -87,27 +87,27 @@ class HomeViewModel @Inject constructor(
                                 listenNotificationInvoke(getUser().value?.id ?: -1)
                             }
                         }, onDoneCallApi = {
-                            uiStateValue.value = HomeUiState.DoneSignInBackground
+                            uiEffectValue.value = HomeUiEffect.DoneSignInBackground
                         }, showDialog = false
                     )
                 }
             }, onErrorAction = {
                 viewModelScope.launch {
-                    uiStateValue.value = HomeUiState.DoneSignInBackground
+                    uiEffectValue.value = HomeUiEffect.DoneSignInBackground
                 }
             })
         }
     }
 
     internal fun getTypes() {
-        uiStateValue.value = HomeUiState.Loading
+        uiEffectValue.value = HomeUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(response = mutableListOf(
-                appRepository.getTypes(showLoading = false),
+                appRepository.getTypes(),
             ), apiSuccess = {
-                uiStateValue.value = HomeUiState.GetTypesSuccess(it.body)
+                uiEffectValue.value = HomeUiEffect.GetTypesSuccess(it.body)
             }, apiError = {
-                uiStateValue.value = HomeUiState.Error
+                uiEffectValue.value = HomeUiEffect.Error
             }, showDialog = false
             )
         }
@@ -120,7 +120,7 @@ class HomeViewModel @Inject constructor(
         isLowestPrice: Boolean = false,
         showLoading: Boolean = false
     ) {
-        uiStateValue.value = HomeUiState.Loading
+        uiEffectValue.value = HomeUiEffect.Loading
         viewModelScope.launch {
             val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
             callAPIOnThread(
@@ -130,28 +130,27 @@ class HomeViewModel @Inject constructor(
                         pageSize = 10,
                         isMostView = isMostView,
                         typePropertyIds = typePropertyIds.toMutableList(),
+                        isLatest = isLatest,
                         isHighestPrice = isHighestPrice,
                         isLowestPrice = isLowestPrice,
-                        isLatest = isLatest,
-                        userId = getUser().value?.id ?: 0,
-                        showLoading = showLoading
+                        userId = getUser().value?.id ?: 0
                     )
                 ), apiSuccess = {
-                    uiStateValue.value = when {
-                        isLatest -> HomeUiState.GetLatestSuccess(it.body.items ?: mutableListOf())
-                        isMostView -> HomeUiState.GetMostViewSuccess(
+                    uiEffectValue.value = when {
+                        isLatest -> HomeUiEffect.GetLatestSuccess(it.body.items ?: mutableListOf())
+                        isMostView -> HomeUiEffect.GetMostViewSuccess(
                             it.body.items ?: mutableListOf()
                         )
-                        isHighestPrice -> HomeUiState.GetHighestPriceSuccess(
+                        isHighestPrice -> HomeUiEffect.GetHighestPriceSuccess(
                             it.body.items ?: mutableListOf()
                         )
-                        isLowestPrice -> HomeUiState.GetLowestPriceSuccess(
+                        isLowestPrice -> HomeUiEffect.GetLowestPriceSuccess(
                             it.body.items ?: mutableListOf()
                         )
-                        else -> HomeUiState.Error
+                        else -> HomeUiEffect.Error
                     }
                 }, apiError = {
-                    uiStateValue.value = HomeUiState.Error
+                    uiEffectValue.value = HomeUiEffect.Error
                 }, showDialog = false
             )
         }

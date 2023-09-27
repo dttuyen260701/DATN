@@ -19,8 +19,7 @@ import javax.inject.Inject
 class FakeAppRepository @Inject constructor() : AppRepository {
     override suspend fun signIn(
         email: String,
-        password: String,
-        showLoading: Boolean
+        password: String
     ): Flow<ApiResultWrapper<User?>> = flow {
         emit(
             if (email == ConstantTest.DefaultTestLaunchValue.email
@@ -70,7 +69,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         )
     }
 
-    override suspend fun getTypes(showLoading: Boolean): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
+    override suspend fun getTypes(): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         TODO("Not yet implemented")
     }
 
@@ -82,54 +81,47 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         isLatest: Boolean,
         isHighestPrice: Boolean,
         isLowestPrice: Boolean,
-        userId: Int,
-        showLoading: Boolean
+        userId: Int
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getPostDetailById(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean
+        idUser: String
     ): Flow<ApiResultWrapper<RealEstateDetail>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getPostSamePrice(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean
+        idUser: String
     ): Flow<ApiResultWrapper<MutableList<RealEstateList>>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getPostSameCluster(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean
+        idUser: String
     ): Flow<ApiResultWrapper<MutableList<RealEstateList>>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getDistricts(
-        provinceId: String,
-        showLoading: Boolean
+        provinceId: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getWards(
-        districtId: String,
-        showLoading: Boolean
+        districtId: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getStreets(
         districtId: String,
-        filter: String,
-        showLoading: Boolean
+        filter: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>> {
         TODO("Not yet implemented")
     }
@@ -163,8 +155,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         pageIndex: Int,
         pageSize: Int,
         search: String,
-        optionSort: Int,
-        showLoading: Boolean
+        optionSort: Int
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         TODO("Not yet implemented")
     }
@@ -177,8 +168,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
-        filter: String,
-        showLoading: Boolean
+        filter: String
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         TODO("Not yet implemented")
     }
@@ -187,15 +177,13 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
-        filter: String,
-        showLoading: Boolean
+        filter: String
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun uploadImage(
-        image: File,
-        showLoading: Boolean
+        image: File
     ): Flow<ApiResultWrapper<String>> {
         TODO("Not yet implemented")
     }
@@ -216,13 +204,12 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         districtId: Int,
         wardId: Int,
         streetId: Int,
-        widthRoad: Float,
-        showLoading: Boolean
+        widthRoad: Float
     ): Flow<ApiResultWrapper<PredictResult>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getComboOptions(showLoading: Boolean): Flow<ApiResultWrapper<MutableList<ComboOption>>> {
+    override suspend fun getComboOptions(): Flow<ApiResultWrapper<MutableList<ComboOption>>> {
         TODO("Not yet implemented")
     }
 
@@ -255,8 +242,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         images: MutableList<String>,
         propertyTypeId: Int,
         cluster: Int,
-        comboOptionId: Int,
-        showLoading: Boolean
+        comboOptionId: Int
     ): Flow<ApiResultWrapper<Any?>> {
         TODO("Not yet implemented")
     }
@@ -285,8 +271,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         latitude: Double,
         listNewImages: MutableList<String>,
         propertyTypeId: Int,
-        comboOptionId: Int,
-        showLoading: Boolean
+        comboOptionId: Int
     ): Flow<ApiResultWrapper<Any?>> {
         TODO("Not yet implemented")
     }
@@ -294,8 +279,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
     override suspend fun changePassWord(
         idUser: Int,
         oldPassword: String,
-        newPassword: String,
-        showLoading: Boolean
+        newPassword: String
     ): Flow<ApiResultWrapper<Any?>> = flow {
         emit(
             ApiResultWrapper.Success(
@@ -309,8 +293,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
     }
 
     override suspend fun getInformationUser(
-        idUser: Int,
-        showLoading: Boolean
+        idUser: Int
     ): Flow<ApiResultWrapper<User>> = flow {
         emit(
             ApiResultWrapper.Success(
@@ -331,8 +314,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
         addressDetail: String,
         wardId: Int,
         districtId: Int,
-        newImage: String,
-        showLoading: Boolean
+        newImage: String
     ): Flow<ApiResultWrapper<User?>> = flow {
         emit(
             ApiResultWrapper.Success(
@@ -352,8 +334,7 @@ class FakeAppRepository @Inject constructor() : AppRepository {
     override suspend fun createReport(
         postId: Int,
         reporterId: Int,
-        description: String,
-        showLoading: Boolean
+        description: String
     ): Flow<ApiResultWrapper<Any?>> {
         TODO("Not yet implemented")
     }

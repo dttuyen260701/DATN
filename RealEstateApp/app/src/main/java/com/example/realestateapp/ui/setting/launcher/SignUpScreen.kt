@@ -45,7 +45,7 @@ internal fun SignUpRoute(
     onBackClick: () -> Unit
 ) {
     viewModel.run {
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         val context = LocalContext.current
         var firstClick by remember { firstClick }
         var name by remember { mutableStateOf("") }
@@ -94,7 +94,7 @@ internal fun SignUpRoute(
         }
 
         when (uiState) {
-            is LauncherUiState.SignUpSuccess -> {
+            is LauncherUiEffect.SignUpSuccess -> {
                 showDialog(
                     dialog = TypeDialog.ConfirmDialog(
                         message = context.getString(R.string.signUpSuccess),

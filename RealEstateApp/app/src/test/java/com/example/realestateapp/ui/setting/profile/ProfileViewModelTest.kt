@@ -38,14 +38,14 @@ class ProfileViewModelTest {
         profileViewModel.run {
             getUser().value = User(id = 1)
             updateInformationUser()
-            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
+            val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
             assertEquals(
                 User(
                     id = 1,
                     fullName = "Testing Edit",
                     dateOfBirth = "07/07/07"
                 ),
-                (uiState.value as? ProfileUiState.UpdateInformationUserSuccess)?.data
+                (uiEffect.value as? ProfileUiEffect.UpdateInformationUserSuccess)?.data
             )
             result.cancel()
         }
@@ -56,8 +56,8 @@ class ProfileViewModelTest {
         profileViewModel.run {
             getUser().value = User(id = 1)
             getInformationUser()
-            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(User(), (uiState.value as? ProfileUiState.GetInformationUserSuccess)?.data)
+            val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
+            assertEquals(User(), (uiEffect.value as? ProfileUiEffect.GetInformationUserSuccess)?.data)
             result.cancel()
         }
     }

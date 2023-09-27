@@ -8,7 +8,7 @@ import com.example.realestateapp.extension.EMAIL_ADDRESS
 import com.example.realestateapp.extension.PASSWORD
 import com.example.realestateapp.extension.writeStoreLauncher
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.util.AuthenticationObject
 import com.example.realestateapp.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,27 +24,27 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/4/2023.
  */
 
-sealed class LauncherUiState : UiState() {
-    object InitView : LauncherUiState()
+sealed class LauncherUiEffect : UiEffect() {
+    object InitView : LauncherUiEffect()
 
-    object Error : LauncherUiState()
+    object Error : LauncherUiEffect()
 
-    object SignInSuccess : LauncherUiState()
+    object SignInSuccess : LauncherUiEffect()
 
-    object SignUpSuccess : LauncherUiState()
+    object SignUpSuccess : LauncherUiEffect()
 }
 
 @HiltViewModel
 class LauncherViewModel @Inject constructor(
     private val application: Application, appRepository: AppRepository
-) : BaseViewModel<LauncherUiState>(appRepository) {
-    override val uiStateValue: MutableStateFlow<UiState> =
-        MutableStateFlow(LauncherUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<LauncherUiEffect>(appRepository) {
+    override val uiEffectValue: MutableStateFlow<UiEffect> =
+        MutableStateFlow(LauncherUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000L),
-            LauncherUiState.InitView
+            LauncherUiEffect.InitView
         )
 
     internal var email = mutableStateOf("")
@@ -71,10 +71,10 @@ class LauncherViewModel @Inject constructor(
                             )
                         }
                     }
-                    uiStateValue.value = LauncherUiState.SignInSuccess
+                    uiEffectValue.value = LauncherUiEffect.SignInSuccess
                 },
                 apiError = {
-                    uiStateValue.value = LauncherUiState.Error
+                    uiEffectValue.value = LauncherUiEffect.Error
                 }
             )
         }
@@ -95,10 +95,10 @@ class LauncherViewModel @Inject constructor(
                     )
                 ),
                 apiSuccess = {
-                    uiStateValue.value = LauncherUiState.SignUpSuccess
+                    uiEffectValue.value = LauncherUiEffect.SignUpSuccess
                 },
                 apiError = {
-                    uiStateValue.value = LauncherUiState.Error
+                    uiEffectValue.value = LauncherUiEffect.Error
                 }
             )
         }

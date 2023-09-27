@@ -8,7 +8,7 @@ import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.models.User
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.ui.pickaddress.PickAddressViewModel
 import com.example.realestateapp.util.Constants.DefaultField.FIELD_GENDER
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
@@ -24,26 +24,26 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/11/2023.
  */
 
-sealed class ProfileUiState : UiState() {
-    object InitView : ProfileUiState()
+sealed class ProfileUiEffect : UiEffect() {
+    object InitView : ProfileUiEffect()
 
-    object Loading : ProfileUiState()
+    object Loading : ProfileUiEffect()
 
-    object Error : ProfileUiState()
+    object Error : ProfileUiEffect()
 
-    object Done : ProfileUiState()
+    object Done : ProfileUiEffect()
 
-    data class GetInformationUserSuccess(val data: User) : ProfileUiState()
+    data class GetInformationUserSuccess(val data: User) : ProfileUiEffect()
 
-    data class UpdateInformationUserSuccess(val data: User) : ProfileUiState()
+    data class UpdateInformationUserSuccess(val data: User) : ProfileUiEffect()
 }
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     appRepository: AppRepository
-) : BaseViewModel<ProfileUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(ProfileUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<ProfileUiEffect>(appRepository) {
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(ProfileUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var firstClick = mutableStateOf(true)
     internal var imgUrl = mutableStateOf("")
     internal var name = mutableStateOf("")
@@ -70,9 +70,9 @@ class ProfileViewModel @Inject constructor(
                             )
                         ),
                         apiSuccess = {
-                            uiStateValue.value = it.body?.let {
-                                ProfileUiState.UpdateInformationUserSuccess(it)
-                            } ?: ProfileUiState.Error
+                            uiEffectValue.value = it.body?.let {
+                                ProfileUiEffect.UpdateInformationUserSuccess(it)
+                            } ?: ProfileUiEffect.Error
                         },
                         apiError = {
 
@@ -91,8 +91,8 @@ class ProfileViewModel @Inject constructor(
                         appRepository.getInformationUser(id ?: DEFAULT_ID_POST)
                     ),
                     apiSuccess = {
-                        uiStateValue.value =
-                            ProfileUiState.GetInformationUserSuccess(it.body)
+                        uiEffectValue.value =
+                            ProfileUiEffect.GetInformationUserSuccess(it.body)
                     },
                     apiError = {
 

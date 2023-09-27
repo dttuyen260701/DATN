@@ -105,33 +105,33 @@ internal fun RealEstateDetailRoute(
         val realEstateProperty = remember { realEstateProperty }
         val realEstatesSamePrice = remember { realEstatesSamePrice }
         val realEstatesCluster = remember { realEstatesCluster }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is RealEstateDetailUiState.InitView -> {
+                is RealEstateDetailUiEffect.InitView -> {
                     getIsLoading().value = true
                     getRealEstateDetail(realEstateId)
                 }
 
-                is RealEstateDetailUiState.GetRealEstateDetailSuccess -> {
+                is RealEstateDetailUiEffect.GetRealEstateDetailSuccess -> {
                     realEstateItem =
-                        (uiState as RealEstateDetailUiState.GetRealEstateDetailSuccess).data
+                        (uiState as RealEstateDetailUiEffect.GetRealEstateDetailSuccess).data
                     getRealEstatesSamePrice(realEstateId)
                 }
 
-                is RealEstateDetailUiState.GetSamePriceSuccess -> {
+                is RealEstateDetailUiEffect.GetSamePriceSuccess -> {
                     realEstatesSamePrice.run {
                         clear()
-                        addAll((uiState as RealEstateDetailUiState.GetSamePriceSuccess).data)
+                        addAll((uiState as RealEstateDetailUiEffect.GetSamePriceSuccess).data)
                     }
                     getRealEstatesCluster(realEstateId)
                 }
 
-                is RealEstateDetailUiState.GetClusterSuccess -> {
+                is RealEstateDetailUiEffect.GetClusterSuccess -> {
                     realEstatesCluster.run {
                         clear()
-                        addAll((uiState as RealEstateDetailUiState.GetClusterSuccess).data)
+                        addAll((uiState as RealEstateDetailUiEffect.GetClusterSuccess).data)
                     }
                     updateUiStateDone()
                 }

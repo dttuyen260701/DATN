@@ -51,7 +51,7 @@ internal fun ReportRoute(
     val context = LocalContext.current
 
     viewModel.run {
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
 
         var firstClick by remember { firstClick }
         var description by remember { description }
@@ -68,7 +68,7 @@ internal fun ReportRoute(
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is RealEstateDetailUiState.Done -> {
+                is RealEstateDetailUiEffect.Done -> {
                     context.run {
                         makeToast(getString(R.string.reportPostSuccessTitle))
                     }

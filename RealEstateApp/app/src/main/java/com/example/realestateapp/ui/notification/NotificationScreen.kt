@@ -58,13 +58,13 @@ internal fun NotificationRoute(
 ) {
     viewModel.run {
         val user by remember { getUser() }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var isMessengerScreen by remember { isMessengerScreen }
         val itemChatGuests = remember { itemChatGuests }
         val itemNotifications = remember { itemNotifications }
         val isLoading by remember {
             derivedStateOf {
-                uiState is NotificationUiState.Loading
+                uiState is NotificationUiEffect.Loading
             }
         }
 
@@ -115,7 +115,7 @@ internal fun NotificationRoute(
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is NotificationUiState.InitView -> {
+                is NotificationUiEffect.InitView -> {
                     getUser().value?.run {
                         if (isMessengerScreen) {
                             getDataChild(CHANNEL_GUEST).child(id.toString())

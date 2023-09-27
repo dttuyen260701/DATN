@@ -41,7 +41,7 @@ internal fun SignInRoute(
     onBackClick: () -> Unit
 ) {
     viewModel.run {
-        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val uiState by viewModel.uiEffect.collectAsStateWithLifecycle()
         var email by remember { email }
         var password by remember { password }
         var firstClick by remember { firstClick }
@@ -62,7 +62,7 @@ internal fun SignInRoute(
         }
 
         when(uiState) {
-            is LauncherUiState.SignInSuccess -> {
+            is LauncherUiEffect.SignInSuccess -> {
                 onSignInSuccess()
             }
             else -> {

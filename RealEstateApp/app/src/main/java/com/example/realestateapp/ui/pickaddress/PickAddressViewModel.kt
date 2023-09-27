@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.models.ItemChoose
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.util.Constants
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ITEM_CHOSEN
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,26 +21,26 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/22/2023.
  */
 
-sealed class PickAddressUiState : UiState() {
-    object InitView : PickAddressUiState()
+sealed class PickAddressUiEffect : UiEffect() {
+    object InitView : PickAddressUiEffect()
 
-    object Loading : PickAddressUiState()
+    object Loading : PickAddressUiEffect()
 
-    object Error : PickAddressUiState()
+    object Error : PickAddressUiEffect()
 
-    object Done : PickAddressUiState()
+    object Done : PickAddressUiEffect()
 
-    data class GetDistrictSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
+    data class GetDistrictSuccess(val data: MutableList<ItemChoose>) : PickAddressUiEffect()
 
-    data class GetWardSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
+    data class GetWardSuccess(val data: MutableList<ItemChoose>) : PickAddressUiEffect()
 
-    data class GetStreetSuccess(val data: MutableList<ItemChoose>) : PickAddressUiState()
+    data class GetStreetSuccess(val data: MutableList<ItemChoose>) : PickAddressUiEffect()
 }
 
 @HiltViewModel
 class PickAddressViewModel @Inject constructor(
     appRepository: AppRepository
-) : BaseViewModel<PickAddressUiState>(appRepository) {
+) : BaseViewModel<PickAddressUiEffect>(appRepository) {
     companion object {
         internal var districtChosen: MutableState<ItemChoose> = mutableStateOf(DEFAULT_ITEM_CHOSEN)
             private set
@@ -61,14 +61,14 @@ class PickAddressViewModel @Inject constructor(
         }
     }
 
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(PickAddressUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(PickAddressUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var districtsData = mutableStateListOf<ItemChoose>()
     internal var wardsData = mutableStateListOf<ItemChoose>()
     internal var streetsData = mutableStateListOf<ItemChoose>()
 
     internal fun getDistricts(filter: String, onDoneApi: () -> Unit) {
-        uiStateValue.value = PickAddressUiState.Loading
+        uiEffectValue.value = PickAddressUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
@@ -79,9 +79,9 @@ class PickAddressViewModel @Inject constructor(
                     if (indexSelected != -1) {
                         it.body[indexSelected].isSelected = true
                     }
-                    uiStateValue.value = PickAddressUiState.GetDistrictSuccess(it.body)
+                    uiEffectValue.value = PickAddressUiEffect.GetDistrictSuccess(it.body)
                 }, apiError = {
-                    uiStateValue.value = PickAddressUiState.Error
+                    uiEffectValue.value = PickAddressUiEffect.Error
                 },
                 onDoneCallApi = onDoneApi,
                 showDialog = false
@@ -94,13 +94,12 @@ class PickAddressViewModel @Inject constructor(
         showLoading: Boolean = false,
         onDoneApi: () -> Unit
     ) {
-        uiStateValue.value = PickAddressUiState.Loading
+        uiEffectValue.value = PickAddressUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
                     appRepository.getWards(
-                        districtId = districtChosen.value.id.toString(),
-                        showLoading = showLoading
+                        districtId = districtChosen.value.id.toString()
                     ),
                 ), apiSuccess = {
                     onApiSuccess(it.body)
@@ -109,9 +108,9 @@ class PickAddressViewModel @Inject constructor(
                     if (indexSelected != -1) {
                         it.body[indexSelected].isSelected = true
                     }
-                    uiStateValue.value = PickAddressUiState.GetWardSuccess(it.body)
+                    uiEffectValue.value = PickAddressUiEffect.GetWardSuccess(it.body)
                 }, apiError = {
-                    uiStateValue.value = PickAddressUiState.Error
+                    uiEffectValue.value = PickAddressUiEffect.Error
                 },
                 onDoneCallApi = onDoneApi,
                 showDialog = false
@@ -125,14 +124,13 @@ class PickAddressViewModel @Inject constructor(
         onApiSuccess: (MutableList<ItemChoose>) -> Unit = {},
         onDoneApi: () -> Unit
     ) {
-        uiStateValue.value = PickAddressUiState.Loading
+        uiEffectValue.value = PickAddressUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
                 response = mutableListOf(
                     appRepository.getStreets(
                         districtId = districtChosen.value.id.toString(),
-                        filter = filter,
-                        showLoading = showLoading
+                        filter = filter
                     ),
                 ), apiSuccess = {
                     onApiSuccess(it.body)
@@ -141,9 +139,9 @@ class PickAddressViewModel @Inject constructor(
                     if (indexSelected != -1) {
                         it.body[indexSelected].isSelected = true
                     }
-                    uiStateValue.value = PickAddressUiState.GetStreetSuccess(it.body)
+                    uiEffectValue.value = PickAddressUiEffect.GetStreetSuccess(it.body)
                 }, apiError = {
-                    uiStateValue.value = PickAddressUiState.Error
+                    uiEffectValue.value = PickAddressUiEffect.Error
                 },
                 onDoneCallApi = onDoneApi,
                 showDialog = false

@@ -50,8 +50,8 @@ class LauncherViewModelTest {
             email.value = ConstantTest.DefaultTestLaunchValue.email
             password.value = ConstantTest.DefaultTestLaunchValue.password
             signInUser()
-            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(LauncherUiState.SignInSuccess, uiState.value)
+            val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
+            assertEquals(LauncherUiEffect.SignInSuccess, uiEffect.value)
             assertEquals(getUser().value, User(email = ConstantTest.DefaultTestLaunchValue.email))
             result.cancel()
         }
@@ -63,8 +63,8 @@ class LauncherViewModelTest {
             email.value = ConstantTest.DefaultTestLaunchValue.wrongEmail
             password.value = ConstantTest.DefaultTestLaunchValue.password
             signInUser()
-            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(LauncherUiState.Error, uiState.value)
+            val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
+            assertEquals(LauncherUiEffect.Error, uiEffect.value)
             assertNull(getUser().value)
             result.cancel()
         }
@@ -76,8 +76,8 @@ class LauncherViewModelTest {
             email.value = ConstantTest.DefaultTestLaunchValue.email
             password.value = ConstantTest.DefaultTestLaunchValue.password
             signUpUser("Test", "0123456789")
-            val result = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(LauncherUiState.SignUpSuccess, uiState.value)
+            val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
+            assertEquals(LauncherUiEffect.SignUpSuccess, uiEffect.value)
             result.cancel()
         }
     }
@@ -88,8 +88,8 @@ class LauncherViewModelTest {
             email.value = ConstantTest.DefaultTestLaunchValue.email
             password.value = ConstantTest.DefaultTestLaunchValue.password
             signUpUser("    ", "0123456789")
-            val resultFail = launch(UnconfinedTestDispatcher()) { uiState.collect() }
-            assertEquals(LauncherUiState.Error, uiState.value)
+            val resultFail = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
+            assertEquals(LauncherUiEffect.Error, uiEffect.value)
             resultFail.cancel()
         }
     }

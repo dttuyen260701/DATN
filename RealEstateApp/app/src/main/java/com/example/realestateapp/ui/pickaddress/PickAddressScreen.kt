@@ -63,36 +63,36 @@ internal fun PickAddressRoute(
         var districtChosen by remember { PickAddressViewModel.districtChosen }
         var wardChosen by remember { PickAddressViewModel.wardChosen }
         var streetChosen by remember { PickAddressViewModel.streetChosen }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
         var detailStreet by remember { PickAddressViewModel.detailStreet }
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is PickAddressUiState.InitView -> {
+                is PickAddressUiEffect.InitView -> {
                     getDistricts("") {}
                 }
-                is PickAddressUiState.Loading -> {
+                is PickAddressUiEffect.Loading -> {
 
                 }
-                is PickAddressUiState.GetDistrictSuccess -> {
+                is PickAddressUiEffect.GetDistrictSuccess -> {
                     districts.run {
                         clear()
-                        addAll((uiState as PickAddressUiState.GetDistrictSuccess).data)
+                        addAll((uiState as PickAddressUiEffect.GetDistrictSuccess).data)
                     }
 //                    uiState = PickAddressUiState.Done
                 }
-                is PickAddressUiState.GetWardSuccess -> {
+                is PickAddressUiEffect.GetWardSuccess -> {
                     wards.run {
                         clear()
-                        addAll((uiState as PickAddressUiState.GetWardSuccess).data)
+                        addAll((uiState as PickAddressUiEffect.GetWardSuccess).data)
                     }
 //                    uiState = PickAddressUiState.Done
                 }
-                is PickAddressUiState.GetStreetSuccess -> {
+                is PickAddressUiEffect.GetStreetSuccess -> {
                     streets.run {
                         clear()
-                        addAll((uiState as PickAddressUiState.GetStreetSuccess).data)
+                        addAll((uiState as PickAddressUiEffect.GetStreetSuccess).data)
                     }
 //                    uiState = PickAddressUiState.Done
                 }

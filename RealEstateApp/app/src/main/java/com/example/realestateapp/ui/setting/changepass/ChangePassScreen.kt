@@ -40,7 +40,7 @@ internal fun ChangePassRoute(
 ) {
     val context = LocalContext.current
     viewModel.run {
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var firstClick by remember { firstClick }
         var oldPass by remember { oldPass }
         val oldPassWordError by remember {
@@ -73,8 +73,8 @@ internal fun ChangePassRoute(
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is ChangePassUiState.ChangePassSuccess -> {
-                    if ((uiState as ChangePassUiState.ChangePassSuccess).data) {
+                is ChangePassUiEffect.ChangePassSuccess -> {
+                    if ((uiState as ChangePassUiEffect.ChangePassSuccess).data) {
                         context.run { makeToast(getString(R.string.changePassSuccessTitle)) }
                         onBackClick()
                     } else {

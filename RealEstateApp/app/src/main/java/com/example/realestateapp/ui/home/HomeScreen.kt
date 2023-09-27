@@ -28,7 +28,7 @@ import com.example.realestateapp.designsystem.icon.RealEstateIcon
 import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
 import com.example.realestateapp.designsystem.theme.RealEstateTypography
 import com.example.realestateapp.ui.base.BaseScreen
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.UiEffect
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_HORIZONTAL_SCREEN
@@ -53,48 +53,48 @@ internal fun HomeRoute(
         val realEstatesMostView = remember { realEstatesMostView }
         val realEstatesHighestPrice = remember { realEstatesHighestPrice }
         val realEstatesLowestPrice = remember { realEstatesLowestPrice }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is HomeUiState.InitView -> {
+                is HomeUiEffect.InitView -> {
                     backgroundSignIn()
                 }
-                is HomeUiState.DoneSignInBackground -> {
+                is HomeUiEffect.DoneSignInBackground -> {
                     getTypes()
                 }
-                is HomeUiState.GetTypesSuccess -> {
+                is HomeUiEffect.GetTypesSuccess -> {
                     types.run {
                         clear()
-                        addAll((uiState as HomeUiState.GetTypesSuccess).data)
+                        addAll((uiState as HomeUiEffect.GetTypesSuccess).data)
                     }
                     getPostsWOptions(isLatest = true)
                 }
-                is HomeUiState.GetLatestSuccess -> {
+                is HomeUiEffect.GetLatestSuccess -> {
                     realEstatesLatest.run {
                         clear()
-                        addAll((uiState as HomeUiState.GetLatestSuccess).data)
+                        addAll((uiState as HomeUiEffect.GetLatestSuccess).data)
                     }
                     getPostsWOptions(isMostView = true)
                 }
-                is HomeUiState.GetMostViewSuccess -> {
+                is HomeUiEffect.GetMostViewSuccess -> {
                     realEstatesMostView.run {
                         clear()
-                        addAll((uiState as HomeUiState.GetMostViewSuccess).data)
+                        addAll((uiState as HomeUiEffect.GetMostViewSuccess).data)
                     }
                     getPostsWOptions(isHighestPrice = true)
                 }
-                is HomeUiState.GetHighestPriceSuccess -> {
+                is HomeUiEffect.GetHighestPriceSuccess -> {
                     realEstatesHighestPrice.run {
                         clear()
-                        addAll((uiState as HomeUiState.GetHighestPriceSuccess).data)
+                        addAll((uiState as HomeUiEffect.GetHighestPriceSuccess).data)
                     }
                     getPostsWOptions(isLowestPrice = true)
                 }
-                is HomeUiState.GetLowestPriceSuccess -> {
+                is HomeUiEffect.GetLowestPriceSuccess -> {
                     realEstatesLowestPrice.run {
                         clear()
-                        addAll((uiState as HomeUiState.GetLowestPriceSuccess).data)
+                        addAll((uiState as HomeUiEffect.GetLowestPriceSuccess).data)
                     }
                 }
                 else -> {}
@@ -103,7 +103,7 @@ internal fun HomeRoute(
 
         HomeScreen(
             modifier = modifier,
-            uiState = uiState,
+            uiEffect = uiState,
             user = user,
             types = types,
             onItemTypeClick = remember {
@@ -125,7 +125,7 @@ internal fun HomeRoute(
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
-    uiState: UiState,
+    uiEffect: UiEffect,
     user: User?,
     types: MutableList<ItemChoose>,
     onItemTypeClick: () -> Unit,
@@ -280,7 +280,7 @@ internal fun HomeScreen(
             }
         }
         Spacing(MARGIN_DIFFERENT_VIEW)
-        if (uiState is HomeUiState.Loading) {
+        if (uiEffect is HomeUiEffect.Loading) {
             CircularProgressIndicator(
                 color = RealEstateAppTheme.colors.progressBar
             )

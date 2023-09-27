@@ -13,8 +13,7 @@ interface AppRepository {
     //launcher follow
     suspend fun signIn(
         email: String,
-        password: String,
-        showLoading: Boolean = true
+        password: String
     ): Flow<ApiResultWrapper<User?>>
 
     suspend fun signUp(
@@ -25,7 +24,7 @@ interface AppRepository {
     ): Flow<ApiResultWrapper<Boolean>>
 
     //home follow
-    suspend fun getTypes(showLoading: Boolean = true): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
+    suspend fun getTypes(): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
 
     suspend fun getPostsWOptions(
         pageIndex: Int,
@@ -35,43 +34,36 @@ interface AppRepository {
         isLatest: Boolean,
         isHighestPrice: Boolean,
         isLowestPrice: Boolean,
-        userId: Int = 0,
-        showLoading: Boolean = true
+        userId: Int = 0
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 
     suspend fun getPostDetailById(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean = true
+        idUser: String
     ): Flow<ApiResultWrapper<RealEstateDetail>>
 
     suspend fun getPostSamePrice(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean = true
+        idUser: String
     ): Flow<ApiResultWrapper<MutableList<RealEstateList>>>
 
     suspend fun getPostSameCluster(
         idPost: String,
-        idUser: String,
-        showLoading: Boolean = true
+        idUser: String
     ): Flow<ApiResultWrapper<MutableList<RealEstateList>>>
 
     //pick Address
     suspend fun getDistricts(
-        provinceId: String = "1",
-        showLoading: Boolean = false
+        provinceId: String = "1"
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
 
     suspend fun getWards(
-        districtId: String,
-        showLoading: Boolean = false
+        districtId: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
 
     suspend fun getStreets(
         districtId: String,
-        filter: String,
-        showLoading: Boolean = false
+        filter: String
     ): Flow<ApiResultWrapper<MutableList<ItemChoose>>>
 
     suspend fun searchPostWithOptions(
@@ -103,8 +95,7 @@ interface AppRepository {
         pageIndex: Int,
         pageSize: Int,
         search: String,
-        optionSort: Int,
-        showLoading: Boolean = true
+        optionSort: Int
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 
     suspend fun updateSavePost(
@@ -116,21 +107,18 @@ interface AppRepository {
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
-        filter: String,
-        showLoading: Boolean = true
+        filter: String
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 
     suspend fun getPostCreatedByUser(
         idUser: Int,
         pageIndex: Int,
         pageSize: Int,
-        filter: String,
-        showLoading: Boolean = true
+        filter: String
     ): Flow<ApiResultWrapper<PagingItem<RealEstateList>>>
 
     suspend fun uploadImage(
-        image: File,
-        showLoading: Boolean = false
+        image: File
     ): Flow<ApiResultWrapper<String>>
 
     suspend fun getPredictPrice(
@@ -149,13 +137,10 @@ interface AppRepository {
         districtId: Int,
         wardId: Int,
         streetId: Int,
-        widthRoad: Float,
-        showLoading: Boolean = true
+        widthRoad: Float
     ): Flow<ApiResultWrapper<PredictResult>>
 
-    suspend fun getComboOptions(
-        showLoading: Boolean = true
-    ): Flow<ApiResultWrapper<MutableList<ComboOption>>>
+    suspend fun getComboOptions(): Flow<ApiResultWrapper<MutableList<ComboOption>>>
 
     suspend fun createPost(
         title: String,
@@ -186,8 +171,7 @@ interface AppRepository {
         images: MutableList<String>,
         propertyTypeId: Int,
         cluster: Int,
-        comboOptionId: Int,
-        showLoading: Boolean = true
+        comboOptionId: Int
     ): Flow<ApiResultWrapper<Any?>>
 
     suspend fun updatePost(
@@ -214,20 +198,17 @@ interface AppRepository {
         latitude: Double,
         listNewImages: MutableList<String>,
         propertyTypeId: Int,
-        comboOptionId: Int,
-        showLoading: Boolean = true
+        comboOptionId: Int
     ): Flow<ApiResultWrapper<Any?>>
 
     suspend fun changePassWord(
         idUser: Int,
         oldPassword: String,
-        newPassword: String,
-        showLoading: Boolean = true
+        newPassword: String
     ): Flow<ApiResultWrapper<Any?>>
 
     suspend fun getInformationUser(
-        idUser: Int,
-        showLoading: Boolean = true
+        idUser: Int
     ): Flow<ApiResultWrapper<User>>
 
     suspend fun updateUser(
@@ -238,14 +219,12 @@ interface AppRepository {
         addressDetail: String,
         wardId: Int,
         districtId: Int,
-        newImage: String,
-        showLoading: Boolean = true
+        newImage: String
     ): Flow<ApiResultWrapper<User?>>
 
     suspend fun createReport(
         postId: Int,
         reporterId: Int,
-        description: String,
-        showLoading: Boolean = true
+        description: String
     ): Flow<ApiResultWrapper<Any?>>
 }

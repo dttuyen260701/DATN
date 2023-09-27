@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.example.realestateapp.data.repository.AppRepository
 import com.example.realestateapp.extension.writeStoreLauncher
-import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiState
+import com.example.realestateapp.ui.base.*
 import com.example.realestateapp.util.AuthenticationObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,20 +18,36 @@ import javax.inject.Inject
  * Created by tuyen.dang on 5/4/2023.
  */
 
-sealed class SettingUiState : UiState() {
-    object InitView : SettingUiState()
+sealed class SettingUiEffect : UiEffect() {
+    object InitView : SettingUiEffect()
 
-    object SignOutSuccess : SettingUiState()
+    object SignOutSuccess : SettingUiEffect()
 }
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val application: Application, appRepository: AppRepository
-) : BaseViewModel<SettingUiState>(appRepository) {
-    override var uiStateValue: MutableStateFlow<UiState> = MutableStateFlow(SettingUiState.InitView)
-    override val uiState: StateFlow<UiState> = uiStateValue.asStateFlow()
+) : BaseViewModel<SettingUiEffect>(appRepository) {
+    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(SettingUiEffect.InitView)
+    override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
 
-    internal fun signOut() {
+    internal fun showSignOutDialog(
+        message: String,
+        negativeBtnText: String,
+        positiveBtnText: String
+    ) {
+        showDialog(
+            dialog = TypeDialog.ConfirmDialog(
+                message = message,
+                negativeBtnText = negativeBtnText,
+                onBtnNegativeClick = {},
+                positiveBtnText = positiveBtnText,
+                onBtnPositiveClick = ::signOut
+            )
+        )
+    }
+
+    private fun signOut() {
         viewModelScope.launch(Dispatchers.IO) {
             application.baseContext.writeStoreLauncher(
                 email = "",
@@ -41,6 +56,6 @@ class SettingViewModel @Inject constructor(
         }
         getUser().value = null
         AuthenticationObject.token = ""
-        uiStateValue.value = SettingUiState.SignOutSuccess
+        uiEffectValue.value = SettingUiEffect.SignOutSuccess
     }
 }

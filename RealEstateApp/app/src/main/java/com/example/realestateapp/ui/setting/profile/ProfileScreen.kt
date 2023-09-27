@@ -66,7 +66,7 @@ internal fun ProfileRoute(
 
     viewModel.run {
         var user by remember { getUser() }
-        val uiState by uiState.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var firstClick by remember { firstClick }
         var addressDetailDisplay by remember { detailAddress }
         val addressDetailsScr = remember { addressDetails }
@@ -115,12 +115,12 @@ internal fun ProfileRoute(
 
         LaunchedEffect(key1 = uiState) {
             when (uiState) {
-                is ProfileUiState.InitView -> {
+                is ProfileUiEffect.InitView -> {
                     getIsLoading().value = true
                     getInformationUser()
                 }
-                is ProfileUiState.GetInformationUserSuccess -> {
-                    user = (uiState as ProfileUiState.GetInformationUserSuccess).data
+                is ProfileUiEffect.GetInformationUserSuccess -> {
+                    user = (uiState as ProfileUiEffect.GetInformationUserSuccess).data
                     user?.let { u ->
                         imgUrl = u.imgUrl ?: ""
                         name = u.fullName
@@ -142,11 +142,11 @@ internal fun ProfileRoute(
                     }
                     updateUiStateDone()
                 }
-                is ProfileUiState.UpdateInformationUserSuccess -> {
+                is ProfileUiEffect.UpdateInformationUserSuccess -> {
                     context.run {
                         makeToast(getString(R.string.updateSuccess))
                     }
-                    user = (uiState as ProfileUiState.UpdateInformationUserSuccess).data
+                    user = (uiState as ProfileUiEffect.UpdateInformationUserSuccess).data
                     user?.let { u ->
                         imgUrl = u.imgUrl ?: ""
                         name = u.fullName
