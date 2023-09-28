@@ -87,7 +87,7 @@ internal fun AddPostRoute(
     val context = LocalContext.current
 
     viewModel.run {
-        val user by remember { getUser() }
+        val user by getUser().collectAsStateWithLifecycle()
         val uiState by uiEffect.collectAsStateWithLifecycle()
         var firstClick by remember { firstClick }
         var addressDetailDisplay by remember { detailAddress }

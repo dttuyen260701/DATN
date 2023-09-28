@@ -40,7 +40,7 @@ class ChangePassViewModelTest {
     @Test
     fun `changePassword$app_debug`() = runTest {
         changePassViewModel.run {
-            getUser().value = User(id = 1)
+            setUser(User(id = 1))
             oldPass.value = "Test@123"
             newPass.value = "Test@1234"
             changePassword()
@@ -53,7 +53,7 @@ class ChangePassViewModelTest {
     @Test
     fun `changePasswordFail$app_debug`() = runTest {
         changePassViewModel.run {
-            getUser().value = User(id = 1)
+            setUser(User(id = 1))
             oldPass.value = "Test@123"
             newPass.value = "Test@123"
             changePassword()

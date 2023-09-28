@@ -36,7 +36,7 @@ class ProfileViewModelTest {
     @Test
     fun `updateInformationUser$app_debug`() = runTest {
         profileViewModel.run {
-            getUser().value = User(id = 1)
+            setUser(User(id = 1))
             updateInformationUser()
             val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
             assertEquals(
@@ -54,7 +54,7 @@ class ProfileViewModelTest {
     @Test
     fun `getInformationUser$app_debug`() = runTest {
         profileViewModel.run {
-            getUser().value = User(id = 1)
+            setUser(User(id = 1))
             getInformationUser()
             val result = launch(UnconfinedTestDispatcher()) { uiEffect.collect() }
             assertEquals(User(), (uiEffect.value as? ProfileUiEffect.GetInformationUserSuccess)?.data)

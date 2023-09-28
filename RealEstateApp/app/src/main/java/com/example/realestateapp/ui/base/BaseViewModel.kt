@@ -61,7 +61,7 @@ abstract class BaseViewModel<US : UiEffect>(
     protected var appRepository: AppRepository
 ) : ViewModel() {
     companion object {
-        private val user = mutableStateOf<User?>(null)
+        private val user = MutableStateFlow<User?>(null)
 
         private val isLoading = mutableStateOf(false)
 
@@ -146,7 +146,7 @@ abstract class BaseViewModel<US : UiEffect>(
         viewModelScope.launch(Dispatchers.IO) {
             onStartUpload()
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.uploadImage(image)
                 ),
                 apiSuccess = {
@@ -171,7 +171,11 @@ abstract class BaseViewModel<US : UiEffect>(
         }
     }
 
-    internal fun getUser() = user
+    internal fun getUser(): StateFlow<User?> = user
+
+    internal fun setUser(newUser: User?) {
+        user.value = newUser
+    }
 
     internal fun getIsLoading() = isLoading
 
@@ -182,7 +186,7 @@ abstract class BaseViewModel<US : UiEffect>(
     }
 
     open suspend fun <T> callAPIOnThread(
-        response: MutableList<Flow<ApiResultWrapper<T>>>,
+        requests: MutableList<Flow<ApiResultWrapper<T>>>,
         apiSuccess: (ResponseAPI<out T>) -> Unit,
         apiError: () -> Unit = {},
         onDoneCallApi: () -> Unit = {},
@@ -192,10 +196,10 @@ abstract class BaseViewModel<US : UiEffect>(
     ) {
         viewModelScope.launch {
             isLoading.value = isShowLoading
-            response.map {
+            requests.map {
                 async {
                     it.collect { result ->
-                        Log.e("TTT", "callAPIOnThread: $result", )
+                        Log.e("TTT", "callAPIOnThread: $result")
                         when (result) {
                             is ApiResultWrapper.Success -> {
                                 apiSuccess(result.value)

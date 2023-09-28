@@ -65,7 +65,7 @@ internal fun ProfileRoute(
     val context = LocalContext.current
 
     viewModel.run {
-        var user by remember { getUser() }
+        val user by getUser().collectAsStateWithLifecycle()
         val uiState by uiEffect.collectAsStateWithLifecycle()
         var firstClick by remember { firstClick }
         var addressDetailDisplay by remember { detailAddress }
@@ -120,7 +120,7 @@ internal fun ProfileRoute(
                     getInformationUser()
                 }
                 is ProfileUiEffect.GetInformationUserSuccess -> {
-                    user = (uiState as ProfileUiEffect.GetInformationUserSuccess).data
+//                    user = (uiState as ProfileUiEffect.GetInformationUserSuccess).data
                     user?.let { u ->
                         imgUrl = u.imgUrl ?: ""
                         name = u.fullName
@@ -146,7 +146,6 @@ internal fun ProfileRoute(
                     context.run {
                         makeToast(getString(R.string.updateSuccess))
                     }
-                    user = (uiState as ProfileUiEffect.UpdateInformationUserSuccess).data
                     user?.let { u ->
                         imgUrl = u.imgUrl ?: ""
                         name = u.fullName

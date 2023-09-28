@@ -1,28 +1,22 @@
 package com.example.realestateapp.ui.setting.launcher
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.text.*
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.style.*
+import androidx.compose.ui.unit.*
+import androidx.hilt.navigation.compose.*
 import androidx.lifecycle.compose.*
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.realestateapp.R
 import com.example.realestateapp.designsystem.components.*
-import com.example.realestateapp.designsystem.icon.AppIcon
-import com.example.realestateapp.designsystem.icon.RealEstateIcon
-import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
-import com.example.realestateapp.designsystem.theme.RealEstateTypography
-import com.example.realestateapp.ui.base.BaseScreen
+import com.example.realestateapp.designsystem.icon.*
+import com.example.realestateapp.designsystem.theme.*
+import com.example.realestateapp.ui.base.*
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.PADDING_VIEW
@@ -41,23 +35,18 @@ internal fun SignInRoute(
     onBackClick: () -> Unit
 ) {
     viewModel.run {
-        val uiState by viewModel.uiEffect.collectAsStateWithLifecycle()
+        val uiState by uiEffect.collectAsStateWithLifecycle()
         var email by remember { email }
         var password by remember { password }
-        var firstClick by remember { firstClick }
+        val firstClick by remember { firstClick }
         val emailError by remember {
             derivedStateOf {
                 validEmail(email)
             }
         }
-        val passwordError by remember {
-            derivedStateOf {
-                ""
-            }
-        }
         val enableBtnSignIn = remember {
             derivedStateOf {
-                emailError.isEmpty() && passwordError.isEmpty()
+                emailError.isEmpty() && password.isNotEmpty() || firstClick
             }
         }
 
@@ -82,11 +71,8 @@ internal fun SignInRoute(
             },
             enableBtnSignIn = enableBtnSignIn.value,
             onSignUpClick = onSignUpClick,
-            onBtnSignInClick = remember {
-                {
-                    firstClick = false
-                    if (enableBtnSignIn.value) signInUser()
-                }
+            onBtnSignInClick = {
+                btnSignInClick(enableBtnSignIn.value)
             },
             onBackClick = remember {
                 onBackClick

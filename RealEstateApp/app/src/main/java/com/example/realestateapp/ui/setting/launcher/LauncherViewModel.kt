@@ -1,24 +1,16 @@
 package com.example.realestateapp.ui.setting.launcher
 
-import android.app.Application
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.viewModelScope
-import com.example.realestateapp.data.repository.AppRepository
-import com.example.realestateapp.extension.EMAIL_ADDRESS
-import com.example.realestateapp.extension.PASSWORD
-import com.example.realestateapp.extension.writeStoreLauncher
-import com.example.realestateapp.ui.base.BaseViewModel
-import com.example.realestateapp.ui.base.UiEffect
-import com.example.realestateapp.util.AuthenticationObject
-import com.example.realestateapp.util.Constants
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import android.app.*
+import androidx.compose.runtime.*
+import androidx.lifecycle.*
+import com.example.realestateapp.data.repository.*
+import com.example.realestateapp.extension.*
+import com.example.realestateapp.ui.base.*
+import com.example.realestateapp.util.*
+import dagger.hilt.android.lifecycle.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import javax.inject.*
 
 /**
  * Created by tuyen.dang on 5/4/2023.
@@ -51,17 +43,22 @@ class LauncherViewModel @Inject constructor(
     internal var password = mutableStateOf("")
     internal var firstClick = mutableStateOf(true)
 
+    internal fun btnSignInClick(enableBtnSignIn: Boolean) {
+        if (enableBtnSignIn && !firstClick.value) signInUser()
+        firstClick.value = false
+    }
+
     internal fun signInUser() {
         viewModelScope.launch {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.signIn(
                         email = email.value,
                         password = password.value
                     )
                 ),
                 apiSuccess = {
-                    getUser().value = it.body
+                    setUser(it.body)
                     AuthenticationObject.token = it.body?.token ?: ""
                     if (it.isSuccess) {
                         viewModelScope.launch {
@@ -86,7 +83,7 @@ class LauncherViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.signUp(
                         name = name,
                         phone = phone,

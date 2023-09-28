@@ -61,7 +61,8 @@ class PickAddressViewModel @Inject constructor(
         }
     }
 
-    override var uiEffectValue: MutableStateFlow<UiEffect> = MutableStateFlow(PickAddressUiEffect.InitView)
+    override var uiEffectValue: MutableStateFlow<UiEffect> =
+        MutableStateFlow(PickAddressUiEffect.InitView)
     override val uiEffect: StateFlow<UiEffect> = uiEffectValue.asStateFlow()
     internal var districtsData = mutableStateListOf<ItemChoose>()
     internal var wardsData = mutableStateListOf<ItemChoose>()
@@ -71,11 +72,11 @@ class PickAddressViewModel @Inject constructor(
         uiEffectValue.value = PickAddressUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getDistricts(),
                 ), apiSuccess = {
                     val indexSelected =
-                        it.body.indexOfFirst { item -> item.id == districtChosen.value.id }
+                    it.body.indexOfFirst { item -> item.id == districtChosen.value.id }
                     if (indexSelected != -1) {
                         it.body[indexSelected].isSelected = true
                     }
@@ -97,7 +98,7 @@ class PickAddressViewModel @Inject constructor(
         uiEffectValue.value = PickAddressUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getWards(
                         districtId = districtChosen.value.id.toString()
                     ),
@@ -127,7 +128,7 @@ class PickAddressViewModel @Inject constructor(
         uiEffectValue.value = PickAddressUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getStreets(
                         districtId = districtChosen.value.id.toString(),
                         filter = filter
@@ -209,13 +210,16 @@ class PickAddressViewModel @Inject constructor(
                 wardChosen.value = DEFAULT_ITEM_CHOSEN
                 streetChosen.value = DEFAULT_ITEM_CHOSEN
             }
+
             Constants.DefaultField.FIELD_WARD -> {
                 wardChosen.value = itemChoose.copy(isSelected = false)
             }
+
             Constants.DefaultField.FIELD_STREET -> {
                 streetChosen.value = itemChoose.copy(isSelected = false)
                 detailStreet.value = ""
             }
+
             else -> {}
         }
     }

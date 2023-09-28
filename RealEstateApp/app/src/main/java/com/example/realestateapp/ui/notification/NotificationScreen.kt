@@ -57,7 +57,7 @@ internal fun NotificationRoute(
     navigateToRealEstateDetail: (Int) -> Unit
 ) {
     viewModel.run {
-        val user by remember { getUser() }
+        val user by getUser().collectAsStateWithLifecycle()
         val uiState by uiEffect.collectAsStateWithLifecycle()
         var isMessengerScreen by remember { isMessengerScreen }
         val itemChatGuests = remember { itemChatGuests }

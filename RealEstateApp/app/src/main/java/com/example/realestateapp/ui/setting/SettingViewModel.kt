@@ -54,7 +54,7 @@ class SettingViewModel @Inject constructor(
                 password = ""
             )
         }
-        getUser().value = null
+        setUser(null)
         AuthenticationObject.token = ""
         uiEffectValue.value = SettingUiEffect.SignOutSuccess
     }

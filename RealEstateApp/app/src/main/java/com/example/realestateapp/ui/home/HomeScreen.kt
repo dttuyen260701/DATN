@@ -47,7 +47,7 @@ internal fun HomeRoute(
     navigateProfile: () -> Unit
 ) {
     viewModel.run {
-        val user by remember { getUser() }
+        val user by getUser().collectAsStateWithLifecycle()
         val types = remember { typesData }
         val realEstatesLatest = remember { realEstatesLatest }
         val realEstatesMostView = remember { realEstatesMostView }

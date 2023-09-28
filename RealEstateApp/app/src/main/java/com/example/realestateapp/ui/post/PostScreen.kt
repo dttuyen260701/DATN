@@ -1,27 +1,17 @@
 package com.example.realestateapp.ui.post
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import androidx.hilt.navigation.compose.*
+import androidx.lifecycle.compose.*
 import com.example.realestateapp.R
-import com.example.realestateapp.designsystem.components.ButtonRadiusGradient
-import com.example.realestateapp.designsystem.components.Spacing
-import com.example.realestateapp.designsystem.components.ToolbarView
-import com.example.realestateapp.designsystem.theme.RealEstateAppTheme
-import com.example.realestateapp.ui.base.BaseScreen
-import com.example.realestateapp.ui.base.RequireLoginScreen
+import com.example.realestateapp.designsystem.components.*
+import com.example.realestateapp.designsystem.theme.*
+import com.example.realestateapp.ui.base.*
 import com.example.realestateapp.util.Constants.DefaultValue.DEFAULT_ID_POST
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_DIFFERENT_VIEW
 import com.example.realestateapp.util.Constants.DefaultValue.MARGIN_VIEW
@@ -40,7 +30,7 @@ internal fun PostRoute(
     navigateSignIn: () -> Unit
 ) {
     viewModel.run {
-        val user by remember { getUser() }
+        val user by getUser().collectAsStateWithLifecycle()
 
         if (user == null) {
             RequireLoginScreen(

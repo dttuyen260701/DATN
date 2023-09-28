@@ -62,7 +62,7 @@ class RealEstateDetailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             getUser().value?.id?.let {
                 callAPIOnThread(
-                    response = mutableListOf(
+                    requests = mutableListOf(
                         appRepository.createReport(
                             postId = idPost,
                             reporterId = it,
@@ -86,7 +86,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.updateSavePost(
                         idPost = idPost,
                         idUser = getUser().value?.id ?: 0
@@ -104,7 +104,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getPostDetailById(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""
@@ -263,7 +263,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getPostSamePrice(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""
@@ -285,7 +285,7 @@ class RealEstateDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getPostSameCluster(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""

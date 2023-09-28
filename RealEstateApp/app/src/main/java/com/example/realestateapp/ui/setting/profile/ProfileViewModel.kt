@@ -57,7 +57,7 @@ class ProfileViewModel @Inject constructor(
             getUser().value?.id?.let { id ->
                 PickAddressViewModel.run {
                     callAPIOnThread(
-                        response = mutableListOf(
+                        requests = mutableListOf(
                             appRepository.updateUser(
                                 userId = id,
                                 fullName = name.value,
@@ -70,8 +70,9 @@ class ProfileViewModel @Inject constructor(
                             )
                         ),
                         apiSuccess = {
-                            uiEffectValue.value = it.body?.let {
-                                ProfileUiEffect.UpdateInformationUserSuccess(it)
+                            uiEffectValue.value = it.body?.let { user ->
+                                setUser(user)
+                                ProfileUiEffect.UpdateInformationUserSuccess(user)
                             } ?: ProfileUiEffect.Error
                         },
                         apiError = {
@@ -87,10 +88,11 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             getUser().value?.id.let { id ->
                 callAPIOnThread(
-                    response = mutableListOf(
+                    requests = mutableListOf(
                         appRepository.getInformationUser(id ?: DEFAULT_ID_POST)
                     ),
                     apiSuccess = {
+                        setUser(it.body)
                         uiEffectValue.value =
                             ProfileUiEffect.GetInformationUserSuccess(it.body)
                     },

@@ -66,12 +66,12 @@ class HomeViewModel @Inject constructor(
             application.baseContext.readStoreLauncher(onReadSuccess = { email, pass ->
                 viewModelScope.launch {
                     callAPIOnThread(
-                        response = mutableListOf(
+                        requests = mutableListOf(
                             appRepository.signIn(
                                 email = email, password = pass
                             )
                         ), apiSuccess = {
-                            getUser().value = it.body
+                            setUser(it.body)
                             AuthenticationObject.token = it.body?.token ?: ""
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 requestPermissionListener(
@@ -102,7 +102,7 @@ class HomeViewModel @Inject constructor(
     internal fun getTypes() {
         uiEffectValue.value = HomeUiEffect.Loading
         viewModelScope.launch {
-            callAPIOnThread(response = mutableListOf(
+            callAPIOnThread(requests = mutableListOf(
                 appRepository.getTypes(),
             ), apiSuccess = {
                 uiEffectValue.value = HomeUiEffect.GetTypesSuccess(it.body)
@@ -124,7 +124,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val typePropertyIds = typesData.filter { it.isSelected }.map { it.id }
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getPostsWOptions(
                         pageIndex = 1,
                         pageSize = 10,
@@ -141,17 +141,21 @@ class HomeViewModel @Inject constructor(
                         isMostView -> HomeUiEffect.GetMostViewSuccess(
                             it.body.items ?: mutableListOf()
                         )
+
                         isHighestPrice -> HomeUiEffect.GetHighestPriceSuccess(
                             it.body.items ?: mutableListOf()
                         )
+
                         isLowestPrice -> HomeUiEffect.GetLowestPriceSuccess(
                             it.body.items ?: mutableListOf()
                         )
+
                         else -> HomeUiEffect.Error
                     }
                 }, apiError = {
                     uiEffectValue.value = HomeUiEffect.Error
-                }, showDialog = false
+                }, showDialog = false,
+                isShowLoading = showLoading
             )
         }
     }

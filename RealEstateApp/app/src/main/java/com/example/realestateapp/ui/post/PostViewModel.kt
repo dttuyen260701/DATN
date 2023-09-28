@@ -128,7 +128,7 @@ class PostViewModel @Inject constructor(
             if (postId.value != DEFAULT_ID_POST) {
                 PickAddressViewModel.run {
                     callAPIOnThread(
-                        response = mutableListOf(
+                        requests = mutableListOf(
                             appRepository.updatePost(
                                 idPost = postId.value,
                                 title = title.value,
@@ -174,7 +174,7 @@ class PostViewModel @Inject constructor(
                 PickAddressViewModel.run {
 
                     callAPIOnThread(
-                        response = mutableListOf(
+                        requests = mutableListOf(
                             appRepository.createPost(
                                 title = title.value,
                                 description = description.value,
@@ -263,7 +263,7 @@ class PostViewModel @Inject constructor(
     internal fun getComboOptions(showLoading: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getComboOptions()
                 ),
                 apiSuccess = { result ->
@@ -280,12 +280,15 @@ class PostViewModel @Inject constructor(
                             BRONZE -> {
                                 comboOptionsBronze.add(item)
                             }
+
                             SILVER -> {
                                 comboOptionsSilver.add(item)
                             }
+
                             GOLD -> {
                                 comboOptionsGold.add(item)
                             }
+
                             else -> {}
                         }
                     }
@@ -303,7 +306,7 @@ class PostViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getPostDetailById(
                         idPost = realEstateId.toString(),
                         idUser = getUser().value?.id?.toString() ?: ""
@@ -326,7 +329,7 @@ class PostViewModel @Inject constructor(
         uiEffectValue.value = PostUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getPredictPrice(
                         bedRoom = bedroom.value.toInt(),
                         width = width.value.toFloat(),
@@ -348,7 +351,8 @@ class PostViewModel @Inject constructor(
                 ),
                 apiSuccess = {
                     cluster = it.body.cluster
-                    uiEffectValue.value = PostUiEffect.GetPredictPriceSuccess(it.body.result, isForSubmit)
+                    uiEffectValue.value =
+                        PostUiEffect.GetPredictPriceSuccess(it.body.result, isForSubmit)
                 },
                 apiError = {
 
@@ -361,7 +365,7 @@ class PostViewModel @Inject constructor(
         uiEffectValue.value = PostUiEffect.Loading
         viewModelScope.launch {
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     appRepository.getTypes(),
                 ), apiSuccess = {
                     val indexSelected =
@@ -384,7 +388,7 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             uiEffectValue.value = PostUiEffect.Loading
             callAPIOnThread(
-                response = mutableListOf(
+                requests = mutableListOf(
                     if (isMyRecords) {
                         appRepository.getPostCreatedByUser(
                             idUser = getUser().value?.id ?: 0,
@@ -425,6 +429,7 @@ class PostViewModel @Inject constructor(
                     )
                 }
             }
+
             FIELD_DIRECTION -> {
                 directionOptions.run {
                     clear()

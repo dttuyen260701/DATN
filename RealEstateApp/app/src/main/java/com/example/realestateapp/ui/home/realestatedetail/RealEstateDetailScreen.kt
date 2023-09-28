@@ -100,7 +100,7 @@ internal fun RealEstateDetailRoute(
 ) {
     val context = LocalContext.current
     viewModel.run {
-        val user by remember { getUser() }
+        val user by getUser().collectAsStateWithLifecycle()
         var realEstateItem by remember { realEstateItem }
         val realEstateProperty = remember { realEstateProperty }
         val realEstatesSamePrice = remember { realEstatesSamePrice }

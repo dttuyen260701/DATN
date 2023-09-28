@@ -69,7 +69,7 @@ internal fun MessengerRoute(
 ) {
     val context = LocalContext.current
     viewModel.run {
-        val user by remember { getUser() }
+        val user by getUser().collectAsStateWithLifecycle()
         val uiState by uiEffect.collectAsStateWithLifecycle()
         var message by remember { message }
         var idChannel by remember { idChannel }

@@ -41,7 +41,7 @@ class ChangePassViewModel @Inject constructor(
         getUser().value?.id?.let {
             viewModelScope.launch {
                 callAPIOnThread(
-                    response = mutableListOf(
+                    requests = mutableListOf(
                         appRepository.changePassWord(
                             idUser = it,
                             oldPassword = oldPass.value,
