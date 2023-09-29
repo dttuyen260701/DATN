@@ -36,15 +36,15 @@ sealed class HomeUiEffect : UiEffect() {
 
     object DoneSignInBackground : HomeUiEffect()
 
-    data class GetTypesSuccess(val data: MutableList<ItemChoose>) : HomeUiEffect()
+    object GetTypesSuccess : HomeUiEffect()
 
-    data class GetLatestSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
+    object GetLatestSuccess : HomeUiEffect()
 
-    data class GetMostViewSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
+    object GetMostViewSuccess : HomeUiEffect()
 
-    data class GetHighestPriceSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
+    object GetHighestPriceSuccess : HomeUiEffect()
 
-    data class GetLowestPriceSuccess(val data: MutableList<RealEstateList>) : HomeUiEffect()
+    object GetLowestPriceSuccess : HomeUiEffect()
 }
 
 @HiltViewModel
@@ -105,7 +105,11 @@ class HomeViewModel @Inject constructor(
             callAPIOnThread(requests = mutableListOf(
                 appRepository.getTypes(),
             ), apiSuccess = {
-                uiEffectValue.value = HomeUiEffect.GetTypesSuccess(it.body)
+                typesData.run {
+                    clear()
+                    addAll(it.body)
+                }
+                uiEffectValue.value = HomeUiEffect.GetTypesSuccess
             }, apiError = {
                 uiEffectValue.value = HomeUiEffect.Error
             }, showDialog = false
@@ -136,21 +140,42 @@ class HomeViewModel @Inject constructor(
                         userId = getUser().value?.id ?: 0
                     )
                 ), apiSuccess = {
-                    uiEffectValue.value = when {
-                        isLatest -> HomeUiEffect.GetLatestSuccess(it.body.items ?: mutableListOf())
-                        isMostView -> HomeUiEffect.GetMostViewSuccess(
-                            it.body.items ?: mutableListOf()
-                        )
+                    uiEffectValue.value = run {
+                        val data = it.body.items ?: mutableListOf()
+                        when {
+                            isLatest -> {
+                                realEstatesLatest.run {
+                                    clear()
+                                    addAll(data)
+                                }
+                                HomeUiEffect.GetLatestSuccess
+                            }
+                            isMostView -> {
+                                realEstatesMostView.run {
+                                    clear()
+                                    addAll(data)
+                                }
+                                HomeUiEffect.GetMostViewSuccess
+                            }
 
-                        isHighestPrice -> HomeUiEffect.GetHighestPriceSuccess(
-                            it.body.items ?: mutableListOf()
-                        )
+                            isHighestPrice -> {
+                                realEstatesHighestPrice.run {
+                                    clear()
+                                    addAll(data)
+                                }
+                                HomeUiEffect.GetHighestPriceSuccess
+                            }
 
-                        isLowestPrice -> HomeUiEffect.GetLowestPriceSuccess(
-                            it.body.items ?: mutableListOf()
-                        )
+                            isLowestPrice -> {
+                                realEstatesLowestPrice.run {
+                                    clear()
+                                    addAll(data)
+                                }
+                                HomeUiEffect.GetLowestPriceSuccess
+                            }
 
-                        else -> HomeUiEffect.Error
+                            else -> HomeUiEffect.Error
+                        }
                     }
                 }, apiError = {
                     uiEffectValue.value = HomeUiEffect.Error

@@ -47,19 +47,25 @@ internal fun SignUpRoute(
     viewModel.run {
         val uiState by uiEffect.collectAsStateWithLifecycle()
         val context = LocalContext.current
-        var firstClick by remember { firstClick }
-        var name by remember { mutableStateOf("") }
+        val firstClick by remember { firstClick }
+        var name by remember { name }
         val nameError by remember {
             derivedStateOf {
-                if (name.isEmpty() && !firstClick) context.getString(R.string.nameError)
-                else ""
+                if (name.isEmpty() && !firstClick) {
+                    context.getString(R.string.nameError)
+                } else {
+                    ""
+                }
             }
         }
-        var phone by remember { mutableStateOf("") }
+        var phone by remember { phone }
         val phoneError by remember {
             derivedStateOf {
-                if (phone.length != 10 && !firstClick) context.getString(R.string.phoneError)
-                else ""
+                if (phone.length != 10 && !firstClick) {
+                    context.getString(R.string.phoneError)
+                } else {
+                    ""
+                }
             }
         }
         var email by remember { email }
@@ -77,10 +83,13 @@ internal fun SignUpRoute(
         var rePassword by remember { mutableStateOf("") }
         val rePasswordError by remember {
             derivedStateOf {
-                if (password != rePassword && !firstClick && rePassword.isNotEmpty()) context.getString(
-                    R.string.rePasswordError
-                )
-                else ""
+                if (password != rePassword && !firstClick && rePassword.isNotEmpty()) {
+                    context.getString(
+                        R.string.rePasswordError
+                    )
+                } else {
+                    ""
+                }
             }
         }
         val enableBtnSignUp by remember {
@@ -138,11 +147,8 @@ internal fun SignUpRoute(
             rePasswordError = rePasswordError,
             enableBtnSignUp = enableBtnSignUp,
             onSignInClick = onSignInClick,
-            onBtnSignUpClick = remember {
-                {
-                    firstClick = false
-                    if (enableBtnSignUp) signUpUser(name = name, phone = phone)
-                }
+            onBtnSignUpClick = {
+                btnSignUpClick(enableBtnSignUp)
             },
             onBackClick = onBackClick
         )

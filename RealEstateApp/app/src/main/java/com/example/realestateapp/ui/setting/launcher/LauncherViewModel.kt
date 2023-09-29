@@ -41,10 +41,17 @@ class LauncherViewModel @Inject constructor(
 
     internal var email = mutableStateOf("")
     internal var password = mutableStateOf("")
+    internal var name = mutableStateOf("")
+    internal var phone = mutableStateOf("")
     internal var firstClick = mutableStateOf(true)
 
     internal fun btnSignInClick(enableBtnSignIn: Boolean) {
         if (enableBtnSignIn && !firstClick.value) signInUser()
+        firstClick.value = false
+    }
+
+    internal fun btnSignUpClick(enableBtnSignIn: Boolean) {
+        if (enableBtnSignIn && !firstClick.value) signUpUser()
         firstClick.value = false
     }
 
@@ -77,16 +84,13 @@ class LauncherViewModel @Inject constructor(
         }
     }
 
-    internal fun signUpUser(
-        name: String,
-        phone: String,
-    ) {
+    internal fun signUpUser() {
         viewModelScope.launch {
             callAPIOnThread(
                 requests = mutableListOf(
                     appRepository.signUp(
-                        name = name,
-                        phone = phone,
+                        name = name.value,
+                        phone = phone.value,
                         email = email.value,
                         password = password.value
                     )

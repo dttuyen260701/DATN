@@ -53,10 +53,10 @@ internal fun HomeRoute(
         val realEstatesMostView = remember { realEstatesMostView }
         val realEstatesHighestPrice = remember { realEstatesHighestPrice }
         val realEstatesLowestPrice = remember { realEstatesLowestPrice }
-        val uiState by uiEffect.collectAsStateWithLifecycle()
+        val uiEffect by uiEffect.collectAsStateWithLifecycle()
 
-        LaunchedEffect(key1 = uiState) {
-            when (uiState) {
+        LaunchedEffect(key1 = uiEffect) {
+            when (uiEffect) {
                 is HomeUiEffect.InitView -> {
                     backgroundSignIn()
                 }
@@ -64,38 +64,18 @@ internal fun HomeRoute(
                     getTypes()
                 }
                 is HomeUiEffect.GetTypesSuccess -> {
-                    types.run {
-                        clear()
-                        addAll((uiState as HomeUiEffect.GetTypesSuccess).data)
-                    }
                     getPostsWOptions(isLatest = true)
                 }
                 is HomeUiEffect.GetLatestSuccess -> {
-                    realEstatesLatest.run {
-                        clear()
-                        addAll((uiState as HomeUiEffect.GetLatestSuccess).data)
-                    }
                     getPostsWOptions(isMostView = true)
                 }
                 is HomeUiEffect.GetMostViewSuccess -> {
-                    realEstatesMostView.run {
-                        clear()
-                        addAll((uiState as HomeUiEffect.GetMostViewSuccess).data)
-                    }
                     getPostsWOptions(isHighestPrice = true)
                 }
                 is HomeUiEffect.GetHighestPriceSuccess -> {
-                    realEstatesHighestPrice.run {
-                        clear()
-                        addAll((uiState as HomeUiEffect.GetHighestPriceSuccess).data)
-                    }
                     getPostsWOptions(isLowestPrice = true)
                 }
                 is HomeUiEffect.GetLowestPriceSuccess -> {
-                    realEstatesLowestPrice.run {
-                        clear()
-                        addAll((uiState as HomeUiEffect.GetLowestPriceSuccess).data)
-                    }
                 }
                 else -> {}
             }
@@ -103,7 +83,7 @@ internal fun HomeRoute(
 
         HomeScreen(
             modifier = modifier,
-            uiEffect = uiState,
+            uiEffect = uiEffect,
             user = user,
             types = types,
             onItemTypeClick = remember {
